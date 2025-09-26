@@ -38,7 +38,7 @@ if "started" not in st.session_state:
 
 
 # -------------------------------
-# 2️⃣ 上传 CSV
+# 2️⃣ 检查/上传 CSV
 # -------------------------------
 
 # uploaded_file = st.file_uploader("charger HAL CSV", type=["csv"])
@@ -52,9 +52,6 @@ if "started" not in st.session_state:
 
 csv_uploader()# 调用上传器（会自动处理已有/新上传）
 if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None:
-    # df = st.session_state.uploaded_df.copy()
-# else:
-#     st.warning("⚠️ Merci d’importer un fichier CSV pour continuer.")
 
     # -------------------------------
     # 3️⃣ 点击开始统计按钮
@@ -65,8 +62,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     if not st.session_state.started:#未开始
         if summary_button:#点击了开始按钮
-            if st.session_state.uploaded_df is not None:#且已经上传数据
-                st.session_state.started = True#更新为“开始状态”，df储存在session中，数据不会在变化?            
+            # if st.session_state.uploaded_df is not None:#且已经上传数据
+            st.session_state.started = True#更新为“开始状态”，df储存在session中，数据不会在变化?            
         
     # -------------------------------
     # # 4️⃣ 分析界面
