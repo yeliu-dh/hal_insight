@@ -16,11 +16,10 @@ def csv_uploader(key="uploaded_df"):
         key=f"{key}_file"
     )
 
-    if uploaded_file is not None:
+    if uploaded_file is not None:#存在df
         st.session_state[key] = pd.read_csv(uploaded_file)
-        st.success(f"✅ CSV chargé!")
 
-    # 如果 session_state 里已有数据
+    #再次判断,不是直接upload储存的,从session中提取已有数据
     if key in st.session_state and st.session_state[key] is not None:
         st.success("✅ CSV chargé ")
         #apercu
