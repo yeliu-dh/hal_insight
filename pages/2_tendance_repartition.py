@@ -1,15 +1,17 @@
-# app.py
 import streamlit as st
 from streamlit_tags import st_tags
 import pandas as pd
 import matplotlib.pyplot as plt
-import textwrap #分行
 import seaborn as sns
+import textwrap #分行
 import altair as alt
 import plotly.express as px
 from wordcloud import WordCloud, STOPWORDS
 from PIL import Image
 import io
+
+#my utils:
+from utils.upload import csv_uploader
 
 
 # session state :
@@ -20,9 +22,10 @@ import io
 
 
 # -------------------- 页面配置 --------------------
-# st.set_page_config(page_title="HAL Insights Dashboard", layout="wide", page_icon='🛸')
+st.set_page_config(page_title="HAL Insights Dashboard", layout="wide")
+# st.title("📊 Tendance & Répartition")
 
-st.title("📊 Tendance & Répartition")
+
 
 # -------------------------------
 # 1️⃣ 初始化 Session State
@@ -37,13 +40,24 @@ if "started" not in st.session_state:
 # -------------------------------
 # 2️⃣ 上传 CSV
 # -------------------------------
-uploaded_file = st.file_uploader("charger HAL CSV", type=["csv"])
 
-if uploaded_file is not None:
-    st.session_state.uploaded_df = pd.read_csv(uploaded_file)
-    # st.success("CSV 上传成功！")
-    corpus = st.session_state.uploaded_df #pd.read_csv(uploaded_file)
-    st.write("### Corpus original", corpus.head())
+csv_uploader()# 调用上传器（会自动处理已有/新上传）
+
+if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None:
+    df = st.session_state.uploaded_df.copy()
+    st.write("### Aperçu des données", df.head())
+    # 👉 这里接着做分析
+
+else:
+    st.warning("⚠️ Merci d’importer un fichier CSV pour continuer.")
+
+# uploaded_file = st.file_uploader("charger HAL CSV", type=["csv"])
+
+# if uploaded_file is not None:
+#     st.session_state.uploaded_df = pd.read_csv(uploaded_file)
+#     # st.success("CSV 上传成功！")
+#     corpus = st.session_state.uploaded_df #pd.read_csv(uploaded_file)
+#     st.write("### Corpus original", corpus.head())
 
     # -------------------------------
     # 3️⃣ 点击开始统计按钮
