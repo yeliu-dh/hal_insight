@@ -6,7 +6,6 @@ import seaborn as sns
 import textwrap #分行
 import altair as alt
 import plotly.express as px
-from wordcloud import WordCloud, STOPWORDS
 from PIL import Image
 import io
 
@@ -408,8 +407,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             "journalTitle_s":"Répartition par journal",
             "language_s": "Répartition par langue",
             "country_s": "Répartition par pays"
-        }.items():
-            # st.subheader(title)
+        }.items():      
+    
             if col in df.columns:
                 cols = st.columns(2)
                 with cols[0]:
@@ -429,7 +428,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                         min_value=1, max_value=100, value=5, step=1, key=f"topn_{col}"
                     )
             
-
                 if chart_type == "pie":
                     fig = make_pie_chart(df, col, title, top_n=top_n)
 
