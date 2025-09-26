@@ -6,7 +6,7 @@ import json
 from datetime import datetime
 import re
 from pathlib import Path
-from utils.1_HAL_search_api import fetch_hal_articles
+from utils.HAL_search_api import fetch_hal_articles
 
 
 #====================CACHE=========================#
