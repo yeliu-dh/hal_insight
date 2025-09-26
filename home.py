@@ -31,5 +31,7 @@ else:
 
 
 
+#update requirements
+# pipreqs hal_insight --force --savepath hal_insight/requirements.txt
 
 
