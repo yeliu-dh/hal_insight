@@ -128,56 +128,56 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     if st.session_state.started and summary_button2:
         df = st.session_state.uploaded_df.copy()
-    df["publicationDate_s"] = pd.to_datetime(df["publicationDate_s"], errors="coerce")
-    df["year"] = df["publicationDate_s"].dt.year
+        df["publicationDate_s"] = pd.to_datetime(df["publicationDate_s"], errors="coerce")
+        df["year"] = df["publicationDate_s"].dt.year
 
-    # ---------------- 用户输入 ----------------
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        start_year = st.number_input("Année de début", min_value=1900, max_value=2100, value=2010)
-    with col2:
-        end_year = st.number_input("Année de fin", min_value=1900, max_value=2100, value=2020)
-    with col3:
-        step_year = st.number_input("Intervalle de temps", min_value=1, max_value=20, value=3)
+        # ---------------- 用户输入 ----------------
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            start_year = st.number_input("Année de début", min_value=1900, max_value=2100, value=2010)
+        with col2:
+            end_year = st.number_input("Année de fin", min_value=1900, max_value=2100, value=2020)
+        with col3:
+            step_year = st.number_input("Intervalle de temps", min_value=1, max_value=20, value=3)
 
-    # ---------------- 时间段切片 ----------------
-    time_slices = [(y, min(y + step_year - 1, end_year)) for y in range(start_year, end_year+1, step_year)]
+        # ---------------- 时间段切片 ----------------
+        time_slices = [(y, min(y + step_year - 1, end_year)) for y in range(start_year, end_year+1, step_year)]
 
-    # ---------------- 生成 keyness 词云 ----------------
-    # 这里示例用简单频率代替 keyness
-    # 如果需要严格 keyness，可用 log-likelihood 或 chi-square
+        # ---------------- 生成 keyness 词云 ----------------
+        # 这里示例用简单频率代替 keyness
+        # 如果需要严格 keyness，可用 log-likelihood 或 chi-square
 
-    texts_all = " ".join(df["keyword_s"].dropna().astype(str).str.lower())
-    global_freq = pd.Series(texts_all.split()).value_counts()
+        texts_all = " ".join(df["keyword_s"].dropna().astype(str).str.lower())
+        global_freq = pd.Series(texts_all.split()).value_counts()
 
-    n_cols = 3
-    n_rows = math.ceil(len(time_slices)/n_cols)
-    fig, axes = plt.subplots(n_rows, n_cols, figsize=(n_cols*5, n_rows*5))
+        n_cols = 3
+        n_rows = math.ceil(len(time_slices)/n_cols)
+        fig, axes = plt.subplots(n_rows, n_cols, figsize=(n_cols*5, n_rows*5))
 
-    for idx, (y_start, y_end) in enumerate(time_slices):
-        df_slice = df[(df["year"] >= y_start) & (df["year"] <= y_end)]
-        if df_slice.empty:
-            text = ""
-        else:
-            text = " ".join(df_slice["keyword_s"].dropna().astype(str).str.lower())
+        for idx, (y_start, y_end) in enumerate(time_slices):
+            df_slice = df[(df["year"] >= y_start) & (df["year"] <= y_end)]
+            if df_slice.empty:
+                text = ""
+            else:
+                text = " ".join(df_slice["keyword_s"].dropna().astype(str).str.lower())
 
-        # 简单 keyness：词频 / 全局词频
-        freq_slice = pd.Series(text.split()).value_counts()
-        keyness = (freq_slice / global_freq).fillna(0).to_dict()
+            # 简单 keyness：词频 / 全局词频
+            freq_slice = pd.Series(text.split()).value_counts()
+            keyness = (freq_slice / global_freq).fillna(0).to_dict()
 
-        wc = WordCloud(width=400, height=400, background_color="white").generate_from_frequencies(keyness)
+            wc = WordCloud(width=400, height=400, background_color="white").generate_from_frequencies(keyness)
 
-        row, col = divmod(idx, n_cols)
-        ax = axes[row, col] if n_rows>1 else axes[col]
-        ax.imshow(wc, interpolation="bilinear")
-        ax.set_title(f"{y_start}-{y_end}", fontsize=12)
-        ax.axis("off")
+            row, col = divmod(idx, n_cols)
+            ax = axes[row, col] if n_rows>1 else axes[col]
+            ax.imshow(wc, interpolation="bilinear")
+            ax.set_title(f"{y_start}-{y_end}", fontsize=12)
+            ax.axis("off")
 
-    # 删除多余子图
-    for j in range(idx+1, n_rows*n_cols):
-        row, col = divmod(j, n_cols)
-        ax = axes[row, col] if n_rows>1 else axes[col]
-        ax.axis("off")
+        # 删除多余子图
+        for j in range(idx+1, n_rows*n_cols):
+            row, col = divmod(j, n_cols)
+            ax = axes[row, col] if n_rows>1 else axes[col]
+            ax.axis("off")
 
-    st.pyplot(fig)
+        st.pyplot(fig)
 
