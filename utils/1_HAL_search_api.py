@@ -86,9 +86,7 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     if text:
         q = " AND ".join(text)  # 所有关键词都必须出现
     else:
-    
         q="*:*"
-
 
     # CHECK: 
     #输入筛选条件
