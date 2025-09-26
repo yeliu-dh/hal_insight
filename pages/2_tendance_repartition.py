@@ -22,9 +22,10 @@ from utils.upload import csv_uploader
 
 
 # -------------------- 页面配置 --------------------
-st.set_page_config(page_title="HAL Insights Dashboard", layout="wide")
-# st.title("📊 Tendance & Répartition")
+# st.set_page_config(page_title="HAL Insights Dashboard", layout="wide")
 
+st.set_page_config(page_title="Tendance & Répartition", page_icon="🛸", layout="wide")
+# st.title("📊 Tendance & Répartition")
 
 
 # -------------------------------

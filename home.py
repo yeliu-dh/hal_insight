@@ -1,5 +1,4 @@
 import streamlit as st
-from utils.upload import csv_uploader#
 
 st.set_page_config(page_title="HAL Insight",page_icon="🛸", layout="wide")
 
@@ -15,13 +14,13 @@ Bienvenu-e sur le tableau de bord HAL Insight !
     * Tendances temporelles
     * Nuage des mots clés
     * Réseaux de cooccurrence
-en consultant la barre latéral. 
+            
+en consultant la barre latéral! 
 """)
 
 st.markdown("""
-            Pour aucune dysfonctionnement des applications et difficulté d'utilisation,
-            veuillez me contacter: ye.liu@chartes.psl.eu
-            
+Pour tout problème ou question concernant l'utilisation de l'application,  
+veuillez me contacter : ye.liu@chartes.psl.eu
 """)
 
 
