@@ -18,10 +18,10 @@ def csv_uploader(key="uploaded_df"):
 
     if uploaded_file is not None:
         st.session_state[key] = pd.read_csv(uploaded_file)
-        # st.success(f"✅ CSV chargé avec {len(st.session_state[key])} lignes.")
+        st.success(f"✅ CSV chargé!")
 
     # 如果 session_state 里已有数据
     if key in st.session_state and st.session_state[key] is not None:
         st.success("✅ CSV chargé ")
-        #apercus
+        #apercu
         st.dataframe(st.session_state[key].head())  # 显示前几行

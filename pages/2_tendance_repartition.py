@@ -37,7 +37,6 @@ if "started" not in st.session_state:
     st.session_state.started = False
 
 
-
 # -------------------------------
 # 2️⃣ 上传 CSV
 # -------------------------------
@@ -52,7 +51,6 @@ if "started" not in st.session_state:
 
 
 csv_uploader()# 调用上传器（会自动处理已有/新上传）
-
 if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None:
     # df = st.session_state.uploaded_df.copy()
 # else:
@@ -65,16 +63,10 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     with col2:
         summary_button = st.button("Commencer")
 
-
-    if not st.session_state.started:
-        if summary_button:
-            if st.session_state.uploaded_df is not None:#已上传数据
-                st.session_state.started = True
-                # st.experimental_rerun()  # 刷新页面进入分析模式
-
-            else:
-                st.warning("⚠️ Merci d’importer un fichier CSV pour continuer.")
-        
+    if not st.session_state.started:#未开始
+        if summary_button:#点击了开始按钮
+            if st.session_state.uploaded_df is not None:#且已经上传数据
+                st.session_state.started = True#更新为“开始状态”，df储存在session中，数据不会在变化?            
         
     # -------------------------------
     # # 4️⃣ 分析界面
