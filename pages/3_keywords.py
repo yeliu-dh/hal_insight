@@ -81,7 +81,10 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             value=[],
             maxtags=50
         )
-        french_stopwords = {"et", "de", "la", "le", "les", "des", "un", "une", "du", "en", "au"}
+        french_stopwords = {"et", "de", "la", "le", "les","l","l'", "des", "un", "une", 
+                            "du", "en", "au","d","dans","à","par","pour","sur","sont","aux","au",
+                            "leur","qui","ou","il","elle","ils","elles","je","tu","vous","nous"}
+        
         stopwords = set(STOPWORDS).union(french_stopwords).union(user_stopwords)
 
         # ------------ wordcloud ---------------------------
@@ -103,7 +106,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             img.save(buf, format="PNG")
             buf.seek(0)
 
-            cols = st.columns([4,1])  # 4:1 比例，右侧放按钮    
+            cols = st.columns([5,1])  # 4:1 比例，右侧放按钮    
             with cols[1]:
                 st.download_button(
                     label="Télécharger",
