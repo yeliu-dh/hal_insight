@@ -23,4 +23,5 @@ def csv_uploader(key="uploaded_df"):
     # 如果 session_state 里已有数据
     if key in st.session_state and st.session_state[key] is not None:
         st.success("✅ CSV chargé ")
+        #apercus
         st.dataframe(st.session_state[key].head())  # 显示前几行

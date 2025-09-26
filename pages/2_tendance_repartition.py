@@ -42,13 +42,6 @@ if "started" not in st.session_state:
 # 2️⃣ 上传 CSV
 # -------------------------------
 
-csv_uploader()# 调用上传器（会自动处理已有/新上传）
-
-if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None:
-    df = st.session_state.uploaded_df.copy()
-else:
-    st.warning("⚠️ Merci d’importer un fichier CSV pour continuer.")
-
 # uploaded_file = st.file_uploader("charger HAL CSV", type=["csv"])
 
 # if uploaded_file is not None:
@@ -56,6 +49,14 @@ else:
 #     # st.success("CSV 上传成功！")
 #     corpus = st.session_state.uploaded_df #pd.read_csv(uploaded_file)
 #     st.write("### Corpus original", corpus.head())
+
+
+csv_uploader()# 调用上传器（会自动处理已有/新上传）
+
+if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None:
+    # df = st.session_state.uploaded_df.copy()
+# else:
+#     st.warning("⚠️ Merci d’importer un fichier CSV pour continuer.")
 
     # -------------------------------
     # 3️⃣ 点击开始统计按钮
@@ -72,7 +73,7 @@ else:
                 # st.experimental_rerun()  # 刷新页面进入分析模式
 
             else:
-                st.warning("⚠️ Charger le fichier CSV!")
+                st.warning("⚠️ Merci d’importer un fichier CSV pour continuer.")
         
         
     # -------------------------------
