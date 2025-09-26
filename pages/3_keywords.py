@@ -6,12 +6,13 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud, STOPWORDS
 from PIL import Image
 import io
+import math
 
 #my utils:
 from utils.upload import csv_uploader
 
-st.set_page_config(page_title="☁️ Keywords & Répartition", page_icon="🛸", layout="wide")
-st.title("☁️ Keywords")
+st.set_page_config(page_title="☁️ Wordcloud", page_icon="🛸", layout="wide")
+st.title("☁️ Wordcloud")
 
 
 # -------------------------------
@@ -31,20 +32,23 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     # -------------------------------
     # 3️⃣ 点击开始统计按钮
     # -------------------------------
-    col1, col2 = st.columns([5, 1])  # 最右边一列放按钮
+    col1, col2, col3 = st.columns([4, 1, 1])  # 最右边一列放按钮
     with col2:
-        summary_button = st.button("Commencer")
+        summary_button1 = st.button("Wordcloud global")
+    
+    with col3:
+        summary_button2 = st.button("Wordcloud évolutif")
 
     if not st.session_state.started:#未开始
-        if summary_button:#点击了开始按钮
+        if summary_button1 or summary_button2:#点击了开始按钮
             # if st.session_state.uploaded_df is not None:#且已经上传数据
             st.session_state.started = True#更新为“开始状态”，df储存在session中，数据不会在变化?            
         
     # -------------------------------
     # # 4️⃣ 分析界面
     # # -------------------------------
-        
-    if st.session_state.started:
+
+    if st.session_state.started and summary_button1:
         df = st.session_state.uploaded_df.copy()
 
         # -------------------- 关键词词云 --------------------        
@@ -83,8 +87,10 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         )
         french_stopwords = {"et", "de", "la", "le", "les","l","l'", "des", "un", "une", 
                             "du", "en", "au","d","dans","à","par","pour","sur","sont","aux","au",
-                            "leur","qui","ou","il","elle","ils","elles","je","tu","vous","nous","se",
-                            "et","ce",'qui','que',"est","qu","avec","ont"}
+                            "leur","leurs","qui","ou","il","elle","ils","elles","je","tu","vous","nous","se",
+                            "et","ce",'qui','que',"est","qu","avec","ont","ces",'celle','ceux','celles',
+                            'comme','afin','ne',"son",'ses'}
+        
         
         stopwords = set(STOPWORDS).union(french_stopwords).union(user_stopwords)
 
@@ -117,3 +123,61 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 )
         except Exception as e:
             st.error(f"ERROR :{e}")
+
+
+
+    if st.session_state.started and summary_button2:
+        df = st.session_state.uploaded_df.copy()
+    df["publicationDate_s"] = pd.to_datetime(df["publicationDate_s"], errors="coerce")
+    df["year"] = df["publicationDate_s"].dt.year
+
+    # ---------------- 用户输入 ----------------
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        start_year = st.number_input("Année de début", min_value=1900, max_value=2100, value=2010)
+    with col2:
+        end_year = st.number_input("Année de fin", min_value=1900, max_value=2100, value=2020)
+    with col3:
+        step_year = st.number_input("Intervalle de temps", min_value=1, max_value=20, value=3)
+
+    # ---------------- 时间段切片 ----------------
+    time_slices = [(y, min(y + step_year - 1, end_year)) for y in range(start_year, end_year+1, step_year)]
+
+    # ---------------- 生成 keyness 词云 ----------------
+    # 这里示例用简单频率代替 keyness
+    # 如果需要严格 keyness，可用 log-likelihood 或 chi-square
+
+    texts_all = " ".join(df["keyword_s"].dropna().astype(str).str.lower())
+    global_freq = pd.Series(texts_all.split()).value_counts()
+
+    n_cols = 3
+    n_rows = math.ceil(len(time_slices)/n_cols)
+    fig, axes = plt.subplots(n_rows, n_cols, figsize=(n_cols*5, n_rows*5))
+
+    for idx, (y_start, y_end) in enumerate(time_slices):
+        df_slice = df[(df["year"] >= y_start) & (df["year"] <= y_end)]
+        if df_slice.empty:
+            text = ""
+        else:
+            text = " ".join(df_slice["keyword_s"].dropna().astype(str).str.lower())
+
+        # 简单 keyness：词频 / 全局词频
+        freq_slice = pd.Series(text.split()).value_counts()
+        keyness = (freq_slice / global_freq).fillna(0).to_dict()
+
+        wc = WordCloud(width=400, height=400, background_color="white").generate_from_frequencies(keyness)
+
+        row, col = divmod(idx, n_cols)
+        ax = axes[row, col] if n_rows>1 else axes[col]
+        ax.imshow(wc, interpolation="bilinear")
+        ax.set_title(f"{y_start}-{y_end}", fontsize=12)
+        ax.axis("off")
+
+    # 删除多余子图
+    for j in range(idx+1, n_rows*n_cols):
+        row, col = divmod(j, n_cols)
+        ax = axes[row, col] if n_rows>1 else axes[col]
+        ax.axis("off")
+
+    st.pyplot(fig)
+
