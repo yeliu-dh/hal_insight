@@ -3,7 +3,7 @@ from utils.upload import csv_uploader#
 
 st.set_page_config(page_title="HAL Insight",page_icon="🛸", layout="wide")
 
-st.title("🛸HAL Insight | Accueil")
+st.title("🛸Accueil | HAL Insight")
 st.markdown("""
 Bienvenue sur le tableau de bord HAL Insight !
 
@@ -28,7 +28,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 else:
     st.warning("⚠️ Merci d’importer un fichier CSV pour continuer.")
 
-    
+
 
 
 
