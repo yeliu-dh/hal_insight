@@ -83,7 +83,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         )
         french_stopwords = {"et", "de", "la", "le", "les","l","l'", "des", "un", "une", 
                             "du", "en", "au","d","dans","à","par","pour","sur","sont","aux","au",
-                            "leur","qui","ou","il","elle","ils","elles","je","tu","vous","nous"}
+                            "leur","qui","ou","il","elle","ils","elles","je","tu","vous","nous","se",
+                            "et","ce",'qui','que',"est","qu","avec","ont"}
         
         stopwords = set(STOPWORDS).union(french_stopwords).union(user_stopwords)
 
