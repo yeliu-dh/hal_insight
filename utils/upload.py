@@ -11,16 +11,16 @@ def csv_uploader(key="uploaded_df"):
     st.subheader("📂 Importer vos données")
 
     uploaded_file = st.file_uploader(
-        "Charger/Changer un fichier CSV", 
+        "Charger / Changer un fichier CSV", 
         type=["csv"], 
         key=f"{key}_file"
     )
 
     if uploaded_file is not None:
         st.session_state[key] = pd.read_csv(uploaded_file)
-        st.success(f"✅ CSV chargé avec {len(st.session_state[key])} lignes.")
+        # st.success(f"✅ CSV chargé avec {len(st.session_state[key])} lignes.")
 
     # 如果 session_state 里已有数据
     if key in st.session_state and st.session_state[key] is not None:
-        st.success("✅ Fichier déjà chargé")
+        st.success("✅ CSV chargé ")
         st.dataframe(st.session_state[key].head())  # 显示前几行

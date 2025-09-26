@@ -25,7 +25,7 @@ from utils.upload import csv_uploader
 # st.set_page_config(page_title="HAL Insights Dashboard", layout="wide")
 
 st.set_page_config(page_title="Tendance & Répartition", page_icon="🛸", layout="wide")
-# st.title("📊 Tendance & Répartition")
+st.title("📊 Tendance & Répartition")
 
 
 # -------------------------------
@@ -46,9 +46,6 @@ csv_uploader()# 调用上传器（会自动处理已有/新上传）
 
 if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None:
     df = st.session_state.uploaded_df.copy()
-    st.write("### Aperçu des données", df.head())
-    # 👉 这里接着做分析
-
 else:
     st.warning("⚠️ Merci d’importer un fichier CSV pour continuer.")
 
