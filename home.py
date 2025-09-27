@@ -24,15 +24,8 @@ st.divider() #分割线
 
 
 #----------------------- 「留言系统 + 公告栏」-----------------------*
-import streamlit as st
-import sqlite3
-from datetime import datetime
-
-# ========== 配置 ==========
-ADMIN_PASSWORD = "123"  # ⚠️ 记得换成你自己的密码
-
 # ========== 数据库函数 ==========
-def init_db():
+def init_db():# 获取数据库
     conn = sqlite3.connect("feedback.db")
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS feedback
@@ -41,37 +34,30 @@ def init_db():
                   problem TEXT,
                   date TEXT,
                   handled INTEGER DEFAULT 0,
-                  reply TEXT)''')
+                  reply TEXT,
+                  published INTEGER DEFAULT 0)''')  # 新增 published 字段
     conn.commit()
     conn.close()
+
 
 def insert_feedback(page, problem):
     conn = sqlite3.connect("feedback.db")
     c = conn.cursor()
     c.execute("INSERT INTO feedback (page, problem, date) VALUES (?, ?, ?)",
-              (page, problem, datetime.now().strftime("%Y-%m-%d %H:%M")))
+              (page, problem, datetime.now().strftime("%d-%m-%Y")))
     conn.commit()
     conn.close()
 
-def get_feedback():
-    conn = sqlite3.connect("feedback.db")
-    c = conn.cursor()
-    c.execute("SELECT * FROM feedback ORDER BY handled, date DESC")
-    rows = c.fetchall()
-    conn.close()
-    return rows
-
-def update_feedback(feedback_id, reply):
-    conn = sqlite3.connect("feedback.db")
-    c = conn.cursor()
-    c.execute("UPDATE feedback SET handled=1, reply=? WHERE id=?", (reply, feedback_id))
-    conn.commit()
-    conn.close()
 
 def get_updates(limit=5):
     conn = sqlite3.connect("feedback.db")
     c = conn.cursor()
-    c.execute("SELECT date, reply FROM feedback WHERE handled=1 AND reply IS NOT NULL ORDER BY date DESC LIMIT ?", (limit,))
+    c.execute("""
+        SELECT page, problem, date, reply 
+        FROM feedback 
+        WHERE handled=1 AND reply IS NOT NULL AND published=1
+        ORDER BY date DESC LIMIT ?
+    """, (limit,))
     rows = c.fetchall()
     conn.close()
     return rows
@@ -79,57 +65,46 @@ def get_updates(limit=5):
 # ========== 初始化数据库 ==========
 init_db()
 
-# ========== 页面内容 ==========
-st.title("🏠 Home Page")
-
-# --- 用户留言区 ---
+# --- 留言板 ---
 st.subheader("📬 留言板")
-page = st.selectbox("选择有问题的页面", ["Page1", "Page2", "Page3", "其他"])
-problem = st.text_area("请输入您的问题")
+page = st.selectbox("Page en question", ["Page1", "Page2", "Page3", "Autres pages"])
+problem = st.text_area("Votre feedback:")
 
-if st.button("提交反馈"):
+#右下角按钮
+cols=st.columns([5,1])
+with cols[1]:
+    feedback_button=st.button("Soumettre")
+
+if feedback_button:
     if problem.strip():
         insert_feedback(page, problem)
-        st.success("✅ 感谢您的反馈！")
+        st.success(f"✅ Votre feedback a été remis le {datetime.now().strftime("%d-%m-%Y")}！\n")
     else:
-        st.warning("请输入问题描述！")
+        st.warning("Input obligatoire!")
 
 st.divider()
 
 # --- 更新展示区 ---
-st.subheader("📢 最新更新")
-updates = get_updates()
+st.subheader("📢 公告栏 Updates")
+updates = get_updates(limit=10)  # 可以显示更多条
+
 if updates:
-    for date, reply in updates:
-        st.info(f"{date} - {reply}")
+    for page, problem, date, reply in updates:
+        # 使用卡片风格或者左右两栏
+        with st.container():
+            st.markdown("---")  # 分隔线
+            col1, col2 = st.columns([1, 2])  # 左右比例可以调
+            with col1:
+                st.caption(f"页面: {page}")
+                st.caption(f"提交时间: {date}")
+                st.write("用户反馈:")
+                st.info(problem)
+            with col2:
+                st.write("管理员回复:")
+                st.success(reply)
 else:
     st.write("暂无更新~")
 
-st.divider()
-
-# --- 管理员后台 ---
-st.subheader("🔑 管理员登录")
-password = st.text_input("请输入管理员密码", type="password")
-
-if password == ADMIN_PASSWORD:
-    st.success("已进入管理员后台 ✅")
-
-    feedbacks = get_feedback()
-    if not feedbacks:
-        st.write("暂无留言")
-    else:
-        for f in feedbacks:
-            fid, page, problem, date, handled, reply = f
-            with st.expander(f"📌 {date} | {page} | {'✅ 已处理' if handled else '❌ 未处理'}"):
-                st.write(problem)
-                if handled:
-                    st.success(f"回复：{reply}")
-                else:
-                    reply_text = st.text_input(f"回复（ID: {fid}）", key=f"reply_{fid}")
-                    if st.button(f"标记已处理 (ID: {fid})"):
-                        update_feedback(fid, reply_text)
-                        st.success("处理完成 ✅")
-                        st.rerun()
 
 
 
@@ -138,8 +113,6 @@ if password == ADMIN_PASSWORD:
 
 
 # emojis:
-
-
 # 🗂️
 # 📑
 
