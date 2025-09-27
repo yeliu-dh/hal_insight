@@ -52,11 +52,11 @@ st.subheader("📢 Updates")
 updates = get_updates(limit=10)  # 可以显示更多条
 # consistent with "get_updates":
 # SELECT id, date, page, problem, reply_date, reply
-cols=st.columns(2)
+cols=st.columns([1, 2])
 with cols[0]:
-    st.subheader("Feedbacks")
+    st.subheader("### Feedbacks")
 with cols[1]:
-    st.subheader("Réponse")
+    st.subheader("### Réponse")
     
 
 if updates:
