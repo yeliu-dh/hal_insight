@@ -1,9 +1,11 @@
 import streamlit as st
 from utils.feedback import init_db, get_feedback, update_feedback, set_published
 
+
+
+st.set_page_config(page_title="HAL Insight",page_icon="🛸", layout="wide")
 st.title("🛠️ Feedback Manager")
 init_db()  # 初始化数据库
-
 
 #---------Secrets----------
 # manage app, settings, secrets
@@ -44,8 +46,8 @@ else:
                 publish_toggle = st.checkbox("发布到公告栏", value=bool(published), key=f"publish_{fid}")
                 if publish_toggle != bool(published):
                     set_published(fid, publish_toggle)
-                    st.info("✅ 公告栏已更新")
-                    st.experimental_rerun()
+                    st.info("🔄 公告栏已更新")
+                    st.rerun()
             else:
                 reply_text = st.text_input(f"Reply to id {fid}:", key=f"reply_{fid}")
                 if st.button(f"标记已处理 id {fid}"):
