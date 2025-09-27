@@ -54,9 +54,9 @@ updates = get_updates(limit=10)  # 可以显示更多条
 # SELECT id, date, page, problem, reply_date, reply
 cols=st.columns(2)
 with cols[0]:
-    st.subsubheader("Feedbacks")
+    st.subheader("Feedbacks")
 with cols[1]:
-    st.subsubheader("Réponse")
+    st.subheader("Réponse")
     
 
 if updates:
