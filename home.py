@@ -62,7 +62,6 @@ if updates:
             col1, col2 = st.columns([1, 2])
             with col1:
                 st.caption(f"Date de soumission: {date} | Problème de {page}")
-                st.caption()
                 # st.write("Feedback:")
                 st.info(problem)
             with col2:
