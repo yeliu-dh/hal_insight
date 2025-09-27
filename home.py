@@ -61,12 +61,14 @@ if updates:
 
             col1, col2 = st.columns([1, 2])
             with col1:
-                st.caption(f"Date de soumission: {date} | Problème de {page}")
+                st.caption(f"{date} | {page}")
                 # st.write("Feedback:")
-                st.info(problem)
+                st.info(f"Feedback:\n {problem}")
             with col2:
-                st.caption(f"Date de réponse: {reply_date}")
+                st.caption(f"{reply_date}")
                 # st.write("Réponse:")
+                st.info(f"Réponse:\n {reply}")
+
                 st.success(reply)
 else:
     st.write("Aucune mis à jour...")
