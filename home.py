@@ -45,13 +45,19 @@ if feedback_button:
     else:
         st.warning("Input obligatoire!")
 
-st.divider()
+# st.divider()
 
 # --- 更新展示区 ---
 st.subheader("📢 Updates")
 updates = get_updates(limit=10)  # 可以显示更多条
 # consistent with "get_updates":
 # SELECT id, date, page, problem, reply_date, reply
+cols=st.columns(2)
+with cols[0]:
+    st.subsubheader("Feedbacks")
+with cols[1]:
+    st.subsubheader("Réponse")
+    
 
 if updates:
     for r in updates:
@@ -62,16 +68,16 @@ if updates:
             col1, col2 = st.columns([1, 2])
             with col1:
                 st.caption(f"{date} | {page}")
-                # st.write("Feedback:")
-                st.info(f"Feedback:  \n {problem}")#两个空格 + 换行（Markdown 风格）
+                st.write(problem)
+                # st.info(f"Feedback:  \n {problem}")#两个空格 + 换行（Markdown 风格）
             with col2:
                 st.caption(f"{reply_date}")
-                # st.write("Réponse:")
+                st.write(reply)
                 # st.success(reply)
-
-                st.success(f"Réponse:  \n {reply}")
+                # st.success(f"Réponse:  \n {reply}")
                 
 else:
+    st.write('\n')
     st.write("Aucune mis à jour...")
 
 

@@ -38,7 +38,7 @@ def append_feedback(page, problem):
     """用户提交反馈"""
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    date = datetime.datetime.now().strftime("%d-%m-%Y")
     c.execute("INSERT INTO feedback (page, problem, date) VALUES (?, ?, ?)", (page, problem, date))
     conn.commit()
     conn.close()
