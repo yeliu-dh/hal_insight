@@ -1,8 +1,7 @@
 import streamlit as st
 import sqlite3
 from datetime import datetime
-# from utils.feedback import get_sheet, ensure_header, append_feedback, get_updates
-from utils.feedback import append_feedback, get_updates
+from utils.feedback import init_db, append_feedback, get_updates
 import gspread
 
 st.set_page_config(page_title="HAL Insight",page_icon="🛸", layout="wide")
@@ -26,17 +25,19 @@ en consultant la barre latéral!
 st.divider() #分割线
 
 
-st.subheader("📬 Feedbacks")
-page = st.selectbox("选择有问题的页面", ["Page1", "Page2", "Page3", "其他"])
-problem = st.text_area("请输入您的问题")
+#----初始化数据库------
+init_db()  
 
+# --- 用户反馈表单 ---
+st.subheader("📬 Feedbacks")
+page = st.text_input("问题发生在页面")
+problem = st.text_area("请描述问题")
 if st.button("提交反馈"):
-    if page and problem.strip():
+    if page and problem:
         append_feedback(page, problem)
         st.success("✅ 反馈已提交")
     else:
         st.warning("请填写页面和问题描述")
-
 
 st.divider()
 
@@ -60,54 +61,17 @@ else:
 
 
 
+
+# # --- 公告栏显示 （简洁版）---
 # st.subheader("📢 Updates")
 # updates = get_updates()
 # if updates:
-#     for u in updates:
-#         st.info(f"{u['date']} | {u['page']} | {u['problem']}\n➡️ 回复: {u['reply']}")
+#     for page, problem, date, reply in updates:
+#         st.info(f"{date} | {page} | {problem}\n➡️ 回复: {reply}")
 # else:
 #     st.write("暂无更新~")
+# st.divider()
 
-
-
-#----------------------- 「留言系统 + 公告栏」-----------------------*
-# ========== 数据库函数 ==========
-# def init_db():# 获取数据库
-#     conn = sqlite3.connect("feedback.db")
-#     c = conn.cursor()
-#     c.execute('''CREATE TABLE IF NOT EXISTS feedback
-#                  (id INTEGER PRIMARY KEY AUTOINCREMENT,
-#                   page TEXT,
-#                   problem TEXT,
-#                   date TEXT,
-#                   handled INTEGER DEFAULT 0,
-#                   reply TEXT,
-#                   published INTEGER DEFAULT 0)''')  # 新增 published 字段
-#     conn.commit()
-#     conn.close()
-
-
-# def insert_feedback(page, problem):
-#     conn = sqlite3.connect("feedback.db")
-#     c = conn.cursor()
-#     c.execute("INSERT INTO feedback (page, problem, date) VALUES (?, ?, ?)",
-#               (page, problem, datetime.now().strftime("%d-%m-%Y")))
-#     conn.commit()
-#     conn.close()
-
-
-# def get_updates(limit=5):
-#     conn = sqlite3.connect("feedback.db")
-#     c = conn.cursor()
-#     c.execute("""
-#         SELECT page, problem, date, reply 
-#         FROM feedback 
-#         WHERE handled=1 AND reply IS NOT NULL AND published=1
-#         ORDER BY date DESC LIMIT ?
-#     """, (limit,))
-#     rows = c.fetchall()
-#     conn.close()
-#     return rows
 
 
 
@@ -156,8 +120,13 @@ else:
 
 
 
-#-------------update requirements-----------#
 
+
+
+
+
+
+#-------------update requirements-----------#
 #  pipreqs hal_insight --force --savepath hal_insight/requirements.txt
 
 
