@@ -78,7 +78,7 @@ with cols[1]:
 if feedback_button:
     if problem.strip():
         insert_feedback(page, problem)
-        st.success(f"✅ Votre feedback a été remis le {datetime.now().strftime("%d-%m-%Y")}！\n")
+        st.success(f"✅ Merci pour votre feedback！")
     else:
         st.warning("Input obligatoire!")
 
