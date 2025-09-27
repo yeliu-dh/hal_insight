@@ -86,21 +86,24 @@ st.divider()
 st.subheader("📢 Updates")
 updates = get_updates(limit=10)  # 可以显示更多条
 
+# SELECT id, date, page, problem, reply_date, reply
+
 if updates:
     for r in updates:
+        id, date, page, problem, reply_date, reply=r
         with st.container():
             st.markdown("---")  # 分隔线
 
             col1, col2 = st.columns([1, 2])
             with col1:
-                st.caption(f"Date de soumission: {r.get('date')}")
-                st.caption(f"Page: {r.get('page')}")
+                st.caption(f"Date de soumission: {date}")
+                st.caption(f"Page: {page}")
                 st.write("Feedback:")
-                st.info(r.get("problem"))
+                st.info(problem)
             with col2:
-                st.caption(f"Date de réponse: {r.get('reply_date', '')}")
+                st.caption(f"Date de réponse: {reply_date}")
                 st.write("Réponse:")
-                st.success(r.get("reply"))
+                st.success(reply)
 else:
     st.write("Aucune mis à jour...")
 
