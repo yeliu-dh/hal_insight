@@ -54,10 +54,17 @@ updates = get_updates(limit=10)  # 可以显示更多条
 # SELECT id, date, page, problem, reply_date, reply
 cols=st.columns([1, 2])
 with cols[0]:
-    st.subheader("### Feedbacks")
+    st.write("### Feedbacks")
 with cols[1]:
-    st.subheader("### Réponse")
-    
+    st.write("### Réponse")
+
+# → 最大标题
+
+## → 一级
+
+### → 二级
+
+#### → 三级（比 subheader 更小）
 
 if updates:
     for r in updates:

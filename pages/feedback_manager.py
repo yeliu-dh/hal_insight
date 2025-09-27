@@ -39,11 +39,13 @@ if not feedbacks:
 else:
     for f in feedbacks: 
         fid, date, page, problem, reply_date, handled, reply, published = f
-        with st.expander(f"📌id {fid} | {date} | {'✅ 已处理' if handled else '❌ 未处理'}"):
+        with st.expander(f"📌 id{fid} | {date} | {'✅ 已处理' if handled else '❌ 未处理'}"):
             st.write(problem)
             if handled:
                 st.success(f"回复：{reply}")
-                publish_toggle = st.checkbox("发布到公告栏", value=bool(published), key=f"publish_{fid}")
+                cols=st.columns([5,1])
+                with cols[1]:
+                    publish_toggle = st.checkbox("发布到公告栏", value=bool(published), key=f"publish_{fid}")
                 if publish_toggle != bool(published):
                     set_published(fid, publish_toggle)
                     st.info("🔄 公告栏已更新")
@@ -54,8 +56,3 @@ else:
                     update_feedback(fid, reply_text, handled=True, published=False)#自动获取时间
                     st.success("✅ 处理完成 ")
                     st.rerun()
-
-
-
-# for page, problem, date, reply, reply_date in updates:
-#     st.info(f"{date} | {page} | {problem}\n➡️ 回复({reply_date}): {reply}")
