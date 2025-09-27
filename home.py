@@ -50,7 +50,7 @@ st.divider()
 # --- 更新展示区 ---
 st.subheader("📢 Updates")
 updates = get_updates(limit=10)  # 可以显示更多条
-
+# consistent with "get_updates":
 # SELECT id, date, page, problem, reply_date, reply
 
 if updates:
@@ -63,13 +63,13 @@ if updates:
             with col1:
                 st.caption(f"{date} | {page}")
                 # st.write("Feedback:")
-                st.info(f"Feedback:\n {problem}")
+                st.info(f"Feedback:  \n {problem}")#两个空格 + 换行（Markdown 风格）
             with col2:
                 st.caption(f"{reply_date}")
                 # st.write("Réponse:")
                 # st.success(reply)
 
-                st.success(f"Réponse:\n {reply}")
+                st.success(f"Réponse:  \n {reply}")
                 
 else:
     st.write("Aucune mis à jour...")

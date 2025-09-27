@@ -6,14 +6,6 @@ import os
 # Streamlit Cloud 提供了一个 持久化目录 /mnt/data，这里的文件可以在 App 重启和更新时保留。(只要不删除app都可以保存)
 # DB_PATH = "/mnt/data/feedback.db"
 
-# #删除
-# DB_PATH="/home/appuser/app_data/feedback.bd"
-# if os.path.exists(DB_PATH):
-#     os.remove(DB_PATH)
-#     print("旧数据库已删除!")
-# else:
-#     print('数据库不存在!')
-
 
 DB_DIR = "/home/appuser/app_data"
 os.makedirs(DB_DIR, exist_ok=True)  # 确保目录存在
@@ -78,15 +70,6 @@ def update_feedback(fid, reply_text, handled=True, published=False):
     conn.close()
 
 
-# def update_feedback(fid, reply_text, handled=True, published=False):
-#     """更新反馈状态和回复"""
-#     conn = sqlite3.connect(DB_PATH)
-#     c = conn.cursor()
-#     c.execute("UPDATE feedback SET handled=?, reply=?, published=? WHERE id=?", (int(handled), reply_text, int(published), fid))
-#     conn.commit()
-#     conn.close()
-
-
 def set_published(fid, publish=True):
     """更新公告栏发布状态"""
     conn = sqlite3.connect(DB_PATH)
@@ -109,13 +92,3 @@ def get_updates(limit=5):
     rows = c.fetchall()
     conn.close()
     return rows
-
-
-# def get_updates(limit=5):
-#     """获取已处理并发布的公告"""
-#     conn = sqlite3.connect(DB_PATH)
-#     c = conn.cursor()
-#     c.execute("SELECT page, problem, date, reply FROM feedback WHERE handled=1 AND published=1 ORDER BY date DESC LIMIT ?", (limit,))
-#     rows = c.fetchall()
-#     conn.close()
-#     return rows
