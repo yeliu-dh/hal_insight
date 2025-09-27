@@ -13,7 +13,7 @@ init_db()  # 初始化数据库
 
 ADMIN_PASSWORD = st.secrets["admin"]["password"]
 
-password = st.text_input("🔑 请输入管理员密码", type="password")
+password = st.text_input("🔑 Password Admin:", type="password")
 if password != ADMIN_PASSWORD:
     st.warning("请输入正确密码")
     st.stop()
