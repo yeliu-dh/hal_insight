@@ -1,11 +1,17 @@
 import sqlite3
 import datetime
-
+import os
 
 # 使用 Streamlit 的持久化存储 /mnt/data
 # Streamlit Cloud 提供了一个 持久化目录 /mnt/data，这里的文件可以在 App 重启和更新时保留。(只要不删除app都可以保存)
+# DB_PATH = "/mnt/data/feedback.db"
 
-DB_PATH = "/mnt/data/feedback.db"
+
+DB_DIR = "/mnt/data"
+os.makedirs(DB_DIR, exist_ok=True)  # 确保目录存在
+DB_PATH = os.path.join(DB_DIR, "feedback.db")
+
+
 
 def init_db():
     """初始化数据库"""
