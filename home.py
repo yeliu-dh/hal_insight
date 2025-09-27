@@ -30,7 +30,7 @@ init_db()
 
 # --- 留言板 ---
 st.subheader("📬 Feedbacks")
-page = st.selectbox("Page en question", ["Page1", "Page2", "Page3", "Autres pages"])
+page = st.selectbox("App en question", ["articles fetcher", "tendance & répartition", "keywords", "Autres pages"])
 problem = st.text_area("Votre feedback:")
 
 #右下角按钮
@@ -52,11 +52,11 @@ st.subheader("📢 Updates")
 updates = get_updates(limit=10)  # 可以显示更多条
 # consistent with "get_updates":
 # SELECT id, date, page, problem, reply_date, reply
-cols=st.columns([1, 2])
+cols=st.columns(2)
 with cols[0]:
-    st.write("### Feedbacks")
+    st.write("### feedbacks")
 with cols[1]:
-    st.write("### Réponse")
+    st.write("### réponse")
 
 # → 最大标题
 
@@ -72,7 +72,7 @@ if updates:
         with st.container():
             st.markdown("---")  # 分隔线
 
-            col1, col2 = st.columns([1, 2])
+            col1, col2 = st.columns(2)
             with col1:
                 st.caption(f"{date} | {page}")
                 st.write(problem)
