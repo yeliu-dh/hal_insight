@@ -1,12 +1,9 @@
 import streamlit as st
 import sqlite3
 from datetime import datetime
-from utils.feedback import get_sheet, ensure_header, append_feedback, get_updates
-
-SPREADSHEET_NAME = "FeedbackDB"  # 改成你的 sheet 名称或 spreadsheet id
-
-
-
+# from utils.feedback import get_sheet, ensure_header, append_feedback, get_updates
+from utils.feedback import append_feedback, get_updates
+import gspread
 
 st.set_page_config(page_title="HAL Insight",page_icon="🛸", layout="wide")
 
@@ -42,16 +39,17 @@ page = st.selectbox("选择有问题的页面", ["Page1", "Page2", "Page3", "其
 problem = st.text_area("请输入您的问题")
 
 if st.button("提交反馈"):
-    if problem.strip():
-        append_feedback(ws, page, problem)
-        st.success("✅ 感谢您的反馈！")
+    if page and problem.strip():
+        append_feedback(page, problem)
+        st.success("✅ 反馈已提交")
     else:
-        st.warning("请输入问题描述！")
+        st.warning("请填写页面和问题描述")
+
 
 st.divider()
 
 st.subheader("📢 公告栏 Updates")
-updates = get_updates(ws, limit=10)
+updates = get_updates(limit=10)
 if updates:
     for r in updates:
         col1, col2 = st.columns([1, 2])
@@ -68,6 +66,15 @@ else:
     st.write("暂无更新~")
 
 
+
+
+# st.subheader("📢 Updates")
+# updates = get_updates()
+# if updates:
+#     for u in updates:
+#         st.info(f"{u['date']} | {u['page']} | {u['problem']}\n➡️ 回复: {u['reply']}")
+# else:
+#     st.write("暂无更新~")
 
 
 
@@ -162,7 +169,9 @@ else:
 
 
 #-------------update requirements-----------#
-# pipreqs hal_insight --force --savepath hal_insight/requirements.txt
+
+#  pipreqs hal_insight --force --savepath hal_insight/requirements.txt
+
 
 
 # emojis:

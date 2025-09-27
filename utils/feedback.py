@@ -6,134 +6,194 @@ from datetime import datetime
 import json
 from typing import List, Dict
 
-# 表头 —— 我把 reply_date (管理员回复时间) 一并加入
-DEFAULT_HEADER = ["page", "problem", "date", "reply", "reply_date", "handled", "published"]
 
-def _load_credentials_dict():
+SHEET_ID ="1cWjLBrLweH2PiF8c7uzRm1IitAeQ6TAce0hKsKteEBk"
+
+
+def get_sheet():
+    """返回 gspread worksheet 对象"""
+    gc = gspread.Client(None)  # 无认证访问公开 Sheet
+    sh = gc.open_by_key(SHEET_ID)
+    return sh.sheet1
+
+import gspread
+import datetime
+
+# --- 配置你的公开 Google Sheet ID ---
+SHEET_ID = "你的公开 Sheet ID"
+
+def get_sheet():
+    """返回 gspread worksheet 对象"""
+    gc = gspread.Client(None)  # 无认证访问公开 Sheet
+    sh = gc.open_by_key(SHEET_ID)
+    return sh.sheet1
+
+def append_feedback(page, problem):
+    """添加用户反馈"""
+    ws = get_sheet() #worksheet
+    date = datetime.datetime.now().strftime("%d-%m-%Y")
+    ws.append_row([page, problem, date, 0, "", 0])  # handled, reply, published 默认值为0 false
+
+def get_feedback():
+    """获取所有反馈（用于后台管理）"""
+    ws = get_sheet()
+    return ws.get_all_records()
+
+def update_feedback(row_index, reply_text, handled=True, published=False):
     """
-    从 st.secrets 读取 GCP service account JSON。
-    支持几种常见的 secret 存法（见下面的 secrets 示范）。
+    row_index: 在 Sheet 中的行号（从 2 开始，第一行是表头）
+    reply_text: 回复内容
+    handled: 是否处理
+    published: 是否发布到公告栏
     """
-    secret = st.secrets.get("gcp_service_account")
-    if secret is None:
-        raise RuntimeError("找不到 st.secrets['gcp_service_account']，请按文档将 GCP 凭证放入 Secrets。")
+    ws = get_sheet()
+    ws.update(f"D{row_index}", int(handled))  # handled
+    ws.update(f"E{row_index}", reply_text)    # reply
+    ws.update(f"F{row_index}", int(published)) # published
 
-    # case A: secret 是一个 dict，且含有 credentials 字段（json 字符串）
-    if isinstance(secret, dict) and "credentials" in secret:
-        cred_field = secret["credentials"]
-        if isinstance(cred_field, str):
-            return json.loads(cred_field)
-        elif isinstance(cred_field, dict):
-            return cred_field
+def set_published(row_index, publish=True):
+    """更新某条反馈的发布状态"""
+    ws = get_sheet()
+    ws.update(f"F{row_index}", int(publish))
 
-    # case B: secret 是一个字符串（直接把 JSON 放在一个 secret 字段里）
-    if isinstance(secret, str):
-        return json.loads(secret)
-
-    # case C: 直接把 JSON 的 key:value 放在 [gcp_service_account] 下（不常见但支持）
-    if isinstance(secret, dict):
-        return secret
-
-    raise RuntimeError("未能解析 gcp_service_account 的格式，请参考 README 设置 Secrets。")
+def get_updates(limit=5):
+    """获取已处理且发布的更新"""
+    ws = get_sheet()
+    all_records = ws.get_all_records()
+    updates = [r for r in all_records if r.get("handled") == 1 and r.get("published") == 1]
+    updates.sort(key=lambda x: x["date"], reverse=True)
+    return updates[:limit]
 
 
-def get_client():
-    creds = _load_credentials_dict()
-    # gspread 提供从 dict 创建 service account 的方法
-    return gspread.service_account_from_dict(creds)
+
+# # 表头 —— 我把 reply_date (管理员回复时间) 一并加入
+# DEFAULT_HEADER = ["page", "problem", "date", "reply", "reply_date", "handled", "published"]
+
+# def _load_credentials_dict():
+#     """
+#     从 st.secrets 读取 GCP service account JSON。
+#     支持几种常见的 secret 存法（见下面的 secrets 示范）。
+#     """
+#     secret = st.secrets.get("gcp_service_account")
+#     if secret is None:
+#         raise RuntimeError("找不到 st.secrets['gcp_service_account']，请按文档将 GCP 凭证放入 Secrets。")
+
+#     # case A: secret 是一个 dict，且含有 credentials 字段（json 字符串）
+#     if isinstance(secret, dict) and "credentials" in secret:
+#         cred_field = secret["credentials"]
+#         if isinstance(cred_field, str):
+#             return json.loads(cred_field)
+#         elif isinstance(cred_field, dict):
+#             return cred_field
+
+#     # case B: secret 是一个字符串（直接把 JSON 放在一个 secret 字段里）
+#     if isinstance(secret, str):
+#         return json.loads(secret)
+
+#     # case C: 直接把 JSON 的 key:value 放在 [gcp_service_account] 下（不常见但支持）
+#     if isinstance(secret, dict):
+#         return secret
+
+#     raise RuntimeError("未能解析 gcp_service_account 的格式，请参考 README 设置 Secrets。")
 
 
-def get_sheet(spreadsheet_name_or_key: str, worksheet_index: int = 0):
-    """
-    打开 Spreadsheet -> 返回 worksheet 对象（默认第一个表单）。
-    参数 spreadsheet_name_or_key 可以是表名也可以是 spreadsheet id。
-    """
-    client = get_client()
-    try:
-        sh = client.open(spreadsheet_name_or_key)
-    except Exception:
-        sh = client.open_by_key(spreadsheet_name_or_key)
-    ws = sh.get_worksheet(worksheet_index)
-    if ws is None:
-        ws = sh.sheet1
-    return ws
+# def get_client():
+#     creds = _load_credentials_dict()
+#     # gspread 提供从 dict 创建 service account 的方法
+#     return gspread.service_account_from_dict(creds)
 
 
-def ensure_header(ws, header=DEFAULT_HEADER):
-    """
-    确保第一行是我们需要的表头（如果不是，会覆盖第一行）。
-    （注意：覆盖 header 会改变表头，但不会改变已有数据行）
-    """
-    first_row = ws.row_values(1)
-    if not first_row or first_row[: len(header)] != header:
-        ws.update("A1", [header])
+# def get_sheet(spreadsheet_name_or_key: str, worksheet_index: int = 0):
+#     """
+#     打开 Spreadsheet -> 返回 worksheet 对象（默认第一个表单）。
+#     参数 spreadsheet_name_or_key 可以是表名也可以是 spreadsheet id。
+#     """
+#     client = get_client()
+#     try:
+#         sh = client.open(spreadsheet_name_or_key)
+#     except Exception:
+#         sh = client.open_by_key(spreadsheet_name_or_key)
+#     ws = sh.get_worksheet(worksheet_index)
+#     if ws is None:
+#         ws = sh.sheet1
+#     return ws
 
 
-def append_feedback(ws, page: str, problem: str):
-    """
-    新增一条用户反馈（reply/reply_date/handled/published 使用默认空/0）
-    """
-    now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    row = [page, problem, now, "", "", 0, 0]
-    ws.append_row(row, value_input_option="USER_ENTERED")
+# def ensure_header(ws, header=DEFAULT_HEADER):
+#     """
+#     确保第一行是我们需要的表头（如果不是，会覆盖第一行）。
+#     （注意：覆盖 header 会改变表头，但不会改变已有数据行）
+#     """
+#     first_row = ws.row_values(1)
+#     if not first_row or first_row[: len(header)] != header:
+#         ws.update("A1", [header])
 
 
-def fetch_all_feedbacks(ws) -> List[Dict]:
-    """
-    把 sheet 转成 records（list of dict），并附加 '_row' 字段表示真实的 sheet 行号（从1开始）。
-    get_all_records() 会把第一行当 header，返回的数据第一条对应 sheet 的第2行 -> 所以 _row = i + 2
-    """
-    records = ws.get_all_records()
-    for i, rec in enumerate(records):
-        rec["_row"] = i + 2
-    return records
+# def append_feedback(ws, page: str, problem: str):
+#     """
+#     新增一条用户反馈（reply/reply_date/handled/published 使用默认空/0）
+#     """
+#     now = datetime.now().strftime("%Y-%m-%d %H:%M")
+#     row = [page, problem, now, "", "", 0, 0]
+#     ws.append_row(row, value_input_option="USER_ENTERED")
 
 
-def update_feedback_by_row(ws, row_number: int, reply=None, handled=None, published=None):
-    """
-    更新指定行（sheet 的真实行号），只更新非 None 的字段。
-    列序：1 page | 2 problem | 3 date | 4 reply | 5 reply_date | 6 handled | 7 published
-    如果传入 reply，会同时写 reply_date 为当前时间。
-    """
-    if reply is not None:
-        ws.update_cell(row_number, 4, reply)
-        ws.update_cell(row_number, 5, datetime.now().strftime("%Y-%m-%d %H:%M"))
-    if handled is not None:
-        ws.update_cell(row_number, 6, handled)
-    if published is not None:
-        ws.update_cell(row_number, 7, published)
+# def fetch_all_feedbacks(ws) -> List[Dict]:
+#     """
+#     把 sheet 转成 records（list of dict），并附加 '_row' 字段表示真实的 sheet 行号（从1开始）。
+#     get_all_records() 会把第一行当 header，返回的数据第一条对应 sheet 的第2行 -> 所以 _row = i + 2
+#     """
+#     records = ws.get_all_records()
+#     for i, rec in enumerate(records):
+#         rec["_row"] = i + 2
+#     return records
 
 
-def get_updates(ws, limit: int = 5) -> List[Dict]:
-    """
-    返回要展示在公告栏的记录（handled=1, reply 非空, published=1），按 date 降序。
-    返回的记录包含原有字段与 '_row'。
-    """
-    records = fetch_all_feedbacks(ws)
-    # 为确保按提交时间降序，尝试解析 'date'
-    def parse_date(s):
-        try:
-            return datetime.strptime(s, "%Y-%m-%d %H:%M")
-        except Exception:
-            return datetime.min
+# def update_feedback_by_row(ws, row_number: int, reply=None, handled=None, published=None):
+#     """
+#     更新指定行（sheet 的真实行号），只更新非 None 的字段。
+#     列序：1 page | 2 problem | 3 date | 4 reply | 5 reply_date | 6 handled | 7 published
+#     如果传入 reply，会同时写 reply_date 为当前时间。
+#     """
+#     if reply is not None:
+#         ws.update_cell(row_number, 4, reply)
+#         ws.update_cell(row_number, 5, datetime.now().strftime("%Y-%m-%d %H:%M"))
+#     if handled is not None:
+#         ws.update_cell(row_number, 6, handled)
+#     if published is not None:
+#         ws.update_cell(row_number, 7, published)
 
-    filtered = []
-    for rec in records:
-        try:
-            handled = int(rec.get("handled", 0))
-            published = int(rec.get("published", 0))
-            reply = rec.get("reply", "")
-        except Exception:
-            handled = 1 if str(rec.get("handled")).strip() in ("1", "True", "true") else 0
-            published = 1 if str(rec.get("published")).strip() in ("1", "True", "true") else 0
-            reply = rec.get("reply", "")
 
-        if handled == 1 and reply and published == 1:
-            filtered.append(rec)
+# def get_updates(ws, limit: int = 5) -> List[Dict]:
+#     """
+#     返回要展示在公告栏的记录（handled=1, reply 非空, published=1），按 date 降序。
+#     返回的记录包含原有字段与 '_row'。
+#     """
+#     records = fetch_all_feedbacks(ws)
+#     # 为确保按提交时间降序，尝试解析 'date'
+#     def parse_date(s):
+#         try:
+#             return datetime.strptime(s, "%Y-%m-%d %H:%M")
+#         except Exception:
+#             return datetime.min
 
-    # 按用户提交时间排序（最新在前）
-    filtered.sort(key=lambda r: parse_date(r.get("date", "")), reverse=True)
-    return filtered[:limit]
+#     filtered = []
+#     for rec in records:
+#         try:
+#             handled = int(rec.get("handled", 0))
+#             published = int(rec.get("published", 0))
+#             reply = rec.get("reply", "")
+#         except Exception:
+#             handled = 1 if str(rec.get("handled")).strip() in ("1", "True", "true") else 0
+#             published = 1 if str(rec.get("published")).strip() in ("1", "True", "true") else 0
+#             reply = rec.get("reply", "")
+
+#         if handled == 1 and reply and published == 1:
+#             filtered.append(rec)
+
+#     # 按用户提交时间排序（最新在前）
+#     filtered.sort(key=lambda r: parse_date(r.get("date", "")), reverse=True)
+#     return filtered[:limit]
 
 
 
