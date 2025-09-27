@@ -39,7 +39,7 @@ if not feedbacks:
 else:
     for f in feedbacks: 
         fid, date, page, problem, reply_date, handled, reply, published = f
-        with st.expander(f"📌{fid} | {date} | {'✅ 已处理' if handled else '❌ 未处理'}"):
+        with st.expander(f"📌id {fid} | {date} | {'✅ 已处理' if handled else '❌ 未处理'}"):
             st.write(problem)
             if handled:
                 st.success(f"回复：{reply}")

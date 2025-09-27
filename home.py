@@ -25,42 +25,7 @@ en consultant la barre latéral!
 st.divider() #分割线
 
 
-# #----初始化数据库------
-# init_db()  
-
-# # --- 用户反馈表单 ---
-# st.subheader("📬 Feedbacks")
-# page = st.selectbox("Page en question", ["Page1", "Page2", "Page3", "Autres pages"])
-# problem = st.text_area("请描述问题")
-# if st.button("提交反馈"):
-#     if page and problem:
-#         append_feedback(page, problem)
-#         st.success("✅ 反馈已提交")
-#     else:
-#         st.warning("请填写页面和问题描述")
-
-# st.divider()
-
-# st.subheader("📢 Updates")
-# updates = get_updates(limit=10)
-# if updates:
-#     for r in updates:
-#         col1, col2 = st.columns([1, 2])
-#         with col1:
-#             st.caption(f"页面: {r.get('page')}")
-#             st.caption(f"提交时间: {r.get('date')}")
-#             st.write("用户反馈:")
-#             st.info(r.get("problem"))
-#         with col2:
-#             st.write("管理员回复:")
-#             st.success(r.get("reply"))
-#             st.caption(f"回复时间: {r.get('reply_date', '')}")
-# else:
-#     st.write("暂无更新~")
-
-
-
-# ========== 初始化数据库 ==========
+# -----------------初始化数据库 ----------------
 init_db()
 
 # --- 留言板 ---
@@ -96,35 +61,18 @@ if updates:
 
             col1, col2 = st.columns([1, 2])
             with col1:
-                st.caption(f"Date de soumission: {date}")
-                st.caption(f"Page: {page}")
-                st.write("Feedback:")
+                st.caption(f"Date de soumission: {date} | Problème de {page}")
+                st.caption()
+                # st.write("Feedback:")
                 st.info(problem)
             with col2:
                 st.caption(f"Date de réponse: {reply_date}")
-                st.write("Réponse:")
+                # st.write("Réponse:")
                 st.success(reply)
 else:
     st.write("Aucune mis à jour...")
 
 
-
-# if updates:
-#     for page, problem, date, reply in updates:
-#         # 使用卡片风格或者左右两栏
-#         with st.container():
-#             st.markdown("---")  # 分隔线
-#             col1, col2 = st.columns([1, 2])  # 左右比例可以调
-#             with col1:
-#                 st.caption(f"Page: {page}")
-#                 st.caption(f"Date de soumission: {date}")
-#                 st.write("Feedback:")
-#                 st.info(problem)
-#             with col2:
-#                 st.write("Réponse:")
-#                 st.success(reply)
-# else:
-#     st.write("Aucune mis à jour...")
 
 
 
