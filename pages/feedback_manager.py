@@ -15,18 +15,29 @@ ADMIN_PASSWORD = st.secrets["admin"]["password"]
 
 password = st.text_input("🔑 Password Admin:", type="password")
 if password != ADMIN_PASSWORD:
-    st.warning("请输入正确密码")
+    st.warning("Password invalid!")
     st.stop()
 
 st.success("✅ 已进入管理员后台")
 
 feedbacks = get_feedback()
+# #字段顺序 f：
+#             id INTEGER PRIMARY KEY AUTOINCREMENT,
+#             date TEXT,
+#             page TEXT,
+#             problem TEXT,
+#             reply_date TEXT DEFAULT "",
+#             handled INTEGER DEFAULT 0,
+#             reply TEXT,
+#             published INTEGER DEFAULT 0
+
+
 if not feedbacks:
-    st.write("暂无留言")
+    st.write("No feedbacks")
 else:
-    for f in feedbacks:
-        fid, page, problem, date, handled, reply, published = f
-        with st.expander(f"📌 {date} | {page} | {'✅ 已处理' if handled else '❌ 未处理'}"):
+    for f in feedbacks: 
+        fid, date, page, problem, reply_date, handled, reply, published = f
+        with st.expander(f"📌{id}| {date} | {'✅ 已处理' if handled else '❌ 未处理'}"):
             st.write(problem)
             if handled:
                 st.success(f"回复：{reply}")
@@ -36,8 +47,13 @@ else:
                     st.info("✅ 公告栏已更新")
                     st.experimental_rerun()
             else:
-                reply_text = st.text_input(f"回复（ID: {fid}）", key=f"reply_{fid}")
-                if st.button(f"标记已处理 (ID: {fid})"):
-                    update_feedback(fid, reply_text, handled=True, published=False)
-                    st.success("处理完成 ✅")
-                    st.experimental_rerun()
+                reply_text = st.text_input(f"Reply to id {fid}:", key=f"reply_{fid}")
+                if st.button(f"标记已处理 id {fid}"):
+                    update_feedback(fid, reply_text, handled=True, published=False)#自动获取时间
+                    st.success("✅ 处理完成 ")
+                    st.rerun()
+
+
+
+# for page, problem, date, reply, reply_date in updates:
+#     st.info(f"{date} | {page} | {problem}\n➡️ 回复({reply_date}): {reply}")
