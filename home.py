@@ -67,9 +67,10 @@ if updates:
             with col2:
                 st.caption(f"{reply_date}")
                 # st.write("Réponse:")
-                st.info(f"Réponse:\n {reply}")
+                # st.success(reply)
 
-                st.success(reply)
+                st.success(f"Réponse:\n {reply}")
+                
 else:
     st.write("Aucune mis à jour...")
 
