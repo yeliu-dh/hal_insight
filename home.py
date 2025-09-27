@@ -26,15 +26,7 @@ en consultant la barre latéral!
 st.divider() #分割线
 
 
-
-SPREADSHEET_NAME = "FeedbackDB"  # 改成你的 sheet 名称或 spreadsheet id
-
-# 获取 worksheet（第一个表单），并确保 header 存在
-ws = get_sheet(SPREADSHEET_NAME)
-ensure_header(ws)
-
-
-st.subheader("📬 留言板")
+st.subheader("📬 Feedbacks")
 page = st.selectbox("选择有问题的页面", ["Page1", "Page2", "Page3", "其他"])
 problem = st.text_area("请输入您的问题")
 
@@ -48,7 +40,7 @@ if st.button("提交反馈"):
 
 st.divider()
 
-st.subheader("📢 公告栏 Updates")
+st.subheader("📢 Updates")
 updates = get_updates(limit=10)
 if updates:
     for r in updates:
@@ -75,10 +67,6 @@ else:
 #         st.info(f"{u['date']} | {u['page']} | {u['problem']}\n➡️ 回复: {u['reply']}")
 # else:
 #     st.write("暂无更新~")
-
-
-
-
 
 
 
