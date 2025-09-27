@@ -1,6 +1,12 @@
 import streamlit as st
 import sqlite3
 from datetime import datetime
+from utils.feedback import get_sheet, ensure_header, append_feedback, get_updates
+
+SPREADSHEET_NAME = "FeedbackDB"  # 改成你的 sheet 名称或 spreadsheet id
+
+
+
 
 st.set_page_config(page_title="HAL Insight",page_icon="🛸", layout="wide")
 
@@ -23,88 +29,135 @@ en consultant la barre latéral!
 st.divider() #分割线
 
 
-#----------------------- 「留言系统 + 公告栏」-----------------------*
-# ========== 数据库函数 ==========
-def init_db():# 获取数据库
-    conn = sqlite3.connect("feedback.db")
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS feedback
-                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                  page TEXT,
-                  problem TEXT,
-                  date TEXT,
-                  handled INTEGER DEFAULT 0,
-                  reply TEXT,
-                  published INTEGER DEFAULT 0)''')  # 新增 published 字段
-    conn.commit()
-    conn.close()
+
+SPREADSHEET_NAME = "FeedbackDB"  # 改成你的 sheet 名称或 spreadsheet id
+
+# 获取 worksheet（第一个表单），并确保 header 存在
+ws = get_sheet(SPREADSHEET_NAME)
+ensure_header(ws)
 
 
-def insert_feedback(page, problem):
-    conn = sqlite3.connect("feedback.db")
-    c = conn.cursor()
-    c.execute("INSERT INTO feedback (page, problem, date) VALUES (?, ?, ?)",
-              (page, problem, datetime.now().strftime("%d-%m-%Y")))
-    conn.commit()
-    conn.close()
-
-
-def get_updates(limit=5):
-    conn = sqlite3.connect("feedback.db")
-    c = conn.cursor()
-    c.execute("""
-        SELECT page, problem, date, reply 
-        FROM feedback 
-        WHERE handled=1 AND reply IS NOT NULL AND published=1
-        ORDER BY date DESC LIMIT ?
-    """, (limit,))
-    rows = c.fetchall()
-    conn.close()
-    return rows
-
-# ========== 初始化数据库 ==========
-init_db()
-
-# --- 留言板 ---
 st.subheader("📬 留言板")
-page = st.selectbox("Page en question", ["Page1", "Page2", "Page3", "Autres pages"])
-problem = st.text_area("Votre feedback:")
+page = st.selectbox("选择有问题的页面", ["Page1", "Page2", "Page3", "其他"])
+problem = st.text_area("请输入您的问题")
 
-#右下角按钮
-cols=st.columns([5,1])
-with cols[1]:
-    feedback_button=st.button("Soumettre")
-
-if feedback_button:
+if st.button("提交反馈"):
     if problem.strip():
-        insert_feedback(page, problem)
-        st.success(f"✅ Merci pour votre feedback！")
+        append_feedback(ws, page, problem)
+        st.success("✅ 感谢您的反馈！")
     else:
-        st.warning("Input obligatoire!")
+        st.warning("请输入问题描述！")
 
 st.divider()
 
-# --- 更新展示区 ---
 st.subheader("📢 公告栏 Updates")
-updates = get_updates(limit=10)  # 可以显示更多条
-
+updates = get_updates(ws, limit=10)
 if updates:
-    for page, problem, date, reply in updates:
-        # 使用卡片风格或者左右两栏
-        with st.container():
-            st.markdown("---")  # 分隔线
-            col1, col2 = st.columns([1, 2])  # 左右比例可以调
-            with col1:
-                st.caption(f"页面: {page}")
-                st.caption(f"提交时间: {date}")
-                st.write("用户反馈:")
-                st.info(problem)
-            with col2:
-                st.write("管理员回复:")
-                st.success(reply)
+    for r in updates:
+        col1, col2 = st.columns([1, 2])
+        with col1:
+            st.caption(f"页面: {r.get('page')}")
+            st.caption(f"提交时间: {r.get('date')}")
+            st.write("用户反馈:")
+            st.info(r.get("problem"))
+        with col2:
+            st.write("管理员回复:")
+            st.success(r.get("reply"))
+            st.caption(f"回复时间: {r.get('reply_date', '')}")
 else:
     st.write("暂无更新~")
 
+
+
+
+
+
+
+
+
+#----------------------- 「留言系统 + 公告栏」-----------------------*
+# ========== 数据库函数 ==========
+# def init_db():# 获取数据库
+#     conn = sqlite3.connect("feedback.db")
+#     c = conn.cursor()
+#     c.execute('''CREATE TABLE IF NOT EXISTS feedback
+#                  (id INTEGER PRIMARY KEY AUTOINCREMENT,
+#                   page TEXT,
+#                   problem TEXT,
+#                   date TEXT,
+#                   handled INTEGER DEFAULT 0,
+#                   reply TEXT,
+#                   published INTEGER DEFAULT 0)''')  # 新增 published 字段
+#     conn.commit()
+#     conn.close()
+
+
+# def insert_feedback(page, problem):
+#     conn = sqlite3.connect("feedback.db")
+#     c = conn.cursor()
+#     c.execute("INSERT INTO feedback (page, problem, date) VALUES (?, ?, ?)",
+#               (page, problem, datetime.now().strftime("%d-%m-%Y")))
+#     conn.commit()
+#     conn.close()
+
+
+# def get_updates(limit=5):
+#     conn = sqlite3.connect("feedback.db")
+#     c = conn.cursor()
+#     c.execute("""
+#         SELECT page, problem, date, reply 
+#         FROM feedback 
+#         WHERE handled=1 AND reply IS NOT NULL AND published=1
+#         ORDER BY date DESC LIMIT ?
+#     """, (limit,))
+#     rows = c.fetchall()
+#     conn.close()
+#     return rows
+
+
+
+# # ========== 初始化数据库 ==========
+# init_db()
+
+# # --- 留言板 ---
+# st.subheader("📬 留言板")
+# page = st.selectbox("Page en question", ["Page1", "Page2", "Page3", "Autres pages"])
+# problem = st.text_area("Votre feedback:")
+
+# #右下角按钮
+# cols=st.columns([5,1])
+# with cols[1]:
+#     feedback_button=st.button("Soumettre")
+
+# if feedback_button:
+#     if problem.strip():
+#         insert_feedback(page, problem)
+#         st.success(f"✅ Merci pour votre feedback！")
+#     else:
+#         st.warning("Input obligatoire!")
+
+# st.divider()
+
+# # --- 更新展示区 ---
+# st.subheader("📢 公告栏 Updates")
+# updates = get_updates(limit=10)  # 可以显示更多条
+
+# if updates:
+#     for page, problem, date, reply in updates:
+#         # 使用卡片风格或者左右两栏
+#         with st.container():
+#             st.markdown("---")  # 分隔线
+#             col1, col2 = st.columns([1, 2])  # 左右比例可以调
+#             with col1:
+#                 st.caption(f"页面: {page}")
+#                 st.caption(f"提交时间: {date}")
+#                 st.write("用户反馈:")
+#                 st.info(problem)
+#             with col2:
+#                 st.write("管理员回复:")
+#                 st.success(reply)
+# else:
+#     st.write("暂无更新~")
 
 
 
