@@ -125,7 +125,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             st.error(f"ERROR :{e}")
 
 
-
     if st.session_state.started and summary_button2:
         df = st.session_state.uploaded_df.copy()
         df["publicationDate_s"] = pd.to_datetime(df["publicationDate_s"], errors="coerce")

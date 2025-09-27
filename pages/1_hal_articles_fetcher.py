@@ -42,7 +42,7 @@ with left_col:
     st.markdown("<br>", unsafe_allow_html=True)
 
     text = st_tags(
-    label="📑Text",
+    label="Text",
     text="Tapez et 'Entrée' (chercher un texte dans tous les champs...)",
     value=[],
     suggestions=[],
@@ -51,28 +51,28 @@ with left_col:
 
     # 文档类型
     doc_types = st.multiselect(
-        "🗂️ Type de documents",
+        "Type de documents",
         options=list(DOC_TYPE_MAP.keys()),
         format_func=lambda x: DOC_TYPE_MAP[x],
         default=[]
     )
 
     domains = st.multiselect(
-        "📌 Domaine",
+        "Domaine",
         options=list(DOMAIN_MAP.keys()),
         format_func=lambda x: DOMAIN_MAP[x],
         default=[]
     )
 
     keywords = st_tags(
-        label="💡 Mots-clés",
+        label="Mots-clés",
         text="Tapez et 'Entrée'",
         value=[],
         suggestions=[],
         maxtags=10
     )
 
-    st.markdown("📅 Période")
+    st.markdown("Période")
     now = datetime.now()
     current_year, current_month = now.year, now.month
     years = [None] + list(range(current_year, 1901, -1))
@@ -108,14 +108,14 @@ with left_col:
 
     # 语言、实验室
     languages = st.multiselect(
-        "🌐 Langues",
+        "Langues",
         options=list(LANG_MAP.keys()),
         format_func=lambda x: LANG_MAP[x],
         default=[]
     )
 
     labs = st_tags(
-        label="🔬 Laboratoire",
+        label="Laboratoire",
         text="Tapez et 'Entrée'",
         value=["Institut de Recherche en Gestion"],
         maxtags=10
@@ -133,7 +133,7 @@ with left_col:
     #check champs :https://api.archives-ouvertes.fr/docs/search/?schema=fields#fields
 
     fields = st.multiselect(
-        "🧾 Info à exporter",
+        "Info à exporter",
         options=options_fields,
         default=default_fields
     )
@@ -154,7 +154,7 @@ with right_col:
     search_button = st.button("⚡ Chercher")
 
     if search_button and not invalid_date:
-        with st.spinner("Chercher...⌛"):
+        with st.spinner("Chercher..."):
             try:
                 df = fetch_hal_articles(
                     start_year=start_year,
