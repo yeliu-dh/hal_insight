@@ -4,9 +4,12 @@ from datetime import datetime
 from utils.feedback import init_db, append_feedback, get_updates
 import gspread
 
+#标签页：
 st.set_page_config(page_title="HAL Insight",page_icon="🛸", layout="wide")
 
+#当前页标题
 st.title("🏠 Accueil | HAL Insight")
+
 st.markdown("""
 Bienvenu-e sur le tableau de bord HAL Insight !
 
@@ -50,24 +53,27 @@ if feedback_button:
 # --- 更新展示区 ---
 st.subheader("📢 Updates")
 updates = get_updates(limit=10)  # 可以显示更多条
-# consistent with "get_updates":
-# SELECT id, date, page, problem, reply_date, reply
+st.divider() #分割线
+
 cols=st.columns(2)
 with cols[0]:
     st.write("### feedbacks")
 with cols[1]:
     st.write("### réponse")
 
+# title
+# header
+# subheader
+
 # → 最大标题
-
 ## → 一级
-
 ### → 二级
-
 #### → 三级（比 subheader 更小）
 
 if updates:
     for r in updates:
+        # consistent with "get_updates":
+        # SELECT id, date, page, problem, reply_date, reply
         id, date, page, problem, reply_date, reply=r
         with st.container():
             st.markdown("---")  # 分隔线
@@ -83,9 +89,9 @@ if updates:
                 # st.success(reply)
                 # st.success(f"Réponse:  \n {reply}")
                 
-else:
-    st.write('\n')
-    st.write("Aucune mis à jour...")
+# else:
+#     st.write('\n')
+#     st.write("Aucune mis à jour...")
 
 
 

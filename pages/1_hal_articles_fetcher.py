@@ -31,8 +31,11 @@ DOC_TYPE_MAP=load_json(doctype_file)
 st.set_page_config(page_title="HAL Articles Fetcher", page_icon="🛸", layout="wide")
 st.title("Hal Articles Fetcher")
 
+
+st.markdown("📬 (https://hal-insight.streamlit.app/home)")
+
 # 左右布局：左侧显示结果，右侧显示检索栏
-left_col, right_col = st.columns([1, 1])  # 左:右 = 3:1
+left_col, right_col = st.columns([2, 1])  # 左:右 = 3:1
 
 # ----------------------- 右侧检索栏 -----------------------
 
@@ -80,15 +83,15 @@ with left_col:
 
     col1, col2 = st.columns(2)
     with col1:
-        start_year = st.selectbox("Année début", years, index=years.index(2025))
+        start_year = st.selectbox("Année de début", years, index=years.index(2025))
     with col2:
-        start_month = st.selectbox("Mois début", months, index=months.index(current_month))
+        start_month = st.selectbox("Mois de début", months, index=months.index(current_month))
 
     col3, col4 = st.columns(2)
     with col3:
-        end_year = st.selectbox("Année fin", years, index=years.index(current_year))
+        end_year = st.selectbox("Année de fin", years, index=years.index(current_year))
     with col4:
-        end_month = st.selectbox("Mois fin", months, index=months.index(current_month))
+        end_month = st.selectbox("Mois de fin", months, index=months.index(current_month))
     
     
     
@@ -139,7 +142,7 @@ with left_col:
     )
 
     rows_range = list(range(0, 5001))
-    max_records = st.selectbox("⬆️ Limite de requête une fois", rows_range, index=5000)
+    max_records = st.selectbox("Limite de requête une fois", rows_range, index=5000)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
