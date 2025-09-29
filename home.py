@@ -48,7 +48,6 @@ if feedback_button:
     else:
         st.warning("Input obligatoire!")
 
-# st.divider()
 
 # --- 更新展示区 ---
 st.subheader("📢 Updates")
@@ -61,14 +60,6 @@ with cols[0]:
 with cols[1]:
     st.write("### réponse")
 
-# title
-# header
-# subheader
-
-# → 最大标题
-## → 一级
-### → 二级
-#### → 三级（比 subheader 更小）
 
 if updates:
     for r in updates:
