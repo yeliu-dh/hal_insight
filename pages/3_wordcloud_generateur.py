@@ -126,7 +126,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 
     # ------------------PART2 演变词云 --------------------------
-    st.subtitle("Nuage de mots évolutif")
+    st.subheader("Nuage de mots évolutif")
     if "evolutif_wc" not in st.session_state:
         st.session_state["evolutif_wc"] = None
         
