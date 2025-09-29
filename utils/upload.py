@@ -22,6 +22,6 @@ def csv_uploader(key="uploaded_df"):
 
     #再次判断,不是直接upload储存的,从session中提取已有数据
     if key in st.session_state and st.session_state[key] is not None:
-        st.success("✅ CSV chargé ")
+        st.success("✅ CSV chargé : {len(st.session_state[key])} lignes au total.")
         #apercu
         st.dataframe(st.session_state[key].head())  # 显示前几行
