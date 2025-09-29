@@ -32,8 +32,6 @@ st.set_page_config(page_title="HAL Articles Fetcher", page_icon="🛸", layout="
 st.title("Hal Articles Fetcher")
 
 
-st.markdown("📬 (https://hal-insight.streamlit.app/home)")
-
 # 左右布局：左侧显示结果，右侧显示检索栏
 left_col, right_col = st.columns([2, 1])  # 左:右 = 3:1
 

@@ -21,8 +21,6 @@ from utils.upload import csv_uploader
 
 
 # -------------------- 页面配置 --------------------
-# st.set_page_config(page_title="HAL Insights Dashboard", layout="wide")
-
 st.set_page_config(page_title="Tendance & Répartition", page_icon="🛸", layout="wide")
 st.title("📊 Tendance & Répartition")
 
@@ -39,7 +37,7 @@ if "started" not in st.session_state:
 # -------------------------------
 # 2️⃣ 检查/上传 CSV
 # -------------------------------
-
+# 每一页手动上传csv
 # uploaded_file = st.file_uploader("charger HAL CSV", type=["csv"])
 
 # if uploaded_file is not None:
@@ -50,7 +48,8 @@ if "started" not in st.session_state:
 
 
 csv_uploader()# 调用上传器（会自动处理已有/新上传）
-if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None:
+
+if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None:# df存在且不为空
 
     # -------------------------------
     # 3️⃣ 点击开始统计按钮
@@ -64,10 +63,11 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             # if st.session_state.uploaded_df is not None:#且已经上传数据
             st.session_state.started = True#更新为“开始状态”，df储存在session中，数据不会在变化?            
         
+
     # -------------------------------
     # # 4️⃣ 分析界面
     # # -------------------------------
-    if st.session_state.started:
+    if st.session_state.started:#分析开始df不会再刷新
         df = st.session_state.uploaded_df.copy()
 
         #-----------  global-----------------
@@ -408,7 +408,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             "language_s": "Répartition par langue",
             "country_s": "Répartition par pays"
         }.items():      
-    
             if col in df.columns:
                 cols = st.columns(2)
                 with cols[0]:
