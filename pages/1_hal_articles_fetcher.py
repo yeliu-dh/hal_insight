@@ -8,6 +8,8 @@ import re
 from pathlib import Path
 from utils.HAL_search_api import fetch_hal_articles
 
+st.set_page_config(page_title="HAL insight", page_icon="🛸", layout="wide")
+#必须是第一行命令
 
 #====================CACHE=========================#
 ##HAL
@@ -27,8 +29,6 @@ LANG_MAP=load_json(lang_file)
 DOC_TYPE_MAP=load_json(doctype_file)
 
 
-# 页面宽度设为 wide
-st.set_page_config(page_title="HAL Articles Fetcher", page_icon="🛸", layout="wide")
 st.title("Hal Articles Fetcher")
 
 
