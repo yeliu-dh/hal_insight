@@ -65,6 +65,8 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     if labs:
         fq.append("(" + " OR ".join([f'labStructName_s:"{lab}"' for lab in labs]) + ")")
 
+
+
     if start_year is not None and start_month is not None:
         start_date = f"{start_year}-{start_month:02d}-01T00:00:00Z"
     else:
@@ -74,11 +76,11 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     end_date = f"{end_year}-{end_month:02d}-{end_day:02d}T23:59:59Z"
     
     if start_date:
-        fq.append(f'publicationDate_s:[{start_date} TO {end_date}]')
+        fq.append(f'modifiedDate_s:[{start_date} TO {end_date}]')
         # print(f"PERIODE : {start_date} TO {end_date}")
 
     else:
-        fq.append(f'publicationDate_s:[* TO {end_date}]')  # * 表示不限下限
+        fq.append(f'modifiedDate_s:[* TO {end_date}]')  # * 表示不限下限
 
     if text:
         q = " AND ".join(text)  # 所有关键词都必须出现
