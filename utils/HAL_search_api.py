@@ -77,7 +77,7 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     else:
         start_date = None
     
-    end_day = calendar.monthrange(end_year, end_month)[1]#按月份决定最后一天是29/30/31
+    # end_day = calendar.monthrange(end_year, end_month)[1]#按月份决定最后一天是29/30/31
     end_date = f"{end_year}-{end_month:02d}"
 
     # f"{end_year}-{end_month:02d}-{end_day:02d} 23:59:59"
