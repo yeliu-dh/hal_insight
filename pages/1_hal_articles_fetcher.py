@@ -28,7 +28,7 @@ DOC_TYPE_MAP=load_json(doctype_file)
 
 
 # 页面宽度设为 wide
-# st.set_page_config(page_title="HAL Articles Fetcher", page_icon="🛸", layout="wide")
+st.set_page_config(page_title="HAL Articles Fetcher", page_icon="🛸", layout="wide")
 st.title("Hal Articles Fetcher")
 
 
@@ -73,7 +73,7 @@ with left_col:
         maxtags=10
     )
 
-    st.markdown("Période")
+    st.markdown("Période du dépôt")
     now = datetime.now()
     current_year, current_month = now.year, now.month
     years = [None] + list(range(current_year, 1901, -1))
