@@ -225,6 +225,7 @@ if search_button and not invalid_date:
                 else:
                     file_name=f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art"
 
+
                 cols=st.columns(2)
                 with cols[0]:
                     # as CSV
@@ -233,7 +234,7 @@ if search_button and not invalid_date:
                     st.download_button(
                         label="Télécharger CSV",
                         data=csv_data,
-                        file_name=file_name+".csv" # f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.csv",
+                        file_name=file_name +".csv" # f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.csv",
                         mime="text/csv"
                     )
                 
