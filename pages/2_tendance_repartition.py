@@ -10,11 +10,7 @@ from PIL import Image
 import io
 
 #my utils:
-from utils.upload import uploader
-
-# from utils.upload import uploader
-
-# from utils.upload import uploader
+from utils.upload import data_uploader
 
 
 # session state :
@@ -54,7 +50,7 @@ if "started" not in st.session_state:
 #     st.write("### Corpus original", corpus.head())
 
 
-uploader()# 调用上传器（会自动处理已有/新上传）
+data_uploader()# 调用上传器（会自动处理已有/新上传）
 
 if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None:# df存在且不为空
     # -------------------------------

@@ -9,7 +9,7 @@ import io
 import math
 
 #my utils:
-from utils.upload import uploader
+from utils.upload import data_uploader
 from utils.worldcould import generate_wc
 from utils.worldcould import generate_keyness_wc
 
@@ -28,7 +28,7 @@ if "started" not in st.session_state:
 # -------------------------------
 # 2️⃣ 检查/上传 CSV
 # -------------------------------
-uploader()# 调用上传器（会自动处理已有/新上传）
+data_uploader()# 调用上传器（会自动处理已有/新上传）
 if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None:
 
     # 若df存在则视为开始

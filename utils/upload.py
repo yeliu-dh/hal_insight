@@ -1,7 +1,8 @@
-import streamlit as st
-import pandas as pd
 
-def csv_uploader(key="uploaded_df"):
+
+def data_uploader(key="uploaded_df"):
+    import streamlit as st
+    import pandas as pd
     """
     通用 CSV 上传器:
     - 优先显示 session_state 中已有数据 (搜索结果 or 上传)
