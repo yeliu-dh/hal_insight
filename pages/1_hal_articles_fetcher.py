@@ -220,24 +220,22 @@ if search_button and not invalid_date:
                 
                 #file name 
                 today_str = datetime.now().strftime("%d%m%Y")
-                if start_year is None :
-                    file_name=f"{today_str}-ProductionScientifiqueIRG-{end_month}-{end_year}_{len(df)}art"
+                if start_year is None:
+                    file_name = f"{today_str}-ProductionScientifiqueIRG-{end_month}-{end_year}_{len(df)}art"
                 else:
-                    file_name=f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art"
+                    file_name = f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art"
 
-
-                cols=st.columns(2)
+                # 👇 注意这里要换行
                 with cols[0]:
                     # as CSV
-                    csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig") # 按钮 1 → 下载 CSV（UTF-8-SIG 编码，避免 Excel 乱码）
-                    # csv_data = df.to_csv(index=False).encode('utf-8')
+                    csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
                     st.download_button(
                         label="Télécharger CSV",
                         data=csv_data,
-                        file_name=file_name +".csv" # f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.csv",
+                        file_name=file_name + ".csv",
                         mime="text/csv"
                     )
-                
+
 
                 with cols[1]:
                     #as XLSX
@@ -250,7 +248,7 @@ if search_button and not invalid_date:
                     st.download_button(
                         label="Télécharger XLSX",
                         data=xlsx_data,
-                        file_name=file_name+".xlsx" # f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.xlsx",
+                        file_name=file_name + ".xlsx" # f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.xlsx",
                         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     )
 
