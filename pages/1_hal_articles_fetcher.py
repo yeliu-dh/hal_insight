@@ -204,22 +204,19 @@ if search_button and not invalid_date:
                 st.session_state["uploaded_df_source"] = "search"
 
 
-
             #  ----------------SAVE TO LOCAL----------------- 
             df = st.session_state.get("uploaded_df", None)
-
             if df is None or df.empty:
                 st.warning("0 résultat!")
 
             else:
                 st.success(f"✅ {len(df)} articles trouvés!")
                 st.success(f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")
-                               
-                #展示
                 st.dataframe(df)
                 
                 #file name 
                 today_str = datetime.now().strftime("%d%m%Y")
+                cols=st.columns(2)
                 with cols[0]:
                     # as CSV
                     csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
