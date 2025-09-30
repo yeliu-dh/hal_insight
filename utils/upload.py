@@ -12,7 +12,7 @@ def data_uploader(key="uploaded_df"):
     st.subheader("📂 Importer vos données")
 
     uploaded_file = st.file_uploader(
-        # "Charger / Changer un fichier (.xlsx/.csv)", 
+        "Charger / Changer un fichier", 
         type=["csv", "xlsx"], 
         key=f"{key}_file"
     )
