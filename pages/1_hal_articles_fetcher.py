@@ -195,40 +195,46 @@ if search_button and not invalid_date:
 
             else:
                 st.success(f"✅ {len(df)} articles trouvés!")
-                st.dataframe(df)#展示
-
+                st.success(f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")
                 # 保存到 session_state
                 st.session_state["uploaded_df"] = df  
                 st.session_state["uploaded_df_source"] = "search"#和自己上传的做区分
-                st.success(f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")
-
+                
+                #展示
+                st.dataframe(df)
+                
                 # 下载日期
                 today_str = datetime.now().strftime("%d%m%Y")
+                cols=st.columns(2)
+                
+                with cols[0]:
+                    # as CSV
+                    csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig") # 按钮 1 → 下载 CSV（UTF-8-SIG 编码，避免 Excel 乱码）
+                    # csv_data = df.to_csv(index=False).encode('utf-8')
+                    st.download_button(
+                        label="Télécharger CSV",
+                        data=csv_data,
+                        file_name=f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.csv",
+                        mime="text/csv"
+                    )
+                
+                
+                with cols[1]:
+                    #as XLSX
+                    # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
+                    xlsx_buffer = io.BytesIO()
+                    with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
+                        df.to_excel(writer, index=False, sheet_name="Articles")
+                    xlsx_data = xlsx_buffer.getvalue()
 
-                # as CSV
-                csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig") # 按钮 1 → 下载 CSV（UTF-8-SIG 编码，避免 Excel 乱码）
-                # csv_data = df.to_csv(index=False).encode('utf-8')
-                st.download_button(
-                    label="Télécharger CSV",
-                    data=csv_data,
-                    file_name=f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.csv",
-                    mime="text/csv"
-                )
+                    st.download_button(
+                        label="Télécharger XLSX",
+                        data=xlsx_data,
+                        file_name=f"{today_str}-hal_articles-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.xlsx",
+                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    )
 
-                #as XLSX
-                # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
-                xlsx_buffer = io.BytesIO()
-                with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
-                    df.to_excel(writer, index=False, sheet_name="Articles")
-                xlsx_data = xlsx_buffer.getvalue()
-
-                st.download_button(
-                    label="Télécharger XLSX",
-                    data=xlsx_data,
-                    file_name=f"{today_str}-hal_articles-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.xlsx",
-                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                )
-                # 这是 XLSX 文件的 MIME 类型，告诉浏览器这是一个 Excel 文件，否则st button可能无法识别文件类型 
+                    # 这是 XLSX 文件的 MIME 类型，告诉浏览器这是一个 Excel 文件，否则st button可能无法识别文件类型 
 
 
 

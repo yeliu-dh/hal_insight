@@ -28,8 +28,11 @@ st.title("📊 Tendance & Répartition")
 # -------------------------------
 # 1️⃣ 初始化 Session State
 # -------------------------------
+    
+
 if "uploaded_df" not in st.session_state:
     st.session_state.uploaded_df = None
+
 if "started" not in st.session_state:
     st.session_state.started = False
 
