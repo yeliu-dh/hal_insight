@@ -200,6 +200,8 @@ if search_button and not invalid_date:
                 # 保存到 session_state
                 st.session_state["uploaded_df"] = df  
                 st.session_state["uploaded_df_source"] = "search"#和自己上传的做区分
+                st.success(f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")
+
                 # 下载日期
                 today_str = datetime.now().strftime("%d%m%Y")
 
@@ -207,7 +209,7 @@ if search_button and not invalid_date:
                 csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig") # 按钮 1 → 下载 CSV（UTF-8-SIG 编码，避免 Excel 乱码）
                 # csv_data = df.to_csv(index=False).encode('utf-8')
                 st.download_button(
-                    label="💾 Télécharger",
+                    label="Télécharger CSV",
                     data=csv_data,
                     file_name=f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.csv",
                     mime="text/csv"
@@ -221,7 +223,7 @@ if search_button and not invalid_date:
                 xlsx_data = xlsx_buffer.getvalue()
 
                 st.download_button(
-                    label="📊 Télécharger XLSX",
+                    label="Télécharger XLSX",
                     data=xlsx_data,
                     file_name=f"{today_str}-hal_articles-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
