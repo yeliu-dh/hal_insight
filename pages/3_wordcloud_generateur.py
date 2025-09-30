@@ -13,7 +13,7 @@ from utils.upload import csv_uploader
 from utils.worldcould import generate_wc
 from utils.worldcould import generate_keyness_wc
 
-st.set_page_config(page_title="HAL insight", page_icon="🛸", layout="wide")
+st.set_page_config(page_title="HAL insight", page_icon="🛸")
 st.title("☁️ Wordcloud ")
 
 
