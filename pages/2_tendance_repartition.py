@@ -56,7 +56,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     # -------------------------------
     # 3️⃣ 点击开始统计按钮
     # -------------------------------
-    col1, col2 = st.columns([5, 1])  # 最右边一列放按钮
+    col1, col2 = st.columns([4, 1])  # 最右边一列放按钮
     with col2:
         summary_button = st.button("Commencer")
 

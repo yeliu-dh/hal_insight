@@ -15,3 +15,6 @@ wordcloud==1.9.4
 XlsxWriter==3.2.9
 et-xmlfile==2.0.0 
 openpyxl==3.1.5 
+nltk==3.9.1
+regex==2025.9.18
+spacy==3.8.7

@@ -8,10 +8,47 @@ from PIL import Image
 import io
 import math
 
+import re
+import spacy
+from nltk.corpus import stopwords
+import nltk
+
 #my utils:
 from utils.upload import data_uploader
+from utils.worldcould import preprocess_text
 from utils.worldcould import generate_wc
 from utils.worldcould import generate_keyness_wc
+
+#------------CACHE--------------
+
+# 下载停用词 (只会运行一次，缓存)
+@st.cache_resource
+def load_nltk_resources():
+    nltk.download("stopwords")
+    stop_fr = set(stopwords.words("french"))
+    stop_en = set(stopwords.words("english"))
+    return stop_fr, stop_en
+
+
+# 加载 spacy 语言模型
+@st.cache_resource
+def load_spacy_models():
+    try:
+        nlp_fr = spacy.load("fr_core_news_sm")
+    except OSError:
+        from spacy.cli import download
+        download("fr_core_news_sm")
+        nlp_fr = spacy.load("fr_core_news_sm")
+
+    try:
+        nlp_en = spacy.load("en_core_web_sm")
+    except OSError:
+        from spacy.cli import download
+        download("en_core_web_sm")
+        nlp_en = spacy.load("en_core_web_sm")
+
+    return nlp_fr, nlp_en
+
 
 st.set_page_config(page_title="HAL insight", page_icon="🛸")
 st.title("☁️ Wordcloud ")
@@ -24,6 +61,9 @@ if "uploaded_df" not in st.session_state:
     st.session_state.uploaded_df = None
 if "started" not in st.session_state:
     st.session_state.started = False
+
+
+
 
 # -------------------------------
 # 2️⃣ 检查/上传 CSV
@@ -39,36 +79,17 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     # ---PART1 总体词云 ---
     st.subheader("Nuage de mots global")
-
-
     # param:
     if "overall_wc" not in st.session_state:
         st.session_state["overall_wc"] = None
 
-    # 选择文章范围, maxwords, stopwords
-    # option = st.radio("Choisir la granularité temporelle", ["keywords", "abstract"], horizontal=True)    
-    # try:
-    #     if option == "keywords" and "keyword_s" in df.columns:
-    #         st.info(f"⚠️ Les mots clés sont manquants dans {df.keyword_s.isna().sum()} "
-    #                 f"({df.keyword_s.isna().sum()*100/len(df):.2f}%) articles!")
-    #         text = " ".join(df["keyword_s"].dropna().astype(str)).lower()
 
-    #     elif option == "abstract" and "abstract_s" in df.columns:
-    #         st.info(f"⚠️ Les résumés sont manquants dans {df.abstract_s.isna().sum()} "
-    #                 f"({df.abstract_s.isna().sum()*100/len(df):.2f}%) articles!")
-    #         text = " ".join(df["abstract_s"].dropna().astype(str)).lower()
-
-    #     else:
-    #         st.warning("⚠️ La colonne sélectionnée n'existe pas dans le fichier CSV.")
-
-    # except Exception as e:
-    #     st.error(f"⚠️ {e}")
 
    # ---------------文本范围-------------------
     option = st.multiselect(
     "Choisir le texte:",
     ["keywords", "abstract"],
-    default=["keywords"]  # 默认选 keywords，你可以改成 []
+    default=["keywords","abstract"]  # 默认选 keywords，你可以改成 []
     )
 
     try:
@@ -84,10 +105,26 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             texts.append(" ".join(df["abstract_s"].dropna().astype(str)).lower())
 
         if texts:
-            text = " ".join(texts)   # 拼接两个来源的文本
+            raw_text = " ".join(texts)# 链接
+
+            stop_fr, stop_en = load_nltk_resources()
+            nlp_fr, nlp_en = load_spacy_models()
+
+            with st.spinner("🔄 Nettoyage et lemmatisation en cours..."):
+                clean_text = preprocess_text(raw_text, nlp_fr, nlp_en, stop_fr, stop_en)
+
+            st.success("✅ Texte prétraité prêt pour le wordcloud!")
+      
         else:
             st.warning("⚠️ Aucune colonne sélectionnée ou inexistante dans le CSV.")
-            text = ""
+            clean_text = ""
+
+
+        # if texts:
+        #     text = " ".join(texts)   # 拼接两个来源的文本
+        # else:
+        #     st.warning("⚠️ Aucune colonne sélectionnée ou inexistante dans le CSV.")
+        #     text = ""
 
     except Exception as e:
         st.error(f"⚠️ {e}")
@@ -103,7 +140,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     user_stopwords = st_tags(
         label="Ajouter des mots à ignorer",
         text="Tapez un mot et appuyez sur Entrée",
-        value=[],
+        value=["management","gestion","marketing"],
         maxtags=50
     )
     french_stopwords = {"et", "de", "la", "le", "les","l","l'", "des", "un", "une", 
@@ -118,7 +155,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     # 按钮生成+储存
     overall_button=st.button("Générer")
     if overall_button:
-        st.session_state["overall_wc"] = generate_wc(text, max_words, stopwords, title="Nuage de mots global")
+        st.session_state["overall_wc"] = generate_wc(clean_text, max_words, stopwords, title="Nuage de mots global")
 
     # 渲染
     if st.session_state["overall_wc"] is not None:

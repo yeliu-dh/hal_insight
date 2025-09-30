@@ -7,6 +7,31 @@ import pandas as pd
 import numpy as np
 from scipy.stats import chi2_contingency
 
+import re
+
+
+def preprocess_text(text, nlp_fr, nlp_en, stop_fr, stop_en):
+    # 去除标点和非字母
+    text = re.sub(r"[^a-zA-ZÀ-ÿ\s]", " ", text)
+    text = text.lower().strip()
+
+    # 使用 spacy 进行分词 + 词形还原
+    # 检测语言（简单用长度来区分，也可以用 langdetect）
+    doc_fr = nlp_fr(text)
+    doc_en = nlp_en(text)
+
+    #lemmatiser:
+    tokens = []
+    for token in doc_fr:
+        if token.lemma_ not in stop_fr and not token.is_punct and len(token.lemma_) > 2:
+            tokens.append(token.lemma_)
+    for token in doc_en:
+        if token.lemma_ not in stop_en and not token.is_punct and len(token.lemma_) > 2:
+            tokens.append(token.lemma_)
+
+    return " ".join(tokens)
+
+
 
 def generate_wc(text, max_words, stopwords, title="Nuage de mots"):
     wc = WordCloud(
