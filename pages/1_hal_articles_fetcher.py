@@ -202,6 +202,7 @@ if search_button and not invalid_date:
             if not df.empty:
                 st.session_state["uploaded_df"] = df  
                 st.session_state["uploaded_df_source"] = "search"
+                
 
 
             #  ----------------SAVE TO LOCAL----------------- 
@@ -216,8 +217,8 @@ if search_button and not invalid_date:
                 
                 #file name 
                 today_str = datetime.now().strftime("%d%m%Y")
-                cols=st.columns(2)
-                with cols[0]:
+                cols=st.columns(4)
+                with cols[1]:
                     # as CSV
                     csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
                     
@@ -228,7 +229,7 @@ if search_button and not invalid_date:
                         mime="text/csv"
                     )
 
-                with cols[1]:
+                with cols[3]:
                     #as XLSX
                     # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
                     xlsx_buffer = io.BytesIO()
