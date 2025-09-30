@@ -37,12 +37,12 @@ def data_uploader(key="uploaded_df"):
         source = st.session_state.get(f"{key}_source", "unknown")# 如果source不存在，则显示unk
 
         source_label = {
-            "search": " 🔎 résultats de recherche",
-            "upload": "📂 fichier uploadé",
-            "unknown": "❓ source inconnue"
-        }.get(source, "❓ source inconnue")
+            "search": " résultats de recherche",
+            "upload": " fichier uploadé",
+            "unknown": "source"
+        }.get(source, "source")
 
-        st.success(f"✅ Data importé |Source :{source_label} | {len(st.session_state[key])} lignes au total.")
+        st.success(f" Data importé | Source :{source_label} | {len(st.session_state[key])} lignes au total.")
         st.dataframe(st.session_state[key].head())
     else:
         st.info("📭 Aucun fichier importé. Veuillez chercher des articles ou charger un CSV.")
