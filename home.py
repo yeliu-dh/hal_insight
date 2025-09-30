@@ -5,7 +5,8 @@ from utils.feedback import init_db, append_feedback, get_updates
 import gspread
 
 #标签页：
-st.set_page_config(page_title="HAL Insight",page_icon="🛸")# , layout="wide"
+st.set_page_config(page_title="HAL Insight",page_icon="🛸")
+# , layout="wide"
 #当前页标题
 st.title("🏠 Accueil | HAL Insight")
 

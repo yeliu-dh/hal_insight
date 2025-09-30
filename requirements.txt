@@ -13,3 +13,5 @@ streamlit==1.39.0
 streamlit_tags==1.2.8
 wordcloud==1.9.4
 XlsxWriter==3.2.9
+et-xmlfile==2.0.0 
+openpyxl==3.1.5 

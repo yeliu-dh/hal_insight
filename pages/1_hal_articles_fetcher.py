@@ -218,7 +218,7 @@ if search_button and not invalid_date:
                         mime="text/csv"
                     )
                 
-                
+
                 with cols[1]:
                     #as XLSX
                     # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
@@ -230,7 +230,7 @@ if search_button and not invalid_date:
                     st.download_button(
                         label="Télécharger XLSX",
                         data=xlsx_data,
-                        file_name=f"{today_str}-hal_articles-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.xlsx",
+                        file_name=f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.xlsx",
                         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     )
 

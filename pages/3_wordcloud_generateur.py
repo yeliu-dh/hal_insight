@@ -29,8 +29,9 @@ if "started" not in st.session_state:
 # 2️⃣ 检查/上传 CSV
 # -------------------------------
 data_uploader()# 调用上传器（会自动处理已有/新上传）
-if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None:
+st.divider() 
 
+if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None:
     # 若df存在则视为开始
     st.session_state.started=True
     df = st.session_state.uploaded_df.copy()
@@ -65,7 +66,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
    # ---------------文本范围-------------------
     option = st.multiselect(
-    "Choisir la granularité temporelle",
+    "Choisir le texte:",
     ["keywords", "abstract"],
     default=["keywords"]  # 默认选 keywords，你可以改成 []
     )

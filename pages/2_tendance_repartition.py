@@ -52,7 +52,7 @@ if "started" not in st.session_state:
 
 data_uploader()# 调用上传器（会自动处理已有/新上传）
 
-if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None:# df存在且不为空
+if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None: # df存在且不为空
     # -------------------------------
     # 3️⃣ 点击开始统计按钮
     # -------------------------------
@@ -64,7 +64,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         if summary_button:#点击了开始按钮
             # if st.session_state.uploaded_df is not None:#且已经上传数据
             st.session_state.started = True#更新为“开始状态”，df储存在session中，数据不会在变化?            
-        
 
     # -------------------------------
     # # 4️⃣ 分析界面

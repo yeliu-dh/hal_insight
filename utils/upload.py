@@ -12,32 +12,37 @@ def data_uploader(key="uploaded_df"):
     st.subheader("📂 Importer vos données")
 
     uploaded_file = st.file_uploader(
-        "Charger / Changer un fichier (.xlsx/.csv)", 
+        # "Charger / Changer un fichier (.xlsx/.csv)", 
         type=["csv", "xlsx"], 
         key=f"{key}_file"
     )
 
     # 用户主动上传 -> 覆盖 session_state 并打上来源
     if uploaded_file is not None:# 读成df，都可以同样处理！
-        if uploaded_file.name.endswith(".csv"):
-            df = pd.read_csv(uploaded_file, encoding="utf-8")
-        else:
-            df = pd.read_excel(uploaded_file)
-        st.session_state[key] = df
-        st.session_state[f"{key}_source"] = "upload"
+        try :
 
+            if uploaded_file.name.endswith(".csv"):
+                df = pd.read_csv(uploaded_file, encoding="utf-8")
+            else:
+                df = pd.read_excel(uploaded_file)
+            st.session_state[key] = df
+            st.session_state[f"{key}_source"] = "upload"
+        except Exception as e:
+            st.error(f"⚠ {e}")
+
+        
 
     # 如果uploaded df存在,无论是用户刚上传，还是通过搜索保存的
     if key in st.session_state and st.session_state[key] is not None:
         source = st.session_state.get(f"{key}_source", "unknown")# 如果source不存在，则显示unk
 
         source_label = {
-            "search": " 🔎 Résultats de recherche",
-            "upload": "📂 Fichier uploadé",
-            "unknown": "❓ Source inconnue"
-        }.get(source, "❓ Source inconnue")
+            "search": " 🔎 résultats de recherche",
+            "upload": "📂 fichier uploadé",
+            "unknown": "❓ source inconnue"
+        }.get(source, "❓ source inconnue")
 
-        st.success(f"✅ data chargé |{source_label} : {len(st.session_state[key])} lignes au total.")
+        st.success(f"✅ Data importé |Source :{source_label} | {len(st.session_state[key])} lignes au total.")
         st.dataframe(st.session_state[key].head())
     else:
         st.info("📭 Aucun fichier importé. Veuillez chercher des articles ou charger un CSV.")
