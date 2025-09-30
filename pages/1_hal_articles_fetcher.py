@@ -7,6 +7,7 @@ from datetime import datetime
 import re
 from pathlib import Path
 from utils.HAL_search_api import fetch_hal_articles
+import io
 
 st.set_page_config(page_title="HAL insight", page_icon="🛸")
 #必须是第一行命令
@@ -34,7 +35,7 @@ st.title("Hal Articles Fetcher")
 
 # 左右布局：左侧显示结果，右侧显示检索栏
 # left_col, right_col = st.columns([2, 1])  # 左:右 = 3:1
-# ----------------------- 右侧检索栏 -----------------------
+# ----------------------- PARAM -----------------------
 # with left_col:
 
 st.subheader("Filtrer vos résultats")
@@ -130,7 +131,7 @@ default_fields=['halId_s','uri_s', "docType_s", "title_s", "subTitle_s", "authFu
                 "country_s", "language_s",
                 "keyword_s", "abstract_s","files_s","urlFulltextEsr_s"]
 
-#check champs :https://api.archives-ouvertes.fr/docs/search/?schema=fields#fields
+#⭐ check champs :https://api.archives-ouvertes.fr/docs/search/?schema=fields#fields
 
 fields = st.multiselect(
     "Info à exporter",
@@ -144,13 +145,11 @@ max_records = st.selectbox("Limite de requête une fois", rows_range, index=5000
 st.markdown("<br>", unsafe_allow_html=True)
 
 
-# ----------------------- 左侧结果区 -----------------------
+# ----------------------- RESULT -----------------------
 # with right_col:
 
 st.subheader("Commencer la recherche")
 st.markdown("<br>", unsafe_allow_html=True)
-
-# 搜索按钮
 search_button = st.button("⚡ Chercher")
 
 if search_button and not invalid_date:
@@ -174,7 +173,11 @@ if search_button and not invalid_date:
 
             # 处理 domain
             if "domain_s" in df.columns:
+                
                 def map_domains(codes_str):
+                    """
+                    搜索结果是代码，对代码进行映射和清洗
+                    """
                     if not codes_str: return ""
                     codes = codes_str.split(";")
                     mapped = []
@@ -186,19 +189,46 @@ if search_button and not invalid_date:
 
 
 
+            #  SAVE 
             if df.empty:
                 st.warning("0 résultat!")
+
             else:
                 st.success(f"✅ {len(df)} articles trouvés!")
-                st.dataframe(df)
+                st.dataframe(df)#展示
 
-                csv_data = df.to_csv(index=False).encode('utf-8')
+                # 保存到 session_state
+                st.session_state["uploaded_df"] = df  
+                st.session_state["uploaded_df_source"] = "search"#和自己上传的做区分
+                # 下载日期
                 today_str = datetime.now().strftime("%d%m%Y")
+
+                # as CSV
+                csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig") # 按钮 1 → 下载 CSV（UTF-8-SIG 编码，避免 Excel 乱码）
+                # csv_data = df.to_csv(index=False).encode('utf-8')
                 st.download_button(
                     label="💾 Télécharger",
                     data=csv_data,
-                    file_name=f"{today_str}-hal_articles-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.csv",
+                    file_name=f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.csv",
                     mime="text/csv"
                 )
+
+                #as XLSX
+                # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
+                xlsx_buffer = io.BytesIO()
+                with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
+                    df.to_excel(writer, index=False, sheet_name="Articles")
+                xlsx_data = xlsx_buffer.getvalue()
+
+                st.download_button(
+                    label="📊 Télécharger XLSX",
+                    data=xlsx_data,
+                    file_name=f"{today_str}-hal_articles-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.xlsx",
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                )
+                # 这是 XLSX 文件的 MIME 类型，告诉浏览器这是一个 Excel 文件，否则st button可能无法识别文件类型 
+
+
+
         except Exception as e:
             st.error(f"⚠️ {e}")
