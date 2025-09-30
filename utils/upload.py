@@ -1,14 +1,15 @@
 
 
 def data_uploader(key="uploaded_df"):
-    import streamlit as st
-    import pandas as pd
     """
     通用 CSV 上传器:
     - 优先显示 session_state 中已有数据 (搜索结果 or 上传)
     - 用户可随时上传新文件覆盖
     - 自动区分数据来源
     """
+    import streamlit as st
+    import pandas as pd
+
     st.subheader("📂 Importer vos données")
 
     uploaded_file = st.file_uploader(
