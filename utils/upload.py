@@ -21,7 +21,6 @@ def data_uploader(key="uploaded_df"):
     # 用户主动上传 -> 覆盖 session_state 并打上来源
     if uploaded_file is not None:# 读成df，都可以同样处理！
         try :
-
             if uploaded_file.name.endswith(".csv"):
                 df = pd.read_csv(uploaded_file, encoding="utf-8")
             else:
