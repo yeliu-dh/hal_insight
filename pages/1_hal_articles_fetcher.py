@@ -156,7 +156,7 @@ st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("<br>", unsafe_allow_html=True)
 
 st.divider()
-cols=st.columns([5,1])
+cols=st.columns([4,1])
 with cols[1]:
     search_button = st.button("⚡ Chercher")
 
