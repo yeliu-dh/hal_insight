@@ -152,9 +152,13 @@ st.markdown("<br>", unsafe_allow_html=True)
 # ----------------------- RESULT -----------------------
 # with right_col:
 
-st.subheader("Commencer la recherche")
+# st.subheader("Commencer la recherche")
 st.markdown("<br>", unsafe_allow_html=True)
-search_button = st.button("⚡ Chercher")
+
+st.divider()
+cols=st.columns([5,1])
+with cols[1]:
+    search_button = st.button("⚡ Chercher")
 
 if search_button and not invalid_date:
     with st.spinner("Chercher..."):
@@ -191,19 +195,25 @@ if search_button and not invalid_date:
                     return "; ".join(mapped)
                 df["domain_s"] = df["domain_s"].apply(map_domains)
 
+            #-------------SAVE TO SESSION-----------------
+
+            # 保存结果到 session_state
+            if not df.empty:
+                st.session_state["uploaded_df"] = df  
+                st.session_state["uploaded_df_source"] = "search"
 
 
-            #  SAVE 
-            if df.empty:
+
+            #  ----------------SAVE TO LOCAL----------------- 
+            df = st.session_state.get("uploaded_df", None)
+
+            if df is None or df.empty:
                 st.warning("0 résultat!")
 
             else:
                 st.success(f"✅ {len(df)} articles trouvés!")
                 st.success(f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")
-                # 保存到 session_state
-                st.session_state["uploaded_df"] = df  
-                st.session_state["uploaded_df_source"] = "search"#和自己上传的做区分
-                
+                               
                 #展示
                 st.dataframe(df)
                 
