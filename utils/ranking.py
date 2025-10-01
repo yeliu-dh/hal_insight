@@ -84,7 +84,8 @@ def add_classement_col(
     cl_name: str = 'Cl. FNEGE',
     cutoff: int = 85
 ) -> pd.DataFrame:
-    col_cl = df[journal_col].apply(lambda x: fuzzy_lookup(x, mapping, cutoff=cutoff))
+    
+    col_cl = df[journal_col].apply(lambda x: fuzzy_lookup(x, map, cutoff=cutoff))
     
     # 找到 journalTitle_s 的列索引
     idx = df.columns.get_loc(journal_col)
