@@ -11,7 +11,7 @@ import io
 # my utils
 from utils.HAL_search_api import fetch_hal_articles
 from utils.mapping import load_mapping_json
-from utils.ranking import add_classement
+from utils.ranking import add_classement_col
 
 
 st.set_page_config(page_title="HAL insight", page_icon="🛸")
