@@ -6,11 +6,10 @@ import json
 from datetime import datetime
 import re
 from pathlib import Path
-from utils.HAL_search_api import fetch_hal_articles
 import io
 
-
 # my utils
+from utils.HAL_search_api import fetch_hal_articles
 from utils.mapping import load_mapping_json
 
 st.set_page_config(page_title="HAL insight", page_icon="🛸")
@@ -32,11 +31,20 @@ st.set_page_config(page_title="HAL insight", page_icon="🛸")
 # LANG_MAP=load_json(lang_file)
 # DOC_TYPE_MAP=load_json(doctype_file)
 
+@st.cache_data 
+# @st.cache_data 是装饰器，只能用在函数定义上，不能直接装饰一个变量
+# 不能直接写# DOMAIN_MAP = load_json(domain_file)
+def get_mappings():
+    return {
+        "DOMAIN_MAP": load_mapping_json("domain_map.json"),
+        "LANG_MAP": load_mapping_json("lang_map.json"),
+        "DOC_TYPE_MAP": load_mapping_json("doctype_map.json"),
+    }
 
-@st.cache_data
-DOMAIN_MAP= load_mapping_json("domain_map.json")
-LANG_MAP= load_mapping_json("lang_map.json")
-DOC_TYPE_MAP= load_mapping_json('doctype_map.json')
+maps = get_mappings()
+DOMAIN_MAP = maps["DOMAIN_MAP"]
+LANG_MAP = maps["LANG_MAP"]
+DOC_TYPE_MAP = maps["DOC_TYPE_MAP"]
 
 
 st.title("Hal Articles Fetcher")
