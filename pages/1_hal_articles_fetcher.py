@@ -223,13 +223,14 @@ if search_button and not invalid_date:
             journal_col="journalTitle_s"
             cl_name = 'Cl. FNEGE'
 
+
             if journal_col in df.columns:
                 df= add_classement_col(df, journal_col= journal_col, mapping=CLASSEMENT, cl_name=cl_name)
-                if cl_name in df.columns:
-                   st.info(f"⚠️ Les classements sont manquants dans {df[cl_name].isna().sum()} "
-                    f"({df[cl_name].isna().sum()*100/len(df):.2f}%) articles!")
-                
 
+            # if cl_name in df.columns:
+                #    st.info(f"⚠️ Les classements sont manquants dans {df[cl_name].isna().sum()} "
+                #     f"({df[cl_name].isna().sum()*100/len(df):.2f}%) articles!")
+                
             #-------------SAVE TO SESSION-----------------
 
             # 保存结果到 session_state
@@ -246,6 +247,7 @@ if search_button and not invalid_date:
                 #-------------show----------------------
                 st.success(f"✅ {len(df)} articles trouvés!")
                 st.success(f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")
+                
                 st.dataframe(df)
 
                 #  ----------------SAVE TO LOCAL----------------- 
@@ -262,6 +264,7 @@ if search_button and not invalid_date:
                         file_name = f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.csv",
                         mime="text/csv"
                     )
+                    st.rerun()
 
                 with cols[3]:
                     #as XLSX
@@ -277,6 +280,7 @@ if search_button and not invalid_date:
                         file_name=f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.xlsx",
                         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     )
+                    st.rerun()
 
                     # 这是 XLSX 文件的 MIME 类型，告诉浏览器这是一个 Excel 文件，否则st button可能无法识别文件类型 
 
