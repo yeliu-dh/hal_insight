@@ -90,7 +90,7 @@ def make_pie_chart(df, col, title, top_n=5):
             xanchor='center',
             yanchor='top'
         ),
-        margin=dict(t=80, b=80, l=100, r=150),  # 上下左右留白
+        margin=dict(t=80, b=80, l=150, r=150),  # 上下左右留白
         # yaxis=dict(tickfont=dict(size=10))       # 缩小字体
     )
 
@@ -146,7 +146,7 @@ def make_bar_chart(df, col, title, top_n=10):
             xanchor='left',
             yanchor='middle'
         ),
-        margin=dict(t=80, b=80, l=100, r=150)  # 上下左右留白
+        margin=dict(t=80, b=80, l=150, r=150)  # 上下左右留白
     )
     fig.update_yaxes(tickangle=0, automargin=True)#或者让 y 轴自动换行
 
