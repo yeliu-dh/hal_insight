@@ -20,7 +20,7 @@ def map_domains(codes_str:str=None, map:dict=None):
     搜索结果是代码，对代码进行映射和清洗
     """
     if not isinstance(codes_str,str): 
-        return ""
+        return None
 
     codes = codes_str.split(";")
     mapped = []
@@ -33,6 +33,9 @@ def map_domains(codes_str:str=None, map:dict=None):
 
 
 def transforme_axe(axe_str:str):
+    if not isinstance(axe_str,str): 
+        return None
+
     axe_str=axe_str.strip().lower()
     if axe_str and axe_str.startswith("irg_axe"):
         axe_label=axe_str[-1:]
