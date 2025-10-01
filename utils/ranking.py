@@ -1,4 +1,5 @@
 import json
+import pandas as pd
 from pathlib import Path
 import unicodedata
 import re
@@ -73,16 +74,15 @@ def fuzzy_lookup(journal_name: str, mapping: dict, cutoff: int = 85) -> str:
         return mapping[original_key]
     return None
 
+def add_classement(df: pd.DataFrame, journal_col: str = "journalTitle_s", mapping : json, cl_name:str='Cl. FNEGE', cutoff: int = 85) -> pd.DataFrame:
+    col_cl = df[journal_col].apply(lambda x: fuzzy_lookup(x, mapping, cutoff=cutoff))
+    
+    # 找到 journalTitle_s 的列索引
+    idx = df.columns.get_loc(journal_col)
 
-# def fuzzy_lookup(journal_name, mapping, cutoff=85): # 模糊搜索
-
-#     # 从 mapping.keys() 中找最接近的
-#     best_match, score, _ = process.extractOne(journal_name, mapping.keys())
-#     if score >= cutoff:
-#         return mapping[best_match]
-#     else:
-#         return None
-
+    # 插入列到 journalTitle_s 后面
+    df.insert(loc=idx+1, column=cl_name, value=col_cl)
+    return df
 
 
 
