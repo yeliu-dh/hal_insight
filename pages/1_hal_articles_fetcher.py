@@ -13,6 +13,7 @@ from utils.HAL_search_api import fetch_hal_articles
 from utils.mapping import load_mapping_json
 from utils.ranking import add_classement
 
+
 st.set_page_config(page_title="HAL insight", page_icon="🛸")
 #必须是第一行命令
 

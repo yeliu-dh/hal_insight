@@ -1,5 +1,6 @@
 import json
 import pandas as pd
+from typing import Dict, Any #Python 类型注解模块 typing 里的类型提示
 from pathlib import Path
 import unicodedata
 import re
@@ -74,7 +75,15 @@ def fuzzy_lookup(journal_name: str, mapping: dict, cutoff: int = 85) -> str:
         return mapping[original_key]
     return None
 
-def add_classement(df: pd.DataFrame, journal_col: str = "journalTitle_s", mapping : json, cl_name:str='Cl. FNEGE', cutoff: int = 85) -> pd.DataFrame:
+
+
+def add_classement(
+    df: pd.DataFrame,
+    journal_col: str = "journalTitle_s",
+    mapping: Dict[str, Any] = None, ## 表示 mapping 是一个字典，key 是字符串，value 可以是任意类型  
+    cl_name: str = 'Cl. FNEGE',
+    cutoff: int = 85
+) -> pd.DataFrame:
     col_cl = df[journal_col].apply(lambda x: fuzzy_lookup(x, mapping, cutoff=cutoff))
     
     # 找到 journalTitle_s 的列索引
@@ -83,6 +92,18 @@ def add_classement(df: pd.DataFrame, journal_col: str = "journalTitle_s", mappin
     # 插入列到 journalTitle_s 后面
     df.insert(loc=idx+1, column=cl_name, value=col_cl)
     return df
+
+
+
+# def add_classement(df: pd.DataFrame, journal_col: str = "journalTitle_s", mapping : dict, cl_name:str='Cl. FNEGE', cutoff: int = 85) -> pd.DataFrame:
+#     col_cl = df[journal_col].apply(lambda x: fuzzy_lookup(x, mapping, cutoff=cutoff))
+    
+#     # 找到 journalTitle_s 的列索引
+#     idx = df.columns.get_loc(journal_col)
+
+#     # 插入列到 journalTitle_s 后面
+#     df.insert(loc=idx+1, column=cl_name, value=col_cl)
+#     return df
 
 
 
