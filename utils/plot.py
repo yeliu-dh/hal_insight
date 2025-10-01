@@ -17,13 +17,23 @@ def make_pie_chart(df, col, title, top_n=5):
         counts = df[col].fillna("nan").value_counts()
     
     if col=="Axe":
-        df['Axe'] = df["Axe"].astype(str).map({
-    "1": "Performances et responsabilités",
-    "2": "Société de services et services à la société",
-    "3": "Innovations, transformations et résistances organisationnelles et sociétales",
-    "4": "Ouvrages pédagogiques"
-    })
+        # 定义映射字典
+        axe_map = {
+            "1": "Performances et responsabilités",
+            "2": "Société de services et services à la société",
+            "3": "Innovations, transformations et résistances organisationnelles et sociétales",
+            "4": "Ouvrages pédagogiques"
+        }
 
+        # 拆分、映射、再合并
+        df['Axe'] = (
+            df['Axe']
+            .fillna('')
+            .astype(str)
+            .str.split(';')                  # 拆分多个值
+            .apply(lambda lst: [axe_map.get(x.strip(), x.strip()) for x in lst])  # 映射
+            .apply(lambda lst: ';'.join(lst))  # 再合并成字符串
+        )
 
 
     # 如果类别大于top_n, 只保留 top_n，其余归为 "其他"
