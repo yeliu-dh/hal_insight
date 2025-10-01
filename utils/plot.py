@@ -11,10 +11,6 @@ def wrap_text(text, max_len=30):
 
 
 def make_pie_chart(df, col, title, top_n=5):
-    if col=='domain_s' or col=="Axe":
-        counts=df[col].fillna('nan').str.split(";").explode().str.strip().value_counts()
-    else:
-        counts = df[col].fillna("nan").value_counts()
     
     if col=="Axe":
         # 定义映射字典
@@ -28,13 +24,18 @@ def make_pie_chart(df, col, title, top_n=5):
         # 拆分、映射、再合并
         df['Axe'] = (
             df['Axe']
-            .fillna('')
+            .fillna('nan')
             .astype(str)
             .str.split(';')                  # 拆分多个值
             .apply(lambda lst: [axe_map.get(x.strip(), x.strip()) for x in lst])  # 映射
             .apply(lambda lst: ';'.join(lst))  # 再合并成字符串
         )
 
+    if col=='domain_s' or col=="Axe":
+        counts=df[col].fillna('nan').str.split(";").explode().str.strip().value_counts()
+    else:
+        counts = df[col].fillna("nan").value_counts()
+    
 
     # 如果类别大于top_n, 只保留 top_n，其余归为 "其他"
     if len(counts) > top_n:
