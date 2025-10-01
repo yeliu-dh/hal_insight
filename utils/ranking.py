@@ -46,6 +46,7 @@ def save_mapping(mapping: dict, output_file: str = RANKING_FILE):
     print(f"✅ 已保存到 {output_file}")
 
 
+
 # --------------------------
 # 模糊匹配期刊名
 # --------------------------
@@ -68,7 +69,7 @@ def fuzzy_lookup(journal_name: str, mapping: dict, cutoff: int = 85) -> str:
 
 
 
-def add_classement_col(
+def add_classement(
     df: pd.DataFrame,
     journal_col: str = "journalTitle_s",
     map: Dict[str, Any] = None, ## 表示 mapping 是一个字典，key 是字符串，value 可以是任意类型  

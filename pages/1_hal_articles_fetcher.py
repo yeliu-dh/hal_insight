@@ -229,7 +229,7 @@ if search_button and not invalid_date:
     journal_col="journalTitle_s"
     cl_name = 'Cl. FNEGE'
     if "journalTitle_s" in df.columns:
-        df= add_classement_col(df, journal_col='journalTitle_s', map=CLASSEMENT, cl_name=cl_name)
+        df= add_classement(df, journal_col='journalTitle_s', map=CLASSEMENT, cl_name=cl_name)
 
     #-------------SAVE TO SESSION-----------------
     # 保存结果到 session_state

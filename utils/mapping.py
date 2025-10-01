@@ -69,7 +69,7 @@ def extract_irg_axes(text):
     matches = re.findall(r"axe\s*(\d+)", text)
     if matches:
         # 用分号拼接
-        return ";".join(matches)
+        return "; ".join(matches)
     return None
 
 
