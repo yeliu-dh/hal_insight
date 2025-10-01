@@ -223,14 +223,11 @@ if search_button and not invalid_date:
             journal_col="journalTitle_s"
             cl_name = 'Cl. FNEGE'
             if journal_col in df.columns:
-                df= add_classement(df, journal_col= journal_col, mapping=CLASSEMENT, cl_name=cl_name)
+                df= add_classement_col(df, journal_col= journal_col, mapping=CLASSEMENT, cl_name=cl_name)
                 if cl_name in df.columns:
- 
                    st.info(f"⚠️ Les classements sont manquants dans {df.cl_name.isna().sum()} "
                     f"({df.cl_name.isna().sum()*100/len(df):.2f}%) articles!")
-                # df= add_classement(df=df, journal_col=journal_col, mapping=CLASSEMENT)
-                #df["Cl. FNEGE"] = df["journalTitle_s"].apply(lambda x: fuzzy_lookup(x, CLASSEMENT))
-
+                
 
             #-------------SAVE TO SESSION-----------------
 
