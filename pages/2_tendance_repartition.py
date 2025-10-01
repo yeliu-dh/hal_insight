@@ -10,15 +10,16 @@ from PIL import Image
 import io
 
 #my utils:
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.upload import data_uploader
-
+from utils.plot import make_bar_chart, make_pie_chart
 
 # session state :
 #上传csv，保存在session state中，相当于一个外部字典，不会再操作(刷新)中丢失
 # Streamlit 每次用户操作控件（比如点击 radio、selectbox）都会重新运行整个脚本!!
 # 通过控件加入筛选条件，和保存在session中的数据一起重新输入分析部分的code
-
-
 
 # -------------------- 页面配置 --------------------
 st.set_page_config(page_title="HAL insight", page_icon="🛸")
@@ -28,7 +29,6 @@ st.title("📊 Tendance & Répartition")
 # -------------------------------
 # 1️⃣ 初始化 Session State
 # -------------------------------
-    
 
 if "uploaded_df" not in st.session_state:
     st.session_state.uploaded_df = None
@@ -40,16 +40,6 @@ if "started" not in st.session_state:
 # -------------------------------
 # 2️⃣ 检查/上传 CSV
 # -------------------------------
-# 每一页手动上传csv
-# uploaded_file = st.file_uploader("charger HAL CSV", type=["csv"])
-
-# if uploaded_file is not None:
-#     st.session_state.uploaded_df = pd.read_csv(uploaded_file)
-#     # st.success("CSV 上传成功！")
-#     corpus = st.session_state.uploaded_df #pd.read_csv(uploaded_file)
-#     st.write("### Corpus original", corpus.head())
-
-
 data_uploader()# 调用上传器（会自动处理已有/新上传）
 
 if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None: # df存在且不为空
@@ -236,130 +226,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 ### ------------------------通用def生成图-------------------------------- 
 
         # ------------------- 通用函数 -------------------
-        import textwrap
-
-        def wrap_text(text, max_len=30):
-            # textwrap.wrap 会在空格处换行，不会切断单词
-            lines = textwrap.wrap(text, width=max_len, break_long_words=False, replace_whitespace=False)
-            return "<br>".join(lines)
-
-        def make_pie_chart(df, col, title, top_n=5):
-            if col=='domain_s':
-                counts=df[col].fillna('nan').str.split(";").explode().str.strip().value_counts()
-            else:
-                counts = df[col].fillna("nan").value_counts()
-            
-            # 如果类别大于top_n, 只保留 top_n，其余归为 "其他"
-            if len(counts) > top_n:
-                counts = pd.concat([
-                    counts.head(top_n),
-                    pd.Series({"Autres": counts[top_n:].sum()})
-                ])
-
-            counts_df = counts.reset_index()
-            counts_df.columns = [col, "count"]
-
-            # 标签分行，见上函数
-            counts_df[col] = counts_df[col].apply(lambda x: wrap_text(str(x)))
-
-            fig = px.pie(
-                counts_df,
-                values="count",
-                names=col,
-                color_discrete_sequence=px.colors.sequential.Viridis,
-                hover_data=["count"],
-                title=title
-            )
-            #显示标签和比例，文字在扇形的外部，扇形之间轻微分开
-            fig.update_traces(textinfo="label+percent", textposition="outside", pull=[0.05]*len(counts_df),domain=dict(x=[0, 0.8], y=[0, 1]))
-            #x=[0, 0.8] → 饼图占画布左 0%~80%，右边 20% 留给图例
-            # y=[0,1] → 垂直方向占满画布
-
-          # 图例放下方，水平排列，网页显示好看?
-            fig.update_layout(
-                width=800,   # 固定导出尺寸
-                height=600,  
-                legend=dict(
-                    title=col.split('_')[0].strip(),
-                    orientation='v',
-                    x=0.8,
-                    y=1,
-                    xanchor='left',
-                    yanchor='top'
-                ),           
-                # legend=dict( #pie图图例放在下方
-                #     title=col.split('_')[0].strip(),
-                #     orientation='h',
-                #     y=-0.2, # 负值表示放在画布底部外侧
-     
-                #     x=0.5,
-                #     xanchor='center'
-                # ),
-                # showlegend=False, #不显示图例
-                title=dict(
-                    text=title,
-                    x=0.5,          # 水平居中
-                    xanchor='center',
-                    yanchor='top'
-                ),
-                margin=dict(t=80, b=80, l=100, r=150),  # 上下左右留白
-                # yaxis=dict(tickfont=dict(size=10))       # 缩小字体
-            )
-
-            fig.update_yaxes(tickangle=0, automargin=True)#或者让 y 轴自动换行
-    
-            return fig
-
-        def make_bar_chart(df, col, title, top_n=10):
-            if col=='domain_s':
-                counts=df[col].fillna('nan').str.split(";").explode().str.strip().value_counts()
-            else:
-                counts = df[col].fillna("nan").value_counts()
-                    
-            if len(counts) > top_n:
-                counts = pd.concat([
-                    counts.head(top_n),
-                    pd.Series({"Autres": counts[top_n:].sum()})
-                ])
-
-            counts_df = counts.reset_index()
-            counts_df.columns = [col, "count"]
-            # 标签分行
-            counts_df[col] = counts_df[col].apply(lambda x: wrap_text(str(x)))
-            # counts_df[col] = counts_df[col].apply(lambda x: '<br>'.join([x[i:i+25] for i in range(0,len(x),10)]))
-
-            fig = px.bar(
-                counts_df,
-                x="count",
-                y=col,
-                orientation="h",#horizontal
-                title=title,
-                color="count",
-                color_continuous_scale="viridis",
-                text="count"
-            )
-            
-            fig.update_layout(
-                yaxis=dict(autorange="reversed"),              # 让最大值在最上方
-                title=dict(
-                    text=title,
-                    x=0.5,          # 水平居中
-                    xanchor='center',
-                    yanchor='top'
-                ),
-                legend=dict(
-                    title=col.split('_')[0].strip(),
-                    orientation='v',
-                    x=0.9,
-                    y=0.9,
-                    xanchor='left',
-                    yanchor='middle'
-                ),
-                margin=dict(t=80, b=80, l=100, r=150)  # 上下左右留白
-            )
-            fig.update_yaxes(tickangle=0, automargin=True)#或者让 y 轴自动换行
-
-            return fig
+        
         
 
 
@@ -411,6 +278,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             # "language_s": "Répartition par langue",
             # "country_s": "Répartition par pays"
         }.items():      
+            
             if col in df.columns:
                 cols = st.columns(2)
                 with cols[0]:
@@ -432,7 +300,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             
                 if chart_type == "pie":
                     fig = make_pie_chart(df, col, title, top_n=top_n)
-
 
                 else:
                     fig = make_bar_chart(df, col, title, top_n=top_n)
