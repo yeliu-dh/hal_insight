@@ -27,7 +27,6 @@ from utils.plot import make_bar_chart, make_pie_chart
 st.set_page_config(page_title="HAL insight", page_icon="🛸")
 st.title("📊 Tendance & Répartition")
 
-
 # -------------------------------
 # 1️⃣ 初始化 Session State
 # -------------------------------
@@ -65,9 +64,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
         #-----------  global-----------------
         #----------- période ----------------
-        if "publicationDate_s" in df.columns:
-            df["publicationDate_s"] = pd.to_datetime(df["publicationDate_s"], errors="coerce")
-            latest_date = df["publicationDate_s"].max()
+        if "submittedDate_s" in df.columns:
+            df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
+            latest_date = df["submittedDate_s"].max()
             latest_ym = latest_date.strftime("%Y-%m") if pd.notnull(latest_date) else "Aucune date valide"
         else:
             latest_ym = "Colonne manquante"
@@ -120,13 +119,11 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         # # -------------------- 增强版 趋势折线图 --------------------
         st.header("📈 Tendance de production scientifique")
 
-        if "publicationDate_s" not in df.columns:
-                st.error("la colonne 'publicationDate_s' manque dans CSV")
+        if "submittedDate_s" not in df.columns:
+                st.error("la colonne 'submittedDate_s' manque dans CSV")
         else:
             # 转换日期
-            # df["publicationDate_s"] = pd.to_datetime(df["publicationDate_s"], errors="coerce")
-            
-            st.info(f"⚠️ La date est manquante dans {df.publicationDate_s.isna().sum()} ({df.publicationDate_s.isna().sum()*100/len(df):.2f}%) articles!")
+            st.info(f"⚠️ La date est manquante dans {df.submittedDate_s.isna().sum()} ({df.submittedDate_s.isna().sum()*100/len(df):.2f}%) articles!")
 
             # # -------------------------------
             # # 4a. 选择时间范围
@@ -144,7 +141,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
             # if years is not None:
             #     cutoff = pd.Timestamp.today() - pd.DateOffset(years=years)
-            #     df = df[df["publicationDate_s"] >= cutoff]
+            #     df = df[df["submittedDate_s"] >= cutoff]
 
             # -------------------------------
             # 4a. 选择时间范围 (横向滑块)
@@ -163,7 +160,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 df_filtered = df.copy()
             else:
                 cutoff = pd.Timestamp.today() - pd.DateOffset(years=years)
-                df= df[df["publicationDate_s"] >= cutoff]
+                df= df[df["submittedDate_s"] >= cutoff]
 
             # -------------------------------
             # 4b. 选择时间颗粒
@@ -175,9 +172,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             )
 
             if period_option == "Par mois":
-                df["Period"] = df["publicationDate_s"].dt.to_period("M").astype(str)
+                df["Period"] = df["submittedDate_s"].dt.to_period("M").astype(str)
             else:
-                df["Period"] = df["publicationDate_s"].dt.to_period("Y").astype(str)
+                df["Period"] = df["submittedDate_s"].dt.to_period("Y").astype(str)
 
             # -------------------------------
             # 4c. 聚合统计
@@ -189,8 +186,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             # -------------------------------
             # 4d. 标题：显示起止年月
             # -------------------------------
-            min_date = df["publicationDate_s"].min()
-            max_date = df["publicationDate_s"].max()
+            min_date = df["submittedDate_s"].min()
+            max_date = df["submittedDate_s"].max()
             if pd.notnull(min_date) and pd.notnull(max_date):
                 min_label = min_date.strftime("%b %Y")
                 max_label = max_date.strftime("%b %Y")

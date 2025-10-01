@@ -182,7 +182,6 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     df = pd.DataFrame(info)
     df=df.drop_duplicates(subset='halId_s')
 
-
     if 'publicationDate_s' in df.columns:
         df['publicationDate_s'] = pd.to_datetime(df['publicationDate_s'], errors='coerce')
         df = df.sort_values(by='publicationDate_s', ascending=False)
