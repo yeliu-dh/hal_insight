@@ -33,6 +33,7 @@ init_db()
 
 # --- 留言板 ---
 st.subheader("📬 Feedbacks")
+st.markdown("### Merci de m'écrire ici ou par email (ye.liu@chartes.psl.eu)")
 page = st.selectbox("App en question", ["articles fetcher", "tendance & répartition", "keywords", "Autres pages"])
 problem = st.text_area("Votre feedback:")
 
