@@ -48,7 +48,7 @@ maps = get_mappings()
 DOMAIN_MAP = maps["DOMAIN_MAP"]
 LANG_MAP = maps["LANG_MAP"]
 DOC_TYPE_MAP = maps["DOC_TYPE_MAP"]
-CLASSEMENT=map['CLASSEMENT']
+CLASSEMENT=maps['CLASSEMENT']
 
 
 st.title("Hal Articles Fetcher")
@@ -230,18 +230,18 @@ if search_button and not invalid_date:
                 st.session_state["uploaded_df"] = df  
                 st.session_state["uploaded_df_source"] = "search"
                 
-
-
-            #  ----------------SAVE TO LOCAL----------------- 
             df = st.session_state.get("uploaded_df", None)
+            
             if df is None or df.empty:
                 st.warning("0 résultat!")
 
             else:
+                #-------------show----------------------
                 st.success(f"✅ {len(df)} articles trouvés!")
                 st.success(f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")
                 st.dataframe(df)
-                
+
+                #  ----------------SAVE TO LOCAL----------------- 
                 #file name 
                 today_str = datetime.now().strftime("%d%m%Y")
                 cols=st.columns(4)
