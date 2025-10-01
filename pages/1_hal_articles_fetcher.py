@@ -9,6 +9,10 @@ from pathlib import Path
 from utils.HAL_search_api import fetch_hal_articles
 import io
 
+
+# my utils
+from utils.mapping import load_mapping_json
+
 st.set_page_config(page_title="HAL insight", page_icon="🛸")
 #必须是第一行命令
 
@@ -16,18 +20,23 @@ st.set_page_config(page_title="HAL insight", page_icon="🛸")
 ##HAL
 #code/streamlit.py
 # facets/..
-domain_file = Path(__file__).parent / "facets/domain_map.json"
-lang_file = Path(__file__).parent / "facets/lang_map.json"
-doctype_file= Path(__file__).parent / "facets/doctype_map.json"
+# BASE_DIR = Path(__file__).parent # 当前文件所在的文件夹路径 '/pages' ici
+# domain_file = Path(__file__).parent / "facets/domain_map.json"
+# lang_file = Path(__file__).parent / "facets/lang_map.json"
+# doctype_file= Path(__file__).parent / "facets/doctype_map.json"
+
+# def load_json(path):
+#     with open(path, "r", encoding="utf-8") as f:
+#         return json.load(f)
+# DOMAIN_MAP = load_json(domain_file)
+# LANG_MAP=load_json(lang_file)
+# DOC_TYPE_MAP=load_json(doctype_file)
+
 
 @st.cache_data
-def load_json(path):
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
-
-DOMAIN_MAP = load_json(domain_file)
-LANG_MAP=load_json(lang_file)
-DOC_TYPE_MAP=load_json(doctype_file)
+DOMAIN_MAP= load_mapping_json("domain_map.json")
+LANG_MAP= load_mapping_json("lang_map.json")
+DOC_TYPE_MAP= load_mapping_json('doctype_map.json')
 
 
 st.title("Hal Articles Fetcher")
@@ -130,10 +139,11 @@ options_fields = ['halId_s','uri_s',"docType_s", "title_s", "subTitle_s", "authF
 
 default_fields=['halId_s','uri_s', "docType_s", "title_s", "subTitle_s", "authFullName_s","labStructName_s","domain_s", 
                 "openAccess_bool",'volume_s',"page_s",
-                "submittedDate_s", "publicationDate_s","journalTitle_s","conferenceTitle_s","conferenceOrganizer_s","conferenceStartDate_s",
+                "submittedDate_s","modifiedDate_s", "publicationDate_s","journalTitle_s","conferenceTitle_s","conferenceOrganizer_s","conferenceStartDate_s",
                 "country_s", "language_s",
                 "keyword_s", "abstract_s","files_s","urlFulltextEsr_s"
                 ]
+
 
 #⭐ check champs :https://api.archives-ouvertes.fr/docs/search/?schema=fields#fields
 

@@ -22,12 +22,12 @@ from utils.worldcould import generate_keyness_wc
 #------------CACHE--------------
 
 # 下载停用词 (只会运行一次，缓存)
-@st.cache_resource
-def load_nltk_resources():
-    nltk.download("stopwords")
-    stop_fr = set(stopwords.words("french"))
-    stop_en = set(stopwords.words("english"))
-    return stop_fr, stop_en
+# @st.cache_resource
+# def load_nltk_resources():
+#     nltk.download("stopwords")
+#     stop_fr = set(stopwords.words("french"))
+#     stop_en = set(stopwords.words("english"))
+#     return stop_fr, stop_en
 
 
 # 加载 spacy 语言模型
@@ -83,8 +83,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     if "overall_wc" not in st.session_state:
         st.session_state["overall_wc"] = None
 
-
-
    # ---------------文本范围-------------------
     option = st.multiselect(
     "Choisir le texte:",
@@ -104,17 +102,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                     f"({df.abstract_s.isna().sum()*100/len(df):.2f}%) articles!")
             texts.append(" ".join(df["abstract_s"].dropna().astype(str)).lower())
 
-        if texts:
-            raw_text = " ".join(texts)# 链接
-
-            stop_fr, stop_en = load_nltk_resources()
-            nlp_fr, nlp_en = load_spacy_models()
-
-            with st.spinner("🔄 Nettoyage et lemmatisation en cours..."):
-                clean_text = preprocess_text(raw_text, nlp_fr, nlp_en, stop_fr, stop_en)
-
-            st.success("✅ Texte prétraité prêt pour le wordcloud!")
-      
         else:
             st.warning("⚠️ Aucune colonne sélectionnée ou inexistante dans le CSV.")
             clean_text = ""
@@ -143,6 +130,10 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         value=["management","gestion","marketing"],
         maxtags=50
     )
+    #nltk stopwords
+    stop_en={'won', 'an', 'having', "mightn't", 'the', "hasn't", 'more', 'in', 'only', 'under', 'o', 'ain', 'can', 'some', 'with', 'these', 'had', 'they', 'me', 'its', 'such', "wouldn't", 'as', 'own', "they'd", 'weren', 'or', "shan't", 'don', 'him', 'yours', 'after', 'so', "don't", 'down', 't', 'hadn', "she'll", 'been', 'y', 'whom', 'because', 'about', 'am', 'my', 'there', 'here', 'up', 'on', 'those', 'once', 'hers', 'too', 'this', 'do', 'further', 'not', 'at', 'any', 'for', 'haven', 'ours', 'then', 'we', 'each', 'than', "she's", 'herself', "i'm", 's', 'did', 'didn', "i'd", 'shouldn', 'himself', 'you', 'other', 'why', "he'll", 'nor', "needn't", 'couldn', 'needn', 'should', 'where', "haven't", 'i', 'being', "they'll", "he's", 'from', 'mustn', "we'll", "wasn't", "should've", 'of', 'now', 'until', 'all', 'has', "shouldn't", 'his', "you'll", "it'd", 'll', "they're", "it's", 'does', 'no', 'while', 'into', "that'll", 'itself', 'your', 'were', 'above', "it'll", 'ma', 'doing', "mustn't", 'between', 'them', 'and', "they've", 'are', 'our', 'off', "i've", 'most', 'out', "won't", 'before', 'will', 'shan', "we're", 'who', "you're", 'doesn', 'hasn', 'have', 'against', 'just', 'yourselves', 'be', 'is', "isn't", 'a', "aren't", 'again', "you'd", "hadn't", 'that', 'but', 'when', "didn't", 'ourselves', "doesn't", 've', 'yourself', 'myself', "couldn't", 'd', 'was', "you've", 'both', 'themselves', 'if', 'over', "she'd", 'few', 'her', "he'd", 'through', 'wouldn', "we'd", 'below', 'theirs', 'aren', 'to', "we've", 'same', 'mightn', 'isn', 'by', 'during', 'what', 'he', "i'll", 'very', 'how', 'wasn', 'she', "weren't", 'm', 'their', 'which', 'it', 're'}
+    stop_fr={'j', 'avions', 'avez', 'ta', 'son', 'avais', 'étaient', 'une', 'ai', 'seront', 'il', 'soient', 'étions', 'sommes', 'serai', 'me', 'l', 'est', 'tes', 'aurez', 'ayons', 'as', 'elle', 'eusses', 'été', 'fût', 'par', 't', 'auraient', 'et', 'notre', 'y', 'aie', 'eux', 'leur', 'le', 'on', 'avaient', 'ont', 'eue', 'aurait', 'aies', 'eussent', 'eut', 'soit', 'sur', 'avec', 'serions', 'ses', 'n', 'du', 'aurions', 'ils', 'es', 'un', 's', 'vous', 'dans', 'qui', 'étée', 'auriez', 'aient', 'je', 'étante', 'étant', 'fusses', 'mon', 'eurent', 'nous', 'êtes', 'serez', 'auront', 'fut', 'ayants', 'aurais', 'même', 'fussent', 'auras', 'qu', 'fûtes', 'étiez', 'seras', 'fussions', 'soyez', 'les', 'sois', 'aviez', 'mes', 'serait', 'étantes', 'furent', 'eu', 'moi', 'seriez', 'sa', 'avait', 'sera', 'étés', 'ayante', 'fus', 'eûtes', 'ma', 'ayantes', 'eusse', 'à', 'se', 'ton', 'en', 'au', 'serons', 'suis', 'ayant', 'ces', 'te', 'lui', 'nos', 'des', 'aux', 'eussiez', 'pour', 'eues', 'ne', 'aurons', 'que', 'fussiez', 'tu', 'eussions', 'd', 'étants', 'ce', 'étais', 'était', 'serais', 'étées', 'mais', 'eus', 'eût', 'ayez', 'votre', 'seraient', 'fusse', 'ait', 'de', 'c', 'la', 'soyons', 'aurai', 'vos', 'fûmes', 'pas', 'm', 'sont', 'aura', 'avons', 'eûmes', 'toi', 'ou'}
+
     french_stopwords = {"et", "de", "la", "le", "les","l","l'", "des", "un", "une", 
                         "du", "en", "au","d","dans","à","par","pour","sur","sont","aux","au",
                         "leur","leurs","qui","ou","il","elle","ils","elles","je","tu","vous","nous","se",
@@ -150,11 +141,25 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                         'comme','afin','ne',"son",'ses'}
     
     
-    stopwords = set(STOPWORDS).union(french_stopwords).union(user_stopwords)
+    stopwords = set(STOPWORDS).union(french_stopwords).union(user_stopwords).union(stop_en).union(stop_fr)
+    
 
     # 按钮生成+储存
     overall_button=st.button("Générer")
     if overall_button:
+        if texts:
+            raw_text = " ".join(texts)# 链接
+            with st.spinner("🔄 Nettoyage et lemmatisation en cours..."):
+
+            # stop_fr, stop_en = load_nltk_resources()
+            
+            nlp_fr, nlp_en = load_spacy_models()
+            clean_text = preprocess_text(raw_text, nlp_fr, nlp_en, stop_fr, stop_en)
+
+            st.success("✅ Texte prétraité prêt pour le wordcloud!")
+      
+
+
         st.session_state["overall_wc"] = generate_wc(clean_text, max_words, stopwords, title="Nuage de mots global")
 
     # 渲染
