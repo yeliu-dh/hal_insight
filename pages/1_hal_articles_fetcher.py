@@ -11,7 +11,7 @@ import io
 # my utils
 from utils.HAL_search_api import fetch_hal_articles
 from utils.mapping import load_mapping_json
-from utils.mapping import map_domain
+from utils.mapping import map_domains
 from utils.ranking import add_classement_col
 
 
@@ -208,8 +208,9 @@ if search_button and not invalid_date:
 
 
         # 处理 domain
-        if "domain_s" in df.columns:            
-            df["domain_s"] = df["domain_s"].apply(lambda x : map_domain(x, map=DOMAIN_MAP))
+        if "domain_s" in df.columns:   
+
+            df["domain_s"] = df["domain_s"].apply(lambda x : map_domains(x, map=DOMAIN_MAP))
 
         # 处理fnege
         journal_col="journalTitle_s"
