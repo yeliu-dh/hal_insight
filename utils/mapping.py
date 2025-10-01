@@ -16,16 +16,16 @@ def load_mapping_json(file_name: str):
         return json.load(f)
 
 def map_domain(codes_str:str=None, map:dict=None):
-                """
-                搜索结果是代码，对代码进行映射和清洗
-                """
-                if not codes_str: return ""
-                codes = codes_str.split(";")
-                mapped = []
-                for code in codes:
-                    code_clean = re.sub(r"^\d+\.", "", code.strip())
-                    mapped.append(map.get(code_clean, code_clean))
-                return "; ".join(mapped)
+    """
+    搜索结果是代码，对代码进行映射和清洗
+    """
+    if not codes_str: return ""
+    codes = codes_str.split(";")
+    mapped = []
+    for code in codes:
+        code_clean = re.sub(r"^\d+\.", "", code.strip())
+        mapped.append(map.get(code_clean, code_clean))
+    return "; ".join(mapped)
 
 
 # # 如果需要专门函数，可以写多个，方便调用
