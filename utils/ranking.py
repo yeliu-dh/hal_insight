@@ -1,0 +1,98 @@
+import json
+from pathlib import Path
+import unicodedata
+import re
+from rapidfuzz import process
+
+
+MAPPING_DIR = Path(__file__).parent.parent / "mappings"
+RANKING_FILE = MAPPING_DIR / "classement.json"
+
+# --------------------------
+# 字符串归一化
+# --------------------------
+def normalize(text: str) -> str:
+    if not isinstance(text, str):
+        return ""
+    text = text.lower().strip()
+    text = unicodedata.normalize("NFKD", text)
+    text = "".join(c for c in text if not unicodedata.combining(c))
+    text = re.sub(r"[^\w\s]", "", text)  # 去掉标点
+    return text
+
+
+# def normalize(text: str) -> str:
+     
+#     text = text.lower().strip()
+#     text = unicodedata.normalize("NFKD", text)
+#     text = "".join(c for c in text if not unicodedata.combining(c))
+#     text = re.sub(r"[^\w\s]", "", text)
+#     return text
+
+def parse_php_txt(input_file: str) -> dict:
+    mapping = {}
+    with open(input_file, "r", encoding="utf-8") as f:
+        i=0
+        for line in f:            
+            line = line.strip()
+            if "=>" in line:
+                i+=1
+                left, right = line.split("=>", 1)
+                journal = left.strip().strip('"')
+                rank = right.strip().strip('"').strip(',;"')
+                mapping[journal] = rank
+        print(f'{i} correspondances du classement!')
+        print(f"{len(mapping)} enregistrés dans le dict")
+        #有很多重复key
+    return mapping
+
+def save_mapping(mapping: dict, output_file: str = RANKING_FILE):
+
+    with open(output_file, "w", encoding="utf-8") as f:
+        json.dump(mapping, f, ensure_ascii=False, indent=2)
+    print(f"✅ 已保存到 {output_file}")
+
+
+# --------------------------
+# 模糊匹配期刊名
+# --------------------------
+def fuzzy_lookup(journal_name: str, mapping: dict, cutoff: int = 85) -> str:
+    """
+    返回最匹配的期刊排名，如果匹配不到则返回 None
+    """
+    if not journal_name or not mapping:
+        return None
+
+    normalized_mapping_keys = {normalize(k): k for k in mapping.keys()}
+    norm_name = normalize(journal_name)
+
+    # 找最接近的 key
+    best_match = process.extractOne(norm_name, list(normalized_mapping_keys.keys()))
+    if best_match and best_match[1] >= cutoff:
+        original_key = normalized_mapping_keys[best_match[0]]
+        return mapping[original_key]
+    return None
+
+
+# def fuzzy_lookup(journal_name, mapping, cutoff=85): # 模糊搜索
+
+#     # 从 mapping.keys() 中找最接近的
+#     best_match, score, _ = process.extractOne(journal_name, mapping.keys())
+#     if score >= cutoff:
+#         return mapping[best_match]
+#     else:
+#         return None
+
+
+
+
+# -----------------------------
+# python hal_insight\utils\ranking.py
+# -----------------------------
+if __name__ == "__main__":
+    input_file = Path(__file__).parent / "ExtractionHAL-revues-IRG.txt"  # 或者你 txt 的路径
+    # input_file = Path(__file__).parent / "classement.txt"
+    mapping = parse_php_txt(input_file)
+    save_mapping(mapping)
+
+

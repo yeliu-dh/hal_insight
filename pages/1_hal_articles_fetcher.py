@@ -11,6 +11,7 @@ import io
 # my utils
 from utils.HAL_search_api import fetch_hal_articles
 from utils.mapping import load_mapping_json
+from utils.ranking import fuzzy_lookup
 
 st.set_page_config(page_title="HAL insight", page_icon="🛸")
 #必须是第一行命令
@@ -39,12 +40,15 @@ def get_mappings():
         "DOMAIN_MAP": load_mapping_json("domain_map.json"),
         "LANG_MAP": load_mapping_json("lang_map.json"),
         "DOC_TYPE_MAP": load_mapping_json("doctype_map.json"),
+        "CLASSEMENT": load_mapping_json("classement.json"),
+
     }
 
 maps = get_mappings()
 DOMAIN_MAP = maps["DOMAIN_MAP"]
 LANG_MAP = maps["LANG_MAP"]
 DOC_TYPE_MAP = maps["DOC_TYPE_MAP"]
+CLASSEMENT=map['CLASSEMENT']
 
 
 st.title("Hal Articles Fetcher")
@@ -213,6 +217,11 @@ if search_button and not invalid_date:
                         mapped.append(DOMAIN_MAP.get(code_clean, code_clean))
                     return "; ".join(mapped)
                 df["domain_s"] = df["domain_s"].apply(map_domains)
+
+            # 处理fnege
+            if "journalTitle_s" in df.columns:
+                df["Cl. FNEGE"] = df["journalTitle_s"].apply(lambda x: fuzzy_lookup(x, CLASSEMENT))
+
 
             #-------------SAVE TO SESSION-----------------
 
