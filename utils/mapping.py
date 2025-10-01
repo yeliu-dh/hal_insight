@@ -54,6 +54,10 @@ def map_domains(codes_str:str=None, map:dict=None):
 def extract_irg_axes(text):
     """
     re.findall(pattern, text)
+    \s* 允许space, *表示0或多个！
+
+    (\d+):
+        \d是数字，+表示模式重复多次，()为捕获组单位，只取出()内的内容
 
     """
     text=text.strip().lower()
@@ -62,7 +66,7 @@ def extract_irg_axes(text):
         return None
         
     # 找出所有 irg_axe后面的数字
-    matches = re.findall(r"irg_axe(\d+)", text)
+    matches = re.findall(r"axe\s*(\d+)", text)
     if matches:
         # 用分号拼接
         return ";".join(matches)
