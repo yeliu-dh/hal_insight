@@ -207,81 +207,81 @@ if search_button and not invalid_date:
             st.error(f"⚠️ {e}")
 
 
-        # 处理 domain
-        if "domain_s" in df.columns:   
-            # def map_domains(codes_str:str=None, map:dict=None):
-            #     """
-            #     搜索结果是代码，对代码进行映射和清洗
-            #     """
-            #     if not codes_str: return ""
-            #     codes = codes_str.split(";")
-            #     mapped = []
-            #     for code in codes:
-            #         code_clean = re.sub(r"^\d+\.", "", code.strip())
-            #         mapped.append(map.get(code_clean, code_clean))
-            #     return "; ".join(mapped)
-            df["domain_s"] = df["domain_s"].apply(lambda x : map_domains(x, map=DOMAIN_MAP))
+# -----------处理 domain----------------
+if "domain_s" in df.columns:   
+    # def map_domains(codes_str:str=None, map:dict=None):
+    #     """
+    #     搜索结果是代码，对代码进行映射和清洗
+    #     """
+    #     if not codes_str: return ""
+    #     codes = codes_str.split(";")
+    #     mapped = []
+    #     for code in codes:
+    #         code_clean = re.sub(r"^\d+\.", "", code.strip())
+    #         mapped.append(map.get(code_clean, code_clean))
+    #     return "; ".join(mapped)
+    df["domain_s"] = df["domain_s"].apply(lambda x : map_domains(x, map=DOMAIN_MAP))
 
-        # 处理fnege
-        journal_col="journalTitle_s"
-        cl_name = 'Cl. FNEGE'
+#------------- 处理fnege----------------
+journal_col="journalTitle_s"
+cl_name = 'Cl. FNEGE'
 
-        if journal_col in df.columns:
-            df= add_classement_col(df, journal_col= journal_col, map=CLASSEMENT, cl_name=cl_name)
+if journal_col in df.columns:
+    df= add_classement_col(df, journal_col= journal_col, map=CLASSEMENT, cl_name=cl_name)
 
-        # if cl_name in df.columns:
-            #    st.info(f"⚠️ Les classements sont manquants dans {df[cl_name].isna().sum()} "
-            #     f"({df[cl_name].isna().sum()*100/len(df):.2f}%) articles!")
-            
-        #-------------SAVE TO SESSION-----------------
+# if cl_name in df.columns:
+    #    st.info(f"⚠️ Les classements sont manquants dans {df[cl_name].isna().sum()} "
+    #     f"({df[cl_name].isna().sum()*100/len(df):.2f}%) articles!")
+    
+#-------------SAVE TO SESSION-----------------
 
-        # 保存结果到 session_state
-        if not df.empty:
-            st.session_state["uploaded_df"] = df  
-            st.session_state["uploaded_df_source"] = "search"
-            
-        df = st.session_state.get("uploaded_df", None)
+# 保存结果到 session_state
+if not df.empty:
+    st.session_state["uploaded_df"] = df  
+    st.session_state["uploaded_df_source"] = "search"
+    
+df = st.session_state.get("uploaded_df", None)
+
+if df is None or df.empty:
+    st.warning("0 résultat!")
+
+else:
+    #-------------show----------------------
+    st.success(f"✅ {len(df)} articles trouvés!")
+    st.success(f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")
+    
+    st.dataframe(df)
+
+    #  ----------------SAVE TO LOCAL----------------- 
+    #file name 
+    today_str = datetime.now().strftime("%d%m%Y")
+    cols=st.columns(4)
+    with cols[1]:
+        # as CSV
+        csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
         
-        if df is None or df.empty:
-            st.warning("0 résultat!")
+        st.download_button(
+            label="Télécharger CSV",
+            data=csv_data,
+            file_name = f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.csv",
+            mime="text/csv"
+        )
 
-        else:
-            #-------------show----------------------
-            st.success(f"✅ {len(df)} articles trouvés!")
-            st.success(f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")
-            
-            st.dataframe(df)
+    with cols[3]:
+        #as XLSX
+        # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
+        xlsx_buffer = io.BytesIO()
+        with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
+            df.to_excel(writer, index=False, sheet_name="Articles")
+        xlsx_data = xlsx_buffer.getvalue()
 
-            #  ----------------SAVE TO LOCAL----------------- 
-            #file name 
-            today_str = datetime.now().strftime("%d%m%Y")
-            cols=st.columns(4)
-            with cols[1]:
-                # as CSV
-                csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
-                
-                st.download_button(
-                    label="Télécharger CSV",
-                    data=csv_data,
-                    file_name = f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.csv",
-                    mime="text/csv"
-                )
+        st.download_button(
+            label="Télécharger XLSX",
+            data=xlsx_data,
+            file_name=f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
 
-            with cols[3]:
-                #as XLSX
-                # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
-                xlsx_buffer = io.BytesIO()
-                with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
-                    df.to_excel(writer, index=False, sheet_name="Articles")
-                xlsx_data = xlsx_buffer.getvalue()
-
-                st.download_button(
-                    label="Télécharger XLSX",
-                    data=xlsx_data,
-                    file_name=f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.xlsx",
-                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                )
-
-                # 这是 XLSX 文件的 MIME 类型，告诉浏览器这是一个 Excel 文件，否则st button可能无法识别文件类型 
+        # 这是 XLSX 文件的 MIME 类型，告诉浏览器这是一个 Excel 文件，否则st button可能无法识别文件类型 
 
 
