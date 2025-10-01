@@ -60,10 +60,10 @@ def extract_irg_axes(text):
         \d是数字，+表示模式重复多次，()为捕获组单位，只取出()内的内容
 
     """
-    text=text.strip().lower()
 
     if pd.isna(text):
         return None
+    text=text.strip().lower()
         
     # 找出所有 irg_axe后面的数字
     matches = re.findall(r"axe\s*(\d+)", text)
