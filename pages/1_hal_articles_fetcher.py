@@ -26,21 +26,6 @@ st.set_page_config(page_title="HAL insight", page_icon="🛸")
 #必须是第一行命令
 
 #====================CACHE=========================#
-##HAL
-#code/streamlit.py
-# facets/..
-# BASE_DIR = Path(__file__).parent # 当前文件所在的文件夹路径 '/pages' ici
-# domain_file = Path(__file__).parent / "facets/domain_map.json"
-# lang_file = Path(__file__).parent / "facets/lang_map.json"
-# doctype_file= Path(__file__).parent / "facets/doctype_map.json"
-
-# def load_json(path):
-#     with open(path, "r", encoding="utf-8") as f:
-#         return json.load(f)
-# DOMAIN_MAP = load_json(domain_file)
-# LANG_MAP=load_json(lang_file)
-# DOC_TYPE_MAP=load_json(doctype_file)
-
 @st.cache_data 
 # @st.cache_data 是装饰器，只能用在函数定义上，不能直接装饰一个变量
 # 不能直接写# DOMAIN_MAP = load_json(domain_file)

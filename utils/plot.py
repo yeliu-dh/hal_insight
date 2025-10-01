@@ -10,13 +10,22 @@ def wrap_text(text, max_len=30):
     return "<br>".join(lines)
 
 
-
 def make_pie_chart(df, col, title, top_n=5):
     if col=='domain_s' or col=="Axe":
         counts=df[col].fillna('nan').str.split(";").explode().str.strip().value_counts()
     else:
         counts = df[col].fillna("nan").value_counts()
     
+    if col=="Axe":
+        df['Axe'] = df["Axe"].astype(str).map({
+    "1": "Performances et responsabilités",
+    "2": "Société de services et services à la société",
+    "3": "Innovations, transformations et résistances organisationnelles et sociétales",
+    "4": "Ouvrages pédagogiques"
+    })
+
+
+
     # 如果类别大于top_n, 只保留 top_n，其余归为 "其他"
     if len(counts) > top_n:
         counts = pd.concat([
@@ -77,6 +86,10 @@ def make_pie_chart(df, col, title, top_n=5):
     fig.update_yaxes(tickangle=0, automargin=True)#或者让 y 轴自动换行
 
     return fig
+
+
+
+
 
 def make_bar_chart(df, col, title, top_n=10):
     if col=='domain_s' or col=="Axe":
