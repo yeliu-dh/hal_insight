@@ -16,6 +16,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.upload import data_uploader
 from utils.plot import make_bar_chart, make_pie_chart
 
+
+
 # session state :
 #上传csv，保存在session state中，相当于一个外部字典，不会再操作(刷新)中丢失
 # Streamlit 每次用户操作控件（比如点击 radio、selectbox）都会重新运行整个脚本!!
@@ -223,38 +225,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             st.altair_chart(chart, use_container_width=True)
 
 
-### ------------------------通用def生成图-------------------------------- 
-
-        # ------------------- 通用函数 -------------------
-        
-        
-
-
-        #------------------------------------------------#
-            # #optional：
-            # fig.update_layout(
-            #     legend=dict(
-            #         # title="文献类型",
-            #         x=0.9,  # 横向位置，0=左, 1=右
-            #         y=0.9,  # 纵向位置，0=下, 1=上
-            #         xanchor='left',
-            #         yanchor='middle',
-            #         orientation="v"  # 'v' 垂直, 'h' 水平
-            #     )
-            # )
-            ## tips:
-            # xanchor（水平对齐）：
-            # 'left' → x 坐标对应图例的左边缘
-            # 'center' → x 坐标对应图例的水平中心
-            # 'right' → x 坐标对应图例的右边缘
-
-            # yanchor（垂直对齐）：
-            # 'bottom' → y 坐标对应图例底部
-            # 'middle' → y 坐标对应图例中间
-            # 'top' → y 坐标对应图例顶部
-
-            # 显示图例（默认在右侧）
-            # fig.update_layout(legend_title_text="文献类型")
+### ------------------------PIE OR BAR-------------------------------- 
 
         # ------------------- 示例应用 -------------------
 

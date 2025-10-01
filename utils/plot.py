@@ -79,7 +79,7 @@ def make_pie_chart(df, col, title, top_n=5):
     return fig
 
 def make_bar_chart(df, col, title, top_n=10):
-    if col=='domain_s':
+    if col=='domain_s' or col=="Axe":
         counts=df[col].fillna('nan').str.split(";").explode().str.strip().value_counts()
     else:
         counts = df[col].fillna("nan").value_counts()
@@ -94,7 +94,6 @@ def make_bar_chart(df, col, title, top_n=10):
     counts_df.columns = [col, "count"]
     # 标签分行
     counts_df[col] = counts_df[col].apply(lambda x: wrap_text(str(x)))
-    # counts_df[col] = counts_df[col].apply(lambda x: '<br>'.join([x[i:i+25] for i in range(0,len(x),10)]))
 
     fig = px.bar(
         counts_df,
@@ -127,7 +126,8 @@ def make_bar_chart(df, col, title, top_n=10):
     )
     fig.update_yaxes(tickangle=0, automargin=True)#或者让 y 轴自动换行
 
-    return 
+    return fig
+
 
   #------------------------------------------------#
             # #optional：
