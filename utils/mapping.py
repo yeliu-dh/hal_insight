@@ -40,23 +40,50 @@ def map_domains(codes_str:str=None, map:dict=None):
 # IRG_AXE3	Innovations, transformations et résistances organisationnelles et sociétales
 # IRG_AXE4	Ouvrages pédagogiques
 
-def transforme_axe(axe_str:str):
-    if not isinstance(axe_str,str): #确保是str
-        return None
+# def transforme_axe(axe_str:str):
+#     if not isinstance(axe_str,str): #确保是str
+#         return None
     
-    axe_str=axe_str.strip().lower()
-    if axe_str and axe_str.startswith("irg_axe"):#以irg开头
-        axe_label=axe_str[-1:]
-    else :
-        axe_label=axe_str
-    return axe_label
+#     axe_str=axe_str.strip().lower()
+#     if axe_str and axe_str.startswith("irg_axe"):#以irg开头
+#         axe_label=axe_str[-1:]
+#     else :
+#         axe_label=axe_str
+#     return axe_label
+
+def extract_irg_axes(text):
+    """
+    re.findall(pattern, text)
+
+    """
+    text=text.strip().lower()
+
+    if pd.isna(text):
+        return None
+        
+    # 找出所有 irg_axe后面的数字
+    matches = re.findall(r"irg_axe(\d+)", text)
+    if matches:
+        # 用分号拼接
+        return ";".join(matches)
+    return None
+
+
     
 def add_axe(df,axe_name='Axe'):
     """   
-    把 classification_s 字段中的值"IRG_AXE1/2/3"，整理成字符串数字，列名改为Axe
+    把 classification_s 字段中的值:
+            IRG_AXE1
+            IRG_axe1
+            IRG_AXE 3
+            IRG_AXE1IRG_AXE3
+            IRG_AXE2 – Sociétés de services et services à la société (A society of services and services to society)
+            Axe_1
+
+    整理成字符串数字，列名改为Axe
 
     """
-    df["classification_s"] = df["classification_s"].apply(transforme_axe)
+    df["classification_s"] = df["classification_s"].apply(extract_irg_axes)
     df=df.rename(columns={"classification_s":axe_name})
     return df
 
