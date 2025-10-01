@@ -71,7 +71,7 @@ doc_types = st.multiselect(
     "Type de documents",
     options=list(DOC_TYPE_MAP.keys()),
     format_func=lambda x: DOC_TYPE_MAP[x],
-    default=["ART"]
+    default=["ART","OUV","COUV"]
 )
 
 domains = st.multiselect(
