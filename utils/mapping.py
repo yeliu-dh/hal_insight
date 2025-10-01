@@ -14,7 +14,18 @@ def load_mapping_json(file_name: str):
         raise FileNotFoundError(f"{file_name} not found in {MAPPING_DIR}")
     with open(file_path, "r", encoding="utf-8") as f:
         return json.load(f)
-
+    
+def map_domains(codes_str:str=None, map:dict=None):
+                """
+                搜索结果是代码，对代码进行映射和清洗
+                """
+                if not codes_str: return ""
+                codes = codes_str.split(";")
+                mapped = []
+                for code in codes:
+                    code_clean = re.sub(r"^\d+\.", "", code.strip())
+                    mapped.append(map.get(code_clean, code_clean))
+                return "; ".join(mapped)
 
 
 # # 如果需要专门函数，可以写多个，方便调用
