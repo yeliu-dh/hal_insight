@@ -31,13 +31,19 @@ def map_domains(codes_str:str=None, map:dict=None):
     
     return "; ".join(mapped)
 
+
+def transforme_axe(axe_str:str):
+    axe_str=axe_str.strip().lower()
+    if axe_str and axe_str.startswith("irg_axe"):
+        axe_label=axe_str[-1:]
+    return axe_label
     
 def add_axe(df,axe_name='Axe'):
     """   
     把 classification_s 字段中的值"IRG_AXE1/2/3"，整理成字符串数字，列名改为Axe
 
     """
-    df["classification_s"] = df["classification_s"].apply(lambda str(x[-1:]) if isinstance(x, str) else None)
+    df["classification_s"] = df["classification_s"].apply(transforme_axe)
     df=df.rename(columns={"classification_s":axe_name})
     return df
 

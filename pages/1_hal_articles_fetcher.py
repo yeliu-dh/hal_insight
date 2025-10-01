@@ -11,9 +11,9 @@ import sys
 import os
 
 # 把项目根目录 (/mount/src/hal_insight) 加入 Python 路径
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))#file 得出当前脚本所在文件夹（pages），join+".."表示回到上一级路径，abs表示绝对化，sys.append则为加入系统路径
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+#file 得出当前脚本所在文件夹（pages），join+".."表示回到上一级路径，abs表示绝对化，sys.append则为加入系统路径
 #=> ../mount/src/hal_insight
-
 
 # my utils
 from utils.HAL_search_api import fetch_hal_articles
