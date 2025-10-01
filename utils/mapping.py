@@ -32,13 +32,23 @@ def map_domains(codes_str:str=None, map:dict=None):
     return "; ".join(mapped)
 
 
-def transforme_axe(axe_str:str):
-    if not isinstance(axe_str,str): 
-        return None
 
+# Axes thématiques (classification) d'IRG
+# Code	    Nom de l'axe
+# IRG_AXE1	Performances et responsabilités
+# IRG_AXE2	Société de services et services à la société
+# IRG_AXE3	Innovations, transformations et résistances organisationnelles et sociétales
+# IRG_AXE4	Ouvrages pédagogiques
+
+def transforme_axe(axe_str:str):
+    if not isinstance(axe_str,str): #确保是str
+        return None
+    
     axe_str=axe_str.strip().lower()
-    if axe_str and axe_str.startswith("irg_axe"):
+    if axe_str and axe_str.startswith("irg_axe"):#以irg开头
         axe_label=axe_str[-1:]
+    else :
+        axe_label=axe_str
     return axe_label
     
 def add_axe(df,axe_name='Axe'):
