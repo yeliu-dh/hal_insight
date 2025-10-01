@@ -20,8 +20,7 @@ from utils.HAL_search_api import fetch_hal_articles
 from utils.mapping import load_mapping_json
 from utils.mapping import map_domains
 from utils.mapping import add_axe
-from utils.ranking import add_classement_col
-
+from utils.ranking import add_classement_fnege
 
 st.set_page_config(page_title="HAL insight", page_icon="🛸")
 #必须是第一行命令
@@ -229,7 +228,7 @@ if search_button and not invalid_date:
     journal_col="journalTitle_s"
     cl_name = 'Cl. FNEGE'
     if "journalTitle_s" in df.columns:
-        df= add_classement(df, journal_col='journalTitle_s', map=CLASSEMENT, cl_name=cl_name)
+        df= add_classement_fnege(df, journal_col='journalTitle_s', map=CLASSEMENT, cl_name=cl_name)
 
     #-------------SAVE TO SESSION-----------------
     # 保存结果到 session_state

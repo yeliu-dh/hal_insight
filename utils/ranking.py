@@ -69,7 +69,7 @@ def fuzzy_lookup(journal_name: str, mapping: dict, cutoff: int = 85) -> str:
 
 
 
-def add_classement(
+def add_classement_fnege(
     df: pd.DataFrame,
     journal_col: str = "journalTitle_s",
     map: Dict[str, Any] = None, ## 表示 mapping 是一个字典，key 是字符串，value 可以是任意类型  
