@@ -222,11 +222,12 @@ if search_button and not invalid_date:
             # 处理fnege
             journal_col="journalTitle_s"
             cl_name = 'Cl. FNEGE'
+
             if journal_col in df.columns:
                 df= add_classement_col(df, journal_col= journal_col, mapping=CLASSEMENT, cl_name=cl_name)
                 if cl_name in df.columns:
-                   st.info(f"⚠️ Les classements sont manquants dans {df.cl_name.isna().sum()} "
-                    f"({df.cl_name.isna().sum()*100/len(df):.2f}%) articles!")
+                   st.info(f"⚠️ Les classements sont manquants dans {df[cl_name].isna().sum()} "
+                    f"({df[cl_name].isna().sum()*100/len(df):.2f}%) articles!")
                 
 
             #-------------SAVE TO SESSION-----------------
