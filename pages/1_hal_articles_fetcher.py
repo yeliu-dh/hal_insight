@@ -42,8 +42,7 @@ def get_mappings():
         "DOMAIN_MAP": load_mapping_json("domain_map.json"),
         "LANG_MAP": load_mapping_json("lang_map.json"),
         "DOC_TYPE_MAP": load_mapping_json("doctype_map.json"),
-        "CLASSEMENT": load_mapping_json("classement.json"),
-
+        "CLASSEMENT": load_mapping_json("classement_fnege.json"),#/classement.json
     }
 
 maps = get_mappings()

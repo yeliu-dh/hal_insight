@@ -6,9 +6,10 @@ import unicodedata
 import re
 from rapidfuzz import process
 
-
+#output
 MAPPING_DIR = Path(__file__).parent.parent / "mappings"
-RANKING_FILE = MAPPING_DIR / "classement.json"
+RANKING_FILE = MAPPING_DIR / "classement_fnege.json"
+   
 
 # --------------------------
 # 字符串归一化
@@ -22,15 +23,6 @@ def normalize(text: str) -> str:
     text = re.sub(r"[^\w\s]", "", text)  # 去掉标点
     return text
 
-
-# def normalize(text: str) -> str:
-     
-#     text = text.lower().strip()
-#     text = unicodedata.normalize("NFKD", text)
-#     text = "".join(c for c in text if not unicodedata.combining(c))
-#     text = re.sub(r"[^\w\s]", "", text)
-#     return text
-
 def parse_php_txt(input_file: str) -> dict:
     mapping = {}
     with open(input_file, "r", encoding="utf-8") as f:
@@ -41,7 +33,7 @@ def parse_php_txt(input_file: str) -> dict:
                 i+=1
                 left, right = line.split("=>", 1)
                 journal = left.strip().strip('"')
-                rank = right.strip().strip('"').strip(',;"')
+                rank = right.strip().strip('"').strip(',;"*')
                 mapping[journal] = rank
         print(f'{i} correspondances du classement!')
         print(f"{len(mapping)} enregistrés dans le dict")
@@ -49,7 +41,6 @@ def parse_php_txt(input_file: str) -> dict:
     return mapping
 
 def save_mapping(mapping: dict, output_file: str = RANKING_FILE):
-
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(mapping, f, ensure_ascii=False, indent=2)
     print(f"✅ 已保存到 {output_file}")
@@ -96,25 +87,16 @@ def add_classement_col(
 
 
 
-# def add_classement(df: pd.DataFrame, journal_col: str = "journalTitle_s", mapping : dict, cl_name:str='Cl. FNEGE', cutoff: int = 85) -> pd.DataFrame:
-#     col_cl = df[journal_col].apply(lambda x: fuzzy_lookup(x, mapping, cutoff=cutoff))
-    
-#     # 找到 journalTitle_s 的列索引
-#     idx = df.columns.get_loc(journal_col)
-
-#     # 插入列到 journalTitle_s 后面
-#     df.insert(loc=idx+1, column=cl_name, value=col_cl)
-#     return df
-
-
-
 # -----------------------------
 # python hal_insight\utils\ranking.py
 # -----------------------------
+
 if __name__ == "__main__":
-    input_file = Path(__file__).parent / "ExtractionHAL-revues-IRG.txt"  # 或者你 txt 的路径
-    # input_file = Path(__file__).parent / "classement.txt"
+    #input
+    # input_file = Path(__file__).parent / "ExtractionHAL-revues-IRG.txt"  # 或者你 txt 的路径
+    input_file = Path(__file__).parent / "classement_fnege.txt"
+    
     mapping = parse_php_txt(input_file)
-    save_mapping(mapping)
+    save_mapping(mapping,)
 
 
