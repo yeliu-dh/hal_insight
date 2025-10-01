@@ -219,7 +219,6 @@ if search_button and not invalid_date:
     if "domain_s" in df.columns:   
         df["domain_s"] = df["domain_s"].apply(lambda x : map_domains(x, map=DOMAIN_MAP))
 
-
     #----------处理axe----------------------
     if "classification_s" in df.columns:
         df=add_axe(df)

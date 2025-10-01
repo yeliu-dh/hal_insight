@@ -407,7 +407,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             "domain_s": "Répartition par domaine scientifique",
             "journalTitle_s":"Répartition par journal",
             'Cl. FNEGE':"Répartition par classement"
-
+            "Axe":"Répartition par axe thématique "
             # "language_s": "Répartition par langue",
             # "country_s": "Répartition par pays"
         }.items():      
