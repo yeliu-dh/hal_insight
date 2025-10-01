@@ -11,7 +11,7 @@ import io
 # my utils
 from utils.HAL_search_api import fetch_hal_articles
 from utils.mapping import load_mapping_json
-from utils.mapping import map_domain_s
+
 from utils.ranking import add_classement_col
 
 
@@ -209,6 +209,18 @@ if search_button and not invalid_date:
 
         # 处理 domain
         if "domain_s" in df.columns:   
+            def map_domain_s(codes_str:str=None, map:dict=None):
+                """
+                搜索结果是代码，对代码进行映射和清洗
+                """
+                if not codes_str: return ""
+                codes = codes_str.split(";")
+                mapped = []
+                for code in codes:
+                    code_clean = re.sub(r"^\d+\.", "", code.strip())
+                    mapped.append(map.get(code_clean, code_clean))
+                return "; ".join(mapped)
+
             df["domain_s"] = df["domain_s"].apply(lambda x : map_domain_s(x, map=DOMAIN_MAP))
 
         # 处理fnege
