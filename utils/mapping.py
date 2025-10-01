@@ -16,16 +16,32 @@ def load_mapping_json(file_name: str):
         return json.load(f)
     
 def map_domains(codes_str:str=None, map:dict=None):
-                """
-                搜索结果是代码，对代码进行映射和清洗
-                """
-                if not codes_str: return ""
-                codes = codes_str.split(";")
-                mapped = []
-                for code in codes:
-                    code_clean = re.sub(r"^\d+\.", "", code.strip())
-                    mapped.append(map.get(code_clean, code_clean))
-                return "; ".join(mapped)
+    """
+    搜索结果是代码，对代码进行映射和清洗
+    """
+    if not isinstance(codes_str,str): 
+        return ""
+
+    codes = codes_str.split(";")
+    mapped = []
+
+    for code in codes:
+        code_clean = re.sub(r"^\d+\.", "", code.strip())
+        mapped.append(map.get(code_clean, code_clean))
+    
+    return "; ".join(mapped)
+
+    
+def add_axe(df,axe_name='Axe'):
+    """   
+    把 classification_s 字段中的值"IRG_AXE1/2/3"，整理成字符串数字，列名改为Axe
+
+    """
+    df["classification_s"] = df["classification_s"].apply(lambda str(x[-1:]) if isinstance(x, str) else None)
+    df=df.rename(columns={"classification_s":axe_name})
+    return df
+
+
 
 
 # # 如果需要专门函数，可以写多个，方便调用

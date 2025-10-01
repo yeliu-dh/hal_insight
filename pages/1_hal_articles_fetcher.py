@@ -12,6 +12,7 @@ import io
 from utils.HAL_search_api import fetch_hal_articles
 from utils.mapping import load_mapping_json
 from utils.mapping import map_domains
+from utils.mapping import add_axe
 from utils.ranking import add_classement_col
 
 
@@ -212,19 +213,18 @@ if search_button and not invalid_date:
     if "domain_s" in df.columns:   
         df["domain_s"] = df["domain_s"].apply(lambda x : map_domains(x, map=DOMAIN_MAP))
 
+
+    #----------处理axe----------------------
+    if "classification_s" in df.columns:
+        df=add_axe(df)
+
     #------------- 处理fnege----------------
     journal_col="journalTitle_s"
     cl_name = 'Cl. FNEGE'
+    if "journalTitle_s" in df.columns:
+        df= add_classement_col(df, journal_col='journalTitle_s', map=CLASSEMENT, cl_name=cl_name)
 
-    if journal_col in df.columns:
-        df= add_classement_col(df, journal_col= journal_col, map=CLASSEMENT, cl_name=cl_name)
-
-    # if cl_name in df.columns:
-        #    st.info(f"⚠️ Les classements sont manquants dans {df[cl_name].isna().sum()} "
-        #     f"({df[cl_name].isna().sum()*100/len(df):.2f}%) articles!")
-        
     #-------------SAVE TO SESSION-----------------
-
     # 保存结果到 session_state
     if not df.empty:
         st.session_state["uploaded_df"] = df  
