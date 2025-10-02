@@ -8,29 +8,84 @@ import numpy as np
 from scipy.stats import chi2_contingency
 
 import re
+import streamlit as st
 
 
-def preprocess_text(text, nlp_fr, nlp_en, stop_fr, stop_en):
+def collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "fr")):
+    """
+    从 DataFrame 收集指定列的文本，并按语言分开。
+    
+    Parameters:
+        df (pd.DataFrame): 数据
+        columns (list): 要收集的列，例如 ["keyword_s", "abstract_s"]
+        lang_col (str): 语言列名
+        langs (tuple): 需要分开的语言
+    
+    Returns:
+        dict: { "en": [文本], "fr": [文本] }
+    """
+    col_map={"keyword_s":"mots clé",
+             "abstract_s":"résumé"}
+    
+    texts = {lang: [] for lang in langs}
+
+    for col in options:
+        st.info(f"⚠️ Les {col_map.get(col," ")} sont manquants dans {df[col].isna().sum()} "
+                            f"({df[col].isna().sum()*100/len(df):.2f}%) articles!")
+    
+        if col not in df.columns:
+            continue
+        for lang in langs:
+            subset = df[(df[lang_col] == lang) & df[col].notna()]
+            if not subset.empty:
+                texts[lang].append(" ".join(subset[col].astype(str)).lower())
+
+    return texts
+
+
+
+
+def preprocess_text(texts, nlp, stopwords):
+    """
+    对文本列表做lemmatization和停用词过滤
+    """
     # 去除标点和非字母
     text = re.sub(r"[^a-zA-ZÀ-ÿ\s]", " ", text)
     text = text.lower().strip()
+    all_tokens = []
+    
+    # lemmatisation + enlever les stopwords
+    for doc in texts:
+        spacy_doc = nlp(doc)
+        for token in spacy_doc:
+            lemma = token.lemma_.lower()
+            # 过滤停用词和标点
+            if lemma.isalpha() and lemma not in stopwords:
+                all_tokens.append(lemma)
+    return all_tokens
 
-    # 使用 spacy 进行分词 + 词形还原
-    # 检测语言（简单用长度来区分，也可以用 langdetect）
-    doc_fr = nlp_fr(text)
-    doc_en = nlp_en(text)
 
-    #lemmatiser:
-    tokens = []
-    for token in doc_fr:
-        if token.lemma_ not in stop_fr and not token.is_punct and len(token.lemma_) > 2:
-            tokens.append(token.lemma_)
-    for token in doc_en:
-        if token.lemma_ not in stop_en and not token.is_punct and len(token.lemma_) > 2:
-            tokens.append(token.lemma_)
+# def preprocess_text(text, nlp_fr, nlp_en, stop_fr, stop_en):
+#     # 去除标点和非字母
+#     text = re.sub(r"[^a-zA-ZÀ-ÿ\s]", " ", text)
+#     text = text.lower().strip()
 
-    return " ".join(tokens)
+#     # 使用 spacy 进行分词 + 词形还原
+#     # 检测语言（简单用长度来区分，也可以用 langdetect）
 
+#     doc_fr = nlp_fr(text)
+#     doc_en = nlp_en(text)
+
+#     #lemmatiser:
+#     tokens = []
+#     for token in doc_fr:
+#         if token.lemma_ not in stop_fr and not token.is_punct and len(token.lemma_) > 2:
+#             tokens.append(token.lemma_)
+#     for token in doc_en:
+#         if token.lemma_ not in stop_en and not token.is_punct and len(token.lemma_) > 2:
+#             tokens.append(token.lemma_)
+
+#     return " ".join(tokens)
 
 
 def generate_wc(text, max_words, stopwords, title="Nuage de mots"):
@@ -49,20 +104,6 @@ def generate_wc(text, max_words, stopwords, title="Nuage de mots"):
     ax.axis("off")  # 去掉坐标轴
     ax.set_title(title, fontsize=16)
     return fig
-
-
-
-
-# def generate_wc(text, max_words, stopwords):
-#     wc = WordCloud(
-#             width=800,
-#             height=400,
-#             background_color="white",
-#             max_words=max_words,
-#             stopwords=stopwords,
-#             colormap="viridis"
-#         ).generate(text)
-
 
 
 def compute_keyness(freq_slice, global_freq, method="llr"):
