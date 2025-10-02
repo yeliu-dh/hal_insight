@@ -7,7 +7,6 @@ from wordcloud import WordCloud, STOPWORDS
 from PIL import Image
 import io
 import math
-
 import re
 import spacy
 from nltk.corpus import stopwords
@@ -31,23 +30,29 @@ from utils.worldcould import generate_keyness_wc
 #     return stop_fr, stop_en
 
 
-# 加载 spacy 语言模型
+# # 加载 spacy 语言模型
+# @st.cache_resource
+# def load_spacy_models():
+#     try:
+#         nlp_fr = spacy.load("fr_core_news_sm")
+#     except OSError:
+#         from spacy.cli import download
+#         download("fr_core_news_sm")
+#         nlp_fr = spacy.load("fr_core_news_sm")
+
+#     try:
+#         nlp_en = spacy.load("en_core_web_sm")
+#     except OSError:
+#         from spacy.cli import download
+#         download("en_core_web_sm")
+#         nlp_en = spacy.load("en_core_web_sm")
+
+#     return nlp_fr, nlp_en
+
 @st.cache_resource
 def load_spacy_models():
-    try:
-        nlp_fr = spacy.load("fr_core_news_sm")
-    except OSError:
-        from spacy.cli import download
-        download("fr_core_news_sm")
-        nlp_fr = spacy.load("fr_core_news_sm")
-
-    try:
-        nlp_en = spacy.load("en_core_web_sm")
-    except OSError:
-        from spacy.cli import download
-        download("en_core_web_sm")
-        nlp_en = spacy.load("en_core_web_sm")
-
+    nlp_fr = spacy.load("fr_core_news_sm")
+    nlp_en = spacy.load("en_core_web_sm")
     return nlp_fr, nlp_en
 
 
