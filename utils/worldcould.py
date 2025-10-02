@@ -30,8 +30,8 @@ def collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "
     texts = {lang: [] for lang in langs}
 
     for col in options:
-        st.info(f"⚠️ Les {col_map.get(col," ")} sont manquants dans {df[col].isna().sum()} "
-                            f"({df[col].isna().sum()*100/len(df):.2f}%) articles!")
+        st.info(f"⚠️ Les {col_map.get(col,' ')} sont manquants dans {df[col].isna().sum()}"
+                f"({df[col].isna().sum()*100/len(df):.2f}%) articles!")
     
         if col not in df.columns:
             continue
