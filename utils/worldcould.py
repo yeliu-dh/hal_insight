@@ -11,7 +11,7 @@ import re
 import streamlit as st
 
 
-def collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "fr")):
+def collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "fr"))-> dict:
     """
     从 DataFrame 收集指定列的文本，并按语言分开。
     

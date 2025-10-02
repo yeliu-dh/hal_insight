@@ -85,7 +85,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         st.session_state["overall_wc"] = None
 
    # ---------------文本范围-------------------
-    option = st.multiselect(
+    options = st.multiselect(
     "Choisir le texte:",
     ["keywords", "abstract"],
     default=["keywords","abstract"]  # 默认选择
@@ -93,21 +93,26 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 
     try:
-        texts_en = []
-        texts_fr=[]
-        if "keywords" in option and "keyword_s" in df.columns:
-            texts_by_lang = collect_texts_by_language(df, columns=["keyword_s", "abstract_s"])
-            texts_en.append(texts_by_lang.get("en", []))
-            texts_fr.append(texts_by_lang.get("fr", []))
+        if options:
+            texts_en, texts_fr=[],[]
+            text_by_lang=collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "fr"))
+            texts_en.append(text_by_lang.get('en',[]))
+            texts_fr.append(text_by_lang.get('en',[]))
 
-            # st.info(f"⚠️ Les mots clés sont manquants dans {df.keyword_s.isna().sum()} "
-            #         f"({df.keyword_s.isna().sum()*100/len(df):.2f}%) articles!")
-            # texts.append(" ".join(df["keyword_s"].dropna().astype(str)).lower())
 
-        if "abstract" in option and "abstract_s" in df.columns:
-            texts_by_lang = collect_texts_by_language(df, columns=["keyword_s", "abstract_s"])
-            texts_en.append(texts_by_lang.get("en", []))
-            texts_fr.append(texts_by_lang.get("fr", []))
+        # if "keywords" in option and "keyword_s" in df.columns:
+        #     texts_by_lang = collect_texts_by_language(df, option=["keyword_s", "abstract_s"])
+        #     texts_en.append(texts_by_lang.get("en", []))
+        #     texts_fr.append(texts_by_lang.get("fr", []))
+
+        #     # st.info(f"⚠️ Les mots clés sont manquants dans {df.keyword_s.isna().sum()} "
+        #     #         f"({df.keyword_s.isna().sum()*100/len(df):.2f}%) articles!")
+        #     # texts.append(" ".join(df["keyword_s"].dropna().astype(str)).lower())
+
+        # if "abstract" in option and "abstract_s" in df.columns:
+        #     texts_by_lang = collect_texts_by_language(df, columns=["keyword_s", "abstract_s"])
+        #     texts_en.append(texts_by_lang.get("en", []))
+        #     texts_fr.append(texts_by_lang.get("fr", []))
 
         else:
             st.warning("⚠️ Aucune colonne sélectionnée ou inexistante dans le CSV.")
