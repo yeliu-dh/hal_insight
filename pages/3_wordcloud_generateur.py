@@ -85,10 +85,14 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         st.session_state["overall_wc"] = None
 
    # ---------------文本范围-------------------
+    WC_MAP={"keywords_s":"mots clés",
+            "abstract_s":'résumés'}
+    
     options = st.multiselect(
     "Choisir le texte:",
-    ["keywords", "abstract"],
-    default=["keywords","abstract"]  # 默认选择
+    options=["keyword_s", "abstract_s"],
+    default=["keywords_s","abstract_s"]  # 默认选择
+    format_func=lambda x: WC_MAP[X]#只改变显示
     )
 
 
