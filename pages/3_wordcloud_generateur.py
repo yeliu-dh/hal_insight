@@ -98,25 +98,10 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     try:
         if options:
-            texts_en, texts_fr=[],[]
+            text_en, text_fr=[],[]
             text_by_lang=collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "fr"))
-            texts_en.append(text_by_lang.get('en',[]))
-            texts_fr.append(text_by_lang.get('en',[]))
-
-
-        # if "keywords" in option and "keyword_s" in df.columns:
-        #     texts_by_lang = collect_texts_by_language(df, option=["keyword_s", "abstract_s"])
-        #     texts_en.append(texts_by_lang.get("en", []))
-        #     texts_fr.append(texts_by_lang.get("fr", []))
-
-        #     # st.info(f"⚠️ Les mots clés sont manquants dans {df.keyword_s.isna().sum()} "
-        #     #         f"({df.keyword_s.isna().sum()*100/len(df):.2f}%) articles!")
-        #     # texts.append(" ".join(df["keyword_s"].dropna().astype(str)).lower())
-
-        # if "abstract" in option and "abstract_s" in df.columns:
-        #     texts_by_lang = collect_texts_by_language(df, columns=["keyword_s", "abstract_s"])
-        #     texts_en.append(texts_by_lang.get("en", []))
-        #     texts_fr.append(texts_by_lang.get("fr", []))
+            text_en.append(text_by_lang.get('en',[]))
+            text_fr.append(text_by_lang.get('en',[]))
 
         else:
             st.warning("⚠️ Aucune colonne sélectionnée ou inexistante dans le CSV.")
@@ -181,8 +166,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     #                     "et","ce",'qui','que',"est","qu","avec","ont","ces",'celle','ceux','celles',
     #                     'comme','afin','ne',"son",'ses'}
     
-    
-    # stopwords = set(STOPWORDS).union(french_stopwords).union(user_stopwords).union(stop_en).union(stop_fr)
     stopwords=set(stop_en).union(stop_fr).union(user_stopwords)
     
     # 按钮生成+储存
@@ -192,16 +175,12 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             nlp_fr, nlp_en = load_spacy_models()
 
         with st.spinner("🔄 Nettoyage et lemmatisation en cours..."):
-            text=[]
+            clean_text_en, clean_text_fr = "", ""
             if text_en:
-                clean_text_en=" ".join(preprocess_text(texts_en, nlp_en, stopwords))
-
+                clean_text_en=" ".join(preprocess_text(text_en, nlp_en, stopwords))
+            
             if text_fr:
-                clean_text_fr=" ".join(preprocess_text(texts_fr, nlp_fr, stopwords))
-
-            # stop_fr, stop_en = load_nltk_resources()
-            # clean_text = preprocess_text(raw_text, nlp_fr, nlp_en, stop_fr, stop_en)
-            # st.success("✅ Texte prétraité prêt pour le wordcloud!")
+                clean_text_fr=" ".join(preprocess_text(text_fr, nlp_fr, stopwords))
         
         with st.spinner("🔄 Générer le nuage de mots global:"):
             st.session_state["overall_wc"] = generate_wc(clean_text_en+clean_text_fr, max_words, stopwords, title="Nuage de mots global")
