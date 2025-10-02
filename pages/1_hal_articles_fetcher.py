@@ -139,7 +139,7 @@ labs = st_tags(
 options_fields = ['halId_s','uri_s',"docType_s", "title_s", "subTitle_s", "authFullName_s","labStructName_s","domain_s", 
                     "publicationDate_s","journalTitle_s","conferenceTitle_s","conferenceStartDate_s","country_s","city_s","audience_s",
                     "language_s", "keyword_s", "abstract_s","urlFulltextEsr_s","files_s",'page_s',"modifiedDate_s","submittedDate_s",
-                     "openAccess_bool",'volume_s',"page_s",'conferenceStartDate_s',"conferenceOrganizer_s","classification_s",
+                     "openAccess_bool",'volume_s','conferenceStartDate_s',"conferenceOrganizer_s","classification_s",
                     
                 ]
 

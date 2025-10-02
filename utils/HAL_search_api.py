@@ -123,7 +123,9 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         "fq": fq,
         "fl": ",".join(fields),
         "rows": rows,
-        "wt": "json"
+        "wt": "json",
+        "sort": "submittedDate_t"
+
     }   
 
     # 构建 URL 用于打印检查
