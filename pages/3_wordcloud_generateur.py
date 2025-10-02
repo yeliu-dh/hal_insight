@@ -91,7 +91,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     options = st.multiselect(
     "Choisir le texte:",
     options=["keyword_s", "abstract_s"],
-    default=["keywords_s","abstract_s"],  # 默认选择
+    default=["keyword_s","abstract_s"],  # 默认选择
     format_func=lambda x: WC_MAP[x]#只改变显示
     )
 

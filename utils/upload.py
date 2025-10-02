@@ -45,7 +45,7 @@ def data_uploader(key="uploaded_df"):
         st.success(f" Data importé | Source :{source_label} | {len(st.session_state[key])} lignes au total.")
         st.dataframe(st.session_state[key].head())
     else:
-        st.info("📭 Aucun fichier importé. Veuillez chercher des articles ou charger un CSV.")
+        st.info("Aucun fichier importé. Veuillez chercher des articles ou charger un CSV.")
 
 
 
