@@ -176,8 +176,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     # 按钮生成+储存
     overall_button=st.button("Générer")
     if overall_button:
-        # with st.spinner("🔄 Charger le modèle pour la lemmatisation..."):
-            # nlp_fr, nlp_en = load_spacy_models()
+        with st.spinner("🔄 Charger le modèle pour la lemmatisation..."):
+            nlp_fr, nlp_en = load_spacy_models()
 
         with st.spinner("🔄 Nettoyage et lemmatisation en cours..."):
             clean_text_en, clean_text_fr = "", ""
