@@ -24,13 +24,13 @@ def collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "
     Returns:
         dict: { "en": [文本], "fr": [文本] }
     """
-    col_map={"keyword_s":"mots clé",
-             "abstract_s":"résumé"}
+    WC_MAP={"keywords_s":"mots clés",
+            "abstract_s":'résumés'}
     
     texts = {lang: [] for lang in langs}
 
     for col in options:
-        st.info(f"⚠️ Les {col_map.get(col,' ')} sont manquants dans {df[col].isna().sum()}"
+        st.info(f"⚠️ Les {WC_MAP.get(col,' ')} sont manquants dans {df[col].isna().sum()}"
                 f"({df[col].isna().sum()*100/len(df):.2f}%) articles!")
     
         if col not in df.columns:
