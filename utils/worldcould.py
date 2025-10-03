@@ -25,20 +25,23 @@ def collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "
     Returns:
         dict: { "en": [文本], "fr": [文本] }
     """
-    WC_MAP={"keywords_s":"mots clés",
+    WC_MAP={"keyword_s":"mots clés",
             "abstract_s":'résumés'}
     
     texts = {lang: [] for lang in langs}
 
     for col in options:
-        st.info(f"⚠️ Les {WC_MAP.get(col,' ')} sont manquants dans {df[col].isna().sum()}"
+        st.info(f"⚠️ Les {WC_MAP.get(col,"...")} sont manquants dans {df[col].isna().sum()}"
                 f" ({df[col].isna().sum()*100/len(df):.2f}%) articles!")
         if col not in df.columns:
             continue
         for lang in langs:
+            #选择莫语言+不为空的行：
             subset = df[(df[lang_col] == lang) & df[col].notna()]
             if not subset.empty:
-                texts[lang].append(" ".join(subset[col].astype(str)).lower())
+                texts[lang].append(" ".join(subset[col].astype(str)).lower())# lang:['keyword_str','resume_str']
+    for lang in texts:
+        texts[lang] = " ".join(texts[lang])    
 
     return texts
 

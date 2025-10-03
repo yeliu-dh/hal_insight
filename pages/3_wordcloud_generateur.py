@@ -13,6 +13,7 @@ import re
 # import nltk
 import simplemma
 
+
 #my utils:
 from utils.upload import data_uploader
 from utils.worldcould import collect_texts_by_language
@@ -77,9 +78,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         if options:
             text_en, text_fr=[],[]
             text_by_lang=collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "fr"))
-            text_en.append(text_by_lang.get('en',[]))
-            text_fr.append(text_by_lang.get('en',[]))
-
+            text_en=text_by_lang.get('en',[])
+            text_fr=text_by_lang.get('fr',[])
+            
         else:
             st.warning("⚠️ Aucune colonne sélectionnée ou inexistante dans le CSV.")
             text_en = ""
