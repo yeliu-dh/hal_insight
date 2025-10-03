@@ -45,13 +45,18 @@ def collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "
 
     return texts
 
-
-
-
 def preprocess_text(text, stopwords, lang='fr'):
     """
     对文本列表做lemmatization和停用词过滤
     """
+
+    # 确认输入的是str
+    if isinstance(text, list):  # 如果传进来是list，先拼接
+        text = " ".join(map(str, text))
+    elif not isinstance(text, str):  # 如果是其他类型，转成字符串
+        text = str(text)
+    
+
     # 去除标点和非字母+lower()
     text = re.sub(r"[^a-zA-ZÀ-ÿ\s]", " ", text)
     text = text.lower().strip()
