@@ -101,9 +101,16 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     user_stopwords = st_tags(
         label="Ajouter des mots à ignorer",
         text="Tapez un mot et appuyez sur Entrée",
-        value=["management","gestion","marketing"],
+        value=["management","gestion","marketing", "recherche",'research','study'],
         maxtags=50
     )
+
+    # ------------séparé par lang--------------------
+    #radio多选,checkbox单选
+    wc_par_lang = st.checkbox("Afficher par langue :", value=False, key="wc_lang")
+
+
+
 
     #nltk stopwords
     stop_en=['won', 'an', 'having', "mightn't", 'the', "hasn't", 'more', 'in', 'only', 'under',
@@ -158,13 +165,25 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             if text_fr:
                 clean_text_fr=preprocess_text(text_fr, stopwords=stopwords, lang='fr') 
 
-        
-        with st.spinner("🔄 Générer le nuage de mots global:"):
-            st.session_state["overall_wc"] = generate_wc(clean_text_en+clean_text_fr, max_words, stopwords, title="Nuage de mots global")
+            if wc_par_lang:
+                with st.spinner("🔄 Générer..."):
+                    st.session_state["overall_wc"] = generate_wc(clean_text_en+clean_text_fr, max_words, stopwords, title="Nuage de mots global")
 
-            # 渲染
-            if st.session_state["overall_wc"] is not None:
-                st.pyplot(st.session_state["overall_wc"])
+                    # 渲染
+                    if st.session_state["overall_wc"] is not None:
+                        st.pyplot(st.session_state["overall_wc"])
+
+            else:
+                # 分两列生成各自词云
+                col1, col2 = st.columns(2)
+                with col1:
+                    if clean_text_en:
+                        wc_en = generate_wc(clean_text_en, max_words, stopwords, title="Nuage de mots EN")
+                        st.pyplot(wc_en)
+                with col2:
+                    if clean_text_fr:
+                        wc_fr = generate_wc(clean_text_fr, max_words, stopwords, title="Nuage de mots FR")
+                        st.pyplot(wc_fr)
 
 
 
