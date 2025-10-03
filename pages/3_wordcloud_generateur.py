@@ -20,17 +20,12 @@ from utils.worldcould import preprocess_text
 from utils.worldcould import generate_wc
 from utils.worldcould import generate_keyness_wc
 
-#------------CACHE--------------
-
-lang_en = simplemma.load_data("en")
-lang_fr = simplemma.load_data("fr")
-
-
-@st.cache_resource
-def load_spacy_models():
-    nlp_fr = spacy.load("fr_core_news_sm")
-    nlp_en = spacy.load("en_core_web_sm")
-    return nlp_fr, nlp_en
+# #------------CACHE--------------
+# @st.cache_resource
+# def load_spacy_models():
+#     nlp_fr = spacy.load("fr_core_news_sm")
+#     nlp_en = spacy.load("en_core_web_sm")
+#     return nlp_fr, nlp_en
 
 
 st.set_page_config(page_title="HAL insight", page_icon="🛸")
