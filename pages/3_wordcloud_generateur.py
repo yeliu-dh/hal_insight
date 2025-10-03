@@ -8,9 +8,10 @@ from PIL import Image
 import io
 import math
 import re
-import spacy
-from nltk.corpus import stopwords
-import nltk
+# import spacy
+# from nltk.corpus import stopwords
+# import nltk
+import simplemma
 
 #my utils:
 from utils.upload import data_uploader
@@ -21,33 +22,9 @@ from utils.worldcould import generate_keyness_wc
 
 #------------CACHE--------------
 
-# 下载停用词 (只会运行一次，缓存)
-# @st.cache_resource
-# def load_nltk_resources():
-#     nltk.download("stopwords")
-#     stop_fr = set(stopwords.words("french"))
-#     stop_en = set(stopwords.words("english"))
-#     return stop_fr, stop_en
+lang_en = simplemma.load_data("en")
+lang_fr = simplemma.load_data("fr")
 
-
-# # 加载 spacy 语言模型
-# @st.cache_resource
-# def load_spacy_models():
-#     try:
-#         nlp_fr = spacy.load("fr_core_news_sm")
-#     except OSError:
-#         from spacy.cli import download
-#         download("fr_core_news_sm")
-#         nlp_fr = spacy.load("fr_core_news_sm")
-
-#     try:
-#         nlp_en = spacy.load("en_core_web_sm")
-#     except OSError:
-#         from spacy.cli import download
-#         download("en_core_web_sm")
-#         nlp_en = spacy.load("en_core_web_sm")
-
-#     return nlp_fr, nlp_en
 
 @st.cache_resource
 def load_spacy_models():
@@ -132,7 +109,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     )
 
     #nltk stopwords
-    stop_en={'won', 'an', 'having', "mightn't", 'the', "hasn't", 'more', 'in', 'only', 'under',
+    stop_en=['won', 'an', 'having', "mightn't", 'the', "hasn't", 'more', 'in', 'only', 'under',
              'o', 'ain', 'can', 'some', 'with', 'these', 'had', 'they', 'me', 'its', 'such', "wouldn't", 
              'as', 'own', "they'd", 'weren', 'or', "shan't", 'don', 'him', 'yours', 'after', 'so', 
              "don't", 'down', 't', 'hadn', "she'll", 'been', 'y', 'whom', 'because', 'about', 'am',
@@ -148,10 +125,11 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
              'again', "you'd", "hadn't", 'that', 'but', 'when', "didn't", 'ourselves', "doesn't", 've', 'yourself', 
              'myself', "couldn't", 'd', 'was', "you've", 'both', 'themselves', 'if', 'over', "she'd", 'few', 'her', "he'd",
              'through', 'wouldn', "we'd", 'below', 'theirs', 'aren', 'to', "we've", 'same', 'mightn', 'isn', 'by', 'during',
-               'what', 'he', "i'll", 'very', 'how', 'wasn', 'she', "weren't", 'm', 'their', 'which', 'it', 're'}
+               'what', 'he', "i'll", 'very', 'how', 'wasn', 'she', "weren't", 'm', 'their', 'which', 'it', 're'
+            ]
     
 
-    stop_fr={'j', 'avions', 'avez', 'ta', 'son', 'avais', 'étaient', 'une', 'ai', 'seront', 'il', 'soient', 'étions',
+    stop_fr=['j', 'avions', 'avez', 'ta', 'son', 'avais', 'étaient', 'une', 'ai', 'seront', 'il', 'soient', 'étions',
               'sommes','serai', 'me', 'l', 'est', 'tes', 'aurez', 'ayons', 'as', 'elle', 'eusses', 'été', 'fût', 
               'par', 't', 'auraient', 'et', 'notre', 'y', 'aie', 'eux', 'leur', 'le', 'on', 'avaient', 'ont',
               'eue', 'aurait', 'aies', 'eussent', 'eut', 'soit', 'sur', 'avec', 'serions', 'ses', 'n', 'du', 
@@ -163,29 +141,35 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                'lui', 'nos', 'des', 'aux', 'eussiez', 'pour', 'eues', 'ne', 'aurons', 'que', 'fussiez', 'tu', 'eussions', 
                'd', 'étants', 'ce', 'étais', 'était', 'serais', 'étées', 'mais', 'eus', 'eût', 'ayez', 'votre', 'seraient', 
                'fusse', 'ait', 'de', 'c', 'la', 'soyons', 'aurai', 'vos', 'fûmes', 'pas', 'm', 'sont', 'aura', 'avons', 'eûmes', 
-               'toi', 'ou'}
+               'toi', 'ou'
+            ]
 
     #  = {"et", "de", "la", "le", "les","l","l'", "des", "un", "une", 
     #                     "du", "en", "au","d","dans","à","par","pour","sur","sont","aux","au",
     #                     "leur","leurs","qui","ou","il","elle","ils","elles","je","tu","vous","nous","se",
     #                     "et","ce",'qui','que',"est","qu","avec","ont","ces",'celle','ceux','celles',
     #                     'comme','afin','ne',"son",'ses'}
+    # stopwords=stop_en.extend(stop_fr).extend(user_stopwords).lower()
     
-    stopwords=set(stop_en).union(stop_fr).union(user_stopwords)
-    
+    # 转小写+去重
+    stopwords = set(w.lower() for w in (stop_en + stop_fr + user_stopwords))
+
+
+
     # 按钮生成+储存
     overall_button=st.button("Générer")
     if overall_button:
-        with st.spinner("🔄 Charger le modèle pour la lemmatisation..."):
-            nlp_fr, nlp_en = load_spacy_models()
+        # with st.spinner("🔄 Charger le modèle pour la lemmatisation..."):
+        #     nlp_fr, nlp_en = load_spacy_models()
 
         with st.spinner("🔄 Nettoyage et lemmatisation en cours..."):
             clean_text_en, clean_text_fr = "", ""
+
             if text_en:
-                clean_text_en=" ".join(preprocess_text(text_en, nlp_en, stopwords))
-            
+                clean_text_en=preprocess_text(text_en, stopwords=stopwords, lang='en') 
             if text_fr:
-                clean_text_fr=" ".join(preprocess_text(text_fr, nlp_fr, stopwords))
+                clean_text_fr=preprocess_text(text_fr, stopwords=stopwords, lang='fr') 
+
         
         with st.spinner("🔄 Générer le nuage de mots global:"):
             st.session_state["overall_wc"] = generate_wc(clean_text_en+clean_text_fr, max_words, stopwords, title="Nuage de mots global")

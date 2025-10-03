@@ -9,6 +9,7 @@ from scipy.stats import chi2_contingency
 
 import re
 import streamlit as st
+import simplemma
 
 
 def collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "fr"))-> dict:
@@ -32,7 +33,6 @@ def collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "
     for col in options:
         st.info(f"⚠️ Les {WC_MAP.get(col,' ')} sont manquants dans {df[col].isna().sum()}"
                 f" ({df[col].isna().sum()*100/len(df):.2f}%) articles!")
-    
         if col not in df.columns:
             continue
         for lang in langs:
@@ -45,25 +45,30 @@ def collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "
 
 
 
-def preprocess_text(texts, nlp, stopwords):
+def preprocess_text(text, stopwords, lang='fr'):
     """
     对文本列表做lemmatization和停用词过滤
     """
-    # 去除标点和非字母
+    # 去除标点和非字母+lower()
     text = re.sub(r"[^a-zA-ZÀ-ÿ\s]", " ", text)
     text = text.lower().strip()
-    all_tokens = []
-    
-    # lemmatisation + enlever les stopwords
-    for doc in texts:
-        spacy_doc = nlp(doc)
-        for token in spacy_doc:
-            lemma = token.lemma_.lower()
-            # 过滤停用词和标点
-            if lemma.isalpha() and lemma not in stopwords:
-                all_tokens.append(lemma)
-    return all_tokens
 
+    # lemmatisation + enlever les stopwords
+    clean_tokens=[simplemma.lemmatize(word, lang=lang) for word in text.split()]
+    clean_text=" ".join([w for w in clean_tokens if w.isalpha() and w not in stopwords])
+
+    return clean_text
+
+
+    # lemmatisation + enlever les stopwords
+    # all_tokens = []
+    # for doc in texts:
+    #     spacy_doc = nlp(doc)
+    #     for token in spacy_doc:
+    #         lemma = token.lemma_.lower()
+    #         # 过滤停用词和标点
+    #         if lemma.isalpha() and lemma not in stopwords:
+    #             all_tokens.append(lemma)
 
 # def preprocess_text(text, nlp_fr, nlp_en, stop_fr, stop_en):
 #     # 去除标点和非字母
