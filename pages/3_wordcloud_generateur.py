@@ -107,7 +107,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     # ------------séparé par lang--------------------
     #radio多选,checkbox单选
-    wc_par_lang = st.checkbox("Afficher par langue :", value=False, key="wc_lang")
+    wc_par_lang = st.checkbox("Afficher par langue ?", value=False, key="wc_lang")
 
 
 
@@ -157,7 +157,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     # 按钮生成+储存
     overall_button=st.button("Générer")
     if overall_button:
-        with st.spinner("🔄 Nettoyage et lemmatisation en cours..."):
+        with st.spinner("🔄 Générer.."):
             clean_text_en, clean_text_fr = "", ""
 
             if text_en:
@@ -165,10 +165,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             if text_fr:
                 clean_text_fr=preprocess_text(text_fr, stopwords=stopwords, lang='fr') 
 
-            if wc_par_lang:
-                with st.spinner("🔄 Générer..."):
+            if not wc_par_lang:
                     st.session_state["overall_wc"] = generate_wc(clean_text_en+clean_text_fr, max_words, stopwords, title="Nuage de mots global")
-
                     # 渲染
                     if st.session_state["overall_wc"] is not None:
                         st.pyplot(st.session_state["overall_wc"])
@@ -184,6 +182,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                     if clean_text_fr:
                         wc_fr = generate_wc(clean_text_fr, max_words, stopwords, title="Nuage de mots FR")
                         st.pyplot(wc_fr)
+
+
 
 
 
