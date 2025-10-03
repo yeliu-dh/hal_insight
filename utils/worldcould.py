@@ -53,6 +53,7 @@ def preprocess_text(text, stopwords, lang='fr'):
     # 确认输入的是str
     if isinstance(text, list):  # 如果传进来是list，先拼接
         text = " ".join(map(str, text))
+        st.warning("texte sous forme de liste!!!")
     elif not isinstance(text, str):  # 如果是其他类型，转成字符串
         text = str(text)
     
@@ -66,39 +67,6 @@ def preprocess_text(text, stopwords, lang='fr'):
     clean_text=" ".join([w for w in clean_tokens if w.isalpha() and w not in stopwords])
 
     return clean_text
-
-
-    # lemmatisation + enlever les stopwords
-    # all_tokens = []
-    # for doc in texts:
-    #     spacy_doc = nlp(doc)
-    #     for token in spacy_doc:
-    #         lemma = token.lemma_.lower()
-    #         # 过滤停用词和标点
-    #         if lemma.isalpha() and lemma not in stopwords:
-    #             all_tokens.append(lemma)
-
-# def preprocess_text(text, nlp_fr, nlp_en, stop_fr, stop_en):
-#     # 去除标点和非字母
-#     text = re.sub(r"[^a-zA-ZÀ-ÿ\s]", " ", text)
-#     text = text.lower().strip()
-
-#     # 使用 spacy 进行分词 + 词形还原
-#     # 检测语言（简单用长度来区分，也可以用 langdetect）
-
-#     doc_fr = nlp_fr(text)
-#     doc_en = nlp_en(text)
-
-#     #lemmatiser:
-#     tokens = []
-#     for token in doc_fr:
-#         if token.lemma_ not in stop_fr and not token.is_punct and len(token.lemma_) > 2:
-#             tokens.append(token.lemma_)
-#     for token in doc_en:
-#         if token.lemma_ not in stop_en and not token.is_punct and len(token.lemma_) > 2:
-#             tokens.append(token.lemma_)
-
-#     return " ".join(tokens)
 
 
 def generate_wc(text, max_words, stopwords, title="Nuage de mots"):

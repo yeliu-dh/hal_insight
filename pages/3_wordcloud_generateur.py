@@ -107,24 +107,23 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     #nltk stopwords
     stop_en=['won', 'an', 'having', "mightn't", 'the', "hasn't", 'more', 'in', 'only', 'under',
-             'o', 'ain', 'can', 'some', 'with', 'these', 'had', 'they', 'me', 'its', 'such', "wouldn't", 
-             'as', 'own', "they'd", 'weren', 'or', "shan't", 'don', 'him', 'yours', 'after', 'so', 
-             "don't", 'down', 't', 'hadn', "she'll", 'been', 'y', 'whom', 'because', 'about', 'am',
-             'my', 'there', 'here', 'up', 'on', 'those', 'once', 'hers', 'too', 'this', 'do', 'further',
-             'not', 'at', 'any', 'for', 'haven', 'ours', 'then', 'we', 'each', 'than', "she's", 'herself', 
-             "i'm", 's', 'did', 'didn', "i'd", 'shouldn', 'himself', 'you', 'other', 'why', "he'll", 'nor', 
-             "needn't", 'couldn', 'needn', 'should', 'where', "haven't", 'i', 'being', "they'll", "he's", 'from',
-             'mustn', "we'll", "wasn't", "should've", 'of', 'now', 'until', 'all', 'has', "shouldn't", 'his', 
-             "you'll", "it'd", 'll', "they're", "it's", 'does', 'no', 'while', 'into', "that'll", 'itself', 
-             'your', 'were', 'above', "it'll", 'ma', 'doing', "mustn't", 'between', 'them', 'and', "they've", 
-             'are', 'our', 'off', "i've", 'most', 'out', "won't", 'before', 'will', 'shan', "we're", 'who', "you're",
-             'doesn', 'hasn', 'have', 'against', 'just', 'yourselves', 'be', 'is', "isn't", 'a', "aren't", 
-             'again', "you'd", "hadn't", 'that', 'but', 'when', "didn't", 'ourselves', "doesn't", 've', 'yourself', 
-             'myself', "couldn't", 'd', 'was', "you've", 'both', 'themselves', 'if', 'over', "she'd", 'few', 'her', "he'd",
-             'through', 'wouldn', "we'd", 'below', 'theirs', 'aren', 'to', "we've", 'same', 'mightn', 'isn', 'by', 'during',
-               'what', 'he', "i'll", 'very', 'how', 'wasn', 'she', "weren't", 'm', 'their', 'which', 'it', 're'
-            ]
-    
+            'o', 'ain', 'can', 'some', 'with', 'these', 'had', 'they', 'me', 'its', 'such', "wouldn't", 
+            'as', 'own', "they'd", 'weren', 'or', "shan't", 'don', 'him', 'yours', 'after', 'so', 
+            "don't", 'down', 't', 'hadn', "she'll", 'been', 'y', 'whom', 'because', 'about', 'am',
+            'my', 'there', 'here', 'up', 'on', 'those', 'once', 'hers', 'too', 'this', 'do', 'further',
+            'not', 'at', 'any', 'for', 'haven', 'ours', 'then', 'we', 'each', 'than', "she's", 'herself', 
+            "i'm", 's', 'did', 'didn', "i'd", 'shouldn', 'himself', 'you', 'other', 'why', "he'll", 'nor', 
+            "needn't", 'couldn', 'needn', 'should', 'where', "haven't", 'i', 'being', "they'll", "he's", 'from',
+            'mustn', "we'll", "wasn't", "should've", 'of', 'now', 'until', 'all', 'has', "shouldn't", 'his', 
+            "you'll", "it'd", 'll', "they're", "it's", 'does', 'no', 'while', 'into', "that'll", 'itself', 
+            'your', 'were', 'above', "it'll", 'ma', 'doing', "mustn't", 'between', 'them', 'and', "they've", 
+            'are', 'our', 'off', "i've", 'most', 'out', "won't", 'before', 'will', 'shan', "we're", 'who', "you're",
+            'doesn', 'hasn', 'have', 'against', 'just', 'yourselves', 'be', 'is', "isn't", 'a', "aren't", 
+            'again', "you'd", "hadn't", 'that', 'but', 'when', "didn't", 'ourselves', "doesn't", 've', 'yourself', 
+            'myself', "couldn't", 'd', 'was', "you've", 'both', 'themselves', 'if', 'over', "she'd", 'few', 'her', "he'd",
+            'through', 'wouldn', "we'd", 'below', 'theirs', 'aren', 'to', "we've", 'same', 'mightn', 'isn', 'by', 'during',
+            'what', 'he', "i'll", 'very', 'how', 'wasn', 'she', "weren't", 'm', 'their', 'which', 'it', 're', "article",
+            'research']    
 
     stop_fr=['j', 'avions', 'avez', 'ta', 'son', 'avais', 'étaient', 'une', 'ai', 'seront', 'il', 'soient', 'étions',
               'sommes','serai', 'me', 'l', 'est', 'tes', 'aurez', 'ayons', 'as', 'elle', 'eusses', 'été', 'fût', 
@@ -138,16 +137,11 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                'lui', 'nos', 'des', 'aux', 'eussiez', 'pour', 'eues', 'ne', 'aurons', 'que', 'fussiez', 'tu', 'eussions', 
                'd', 'étants', 'ce', 'étais', 'était', 'serais', 'étées', 'mais', 'eus', 'eût', 'ayez', 'votre', 'seraient', 
                'fusse', 'ait', 'de', 'c', 'la', 'soyons', 'aurai', 'vos', 'fûmes', 'pas', 'm', 'sont', 'aura', 'avons', 'eûmes', 
-               'toi', 'ou'
-            ]
-
-    #  = {"et", "de", "la", "le", "les","l","l'", "des", "un", "une", 
-    #                     "du", "en", "au","d","dans","à","par","pour","sur","sont","aux","au",
-    #                     "leur","leurs","qui","ou","il","elle","ils","elles","je","tu","vous","nous","se",
-    #                     "et","ce",'qui','que',"est","qu","avec","ont","ces",'celle','ceux','celles',
-    #                     'comme','afin','ne',"son",'ses'}
-    # stopwords=stop_en.extend(stop_fr).extend(user_stopwords).lower()
-    
+               'toi', 'ou', "être", "avoir","faire", "et", "de", "la", "le", "les","l","l'", "des", "un", "une", 
+                "du", "en", "au","d","dans","à","par","pour","sur","sont","aux","au", "leur","leurs","qui","ou","il","elle","ils","elles",
+                "je","tu","vous","nous","se","et","ce",'qui','que',"est","qu","avec","ont","ces",'celle','ceux','celles',
+                'comme','afin','ne',"son",'ses'
+            ]    
     # 转小写+去重
     stopwords = set(w.lower() for w in (stop_en + stop_fr + user_stopwords))
 
@@ -156,9 +150,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     # 按钮生成+储存
     overall_button=st.button("Générer")
     if overall_button:
-        # with st.spinner("🔄 Charger le modèle pour la lemmatisation..."):
-        #     nlp_fr, nlp_en = load_spacy_models()
-
         with st.spinner("🔄 Nettoyage et lemmatisation en cours..."):
             clean_text_en, clean_text_fr = "", ""
 
@@ -322,103 +313,5 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 
 
-
-
-
-
-    # # -------------------------------
-    # # # 3️⃣ 点击开始统计按钮
-    # # # -------------------------------
-    # # col1, col2, col3 = st.columns([4, 1, 1])  # 最右边一列放按钮
-    # # with col2:
-    # #     summary_button1 = st.button("Wordcloud global")
-    
-    # # with col3:
-    # #     summary_button2 = st.button("Wordcloud évolutif")
-
-    # # if not st.session_state.started:#未开始
-    # #     if summary_button1 or summary_button2:#点击了开始按钮
-    # #         # if st.session_state.uploaded_df is not None:#且已经上传数据
-    # #         st.session_state.started = True#更新为“开始状态”，df储存在session中，数据不会在变化?            
-        
-    # # -------------------------------
-    # # # 4️⃣ 分析界面
-    # # # -------------------------------
-
-    # # if st.session_state.started and summary_button1:
-    # #     df = st.session_state.uploaded_df.copy()
-
-    # #     # -------------------- 关键词词云 --------------------        
-    # #     # 选择文章范围
-    # #     option = st.radio("Choisir la granularité temporelle", ["keywords", "abstract"], horizontal=True)
-        
-    # #     try:
-    # #         if option == "keywords" and "keyword_s" in df.columns:
-    # #             st.info(f"⚠️ Les mots clés sont manquants dans {df.keyword_s.isna().sum()} "
-    # #                     f"({df.keyword_s.isna().sum()*100/len(df):.2f}%) articles!")
-    # #             text = " ".join(df["keyword_s"].dropna().astype(str)).lower()
-
-    # #         elif option == "abstract" and "abstract_s" in df.columns:
-    # #             st.info(f"⚠️ Les résumés sont manquants dans {df.abstract_s.isna().sum()} "
-    # #                     f"({df.abstract_s.isna().sum()*100/len(df):.2f}%) articles!")
-    # #             text = " ".join(df["abstract_s"].dropna().astype(str)).lower()
-
-    # #         else:
-    # #             st.warning("⚠️ La colonne sélectionnée n'existe pas dans le fichier CSV.")
-
-    # #     except Exception as e:
-    # #         st.error(f"⚠️ {e}")
-
-    # #     # --------------- max words ------------------
-    # #     max_words = st.number_input(
-    # #         "max_words:", 
-    # #         min_value=1, max_value=1000, value=100, step=1, key="max_words"
-    # #     )
-
-    # #     # ----------------- stopwords ---------------
-    # #     user_stopwords = st_tags(
-    # #         label="Ajouter des mots à ignorer",
-    # #         text="Tapez un mot et appuyez sur Entrée",
-    # #         value=[],
-    # #         maxtags=50
-    # #     )
-    # #     french_stopwords = {"et", "de", "la", "le", "les","l","l'", "des", "un", "une", 
-    # #                         "du", "en", "au","d","dans","à","par","pour","sur","sont","aux","au",
-    # #                         "leur","leurs","qui","ou","il","elle","ils","elles","je","tu","vous","nous","se",
-    # #                         "et","ce",'qui','que',"est","qu","avec","ont","ces",'celle','ceux','celles',
-    # #                         'comme','afin','ne',"son",'ses'}
-        
-        
-    # #     stopwords = set(STOPWORDS).union(french_stopwords).union(user_stopwords)
-
-    # #     # ------------ wordcloud ---------------------------
-    # #     wc = WordCloud(
-    # #         width=800,
-    # #         height=400,
-    # #         background_color="white",
-    # #         max_words=max_words,
-    # #         stopwords=stopwords,
-    # #         colormap="viridis"
-    # #     ).generate(text)
-
-    #     # st.image(wc.to_array(), use_container_width=True)#图变数组，自适应宽度，不能加标题
-
-    #     # # ------------------ 下载 PNG ------------------
-    #     # try:
-    #     #     img = Image.fromarray(wc.to_array())
-    #     #     buf = io.BytesIO()
-    #     #     img.save(buf, format="PNG")
-    #     #     buf.seek(0)
-
-    #     #     cols = st.columns([5,1])  # 4:1 比例，右侧放按钮    
-    #     #     with cols[1]:
-    #     #         st.download_button(
-    #     #             label="Télécharger",
-    #     #             data=buf,
-    #     #             file_name="worldcloud.png",
-    #     #             mime="image/png"
-    #     #         )
-    #     # except Exception as e:
-    #     #     st.error(f"ERROR :{e}")
 
 
