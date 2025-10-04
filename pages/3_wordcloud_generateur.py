@@ -189,6 +189,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 st.subheader(f"Nuage de mots {group_by_readable}")
 
                 for cat, langs in text_groups.items(): 
+                    
                     combined_text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
                     if combined_text:
                         global_wc = generate_wc(
@@ -206,12 +207,12 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                     with cols[0]:
                         text_en = langs.get("en", "").strip()
                         if text_en:
-                            wc_en = generate_wc(text_en, max_words, stopwords, title=f"EN")
+                            wc_en = generate_wc(text_en, max_words, stopwords, title=f"{cat}-EN")
                             st.pyplot(wc_en)
                     with cols[1]:
                         text_fr = langs.get("fr", "").strip()
                         if text_fr:
-                            wc_fr = generate_wc(text_fr, max_words, stopwords, title=f"FR")
+                            wc_fr = generate_wc(text_fr, max_words, stopwords, title=f"{cat}-FR")
                             st.pyplot(wc_fr)
 
 
