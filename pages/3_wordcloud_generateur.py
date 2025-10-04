@@ -204,7 +204,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
             else: # 分语言 → EN 在一行，FR 在下一行
                 for cat, langs in text_groups.items():
-                    st.subheader(f"{group_by_readable}: {cat}")
+                    st.subheader(f"Nuage de mots {group_by_readable}")
 
                     if langs.get("en"):
                         wc_en = generate_wc(
