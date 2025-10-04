@@ -207,9 +207,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 
             else: # 分语言 → EN 在一行，FR 在下一行
-                st.subheader(f"Nuage de mots")
-                cols=st.columns(2) #一列en，一列fr
+                st.subheader(f"Nuage de mots")                
                 for cat, langs in text_groups.items():
+                    cols=st.columns(2) #一列en，一列fr
                     with cols[0]:
                         if langs.get("en"):
                             wc_en = generate_wc(
@@ -219,6 +219,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                                 title=f"{cat} - EN"
                             )
                             st.pyplot(wc_en)
+                
                     with cols[1]:
                         if langs.get("fr"):
                             wc_fr = generate_wc(
