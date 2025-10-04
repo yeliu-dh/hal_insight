@@ -187,7 +187,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         with st.spinner("Générer..."):
             if not wc_par_lang:  # 不分语言 → 合并 EN + FR
                 st.subheader(f"Nuage de mots {group_by_readable}")
-                for cat, langs in text_groups.items(): # lang=={"en":clean_text_en, "fr":clean_text_fr}
+                for cat, langs in text_groups.items(): 
                     combined_text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
                     if combined_text:
                         global_wc = generate_wc(
@@ -197,29 +197,23 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                             title=f"{cat}"
                         )
                         st.pyplot(global_wc)
-
-            if wc_par_lang:
-                st.subheader(f"Nuage de mots {group_by_readable}")
-                cols1 = st.columns(2)
-                with cols1[0]:  # 所有 EN
-                    for cat, langs in text_groups.items():
-                        if langs.get("en", "").strip():
-                            wc_en = generate_wc(
-                                langs["en"],
-                                max_words,
-                                stopwords,
-                                title=f"{cat} - EN"
-                            )
+            else:
+                # 分语言 → EN/FR 左右列显示，每个类别单独一行
+                for cat, langs in text_groups.items():
+                    st.subheader(f"{group_by_readable}: {cat}")
+                    # 创建两列
+                    cols = st.columns(2)
+                    # EN
+                    with cols[0]:
+                        text_en = langs.get("en", "").strip()
+                        if text_en:
+                            wc_en = generate_wc(text_en, max_words, stopwords, title=f"{cat} - EN")
                             st.pyplot(wc_en)
-                with cols1[1]:  # 所有 FR
-                    for cat, langs in text_groups.items():
-                        if langs.get("fr", "").strip():
-                            wc_fr = generate_wc(
-                                langs["fr"],
-                                max_words,
-                                stopwords,
-                                title=f"{cat} - FR"
-                            )
+                    # FR
+                    with cols[1]:
+                        text_fr = langs.get("fr", "").strip()
+                        if text_fr:
+                            wc_fr = generate_wc(text_fr, max_words, stopwords, title=f"{cat} - FR")
                             st.pyplot(wc_fr)
 
 
