@@ -214,10 +214,10 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                             title=f"{group_by} {cat}-{lang}"
                             text = langs.get(lang, "").strip()
                             if text:
-                                wc = generate_wc(text_en, max_words, stopwords, title=title)
+                                wc = generate_wc(text, max_words, stopwords, title=title)
                                 st.pyplot(wc)
                             else :
-                                st.warning(f"texte invalie dans la catégorie {cat}-FR!")
+                                st.warning(f"texte invalie dans la catégorie {cat}-{lang}!")
 
 
 
