@@ -73,7 +73,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     format_func=lambda x: WC_MAP[x]#只改变显示
     )
 
-    
+
     # #---------分文本语言---------------
     # try:
     #     if options:
@@ -156,7 +156,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         "Cl. FNEGE": "par classe FNEGE"
     }
     group_by = st.radio(
-        "Afficher:",
+        "Afficher :",
         ["Global", "Axe", "Cl. FNEGE"], 
         index=0,
         format_func=lambda x: COL_MAP.get(x, x), 
@@ -184,43 +184,45 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         overall_button=st.button("Générer")      
 
     if overall_button:
-        if not wc_par_lang:  # 不分语言 → 合并 EN + FR
-            cols = st.columns(len(text_groups))
+        with st.spinner("Générer..."):
 
-            for i, (cat, langs) in enumerate(text_groups.items()):# lang=={"en":clean_text_en, "fr":clean_text_fr}
-                with cols[i]:
-                    st.subheader(f"Nuage de mots {group_by_readable}:{cat}")
-                    combined_text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
-                    if combined_text:
-                        wc_global = generate_wc(
-                            combined_text,  # lang 随便传一个
+            if not wc_par_lang:  # 不分语言 → 合并 EN + FR
+                cols = st.columns(len(text_groups))
+
+                for i, (cat, langs) in enumerate(text_groups.items()):# lang=={"en":clean_text_en, "fr":clean_text_fr}
+                    with cols[i]:
+                        st.subheader(f"Nuage de mots {group_by_readable}")
+                        combined_text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
+                        if combined_text:
+                            wc_global = generate_wc(
+                                combined_text,  # lang 随便传一个
+                                max_words,
+                                stopwords,
+                                title=f"{cat}"
+                            )
+                            st.pyplot(wc_global)
+
+            else: # 分语言 → EN 在一行，FR 在下一行
+                for cat, langs in text_groups.items():
+                    st.subheader(f"{group_by_readable}: {cat}")
+
+                    if langs.get("en"):
+                        wc_en = generate_wc(
+                            langs["en"],
                             max_words,
                             stopwords,
-                            title=f"{cat}"
+                            title=f"{cat} - EN"
                         )
-                        st.pyplot(wc_global)
+                        st.pyplot(wc_en)
 
-        else: # 分语言 → EN 在一行，FR 在下一行
-            for cat, langs in text_groups.items():
-                st.subheader(f"{group_by_readable}: {cat}")
-
-                if langs.get("en"):
-                    wc_en = generate_wc(
-                        langs["en"],
-                        max_words,
-                        stopwords,
-                        title=f"{cat} - EN"
-                    )
-                    st.pyplot(wc_en)
-
-                if langs.get("fr"):
-                    wc_fr = generate_wc(
-                        langs["fr"],
-                        max_words,
-                        stopwords,
-                        title=f"{cat} - FR"
-                    )
-                    st.pyplot(wc_fr)
+                    if langs.get("fr"):
+                        wc_fr = generate_wc(
+                            langs["fr"],
+                            max_words,
+                            stopwords,
+                            title=f"{cat} - FR"
+                        )
+                        st.pyplot(wc_fr)
 
 
 
