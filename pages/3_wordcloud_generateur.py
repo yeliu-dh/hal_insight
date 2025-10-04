@@ -200,16 +200,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                         )
                         st.pyplot(global_wc)
 
-                            # st.session_state["overall_wc"] = generate_wc(clean_text_en+clean_text_fr, max_words, stopwords, title="Nuage de mots global")
-                            #             # 渲染
-                            #             if st.session_state["overall_wc"] is not None:
-                            #                 st.pyplot(st.session_state["overall_wc"])
-
-
-
             else:  # 分语言 → EN 在一行，FR 在另一行（每个类别一行）
                 for cat, langs in text_groups.items():
-                    st.subheader(f"Nuage de mots {cat}")
+                    # st.subheader(f"Nuage de mots {cat}")
                     cols = st.columns(2)  # 每个类别独立两列
                     with cols[0]:
                         if langs.get("en", "").strip():
