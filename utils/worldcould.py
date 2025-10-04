@@ -81,7 +81,7 @@ def collect_texts_by_col(df, options, stopwords, col=None, lang_col="languague_s
     
     返回 dict 格式:
     {
-      "cat1": {"en": "...", "fr": "..."},
+      "cat1": {"en": "clean text", "fr": "..."},
       "cat2": {"en": "...", "fr": "..."}
     }
     """
@@ -101,7 +101,7 @@ def collect_texts_by_col(df, options, stopwords, col=None, lang_col="languague_s
         if option_col not in df.columns:
             continue
         for _, row in df.iterrows():
-            lang = str(row.get(lang_col, "fr")).lower()  # 默认法语
+            lang = str(row.get(lang_col, "fr")).lower()  #没有则默认法语
             text = str(row[option_col])
             text = preprocess_text(text, stopwords, lang=lang)
             
@@ -110,7 +110,6 @@ def collect_texts_by_col(df, options, stopwords, col=None, lang_col="languague_s
 
     df.drop(columns=["_col_list"], inplace=True, errors="ignore")
     
-
     return dict(dict_texts)
 
 

@@ -141,7 +141,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                'toi', 'ou', "être", "avoir","faire", "et", "de", "la", "le", "les","l","l'", "des", "un", "une", 
                 "du", "en", "au","d","dans","à","par","pour","sur","sont","aux","au", "leur","leurs","qui","ou","il","elle","ils","elles",
                 "je","tu","vous","nous","se","et","ce",'qui','que',"est","qu","avec","ont","ces",'celle','ceux','celles',
-                'comme','afin','ne',"son",'ses'
+                'comme','afin','ne',"son",'ses',"none"
             ]    
     # 转小写+去重
     stopwords = set(w.lower() for w in (stop_en + stop_fr + user_stopwords))
@@ -203,6 +203,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                             st.pyplot(wc_global)
 
             else: # 分语言 → EN 在一行，FR 在下一行
+                cols=st.columns(2)
+                
                 for cat, langs in text_groups.items():
                     st.subheader(f"Nuage de mots {group_by_readable}")
 
