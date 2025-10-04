@@ -209,11 +209,16 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                         if text_en:
                             wc_en = generate_wc(text_en, max_words, stopwords, title=f"{cat}-EN")
                             st.pyplot(wc_en)
+                        else :
+                            st.warning(f"texte invalie dans la catégorie {cat}-FR!")
+
                     with cols[1]:
                         text_fr = langs.get("fr", "").strip()
                         if text_fr:
                             wc_fr = generate_wc(text_fr, max_words, stopwords, title=f"{cat}-FR")
                             st.pyplot(wc_fr)
+                        else :
+                            st.warning(f"texte invalie dans la catégorie {cat}-FR!")
 
 
             # else:  # 分语言 → EN 在一行，FR 在另一行（每个类别一行）
