@@ -209,21 +209,37 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 st.subheader(f"Nuage de mots {group_by_readable} par langue")
                 for cat, langs in text_groups.items():
                     cols = st.columns(2)
-                    with cols[0]:
-                        text_en = langs.get("en", "").strip()
-                        if text_en:
-                            wc_en = generate_wc(text_en, max_words, stopwords, title=f"{group_by} {cat}-EN")
-                            st.pyplot(wc_en)
-                        else :
-                            st.warning(f"texte invalie dans la catégorie {cat}-FR!")
+                    for i, lang in enumerate(langs.keys()):
+                        with cols[i]:
+                            title=f"{group_by} {cat}-{lang}"
+                            text = langs.get(lang, "").strip()
+                            if text:
+                                wc = generate_wc(text_en, max_words, stopwords, title=title)
+                                st.pyplot(wc)
+                            else :
+                                st.warning(f"texte invalie dans la catégorie {cat}-FR!")
 
-                    with cols[1]:
-                        text_fr = langs.get("fr", "").strip()
-                        if text_fr:
-                            wc_fr = generate_wc(text_fr, max_words, stopwords, title=f"{cat}-FR")
-                            st.pyplot(wc_fr)
-                        else :
-                            st.warning(f"texte invalie dans la catégorie {cat}-FR!")
+
+
+
+
+                    # with cols[0]:
+                    #     lang="en"
+                    #     title=f"{group_by} {cat}-{lang}"
+                    #     text_en = langs.get(lang, "").strip()
+                    #     if text_en:
+                    #         wc_en = generate_wc(text_en, max_words, stopwords, title=title)
+                    #         st.pyplot(wc_en)
+                    #     else :
+                    #         st.warning(f"texte invalie dans la catégorie {cat}-{lang}!")
+
+                    # with cols[1]:
+                    #     text_fr = langs.get("fr", "").strip()
+                    #     if text_fr:
+                    #         wc_fr = generate_wc(text_fr, max_words, stopwords, title=f"{group_by} {cat}-FR")
+                    #         st.pyplot(wc_fr)
+                    #     else :
+                    #         st.warning(f"texte invalie dans la catégorie {cat}-FR!")
 
 
             # else:  # 分语言 → EN 在一行，FR 在另一行（每个类别一行）
