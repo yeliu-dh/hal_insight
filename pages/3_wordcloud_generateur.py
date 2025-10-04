@@ -168,9 +168,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     if group_by == "Global":
         text_groups = collect_texts_by_col(df, options, stopwords, col=None)
     elif group_by == "Axe":
-        text_groups = collect_texts_by_col(df, options,stopwords, col="axe")
+        text_groups = collect_texts_by_col(df, options,stopwords, col="Axe")
     elif group_by == "Classe FNEGE":
-        text_groups = collect_texts_by_col(df, options,stopwords, col="cl.fnege")
+        text_groups = collect_texts_by_col(df, options,stopwords, col="Cl. FNEGE")
     # {
     #   "cat1": {"en": "clean text", "fr": "..."},
     #   "cat2": {"en": "...", "fr": "..."}
