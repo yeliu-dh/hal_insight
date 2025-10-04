@@ -16,9 +16,7 @@ import simplemma
 
 #my utils:
 from utils.upload import data_uploader
-from utils.worldcould import collect_texts_by_language
 from utils.worldcould import collect_texts_by_col
-
 from utils.worldcould import preprocess_text
 from utils.worldcould import generate_wc
 from utils.worldcould import generate_keyness_wc
