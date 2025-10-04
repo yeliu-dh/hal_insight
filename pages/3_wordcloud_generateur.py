@@ -200,11 +200,11 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                         )
                         st.pyplot(global_wc)
 
-            if wc_par_lang:  # 分语言 → EN 左，FR 右
-                for cat, langs in text_groups.items():
-                    st.subheader(f"{group_by_readable}: {cat}")  # 显示类别名
-                    cols = st.columns(2)  # 每个类别独立一行的两列
-                    with cols[0]:
+            if wc_par_lang:
+                st.subheader(f"Nuage de mots {group_by_readable}")
+                cols = st.columns(2)
+                with cols[0]:  # 所有 EN
+                    for cat, langs in text_groups.items():
                         if langs.get("en", "").strip():
                             wc_en = generate_wc(
                                 langs["en"],
@@ -213,7 +213,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                                 title=f"{cat} - EN"
                             )
                             st.pyplot(wc_en)
-                    with cols[1]:
+                with cols[1]:  # 所有 FR
+                    for cat, langs in text_groups.items():
                         if langs.get("fr", "").strip():
                             wc_fr = generate_wc(
                                 langs["fr"],
