@@ -16,7 +16,7 @@ import simplemma
 
 #my utils:
 from utils.upload import data_uploader
-from utils.worldcould import collect_texts_by_col
+from utils.worldcould import collect_texts_by_col, collect_texts_by_language
 from utils.worldcould import preprocess_text
 from utils.worldcould import generate_wc
 from utils.worldcould import generate_keyness_wc
@@ -72,22 +72,24 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     default=["keyword_s","abstract_s"],  # 默认选择
     format_func=lambda x: WC_MAP[x]#只改变显示
     )
-    #---------分文本语言---------------
-    try:
-        if options:
-            text_en, text_fr="", ""
-            text_by_lang=collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "fr"))
-            text_en=text_by_lang.get('en'," ")
-            text_fr=text_by_lang.get('fr'," ")           
 
-        else:
-            st.warning("⚠️ Aucune colonne sélectionnée ou inexistante dans le CSV.")
-            text_en = ""
-            text_fr = ""
+    
+    # #---------分文本语言---------------
+    # try:
+    #     if options:
+    #         text_en, text_fr="", ""
+    #         text_by_lang=collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "fr"))
+    #         text_en=text_by_lang.get('en'," ")
+    #         text_fr=text_by_lang.get('fr'," ")           
+
+    #     else:
+    #         st.warning("⚠️ Aucune colonne sélectionnée ou inexistante dans le CSV.")
+    #         text_en = ""
+    #         text_fr = ""
             
 
-    except Exception as e:
-        st.error(f"⚠️ {e}")
+    # except Exception as e:
+    #     st.error(f"⚠️ {e}")
 
    
     # --------------- max words ------------------
