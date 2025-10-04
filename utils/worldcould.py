@@ -10,7 +10,7 @@ from scipy.stats import chi2_contingency
 import re
 import streamlit as st
 import simplemma
-
+from collections import defaultdict
 
 def collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "fr"))-> dict:
     """
@@ -45,6 +45,9 @@ def collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "
 
     return texts
 
+
+
+
 def preprocess_text(text, stopwords, lang='fr'):
     """
     对文本列表做lemmatization和停用词过滤
@@ -69,6 +72,71 @@ def preprocess_text(text, stopwords, lang='fr'):
     return clean_text
 
 
+
+def collect_texts_by_col(df, options, stopwords, col=None, lang_col="languague_s"):
+    """
+    收集文本，支持：
+    - col=None: 全局（只分语言）
+    - col="axe" 或 "cl.fnege": 先分分类，再分语言
+    
+    返回 dict 格式:
+    {
+      "cat1": {"en": "...", "fr": "..."},
+      "cat2": {"en": "...", "fr": "..."}
+    }
+    """
+    dict_texts = defaultdict(lambda: defaultdict(str))
+
+    if col and col in df.columns:
+        # 处理多分类列
+        df["_col_list"] = df[col].fillna("").apply(
+            lambda x: [v.strip() for v in str(x).split(";") if v.strip()]
+        )
+    else:
+        # 全局只有一个虚拟类别
+        df["_col_list"] = [["Global"]] * len(df)
+
+    # 遍历每个 option 列
+    for option_col in options:
+        if option_col not in df.columns:
+            continue
+        for _, row in df.iterrows():
+            lang = str(row.get(lang_col, "fr")).lower()  # 默认法语
+            text = str(row[option_col])
+            text = preprocess_text(text, stopwords, lang=lang)
+            
+            for cat in row["_col_list"]:
+                dict_texts[cat][lang] += " " + text
+
+    df.drop(columns=["_col_list"], inplace=True, errors="ignore")
+    
+
+    return dict(dict_texts)
+
+
+# def collect_texts_by_col(df, options, col="axe"):
+#     # 先初始化 dict，值为空字符串
+#     dict_texts = defaultdict(str)
+    
+#     # 处理多值列，把每条记录拆成 list
+#     df["_col_list"] = df[col].fillna("").apply(lambda x: [v.strip() for v in str(x).split(";") if v.strip()])
+    
+#     for option_col in options:
+#         if option_col not in df.columns:
+#             continue
+        
+#         # 遍历每行
+#         for _, row in df.iterrows():
+#             text = " ".join([str(row[option_col])])  # 单列文本
+#             for cat in row["_col_list"]:
+#                 dict_texts[cat] += " " + text  # 累加文本
+    
+#     # 删除临时列
+#     df.drop(columns=["_col_list"], inplace=True, errors="ignore")
+#     return dict(dict_texts)
+
+
+
 def generate_wc(text, max_words, stopwords, title="Nuage de mots"):
     wc = WordCloud(
         width=800,
@@ -80,7 +148,7 @@ def generate_wc(text, max_words, stopwords, title="Nuage de mots"):
     ).generate(text)
 
     # 创建画布
-    fig, ax = plt.subplots(figsize=(10, 5))
+    fig, ax = plt.subplots(figsize=(8,6))
     ax.imshow(wc, interpolation="bilinear")
     ax.axis("off")  # 去掉坐标轴
     ax.set_title(title, fontsize=16)

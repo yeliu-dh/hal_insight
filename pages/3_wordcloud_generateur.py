@@ -17,6 +17,8 @@ import simplemma
 #my utils:
 from utils.upload import data_uploader
 from utils.worldcould import collect_texts_by_language
+from utils.worldcould import collect_texts_by_col
+
 from utils.worldcould import preprocess_text
 from utils.worldcould import generate_wc
 from utils.worldcould import generate_keyness_wc
@@ -72,32 +74,31 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     default=["keyword_s","abstract_s"],  # 默认选择
     format_func=lambda x: WC_MAP[x]#只改变显示
     )
-
-
+    #---------分文本语言---------------
     try:
         if options:
-            text_en, text_fr=[],[]
-            #=> dict {lang:" ... "}
+            text_en, text_fr="", ""
             text_by_lang=collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "fr"))
             text_en=text_by_lang.get('en'," ")
-            text_fr=text_by_lang.get('fr'," ")
-            
+            text_fr=text_by_lang.get('fr'," ")           
+
         else:
             st.warning("⚠️ Aucune colonne sélectionnée ou inexistante dans le CSV.")
             text_en = ""
             text_fr = ""
+            
 
     except Exception as e:
         st.error(f"⚠️ {e}")
 
-
+   
     # --------------- max words ------------------
     max_words = st.number_input(
-        "max_words:", 
+        "Nombre de mots maximum affichés:", 
         min_value=1, max_value=1000, value=100, step=1, key="max_words"
     )
 
-    # ----------------- stopwords ---------------
+    # ----------------- user stopwords ---------------
     user_stopwords = st_tags(
         label="Ajouter des mots à ignorer",
         text="Tapez un mot et appuyez sur Entrée",
@@ -105,14 +106,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         maxtags=50
     )
 
-    # ------------séparé par lang--------------------
-    #radio多选,checkbox单选
-    wc_par_lang = st.checkbox("Afficher par langue ?", value=False, key="wc_lang")
-
-
-
-
-    #nltk stopwords
+    #-----------nltk stopwords----------------
     stop_en=['won', 'an', 'having', "mightn't", 'the', "hasn't", 'more', 'in', 'only', 'under',
             'o', 'ain', 'can', 'some', 'with', 'these', 'had', 'they', 'me', 'its', 'such', "wouldn't", 
             'as', 'own', "they'd", 'weren', 'or', "shan't", 'don', 'him', 'yours', 'after', 'so', 
@@ -153,36 +147,118 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     stopwords = set(w.lower() for w in (stop_en + stop_fr + user_stopwords))
 
 
+    # ------------param-------------------
+    #radio多选,checkbox单选
+    
+    COL_MAP = {
+        "Global": "global",
+        "Axe": "par axe",
+        "Cl. FNEGE": "par classe FNEGE"
+    }
+    group_by = st.radio(
+        "Afficher:",
+        ["Global", "Axe", "Cl. FNEGE"], 
+        index=0,
+        format_func=lambda x: COL_MAP.get(x, x), 
+        horizontal=True
+    )
+
+    wc_par_lang = st.checkbox("Afficher par langue ?", value=False, key="wc_lang")#key用于储存在session state中
+    
+    if group_by == "Global":
+        text_groups = collect_texts_by_col(df, options, stopwords, col=None)
+    elif group_by == "Axe":
+        text_groups = collect_texts_by_col(df, options,stopwords, col="axe")
+    elif group_by == "Classe FNEGE":
+        text_groups = collect_texts_by_col(df, options,stopwords, col="cl.fnege")
+    # {
+    #   "cat1": {"en": "clean text", "fr": "..."},
+    #   "cat2": {"en": "...", "fr": "..."}
+    # }
+
+    group_by_readable=COL_MAP.get(group_by, group_by)
 
     # 按钮生成+储存
-    overall_button=st.button("Générer")
+    cols=st.columns([4,1])
+    with cols[1]:   
+        overall_button=st.button("Générer")      
+
     if overall_button:
-        with st.spinner("🔄 Générer.."):
-            clean_text_en, clean_text_fr = "", ""
+        if not wc_par_lang:  # 不分语言 → 合并 EN + FR
+            cols = st.columns(len(text_groups))
 
-            if text_en:
-                clean_text_en=preprocess_text(text_en, stopwords=stopwords, lang='en') 
-            if text_fr:
-                clean_text_fr=preprocess_text(text_fr, stopwords=stopwords, lang='fr') 
+            for i, (cat, langs) in enumerate(text_groups.items()):# lang=={"en":clean_text_en, "fr":clean_text_fr}
+                with cols[i]:
+                    st.subheader(f"Nuage de mots {group_by_readable}:{cat}")
+                    combined_text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
+                    if combined_text:
+                        wc_global = generate_wc(
+                            combined_text,  # lang 随便传一个
+                            max_words,
+                            stopwords,
+                            title=f"{cat}"
+                        )
+                        st.pyplot(wc_global)
 
-            if not wc_par_lang:
-                    st.session_state["overall_wc"] = generate_wc(clean_text_en+clean_text_fr, max_words, stopwords, title="Nuage de mots global")
-                    # 渲染
-                    if st.session_state["overall_wc"] is not None:
-                        st.pyplot(st.session_state["overall_wc"])
+        else: # 分语言 → EN 在一行，FR 在下一行
+            for cat, langs in text_groups.items():
+                st.subheader(f"{group_by_readable}: {cat}")
 
-            else:
-                # 分两列生成各自词云
-                col1, col2 = st.columns(2)
-                with col1:
-                    if clean_text_en:
-                        wc_en = generate_wc(clean_text_en, max_words, stopwords, title="Nuage de mots EN")
-                        st.pyplot(wc_en)
-                with col2:
-                    if clean_text_fr:
-                        wc_fr = generate_wc(clean_text_fr, max_words, stopwords, title="Nuage de mots FR")
-                        st.pyplot(wc_fr)
+                if langs.get("en"):
+                    wc_en = generate_wc(
+                        langs["en"],
+                        max_words,
+                        stopwords,
+                        title=f"{cat} - EN"
+                    )
+                    st.pyplot(wc_en)
 
+                if langs.get("fr"):
+                    wc_fr = generate_wc(
+                        langs["fr"],
+                        max_words,
+                        stopwords,
+                        title=f"{cat} - FR"
+                    )
+                    st.pyplot(wc_fr)
+
+
+
+        # with st.spinner("🔄 Générer.."):
+        #     clean_text_en, clean_text_fr = "", ""
+        #     if text_en:
+        #         clean_text_en=preprocess_text(text_en, stopwords=stopwords, lang='en') 
+        #     if text_fr:
+        #         clean_text_fr=preprocess_text(text_fr, stopwords=stopwords, lang='fr') 
+
+        #     if group_by=='Aucune':
+        #             st.session_state["overall_wc"] = generate_wc(clean_text_en+clean_text_fr, max_words, stopwords, title="Nuage de mots global")
+        #             # 渲染
+        #             if st.session_state["overall_wc"] is not None:
+        #                 st.pyplot(st.session_state["overall_wc"])
+
+        #     elif group_by=="Langue":
+        #         # 分两列生成各自词云
+        #         col1, col2 = st.columns(2)
+        #         with col1:
+        #             if clean_text_en:
+        #                 wc_en = generate_wc(clean_text_en, max_words, stopwords, title="Nuage de mots EN")
+        #                 st.pyplot(wc_en)
+        #         with col2:
+        #             if clean_text_fr:
+        #                 wc_fr = generate_wc(clean_text_fr, max_words, stopwords, title="Nuage de mots FR")
+        #                 st.pyplot(wc_fr)
+
+        #     else:  # Axe 或 Classe FNEGE
+        #         text_groups = collect_texts_by_col(df, options, col=("axe" if group_by=="Axe" else "cl.fnege"))
+        #         if text_groups:
+        #             num_cols = min(3, len(text_groups))
+        #             cols = st.columns(num_cols)
+        #             for i, (cat, txt) in enumerate(text_groups.items()):
+        #                 if txt.strip():
+        #                     with cols[i % num_cols]:
+        #                         clean_txt = preprocess_text(txt, stopwords=stopwords, lang="fr")  # 这里默认法语，也可以尝试混合处理
+        #                         st.pyplot(generate_wc(clean_txt, max_words, stopwords, title=f"{group_by}: {cat}"))
 
 
 
