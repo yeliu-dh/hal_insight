@@ -73,7 +73,7 @@ def preprocess_text(text, stopwords, lang='fr'):
 
 
 
-def collect_texts_by_col(df, options, stopwords, col=None, lang_col="languague_s"):
+def collect_texts_by_col(df, options, stopwords, col=None, lang_col="language_s"):
     """
     收集文本，支持：
     - col=None: 全局（只分语言）
