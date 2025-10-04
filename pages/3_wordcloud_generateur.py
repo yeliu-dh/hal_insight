@@ -187,6 +187,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         with st.spinner("Générer..."):
             if not wc_par_lang:  # 不分语言 → 合并 EN + FR
                 st.subheader(f"Nuage de mots {group_by_readable}")
+
                 for cat, langs in text_groups.items(): 
                     combined_text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
                     if combined_text:
@@ -200,21 +201,21 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             else:
                 # 分语言 → EN/FR 左右列显示，每个类别单独一行
                 for cat, langs in text_groups.items():
-                    st.subheader(f"{group_by_readable}: {cat}")
+                    st.subheader(f"Nuage de mots {cat}")
                     # 创建两列
                     cols = st.columns(2)
                     # EN
                     with cols[0]:
                         text_en = langs.get("en", "").strip()
                         if text_en:
-                            wc_en = generate_wc(text_en, max_words, stopwords, title=f"{cat} - EN")
+                            wc_en = generate_wc(text_en, max_words, stopwords, title=f"EN")
                             st.pyplot(wc_en)
-                    # FR
-                    with cols[1]:
-                        text_fr = langs.get("fr", "").strip()
-                        if text_fr:
-                            wc_fr = generate_wc(text_fr, max_words, stopwords, title=f"{cat} - FR")
-                            st.pyplot(wc_fr)
+                    # # FR
+                    # with cols[1]:
+                    #     text_fr = langs.get("fr", "").strip()
+                    #     if text_fr:
+                    #         wc_fr = generate_wc(text_fr, max_words, stopwords, title=f"FR")
+                    #         st.pyplot(wc_fr)
 
 
             # else:  # 分语言 → EN 在一行，FR 在另一行（每个类别一行）
