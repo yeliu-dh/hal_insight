@@ -157,7 +157,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     }
     group_by = st.radio(
         "Afficher :",
-        ["Global", "Axe", "Cl. FNEGE"], 
+        ["Global", "Axe","Cl. FNEGE"], 
         index=0,
         format_func=lambda x: COL_MAP.get(x, x), 
         horizontal=True
@@ -185,46 +185,52 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     if overall_button:
         with st.spinner("Générer..."):
-
             if not wc_par_lang:  # 不分语言 → 合并 EN + FR
+                st.subheader(f"Nuage de mots {group_by_readable}")
                 cols = st.columns(len(text_groups))
-
-                for i, (cat, langs) in enumerate(text_groups.items()):# lang=={"en":clean_text_en, "fr":clean_text_fr}
+                for i, (cat, langs) in enumerate(text_groups.items()): # lang=={"en":clean_text_en, "fr":clean_text_fr}
                     with cols[i]:
-                        st.subheader(f"Nuage de mots {group_by_readable}")
                         combined_text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
                         if combined_text:
-                            wc_global = generate_wc(
-                                combined_text,  # lang 随便传一个
+                            global_wc = generate_wc(
+                                langs.get("en", "") + " " + langs.get("fr", ""),  # lang 随便传一个
                                 max_words,
                                 stopwords,
                                 title=f"{cat}"
                             )
-                            st.pyplot(wc_global)
+                            st.pyplot(global_wc)
 
-            else: # 分语言 → EN 在一行，FR 在下一行
-                cols=st.columns(2)
-                
-                for cat, langs in text_groups.items():
-                    st.subheader(f"Nuage de mots {group_by_readable}")
+                            # st.session_state["overall_wc"] = generate_wc(clean_text_en+clean_text_fr, max_words, stopwords, title="Nuage de mots global")
+                            #             # 渲染
+                            #             if st.session_state["overall_wc"] is not None:
+                            #                 st.pyplot(st.session_state["overall_wc"])
 
-                    if langs.get("en"):
-                        wc_en = generate_wc(
-                            langs["en"],
-                            max_words,
-                            stopwords,
-                            title=f"{cat} - EN"
-                        )
-                        st.pyplot(wc_en)
 
-                    if langs.get("fr"):
-                        wc_fr = generate_wc(
-                            langs["fr"],
-                            max_words,
-                            stopwords,
-                            title=f"{cat} - FR"
-                        )
-                        st.pyplot(wc_fr)
+
+
+            # else: # 分语言 → EN 在一行，FR 在下一行
+            #     cols=st.columns(2)
+
+            #     for cat, langs in text_groups.items():
+            #         st.subheader(f"Nuage de mots {group_by_readable}")
+
+            #         if langs.get("en"):
+            #             wc_en = generate_wc(
+            #                 langs["en"],
+            #                 max_words,
+            #                 stopwords,
+            #                 title=f"{cat} - EN"
+            #             )
+            #             st.pyplot(wc_en)
+
+            #         if langs.get("fr"):
+            #             wc_fr = generate_wc(
+            #                 langs["fr"],
+            #                 max_words,
+            #                 stopwords,
+            #                 title=f"{cat} - FR"
+            #             )
+            #             st.pyplot(wc_fr)
 
 
 

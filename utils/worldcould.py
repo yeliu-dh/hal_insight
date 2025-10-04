@@ -89,7 +89,7 @@ def collect_texts_by_col(df, options, stopwords, col=None, lang_col="languague_s
 
     if col and col in df.columns:
         # 处理多分类列
-        df["_col_list"] = df[col].fillna("").apply(
+        df["_col_list"] = df[col].fillna("nan").apply(
             lambda x: [v.strip() for v in str(x).split(";") if v.strip()]
         )
     else:
