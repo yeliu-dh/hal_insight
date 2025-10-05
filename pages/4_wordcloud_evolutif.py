@@ -65,20 +65,24 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             period_m = (latest_date.year - earliest_date.year) * 12 + (latest_date.month - earliest_date.month)
         else:
             period_m = 0
-        st.write(f"🕒 Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois)")
-            
+
                 
         # ---- 自动推荐时间粒度并设置 radio 默认选项 ----
         if period_m <= 12:#一年内，按月度或者季度显示
             suggestion = "Mensuel ou Trimestriel"
-            default_index = 0
+            default_index = 1
+
         elif period_m <= 60:#3/5年内，按年度显示
             suggestion = "Annuel"
-            default_index = 1
+            default_index = 2
         else:
             suggestion = "Tous les 3 ou 5 ans"
-            default_index = 2
-        st.info(f"💡 Recommandation automatique : nuage de mots évolutif **{suggestion}**.")
+            default_index = 3
+        # st.write(f"🕒 Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois)")
+
+
+        st.info(f"🕒 Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois)."
+            f"💡 Recommandation automatique : nuage de mots évolutif **{suggestion}**.")
 
         # ---- Radio 选择 ----
         granularity = st.radio(
