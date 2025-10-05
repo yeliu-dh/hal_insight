@@ -63,7 +63,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     #--------period in years--------------------
     df = st.session_state.uploaded_df.copy()
     if "submittedDate_s" in df.columns:
-        df["submittedDate_s"] = pd.to_datetime(df["publicationDate_s"], errors="coerce")
+        df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
         latest_date = df["submittedDate_s"].max()
         latest_y = latest_date.strftime("%Y") if pd.notnull(latest_date) else "Aucune date valide"
 
@@ -207,7 +207,11 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                     cols = st.columns(2)
                     for i, lang in enumerate(langs.keys()):
                         with cols[i]:
-                            title=f"{group_by} {cat}-{lang}"
+                            if group_by=="Global":
+                                title=lang
+                            else:
+                                title=f"{group_by} {cat}-{lang}"
+                            
                             text = langs.get(lang, "").strip()
                             if text:
                                 wc = generate_wc(text, max_words, stopwords, title=title)
@@ -229,7 +233,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     # --------param------------------
     df = st.session_state.uploaded_df.copy()
     if "submittedDate_s" in df.columns:
-        df["submittedDate_s"] = pd.to_datetime(df["publicationDate_s"], errors="coerce")
+        df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
         latest_date = df["submittedDate_s"].max()
         latest_ym = latest_date.strftime("%Y-%m") if pd.notnull(latest_date) else "Aucune date valide"
 
