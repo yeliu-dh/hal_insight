@@ -51,6 +51,24 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 
     
+        
+    # ---------------文本范围-------------------
+    WC_MAP={"keyword_s":"mots clés",
+            "abstract_s":'résumés'}
+    
+    options = st.multiselect(
+    "Choisir le texte:",
+    options=["keyword_s", "abstract_s"],
+    default=["keyword_s","abstract_s"],  # 默认选择
+    format_func=lambda x: WC_MAP[x]#只改变显示
+    )
+
+    for col in options:
+        missing_data_warning(df, col=col, map=WC_MAP)
+    st.write("\n\n")
+
+
+
     # ----------------时间颗粒----------------
     if "submittedDate_s" in df.columns:
         df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
@@ -80,10 +98,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             default_index = 3
         # st.write(f"🕒 Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois)")
 
-
-        st.info(f"🕒 Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).\n"
-            f"💡 Recommandation automatique : nuage de mots évolutif **{suggestion}**.")
-
         # ---- Radio 选择 ----
         granularity = st.radio(
             "Sélectionnez la granularité temporelle :",
@@ -91,26 +105,13 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             index=default_index,
             horizontal=True,
         )
-
         
-    
+        st.info(f"🕒 Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).\n"
+            f"💡Recommandation automatique : nuage de mots évolutif **{suggestion}**.")
+        
         time_slices=create_time_slices(df, granularity="Annuel", step_year=1)
+        st.write("\n\n")
 
-
-        
-    # ---------------文本范围-------------------
-    WC_MAP={"keyword_s":"mots clés",
-            "abstract_s":'résumés'}
-    
-    options = st.multiselect(
-    "Choisir le texte:",
-    options=["keyword_s", "abstract_s"],
-    default=["keyword_s","abstract_s"],  # 默认选择
-    format_func=lambda x: WC_MAP[x]#只改变显示
-    )
-
-    for col in options:
-        missing_data_warning(df, col=col, map=WC_MAP)
 
 
    # ----------------- user stopwords ---------------
