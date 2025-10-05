@@ -86,7 +86,7 @@ keywords = st_tags(
     maxtags=10
 )
 
-st.markdown("Période (date du dépôt)")
+st.markdown("Période (selon date du dépôt)")
 now = datetime.now()
 current_year, current_month = now.year, now.month
 years = [None] + list(range(current_year, 1901, -1))

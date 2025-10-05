@@ -19,7 +19,6 @@ from utils.upload import data_uploader, missing_data_warning
 from utils.worldcould import collect_clean_texts_by_col
 from utils.worldcould import preprocess_text
 from utils.worldcould import generate_wc
-from utils.worldcould import generate_keyness_wc
 
 # #------------CACHE--------------
 # @st.cache_resource
@@ -40,9 +39,6 @@ if "uploaded_df" not in st.session_state:
     st.session_state.uploaded_df = None
 if "started" not in st.session_state:
     st.session_state.started = False
-
-
-
 
 # -------------------------------
 # 2️⃣ 检查/上传 CSV
@@ -221,53 +217,75 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 
 
-    # # ------------------PART2 演变词云 ------------------------------------------------------------------------------------------------
-    #====================================================================================================================================
-    st.write("\n\n")
-    st.divider()
-    st.subheader("Nuage de mots évolutif")
-    
-    # if "evolutif_wc" not in st.session_state:
-    #     st.session_state["evolutif_wc"] = None
+    # # # ------------------PART2 演变词云 ------------------------------------------------------------------------------------------------
+    # #====================================================================================================================================
+    # st.write("\n\n")
+    # st.divider()
+    # st.subheader("Nuage de mots évolutif")
+    # df = st.session_state.uploaded_df.copy()
 
-    # --------param------------------
-    df = st.session_state.uploaded_df.copy()
-    if "submittedDate_s" in df.columns:
-        df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
-        latest_date = df["submittedDate_s"].max()
-        latest_ym = latest_date.strftime("%Y-%m") if pd.notnull(latest_date) else "Aucune date valide"
+    # # if "evolutif_wc" not in st.session_state:
+    # #     st.session_state["evolutif_wc"] = None
+    # # --------------文本选择---------------------
 
-        earliest_date=df["submittedDate_s"].min()
-        earliest_ym = earliest_date.strftime("%Y-%m") if pd.notnull(latest_date) else "Aucune date valide"
-    
-
-        #time period in month 
-        if pd.notnull(earliest_date) and pd.notnull(latest_date):
-            period_months = (latest_date.year - earliest_date.year) * 12 + (latest_date.month - earliest_date.month)
-        else:
-            period_months = 0
-        st.write(f"🕒 Période couverte : {earliest_ym} → {latest_ym}  (environ {period_months} mois)")
-    
 
     
+    # # ----------------时间颗粒----------------
+    # if "submittedDate_s" in df.columns:
+    #     df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
+    #     latest_date = df["submittedDate_s"].max()
+    #     latest_ym = latest_date.strftime("%Y-%m") if pd.notnull(latest_date) else "Aucune date valide"
+
+    #     earliest_date=df["submittedDate_s"].min()
+    #     earliest_ym = earliest_date.strftime("%Y-%m") if pd.notnull(latest_date) else "Aucune date valide"
+    
+    #     #time period in month 
+    #     if pd.notnull(earliest_date) and pd.notnull(latest_date):
+    #         period_m = (latest_date.year - earliest_date.year) * 12 + (latest_date.month - earliest_date.month)
+    #     else:
+    #         period_m = 0
+    #     st.write(f"🕒 Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois)")
+            
+                
+    #     # ---- 自动推荐时间粒度并设置 radio 默认选项 ----
+    #     if period_m <= 12:#一年内，按月度或者季度显示
+    #         suggestion = "Mensuel ou Trimestriel"
+    #         default_index = 0
+    #     elif period_m <= 60:#3/5年内，按年度显示
+    #         suggestion = "Annuel"
+    #         default_index = 1
+    #     else:
+    #         suggestion = "Tous les 3 ou 5 ans"
+    #         default_index = 2
+    #     st.info(f"💡 Recommandation automatique : nuage de mots évolutif **{suggestion}**.")
+
+    #     # ---- Radio 选择 ----
+    #     period_level = st.radio(
+    #         "Sélectionnez la granularité temporelle :",
+    #         ["Mensuel / Trimestriel (≤ 1 an)", "Annuel (3–5 ans)", "Tous les 3 ou 5 ans (> 5 ans)"],
+    #         index=default_index,
+    #         help="Choisissez comment regrouper vos données dans le temps pour visualiser l'évolution des mots-clés."
+    #     )
 
 
-    # -------------------------------
-    years = st.slider(
-        "Afficher les X dernières années",
-        min_value=0,
-        max_value=100,
-        value=10,
-        step=1,
-        help="Déplacez le curseur. 0 = toutes les années"
-    )
 
-    if years == 0:
-        # 不限制时间范围
-        df_filtered = df.copy()
-    else:
-        cutoff = pd.Timestamp.today() - pd.DateOffset(years=years)
-        df= df[df["submittedDate_s"] >= cutoff]
+
+    # # -------------------------------
+    # years = st.slider(
+    #     "Afficher les X dernières années",
+    #     min_value=0,
+    #     max_value=100,
+    #     value=10,
+    #     step=1,
+    #     help="Déplacez le curseur. 0 = toutes les années"
+    # )
+
+    # if years == 0:
+    #     # 不限制时间范围
+    #     df_filtered = df.copy()
+    # else:
+    #     cutoff = pd.Timestamp.today() - pd.DateOffset(years=years)
+    #     df= df[df["submittedDate_s"] >= cutoff]
 
 
 
