@@ -16,7 +16,9 @@ import simplemma
 #my utils:
 from utils.upload import data_uploader, missing_data_warning
 from utils.worldcould import preprocess_text, collect_clean_texts_by_col
-from utils.worldcould import create_time_slices,generate_keyness_wc
+from utils.worldcould import create_time_slices
+from utils.wordcloud import generate_keyness_wc
+
 
 
 st.set_page_config(page_title="HAL insight", page_icon="🛸")
