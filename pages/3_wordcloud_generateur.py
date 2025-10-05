@@ -147,9 +147,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     )
     #-----------langue----------------------
     wc_par_lang = st.checkbox("Afficher par langue ?", value=False, key="wc_lang")#key用于储存在session state中
-    missing_data_warning(df, col="language_s")
-
-
+    missing_data_warning(df, col="language_s", map={"language_s":'langue'}, show_distribution=True)
 
     #------------------traiter les textes-------------------
 
