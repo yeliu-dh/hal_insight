@@ -55,13 +55,23 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     st.session_state.started=True
     df = st.session_state.uploaded_df.copy()
 
-    # ---PART1 总体词云 ---
+    # -----------------PART1 总体词云 ----------------------------------
     st.subheader("Nuage de mots global")
     # param:
-    if "overall_wc" not in st.session_state:
-        st.session_state["overall_wc"] = None
+    # if "overall_wc" not in st.session_state:
+    #     st.session_state["overall_wc"] = None
+    #--------period in years--------------------
+    df = st.session_state.uploaded_df.copy()
+    if "submittedDate_s" in df.columns:
+        df["submittedDate_s"] = pd.to_datetime(df["publicationDate_s"], errors="coerce")
+        latest_date = df["submittedDate_s"].max()
+        latest_y = latest_date.strftime("%Y") if pd.notnull(latest_date) else "Aucune date valide"
 
-   # ---------------文本范围-------------------
+        earliest_date=df["submittedDate_s"].min()
+        earliest_y = earliest_date.strftime("%Y") if pd.notnull(latest_date) else "Aucune date valide"
+        period_y=f"{earliest_y}~{latest_y}"
+ 
+    # ---------------文本范围-------------------
     WC_MAP={"keyword_s":"mots clés",
             "abstract_s":'résumés'}
     
@@ -172,7 +182,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     if overall_button:
         with st.spinner("Générer..."):
             if not wc_par_lang:  # 不分语言 → 合并 EN + FR
-                st.subheader(f"Nuage de mots {group_by_readable}")
+                st.subheader(f"Nuage de mots {group_by_readable} entre {period_y}")
 
                 for cat, langs in text_groups.items(): 
                     
@@ -192,7 +202,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                         st.pyplot(global_wc)
             else:
                 # 分语言 → EN/FR 左右列显示，每个类别单独一行
-                st.subheader(f"Nuage de mots {group_by_readable} par langue")
+                st.subheader(f"Nuage de mots {group_by_readable} par langue entre {period_y}")
                 for cat, langs in text_groups.items():
                     cols = st.columns(2)
                     for i, lang in enumerate(langs.keys()):
@@ -207,7 +217,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 
 
-    # # ------------------PART2 演变词云 --------------------------
+    # # ------------------PART2 演变词云 ------------------------------------------------------------------------------------------------
+    #====================================================================================================================================
     st.write("\n\n")
     st.divider()
     st.subheader("Nuage de mots évolutif")
@@ -219,6 +230,22 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     df = st.session_state.uploaded_df.copy()
     if "submittedDate_s" in df.columns:
         df["submittedDate_s"] = pd.to_datetime(df["publicationDate_s"], errors="coerce")
+        latest_date = df["submittedDate_s"].max()
+        latest_ym = latest_date.strftime("%Y-%m") if pd.notnull(latest_date) else "Aucune date valide"
+
+        earliest_date=df["submittedDate_s"].min()
+        earliest_ym = earliest_date.strftime("%Y-%m") if pd.notnull(latest_date) else "Aucune date valide"
+    
+
+        #time period in month 
+        if pd.notnull(earliest_date) and pd.notnull(latest_date):
+            period_months = (latest_date.year - earliest_date.year) * 12 + (latest_date.month - earliest_date.month)
+        else:
+            period_months = 0
+        st.write(f"🕒 Période couverte : {earliest_ym} → {latest_ym}  (environ {period_months} mois)")
+    
+
+    
 
 
     # -------------------------------
