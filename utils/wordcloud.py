@@ -70,7 +70,7 @@ def preprocess_text(text, stopwords, lang='fr'):
 
 
 
-def collect_clean_texts_by_col(df, options, stopwords, col="Global", lang_col="language_s"):
+def collect_clean_texts_by_col(df, options, stopwords, col=None, lang_col="language_s"):
     """
     收集文本，支持：
     - col=None: 全局（只分语言）
@@ -89,7 +89,7 @@ def collect_clean_texts_by_col(df, options, stopwords, col="Global", lang_col="l
         df["_col_list"] = df[col].fillna("nan").apply(
             lambda x: [v.strip() for v in str(x).split(";") if v.strip()]
         )
-    elif col=="Global":
+    elif col==None:
         # 全局只有一个虚拟类别
         df["_col_list"] = [["Global"]] * len(df)
 
@@ -97,6 +97,7 @@ def collect_clean_texts_by_col(df, options, stopwords, col="Global", lang_col="l
     for option_col in options:
         if option_col not in df.columns:
             continue
+
         for _, row in df.iterrows():
             lang = str(row.get(lang_col, "fr")).lower()  #没有则默认法语
             text = str(row[option_col])

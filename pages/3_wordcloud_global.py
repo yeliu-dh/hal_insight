@@ -189,7 +189,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                     if group_by=="Global":
                         title=" "
                     else:
-                        title=f"{group_by}{cat}"
+                        title=f"{group_by} {cat}"
 
                     if combined_text:
                         global_wc = generate_wc(
