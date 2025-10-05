@@ -16,7 +16,7 @@ import simplemma
 
 #my utils:
 from utils.upload import data_uploader
-from utils.worldcould import collect_texts_by_col, collect_texts_by_language
+from utils.worldcould import collect_clean_texts_by_col
 from utils.worldcould import preprocess_text
 from utils.worldcould import generate_wc
 from utils.worldcould import generate_keyness_wc
@@ -147,11 +147,11 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     wc_par_lang = st.checkbox("Afficher par langue ?", value=False, key="wc_lang")#key用于储存在session state中
     
     if group_by == "Global":
-        text_groups = collect_texts_by_col(df, options, stopwords, col=None)
+        text_groups = collect_clean_texts_by_col(df, options, stopwords, col=None)
     elif group_by == "Axe":
-        text_groups = collect_texts_by_col(df, options,stopwords, col="Axe")
+        text_groups = collect_clean_texts_by_col(df, options,stopwords, col="Axe")
     elif group_by == "Cl. FNEGE":
-        text_groups = collect_texts_by_col(df, options,stopwords, col="Cl. FNEGE")
+        text_groups = collect_clean_texts_by_col(df, options,stopwords, col="Cl. FNEGE")
     # text_groups={
     #   "cat1": {"en": "clean text", "fr": "..."},
     #   "cat2": {"en": "...", "fr": "..."}
@@ -203,6 +203,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 
     # # ------------------PART2 演变词云 --------------------------
+    st.write("\n\n")
+    st.divider()
     st.subheader("Nuage de mots évolutif")
     
     # if "evolutif_wc" not in st.session_state:
