@@ -15,8 +15,8 @@ import simplemma
 
 #my utils:
 from utils.upload import data_uploader, missing_data_warning
-from hal_insight.utils.wordcloud import collect_clean_texts_by_col
-from hal_insight.utils.wordcloud import create_time_slices
+from utils.wordcloud import collect_clean_texts_by_col
+from utils.wordcloud import create_time_slices
 from utils.wordcloud import generate_keyness_wc
 
 
