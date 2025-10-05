@@ -133,11 +133,9 @@ def generate_wc(text, max_words, stopwords, title="Nuage de mots"):
 
 
 
-
-
-
-
-
+#==========================================================================================#
+#==========================================================================================#
+#==========================================================================================#
 
 def create_time_slices(df, granularity="Annuel", step_year=1):
     """
@@ -297,11 +295,6 @@ def generate_keyness_wc(df, options, time_slices, max_words=100, stopwords=None,
     text_groups = collect_clean_texts_by_col(df, options, stopwords, col=None)
     for cat, langs in text_groups.items(): 
         texts_all = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
-                    
-    
-    # texts_all = (text_groups['Global'].get("en", "") + " " + text_groups['Global'].get("fr", "")).strip()
-    # texts_all=" ".join(text_groups.values())
-    # texts_all = " ".join(df["keyword_s"].dropna().astype(str).str.lower())
     global_freq = pd.Series(texts_all.split()).value_counts()
 
     # --- 绘图布局 ---
@@ -319,15 +312,19 @@ def generate_keyness_wc(df, options, time_slices, max_words=100, stopwords=None,
             y_start, y_end = t
             mask = (df["year"] >= y_start) & (df["year"] <= y_end)
             label = f"{y_start}-{y_end}" if y_start != y_end else str(y_start)
-
+        
+        # 时间段内clean_text
         df_slice = df[mask]
-        text = " ".join(df_slice["keyword_s"].dropna().astype(str).str.lower())
+        sliced_text_groups = collect_clean_texts_by_col(df_slice, options, stopwords, col=None)
+        for cat, langs in sliced_text_groups.items(): 
+            text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
+        # text = " ".join(df_slice["keyword_s"].dropna().astype(str).str.lower())
 
         row, col = divmod(idx, n_cols)
         ax = axes[row, col]
         ax.axis("off")
 
-        if text.strip():
+        if text:
             freq_slice = pd.Series(text.split()).value_counts()
             keyness = compute_keyness(freq_slice, global_freq, method=method)
 
