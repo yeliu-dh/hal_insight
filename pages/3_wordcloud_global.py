@@ -161,7 +161,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     #------------------traiter les textes-------------------
     if group_by == "Global":
-        text_groups = collect_clean_texts_by_col(df, options, stopwords, col=None)
+        text_groups = collect_clean_texts_by_col(df, options, stopwords, col="Global")
     elif group_by == "Axe":
         text_groups = collect_clean_texts_by_col(df, options,stopwords, col="Axe")
     elif group_by == "Cl. FNEGE":
@@ -184,8 +184,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 st.subheader(f"Nuage de mots {group_by_readable} entre {period_y}")
 
                 for cat, langs in text_groups.items(): 
-                    
                     combined_text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
+                    
                     if group_by=="Global":
                         title=" "
                     else:
