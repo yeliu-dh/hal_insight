@@ -47,7 +47,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     # if "evolutif_wc" not in st.session_state:
     #     st.session_state["evolutif_wc"] = None
-    # --------------文本选择---------------------
 
 
     
@@ -88,16 +87,81 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             horizontal=True,
         )
 
-        # COL_MAP = {
-        #     "Global": "global",
-        #     "Axe": "par axe",
-        #     "Cl. FNEGE": "par classe FNEGE"
-        # }
-        # group_by = st.radio(
-        #     "Afficher :",
-        #     ["Global", "Axe","Cl. FNEGE"], 
-        #     index=0,
-        #     format_func=lambda x: COL_MAP.get(x, x), 
-        #     horizontal=True
-        # )
+        
+        
+        time_slices = [(y, min(y + step_year - 1, end_year)) for y in range(start_year, end_year+1, step_year)]
+
+
+        
+        
+    # ---------------文本范围-------------------
+    WC_MAP={"keyword_s":"mots clés",
+            "abstract_s":'résumés'}
+    
+    options = st.multiselect(
+    "Choisir le texte:",
+    options=["keyword_s", "abstract_s"],
+    default=["keyword_s","abstract_s"],  # 默认选择
+    format_func=lambda x: WC_MAP[x]#只改变显示
+    )
+
+    for col in options:
+        missing_data_warning(df, col=col, map=WC_MAP)
+   
+
+
+   # ----------------- user stopwords ---------------
+    user_stopwords = st_tags(
+        label="Ajouter des mots à ignorer",
+        text="Tapez un mot et appuyez sur Entrée",
+        value=["management","gestion","marketing", "recherche",'research','study',"social","use","cas"],
+        maxtags=50
+    )
+
+    #-----------nltk stopwords----------------
+    stop_en=['won', 'an', 'having', "mightn't", 'the', "hasn't", 'more', 'in', 'only', 'under',
+            'o', 'ain', 'can', 'some', 'with', 'these', 'had', 'they', 'me', 'its', 'such', "wouldn't", 
+            'as', 'own', "they'd", 'weren', 'or', "shan't", 'don', 'him', 'yours', 'after', 'so', 
+            "don't", 'down', 't', 'hadn', "she'll", 'been', 'y', 'whom', 'because', 'about', 'am',
+            'my', 'there', 'here', 'up', 'on', 'those', 'once', 'hers', 'too', 'this', 'do', 'further',
+            'not', 'at', 'any', 'for', 'haven', 'ours', 'then', 'we', 'each', 'than', "she's", 'herself', 
+            "i'm", 's', 'did', 'didn', "i'd", 'shouldn', 'himself', 'you', 'other', 'why', "he'll", 'nor', 
+            "needn't", 'couldn', 'needn', 'should', 'where', "haven't", 'i', 'being', "they'll", "he's", 'from',
+            'mustn', "we'll", "wasn't", "should've", 'of', 'now', 'until', 'all', 'has', "shouldn't", 'his', 
+            "you'll", "it'd", 'll', "they're", "it's", 'does', 'no', 'while', 'into', "that'll", 'itself', 
+            'your', 'were', 'above', "it'll", 'ma', 'doing', "mustn't", 'between', 'them', 'and', "they've", 
+            'are', 'our', 'off', "i've", 'most', 'out', "won't", 'before', 'will', 'shan', "we're", 'who', "you're",
+            'doesn', 'hasn', 'have', 'against', 'just', 'yourselves', 'be', 'is', "isn't", 'a', "aren't", 
+            'again', "you'd", "hadn't", 'that', 'but', 'when', "didn't", 'ourselves', "doesn't", 've', 'yourself', 
+            'myself', "couldn't", 'd', 'was', "you've", 'both', 'themselves', 'if', 'over', "she'd", 'few', 'her', "he'd",
+            'through', 'wouldn', "we'd", 'below', 'theirs', 'aren', 'to', "we've", 'same', 'mightn', 'isn', 'by', 'during',
+            'what', 'he', "i'll", 'very', 'how', 'wasn', 'she', "weren't", 'm', 'their', 'which', 'it', 're', "article",
+            'research']    
+
+    stop_fr=['j', 'avions', 'avez', 'ta', 'son', 'avais', 'étaient', 'une', 'ai', 'seront', 'il', 'soient', 'étions',
+              'sommes','serai', 'me', 'l', 'est', 'tes', 'aurez', 'ayons', 'as', 'elle', 'eusses', 'été', 'fût', 
+              'par', 't', 'auraient', 'et', 'notre', 'y', 'aie', 'eux', 'leur', 'le', 'on', 'avaient', 'ont',
+              'eue', 'aurait', 'aies', 'eussent', 'eut', 'soit', 'sur', 'avec', 'serions', 'ses', 'n', 'du', 
+              'aurions', 'ils', 'es', 'un', 's', 'vous', 'dans', 'qui', 'étée', 'auriez', 'aient', 'je', 'étante',
+             'étant', 'fusses', 'mon', 'eurent', 'nous', 'êtes', 'serez', 'auront', 'fut', 'ayants', 'aurais', 'même',
+               'fussent', 'auras', 'qu', 'fûtes', 'étiez', 'seras', 'fussions', 'soyez', 'les', 'sois', 'aviez', 'mes', 
+               'serait', 'étantes', 'furent', 'eu', 'moi', 'seriez', 'sa', 'avait', 'sera', 'étés', 'ayante', 'fus', 
+               'eûtes', 'ma', 'ayantes', 'eusse', 'à', 'se', 'ton', 'en', 'au', 'serons', 'suis', 'ayant', 'ces', 'te', 
+               'lui', 'nos', 'des', 'aux', 'eussiez', 'pour', 'eues', 'ne', 'aurons', 'que', 'fussiez', 'tu', 'eussions', 
+               'd', 'étants', 'ce', 'étais', 'était', 'serais', 'étées', 'mais', 'eus', 'eût', 'ayez', 'votre', 'seraient', 
+               'fusse', 'ait', 'de', 'c', 'la', 'soyons', 'aurai', 'vos', 'fûmes', 'pas', 'm', 'sont', 'aura', 'avons', 'eûmes', 
+               'toi', 'ou', "être", "avoir","faire", "et", "de", "la", "le", "les","l","l'", "des", "un", "une", 
+                "du", "en", "au","d","dans","à","par","pour","sur","sont","aux","au", "leur","leurs","qui","ou","il","elle","ils","elles",
+                "je","tu","vous","nous","se","et","ce",'qui','que',"est","qu","avec","ont","ces",'celle','ceux','celles',
+                'comme','afin','ne',"son",'ses',"none","nan"
+            ]    
+    # 转小写+去重
+    stopwords = set(w.lower() for w in (stop_en + stop_fr + user_stopwords))
+
+    # --------------- max words ------------------
+    max_words = st.number_input(
+        "Nombre de mots maximum affichés:", 
+        min_value=1, max_value=1000, value=100, step=1, key="max_words"
+    )
+
 
