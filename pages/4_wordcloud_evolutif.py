@@ -16,8 +16,7 @@ import simplemma
 #my utils:
 from utils.upload import data_uploader, missing_data_warning
 from utils.worldcould import preprocess_text, collect_clean_texts_by_col
-from utils.worldcould import preprocess_text
-from utils.worldcould import generate_wc,generate_keyness_wc
+from utils.worldcould import create_time_slices,generate_keyness_wc
 
 
 st.set_page_config(page_title="HAL insight", page_icon="🛸")
@@ -80,19 +79,18 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         st.info(f"💡 Recommandation automatique : nuage de mots évolutif **{suggestion}**.")
 
         # ---- Radio 选择 ----
-        period_level = st.radio(
+        granularity = st.radio(
             "Sélectionnez la granularité temporelle :",
-            ["Mensuel / Trimestriel (≤ 1 an)", "Annuel (3–5 ans)", "Tous les 3 ou 5 ans (> 5 ans)"],
+            ["Mensuel","Trimestriel", "Annuel", "Tous les 3 ans","Tous les 5 ans"],
             index=default_index,
             horizontal=True,
         )
 
         
         
-        time_slices = [(y, min(y + step_year - 1, end_year)) for y in range(start_year, end_year+1, step_year)]
+        time_slices=create_time_slices(df, granularity="Annuel", step_year=1)
 
 
-        
         
     # ---------------文本范围-------------------
     WC_MAP={"keyword_s":"mots clés",
@@ -107,7 +105,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     for col in options:
         missing_data_warning(df, col=col, map=WC_MAP)
-   
 
 
    # ----------------- user stopwords ---------------
@@ -164,4 +161,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         min_value=1, max_value=1000, value=100, step=1, key="max_words"
     )
 
+
+    # ---------------WC-------------------------
 

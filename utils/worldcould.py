@@ -128,6 +128,64 @@ def generate_wc(text, max_words, stopwords, title="Nuage de mots"):
     return fig
 
 
+
+
+
+
+
+
+
+
+
+
+def create_time_slices(df, granularity="Annuel", step_year=1):
+    """
+    根据颗粒度生成时间切片
+    granularity: "month" | "quarter" | "year" | "3year" | "5year"
+    """
+    df = df.copy()
+    df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
+
+    # 提取年月
+    df["year"] = df["submittedDate_s"].dt.year
+    df["month"] = df["submittedDate_s"].dt.month
+
+    start_year, end_year = df["year"].min(), df["year"].max()
+
+    if granularity == "Mensuel":
+        # 逐月
+        months = pd.period_range(df["submittedDate_s"].min().to_period("M"),
+                                 df["submittedDate_s"].max().to_period("M"), freq="M")
+        time_slices = [(p.start_time, p.end_time) for p in months]
+
+    elif granularity == "Trimestriel":
+        # 逐季度
+        quarters = pd.period_range(df["submittedDate_s"].min().to_period("Q"),
+                                   df["submittedDate_s"].max().to_period("Q"), freq="Q")
+        time_slices = [(p.start_time, p.end_time) for p in quarters]
+
+    elif granularity == "Annuel":
+        step_year = 1
+        time_slices = [(y, min(y + step_year - 1, end_year))
+                       for y in range(start_year, end_year + 1, step_year)]
+
+    elif granularity == "Tous les 3 ans":
+        step_year = 3
+        time_slices = [(y, min(y + step_year - 1, end_year))
+                       for y in range(start_year, end_year + 1, step_year)]
+
+    elif granularity == "Tous les 5 ans":
+        step_year = 5
+        time_slices = [(y, min(y + step_year - 1, end_year))
+                       for y in range(start_year, end_year + 1, step_year)]
+
+    else:  # 默认年度
+        time_slices = [(y, y) for y in range(start_year, end_year + 1)]
+    st.write(f"{granularity}:{time_slices}")
+    return time_slices
+
+
+
 def compute_keyness(freq_slice, global_freq, method="llr"):
     """
     计算 keyness 值
@@ -166,30 +224,101 @@ def compute_keyness(freq_slice, global_freq, method="llr"):
     return keyness_scores
 
 
-def generate_keyness_wc(df, time_slices, max_words=100, stopwords=None, method="llr"):
+# def generate_keyness_wc(df, time_slices, max_words=100, stopwords=None, method="llr"):
+#     """
+#     根据时间片生成 keyness 演变词云
+#     """
+#     # --- 全局词频 ---
+#     texts_all = " ".join(df["keyword_s"].dropna().astype(str).str.lower())
+#     global_freq = pd.Series(texts_all.split()).value_counts()
+
+#     # --- 子图布局 ---
+#     n_cols = 3
+#     n_rows = math.ceil(len(time_slices) / n_cols)
+#     fig, axes = plt.subplots(n_rows, n_cols, figsize=(n_cols * 5, n_rows * 5))
+
+#     if n_rows == 1 and n_cols == 1:
+#         axes = np.array([[axes]])
+#     elif n_rows == 1:
+#         axes = np.array([axes])
+#     elif n_cols == 1:
+#         axes = axes[:, None]
+
+#     # --- 遍历时间片 ---
+#     for idx, (y_start, y_end) in enumerate(time_slices):
+#         df_slice = df[(df["year"] >= y_start) & (df["year"] <= y_end)]
+#         text = " ".join(df_slice["keyword_s"].dropna().astype(str).str.lower())
+
+#         if text.strip():
+#             freq_slice = pd.Series(text.split()).value_counts()
+#             keyness = compute_keyness(freq_slice, global_freq, method=method)
+
+#             wc = WordCloud(
+#                 width=400, height=400, background_color="white",
+#                 max_words=max_words, stopwords=stopwords
+#             ).generate_from_frequencies(keyness)
+#         else:
+#             wc = None
+
+#         row, col = divmod(idx, n_cols)
+#         ax = axes[row, col]
+#         if wc:
+#             ax.imshow(wc, interpolation="bilinear")
+#             ax.set_title(f"{y_start}-{y_end}", fontsize=12)#小图标题
+#         ax.axis("off")
+
+#     # --- 去掉多余子图 ---
+#     for j in range(idx + 1, n_rows * n_cols):
+#         row, col = divmod(j, n_cols)
+#         axes[row, col].axis("off")
+    
+    
+#     # --- 添加全图标题 ---
+#     start_year = time_slices[0][0]
+#     end_year = time_slices[-1][1]
+#     fig.suptitle(f"Évolution du nuage de mots ({start_year}-{end_year})", fontsize=16)
+
+
+#     plt.tight_layout()
+#     return fig
+
+
+def generate_keyness_wc(df, options, time_slices, max_words=100, stopwords=None, method="llr"):
     """
     根据时间片生成 keyness 演变词云
     """
+    df = df.copy()
+    df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
+    df["year"] = df["submittedDate_s"].dt.year
+
     # --- 全局词频 ---
-    texts_all = " ".join(df["keyword_s"].dropna().astype(str).str.lower())
+    text_groups = collect_clean_texts_by_col(df, options, stopwords, col=None)
+    texts_all=" ".join(text_groups.values())
+    # texts_all = " ".join(df["keyword_s"].dropna().astype(str).str.lower())
     global_freq = pd.Series(texts_all.split()).value_counts()
 
-    # --- 子图布局 ---
+    # --- 绘图布局 ---
     n_cols = 3
     n_rows = math.ceil(len(time_slices) / n_cols)
     fig, axes = plt.subplots(n_rows, n_cols, figsize=(n_cols * 5, n_rows * 5))
+    axes = np.array(axes).reshape(n_rows, n_cols)  # 保证二维结构
 
-    if n_rows == 1 and n_cols == 1:
-        axes = np.array([[axes]])
-    elif n_rows == 1:
-        axes = np.array([axes])
-    elif n_cols == 1:
-        axes = axes[:, None]
+    for idx, t in enumerate(time_slices):
+        # 时间切片可为 (start_date, end_date) 或 (start_year, end_year)
+        if isinstance(t[0], pd.Timestamp):  # 月/季度模式
+            mask = (df["submittedDate_s"] >= t[0]) & (df["submittedDate_s"] <= t[1])
+            label = t[0].strftime("%Y-%m")
+        else:
+            y_start, y_end = t
+            mask = (df["year"] >= y_start) & (df["year"] <= y_end)
+            label = f"{y_start}-{y_end}" if y_start != y_end else str(y_start)
 
-    # --- 遍历时间片 ---
-    for idx, (y_start, y_end) in enumerate(time_slices):
-        df_slice = df[(df["year"] >= y_start) & (df["year"] <= y_end)]
+        df_slice = df[mask]
         text = " ".join(df_slice["keyword_s"].dropna().astype(str).str.lower())
+
+        row, col = divmod(idx, n_cols)
+        ax = axes[row, col]
+        ax.axis("off")
 
         if text.strip():
             freq_slice = pd.Series(text.split()).value_counts()
@@ -199,27 +328,28 @@ def generate_keyness_wc(df, time_slices, max_words=100, stopwords=None, method="
                 width=400, height=400, background_color="white",
                 max_words=max_words, stopwords=stopwords
             ).generate_from_frequencies(keyness)
-        else:
-            wc = None
 
-        row, col = divmod(idx, n_cols)
-        ax = axes[row, col]
-        if wc:
             ax.imshow(wc, interpolation="bilinear")
-            ax.set_title(f"{y_start}-{y_end}", fontsize=12)#小图标题
-        ax.axis("off")
+            ax.set_title(label, fontsize=12)
+        else:
+            ax.text(0.5, 0.5, f"Aucune donnée\n{label}",
+                    ha="center", va="center", fontsize=10, color="gray")
 
-    # --- 去掉多余子图 ---
-    for j in range(idx + 1, n_rows * n_cols):
+    # 清理多余空白子图
+    for j in range(len(time_slices), n_rows * n_cols):
         row, col = divmod(j, n_cols)
         axes[row, col].axis("off")
-    
-    
-    # --- 添加全图标题 ---
-    start_year = time_slices[0][0]
-    end_year = time_slices[-1][1]
-    fig.suptitle(f"Évolution du nuage de mots ({start_year}-{end_year})", fontsize=16)
 
+    # --- 添加全局标题 ---
+    if isinstance(time_slices[0][0], pd.Timestamp):
+        start_label = time_slices[0][0].strftime("%Y-%m")
+        end_label = time_slices[-1][1].strftime("%Y-%m")
+    else:
+        start_label = str(time_slices[0][0])
+        end_label = str(time_slices[-1][1])
 
-    plt.tight_layout()
+    fig.suptitle(f"Évolution du nuage de mots ({start_label} → {end_label})", fontsize=16)
+    plt.tight_layout(rect=[0, 0, 1, 0.96])
     return fig
+
+
