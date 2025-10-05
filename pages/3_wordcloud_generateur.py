@@ -72,11 +72,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     format_func=lambda x: WC_MAP[x]#只改变显示
     )
 
-
     for col in options:
-        missing_data_warning(df, col=None, map:dict=WC_MAP)
-
-
+        missing_data_warning(df, col=col, map=WC_MAP)
    
     # --------------- max words ------------------
     max_words = st.number_input(
