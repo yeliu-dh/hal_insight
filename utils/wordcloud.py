@@ -56,11 +56,14 @@ def preprocess_text(text, stopwords, lang='fr'):
         st.warning("Texte sous forme de liste!!!")
     elif not isinstance(text, str):  # 如果是其他类型，转成字符串
         text = str(text)
-    
+
 
     # 去除标点和非字母+lower()
-    text = re.sub(r"[^a-zA-ZÀ-ÿ\s]", " ", text)
     text = text.lower().strip()
+    text = re.sub(r"[^a-zA-ZÀ-ÿ\s]", " ", text)
+
+    # 去除多余的空格：
+    text = re.sub(r"\s+", " ", text).strip()
 
     # lemmatisation + enlever les stopwords
     clean_tokens=[simplemma.lemmatize(word, lang=lang) for word in text.split()]

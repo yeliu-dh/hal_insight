@@ -159,7 +159,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                'toi', 'ou', "être", "avoir","faire", "et", "de", "la", "le", "les","l","l'", "des", "un", "une", 
                 "du", "en", "au","d","dans","à","par","pour","sur","sont","aux","au", "leur","leurs","qui","ou","il","elle","ils","elles",
                 "je","tu","vous","nous","se","et","ce",'qui','que',"est","qu","avec","ont","ces",'celle','ceux','celles',
-                'comme','afin','ne',"son",'ses',"none","nan"
+                'comme','afin','ne',"son",'ses',"none","nan","de","des",'la'
             ]    
     # 转小写+去重
     stopwords = set(w.lower() for w in (stop_en + stop_fr + user_stopwords))
@@ -179,5 +179,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     with cols[1]:   
         button=st.button("Générer")      
     if button:    
-        evolutif_wc=generate_keyness_wc(df, options, time_slices, max_words=max_words, stopwords=stopwords, method="llr")
+        evolutif_wc= generate_keyness_wc(df, options, time_slices, max_words=100, stopwords=stopwords, method="llr")
+        # evolutif_wc=generate_keyness_wc(df, options, time_slices, max_words=max_words, stopwords=stopwords, method="llr")
         st.pyplot(evolutif_wc)
