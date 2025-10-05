@@ -15,7 +15,7 @@ import simplemma
 
 
 #my utils:
-from utils.upload import data_uploader
+from utils.upload import data_uploader, missing_data_warning
 from utils.worldcould import collect_clean_texts_by_col
 from utils.worldcould import preprocess_text
 from utils.worldcould import generate_wc
@@ -71,6 +71,11 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     default=["keyword_s","abstract_s"],  # 默认选择
     format_func=lambda x: WC_MAP[x]#只改变显示
     )
+
+
+    for col in options:
+        missing_data_warning(df, col=None, map:dict=WC_MAP)
+
 
    
     # --------------- max words ------------------

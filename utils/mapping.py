@@ -31,8 +31,6 @@ def map_domains(codes_str:str=None, map:dict=None):
     
     return "; ".join(mapped)
 
-
-
 # Axes thématiques (classification) d'IRG
 # Code	    Nom de l'axe
 # IRG_AXE1	Performances et responsabilités
@@ -81,14 +79,3 @@ def add_axe(df,axe_name='Axe'):
     return df
 
 
-
-
-# # 如果需要专门函数，可以写多个，方便调用
-# def get_journal_rankings():
-#     return load_json("ranking.json")
-
-# def get_domain_map():
-#     return load_json("domain_map.json")
-
-# def get_lang_map():
-#     return load_json("lang_map.json")

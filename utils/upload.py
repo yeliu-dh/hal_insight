@@ -1,4 +1,14 @@
-
+import streamlit as st
+import pandas as pd
+def missing_data_warning(df, col=None, map:dict=None):
+    if map:
+        col_readable= map.get(col,col)
+    else :
+        col_readable=col 
+       
+    st.info(f"⚠️ Les {col_readable} sont manquants dans {df[col].isna().sum()}"
+                f" ({df[col].isna().sum()*100/len(df):.2f}%) articles!")
+    return
 
 def data_uploader(key="uploaded_df"):
     """
@@ -7,9 +17,6 @@ def data_uploader(key="uploaded_df"):
     - 用户可随时上传新文件覆盖
     - 自动区分数据来源
     """
-    import streamlit as st
-    import pandas as pd
-
     st.subheader("📂 Importer vos données")
 
     uploaded_file = st.file_uploader(

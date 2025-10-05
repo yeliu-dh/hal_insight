@@ -31,8 +31,8 @@ def collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "
     texts = {lang: [] for lang in langs}
 
     for col in options:
-        st.info(f"⚠️ Les {WC_MAP.get(col,'...')} sont manquants dans {df[col].isna().sum()}"
-                f" ({df[col].isna().sum()*100/len(df):.2f}%) articles!")
+        # st.info(f"⚠️ Les {WC_MAP.get(col,'...')} sont manquants dans {df[col].isna().sum()}"
+        #         f" ({df[col].isna().sum()*100/len(df):.2f}%) articles!")
         if col not in df.columns:
             continue
         for lang in langs:
@@ -53,7 +53,7 @@ def preprocess_text(text, stopwords, lang='fr'):
     # 确认输入的是str
     if isinstance(text, list):  # 如果传进来是list，先拼接
         text = " ".join(map(str, text))
-        st.warning("texte sous forme de liste!!!")
+        st.warning("Texte sous forme de liste!!!")
     elif not isinstance(text, str):  # 如果是其他类型，转成字符串
         text = str(text)
     
