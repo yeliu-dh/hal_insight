@@ -16,9 +16,9 @@ import simplemma
 
 #my utils:
 from utils.upload import data_uploader, missing_data_warning
-from hal_insight.utils.wordcloud import collect_clean_texts_by_col
-from hal_insight.utils.wordcloud import preprocess_text
-from hal_insight.utils.wordcloud import generate_wc
+from utils.wordcloud import collect_clean_texts_by_col
+from utils.wordcloud import preprocess_text
+from utils.wordcloud import generate_wc
 
 # #------------CACHE--------------
 # @st.cache_resource
