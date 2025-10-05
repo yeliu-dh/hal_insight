@@ -120,7 +120,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         text="Tapez un mot et appuyez sur Entrée",
         value=["management","gestion","marketing", "recherche",'research','study',"social","use","cas"],
         maxtags=50
-    )
+    )        
+    st.write("\n\n")
+
 
     #-----------nltk stopwords----------------
     stop_en=['won', 'an', 'having', "mightn't", 'the', "hasn't", 'more', 'in', 'only', 'under',
@@ -167,6 +169,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         "Nombre de mots maximum affichés:", 
         min_value=1, max_value=1000, value=100, step=1, key="max_words"
     )
+    st.write("\n\n")
+
 
 
     # ---------------WC-------------------------
