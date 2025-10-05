@@ -81,7 +81,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         # st.write(f"🕒 Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois)")
 
 
-        st.info(f"🕒 Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois)."
+        st.info(f"🕒 Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).\n"
             f"💡 Recommandation automatique : nuage de mots évolutif **{suggestion}**.")
 
         # ---- Radio 选择 ----
@@ -93,7 +93,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         )
 
         
-        
+    
         time_slices=create_time_slices(df, granularity="Annuel", step_year=1)
 
 
@@ -169,4 +169,10 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 
     # ---------------WC-------------------------
-
+    # 按钮生成+储存
+    cols=st.columns([4,1])
+    with cols[1]:   
+        button=st.button("Générer")      
+    if button:    
+        evolutif_wc=generate_keyness_wc(df, options, time_slices, max_words=max_words, stopwords=stopwords, method="llr")
+        st.pyplot(evolutif_wc)
