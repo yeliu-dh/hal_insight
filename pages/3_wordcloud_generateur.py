@@ -50,7 +50,6 @@ if "started" not in st.session_state:
 data_uploader()# 调用上传器（会自动处理已有/新上传）
 st.divider() 
 
-
 if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None:
     # 若df存在则视为开始
     st.session_state.started=True
@@ -73,24 +72,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     format_func=lambda x: WC_MAP[x]#只改变显示
     )
 
-
-    # #---------分文本语言---------------
-    # try:
-    #     if options:
-    #         text_en, text_fr="", ""
-    #         text_by_lang=collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "fr"))
-    #         text_en=text_by_lang.get('en'," ")
-    #         text_fr=text_by_lang.get('fr'," ")           
-
-    #     else:
-    #         st.warning("⚠️ Aucune colonne sélectionnée ou inexistante dans le CSV.")
-    #         text_en = ""
-    #         text_fr = ""
-            
-
-    # except Exception as e:
-    #     st.error(f"⚠️ {e}")
-
    
     # --------------- max words ------------------
     max_words = st.number_input(
@@ -102,7 +83,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     user_stopwords = st_tags(
         label="Ajouter des mots à ignorer",
         text="Tapez un mot et appuyez sur Entrée",
-        value=["management","gestion","marketing", "recherche",'research','study'],
+        value=["management","gestion","marketing", "recherche",'research','study',"social","use","cas"],
         maxtags=50
     )
 
@@ -149,7 +130,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     # ------------param-------------------
     #radio多选,checkbox单选
-    
+
     COL_MAP = {
         "Global": "global",
         "Axe": "par axe",
@@ -171,7 +152,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         text_groups = collect_texts_by_col(df, options,stopwords, col="Axe")
     elif group_by == "Cl. FNEGE":
         text_groups = collect_texts_by_col(df, options,stopwords, col="Cl. FNEGE")
-    # {
+    # text_groups={
     #   "cat1": {"en": "clean text", "fr": "..."},
     #   "cat2": {"en": "...", "fr": "..."}
     # }
@@ -221,100 +202,38 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 
 
-
-
-                    # with cols[0]:
-                    #     lang="en"
-                    #     title=f"{group_by} {cat}-{lang}"
-                    #     text_en = langs.get(lang, "").strip()
-                    #     if text_en:
-                    #         wc_en = generate_wc(text_en, max_words, stopwords, title=title)
-                    #         st.pyplot(wc_en)
-                    #     else :
-                    #         st.warning(f"texte invalie dans la catégorie {cat}-{lang}!")
-
-                    # with cols[1]:
-                    #     text_fr = langs.get("fr", "").strip()
-                    #     if text_fr:
-                    #         wc_fr = generate_wc(text_fr, max_words, stopwords, title=f"{group_by} {cat}-FR")
-                    #         st.pyplot(wc_fr)
-                    #     else :
-                    #         st.warning(f"texte invalie dans la catégorie {cat}-FR!")
-
-
-            # else:  # 分语言 → EN 在一行，FR 在另一行（每个类别一行）
-            #     for cat, langs in text_groups.items():
-            #         # st.subheader(f"Nuage de mots {cat}")
-
-            #         cols = st.columns(2)  # 每个类别独立两列
-            #         with cols[0]:
-            #             if langs.get("en", "").strip():
-            #                 wc_en = generate_wc(
-            #                     langs["en"],
-            #                     max_words,
-            #                     stopwords,
-            #                     title=f"EN"
-            #                 )
-            #                 st.pyplot(wc_en)
-            #         with cols[1]:
-            #             if langs.get("fr", "").strip():
-            #                 wc_fr = generate_wc(
-            #                     langs["fr"],
-            #                     max_words,
-            #                     stopwords,
-            #                     title=f"FR"
-            #                 )
-            #                 st.pyplot(wc_fr)
-
-
-
-
-
-        # with st.spinner("🔄 Générer.."):
-        #     clean_text_en, clean_text_fr = "", ""
-        #     if text_en:
-        #         clean_text_en=preprocess_text(text_en, stopwords=stopwords, lang='en') 
-        #     if text_fr:
-        #         clean_text_fr=preprocess_text(text_fr, stopwords=stopwords, lang='fr') 
-
-        #     if group_by=='Aucune':
-        #             st.session_state["overall_wc"] = generate_wc(clean_text_en+clean_text_fr, max_words, stopwords, title="Nuage de mots global")
-        #             # 渲染
-        #             if st.session_state["overall_wc"] is not None:
-        #                 st.pyplot(st.session_state["overall_wc"])
-
-        #     elif group_by=="Langue":
-        #         # 分两列生成各自词云
-        #         col1, col2 = st.columns(2)
-        #         with col1:
-        #             if clean_text_en:
-        #                 wc_en = generate_wc(clean_text_en, max_words, stopwords, title="Nuage de mots EN")
-        #                 st.pyplot(wc_en)
-        #         with col2:
-        #             if clean_text_fr:
-        #                 wc_fr = generate_wc(clean_text_fr, max_words, stopwords, title="Nuage de mots FR")
-        #                 st.pyplot(wc_fr)
-
-
-
-
-
-
-
-
-
-
-
-
     # # ------------------PART2 演变词云 --------------------------
-    # st.subheader("Nuage de mots évolutif")
+    st.subheader("Nuage de mots évolutif")
+    
     # if "evolutif_wc" not in st.session_state:
     #     st.session_state["evolutif_wc"] = None
-        
-    # # param
-    # df = st.session_state.uploaded_df.copy()
-    # df["publicationDate_s"] = pd.to_datetime(df["publicationDate_s"], errors="coerce")
-    # df["year"] = df["publicationDate_s"].dt.year
+
+    # --------param------------------
+    df = st.session_state.uploaded_df.copy()
+    if "submittedDate_s" in df.columns:
+        df["submittedDate_s"] = pd.to_datetime(df["publicationDate_s"], errors="coerce")
+
+
+    # -------------------------------
+    years = st.slider(
+        "Afficher les X dernières années",
+        min_value=0,
+        max_value=100,
+        value=10,
+        step=1,
+        help="Déplacez le curseur. 0 = toutes les années"
+    )
+
+    if years == 0:
+        # 不限制时间范围
+        df_filtered = df.copy()
+    else:
+        cutoff = pd.Timestamp.today() - pd.DateOffset(years=years)
+        df= df[df["submittedDate_s"] >= cutoff]
+
+
+
+
 
     # # ---------------文本范围-------------------
     # option = st.multiselect(
