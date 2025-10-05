@@ -85,6 +85,19 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             "Sélectionnez la granularité temporelle :",
             ["Mensuel / Trimestriel (≤ 1 an)", "Annuel (3–5 ans)", "Tous les 3 ou 5 ans (> 5 ans)"],
             index=default_index,
-            help="Choisissez comment regrouper vos données dans le temps pour visualiser l'évolution des mots-clés."
+            horizontal=True,
         )
+
+        # COL_MAP = {
+        #     "Global": "global",
+        #     "Axe": "par axe",
+        #     "Cl. FNEGE": "par classe FNEGE"
+        # }
+        # group_by = st.radio(
+        #     "Afficher :",
+        #     ["Global", "Axe","Cl. FNEGE"], 
+        #     index=0,
+        #     format_func=lambda x: COL_MAP.get(x, x), 
+        #     horizontal=True
+        # )
 
