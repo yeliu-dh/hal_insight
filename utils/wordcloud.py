@@ -89,7 +89,7 @@ def collect_clean_texts_by_col(df, options, stopwords, col=None, lang_col="langu
         df["_col_list"] = df[col].fillna("nan").apply(
             lambda x: [v.strip() for v in str(x).split(";") if v.strip()]
         )
-    else:
+    else:# col ==None, 自动添加一列Global!!!!
         # 全局只有一个虚拟类别
         df["_col_list"] = [["Global"]] * len(df)
 
@@ -293,7 +293,8 @@ def generate_keyness_wc(df, options, time_slices, max_words=100, stopwords=None,
 
     # --- 全局词频 ---
     text_groups = collect_clean_texts_by_col(df, options, stopwords, col=None)
-    texts_all=" ".join(text_groups.values())
+    texts_all = (text_groups['Global'].get("en", "") + " " + text_groups['Global'].get("fr", "")).strip()
+    # texts_all=" ".join(text_groups.values())
     # texts_all = " ".join(df["keyword_s"].dropna().astype(str).str.lower())
     global_freq = pd.Series(texts_all.split()).value_counts()
 
