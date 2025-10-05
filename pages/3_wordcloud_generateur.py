@@ -145,9 +145,14 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         format_func=lambda x: COL_MAP.get(x, x), 
         horizontal=True
     )
-
+    #-----------langue----------------------
     wc_par_lang = st.checkbox("Afficher par langue ?", value=False, key="wc_lang")#key用于储存在session state中
-    
+    missing_data_warning(df, col="language_s")
+
+
+
+    #------------------traiter les textes-------------------
+
     if group_by == "Global":
         text_groups = collect_clean_texts_by_col(df, options, stopwords, col=None)
     elif group_by == "Axe":

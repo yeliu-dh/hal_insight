@@ -233,7 +233,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             "- Passez la souris pour voir les données statistiques.\n"
             "- Cliquez sur 📷 en haut à droite pour télécharger l'image.\n"
             "- Les valeurs manquantes sont remplacées par « nan ». Vous pouvez cliquer sur la légende pour  masquer/afficher une catégorie.\n"
-            "- Seules les N premières catégories sont affichées, les autres sont regroupées sous « Autres ».\n"
+            "- Seules les top N premières catégories sont affichées, les autres sont regroupées sous « Autres ».\n"
             "- Note qu'un document peut appartenir à plusieurs domaines scientifiques.\n"
         )
 
