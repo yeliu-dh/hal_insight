@@ -163,7 +163,7 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
 
     # wc
     if not wc_par_lang:  # 不分语言 → 合并 EN + FR
-        title=f"Nuage de mots {group_by_readable} entre {period_y}"
+        suptitle=f"Nuage de mots {group_by_readable} entre {period_y}"
         for cat, langs in text_groups.items(): 
             combined_text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
             
@@ -173,17 +173,24 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
                 title=f"{group_by} {cat}"
 
             if combined_text:
-                wc = generate_wc(
+                fig = generate_wc(
                     langs.get("en", "") + " " + langs.get("fr", ""),  # lang 随便传一个
                     max_words,
                     stopwords,
                     title=title
                 )
-            st.pyplot(wc)
+            fig.suptitle(suptitle, fontsize=16, ha="center")
+            st.pyplot(fig)
+
 
     else:
         # 分语言 → EN/FR 左右列显示，每个类别单独一行
-        title=f"Nuage de mots {group_by_readable} par langue entre {period_y}"
+        suptitle=f"Nuage de mots {group_by_readable} par langue entre {period_y}"
+        # st.markdown(f"### {suptitle}")
+        st.markdown(
+            f"<h3 style='text-align: center;'> Nuage de mots {group_by_readable} par langue entre {period_y}</h3>",
+            unsafe_allow_html=True
+        )
         for cat, langs in text_groups.items():
             cols = st.columns(2)
             for i, lang in enumerate(langs.keys()):
@@ -195,10 +202,11 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
                     
                     text = langs.get(lang, "").strip()
                     if text:
-                        wc = generate_wc(text, max_words, stopwords, title=title)
+                        fig = generate_wc(text, max_words, stopwords, title=title)
+                        st.pyplot(fig)
+
                     else :
                         st.warning(f"texte invalie dans la catégorie {cat}-{lang}!")
-                st.pyplot(wc)
     return 
 
 
