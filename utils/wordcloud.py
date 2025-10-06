@@ -164,6 +164,10 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
     # wc
     if not wc_par_lang:  # 不分语言 → 合并 EN + FR
         suptitle=f"Nuage de mots {group_by_readable} entre {period_y}"
+        st.markdown(
+            f"<h3 style='text-align: center;'> {suptitle} </h3>",
+            unsafe_allow_html=True
+        )
         for cat, langs in text_groups.items(): 
             combined_text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
             
@@ -179,15 +183,14 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
                     stopwords,
                     title=title
                 )
-            fig.tight_layout(rect=[0, 0, 1, 0.95])  # 顶部留 5% 给 suptitle
-            fig.suptitle(suptitle, fontsize=10, ha="center")
+            # fig.tight_layout(rect=[0, 0, 1, 0.95])  # 顶部留 5% 给 suptitle
+            # fig.suptitle(suptitle, fontsize=10, ha="center")
             st.pyplot(fig)
 
 
     else:
         # 分语言 → EN/FR 左右列显示，每个类别单独一行
         suptitle=f"Nuage de mots {group_by_readable} par langue entre {period_y}"
-        # st.markdown(f"### {suptitle}")
         st.markdown(
             f"<h3 style='text-align: center;'> Nuage de mots {group_by_readable} par langue entre {period_y}</h3>",
             unsafe_allow_html=True
