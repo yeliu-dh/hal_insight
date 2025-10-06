@@ -186,7 +186,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     if overall_button:
         with st.spinner("Générer..."):
-            wc=generate_wc_param(df, options, group_by, wc_par_lang, include_nan, max_words, stopwords)
+            wc=generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words, stopwords)
             st.pyplot(wc)
 
             # if not wc_par_lang:  # 不分语言 → 合并 EN + FR
