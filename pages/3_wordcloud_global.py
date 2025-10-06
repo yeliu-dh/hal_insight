@@ -83,7 +83,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     )
 
     for col in options:
-        missing_data_warning(df, col=col, map=WC_MAP,show_distribution=True)
+        missing_data_warning(df, col=col, map=WC_MAP,show_distribution=False)
     st.markdown("<br>", unsafe_allow_html=True)#不容易被 Markdown 渲染压缩掉
 
 
