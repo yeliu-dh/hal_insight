@@ -44,8 +44,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     st.session_state.started=True
     df = st.session_state.uploaded_df.copy()
 
-    st.subheader("Nuage de mots évolutif")
-
+    # st.subheader("Nuage de mots évolutif")
     # if "evolutif_wc" not in st.session_state:
     #     st.session_state["evolutif_wc"] = None
 
@@ -65,7 +64,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     for col in options:
         missing_data_warning(df, col=col, map=WC_MAP)
-    st.write("\n\n\n")
+    # st.write("\n\n\n")
+    st.markdown("<br><br><br>", unsafe_allow_html=True)
+
 
 
 
@@ -109,8 +110,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             f"Recommandation automatique : nuage de mots évolutif **{suggestion}**.")
         
         time_slices=create_time_slices(df, granularity="Annuel", step_year=1)
-    st.write("\n\n\n")
-
+    # st.write("\n\n\n")
+    st.markdown("<br><br><br>", unsafe_allow_html=True)
 
 
    # ----------------- user stopwords ---------------
@@ -120,7 +121,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         value=["management","gestion","marketing", "recherche",'research','study',"social","use","cas"],
         maxtags=50
     )        
-    st.write("\n\n\n")
+    st.markdown("<br><br><br>", unsafe_allow_html=True)
+    # st.write("\n\n\n")
 
 
     #-----------nltk stopwords----------------
@@ -168,7 +170,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         "⬆️ Nombre de mots maximum affichés:", 
         min_value=1, max_value=1000, value=100, step=1, key="max_words"
     )
-    st.write("\n\n\n")
+    # st.write("\n\n\n")
+    st.markdown("<br><br><br>", unsafe_allow_html=True)
 
 
 
