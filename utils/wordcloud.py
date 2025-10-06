@@ -179,6 +179,7 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
                     stopwords,
                     title=title
                 )
+            fig.tight_layout(rect=[0, 0, 1, 0.95])  # 顶部留 5% 给 suptitle
             fig.suptitle(suptitle, fontsize=10, ha="center")
             st.pyplot(fig)
 
