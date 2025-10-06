@@ -68,8 +68,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     st.markdown("<br><br>", unsafe_allow_html=True)
 
 
-
-
     # ----------------时间颗粒----------------
     if "submittedDate_s" in df.columns:
         df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
@@ -104,10 +102,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             ["Mensuel","Trimestriel", "Annuel", "Tous les 3 ans","Tous les 5 ans"],
             index=default_index,
             horizontal=True,
-        )
-        
+        )        
         st.info(f"Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).\n\n"
-            f"Recommandation automatique : nuage de mots évolutif **{suggestion}**.")
+            f"Granularité recommandée: **{suggestion}**.")
         
         time_slices=create_time_slices(df, granularity="Annuel", step_year=1)
     # st.write("\n\n\n")
