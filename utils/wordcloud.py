@@ -140,7 +140,7 @@ def generate_wc(text, max_words, stopwords, title="Nuage de mots"):
 #==========================================================================================#
 #==========================================================================================#
 
-def create_time_slices(df, granularity, step_year):
+def create_time_slices(df, granularity):
     """
     根据颗粒度生成时间切片
     granularity: "month" | "quarter" | "year" | "3year" | "5year"
@@ -181,8 +181,8 @@ def create_time_slices(df, granularity, step_year):
         time_slices = [(y, min(y + step_year - 1, end_year))
                        for y in range(start_year, end_year + 1, step_year)]
 
-    else:  # 默认年度
-        time_slices = [(y, y) for y in range(start_year, end_year + 1)]
+    # else:  # 默认年度
+    #     time_slices = [(y, y) for y in range(start_year, end_year + 1)]
     st.info(f"Granularité {granularity}:{time_slices}")
     return time_slices
 

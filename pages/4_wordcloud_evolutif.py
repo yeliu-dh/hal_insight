@@ -106,7 +106,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         st.info(f"Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).\n\n"
             f"Granularité recommandée: **{suggestion}**.")
         
-        time_slices=create_time_slices(df, granularity="Annuel", step_year=1)
+
+        time_slices=create_time_slices(df, granularity=granularity)
     # st.write("\n\n\n")
     st.markdown("<br><br>", unsafe_allow_html=True)
 
