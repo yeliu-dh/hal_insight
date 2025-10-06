@@ -226,65 +226,6 @@ def compute_keyness(freq_slice, global_freq, method="llr"):
     return keyness_scores
 
 
-# def generate_keyness_wc(df, time_slices, max_words=100, stopwords=None, method="llr"):
-#     """
-#     根据时间片生成 keyness 演变词云
-#     """
-#     # --- 全局词频 ---
-#     texts_all = " ".join(df["keyword_s"].dropna().astype(str).str.lower())
-#     global_freq = pd.Series(texts_all.split()).value_counts()
-
-#     # --- 子图布局 ---
-#     n_cols = 3
-#     n_rows = math.ceil(len(time_slices) / n_cols)
-#     fig, axes = plt.subplots(n_rows, n_cols, figsize=(n_cols * 5, n_rows * 5))
-
-#     if n_rows == 1 and n_cols == 1:
-#         axes = np.array([[axes]])
-#     elif n_rows == 1:
-#         axes = np.array([axes])
-#     elif n_cols == 1:
-#         axes = axes[:, None]
-
-#     # --- 遍历时间片 ---
-#     for idx, (y_start, y_end) in enumerate(time_slices):
-#         df_slice = df[(df["year"] >= y_start) & (df["year"] <= y_end)]
-#         text = " ".join(df_slice["keyword_s"].dropna().astype(str).str.lower())
-
-#         if text.strip():
-#             freq_slice = pd.Series(text.split()).value_counts()
-#             keyness = compute_keyness(freq_slice, global_freq, method=method)
-
-#             wc = WordCloud(
-#                 width=400, height=400, background_color="white",
-#                 max_words=max_words, stopwords=stopwords
-#             ).generate_from_frequencies(keyness)
-#         else:
-#             wc = None
-
-#         row, col = divmod(idx, n_cols)
-#         ax = axes[row, col]
-#         if wc:
-#             ax.imshow(wc, interpolation="bilinear")
-#             ax.set_title(f"{y_start}-{y_end}", fontsize=12)#小图标题
-#         ax.axis("off")
-
-#     # --- 去掉多余子图 ---
-#     for j in range(idx + 1, n_rows * n_cols):
-#         row, col = divmod(j, n_cols)
-#         axes[row, col].axis("off")
-    
-    
-#     # --- 添加全图标题 ---
-#     start_year = time_slices[0][0]
-#     end_year = time_slices[-1][1]
-#     fig.suptitle(f"Évolution du nuage de mots ({start_year}-{end_year})", fontsize=16)
-
-
-#     plt.tight_layout()
-#     return fig
-
-
 def generate_keyness_wc(df, options, time_slices, max_words=100, stopwords=None, method="llr"):
     """
     根据时间片生成 keyness 演变词云
@@ -301,10 +242,14 @@ def generate_keyness_wc(df, options, time_slices, max_words=100, stopwords=None,
     global_freq = pd.Series(texts_all.split()).value_counts()
 
     # --- 绘图布局 ---
-    n_cols = 3
-    n_rows = math.ceil(len(time_slices) / n_cols)
-    fig, axes = plt.subplots(n_rows, n_cols, figsize=(n_cols * 5, n_rows * 5))
-    axes = np.array(axes).reshape(n_rows, n_cols)  # 保证二维结构
+    if len(time_slices)>=3:    
+        n_cols = 3
+        n_rows = math.ceil(len(time_slices) / n_cols)
+        fig, axes = plt.subplots(n_rows, n_cols, figsize=(n_cols * 5, n_rows * 5))
+        axes = np.array(axes).reshape(n_rows, n_cols)  # 保证二维结构
+
+    else:
+        n_cols=len(time_slices)
 
     for idx, t in enumerate(time_slices):
         # 时间切片可为 (start_date, end_date) 或 (start_year, end_year)
@@ -321,8 +266,8 @@ def generate_keyness_wc(df, options, time_slices, max_words=100, stopwords=None,
         sliced_text_groups = collect_clean_texts_by_col(df_slice, options, stopwords, col=None)
         for cat, langs in sliced_text_groups.items(): 
             text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
-        # text = " ".join(df_slice["keyword_s"].dropna().astype(str).str.lower())
 
+        # 选择当前子图的位置：在cols数固定的情况下，按照idx自动排列到某一行
         row, col = divmod(idx, n_cols)
         ax = axes[row, col]
         ax.axis("off")
@@ -355,7 +300,7 @@ def generate_keyness_wc(df, options, time_slices, max_words=100, stopwords=None,
         start_label = str(time_slices[0][0])
         end_label = str(time_slices[-1][1])
 
-    fig.suptitle(f"Évolution du nuage de mots ({start_label} → {end_label})", fontsize=16)
+    fig.suptitle(f"Évolution du nuage de mots ({start_label} ~ {end_label})", fontsize=16)
     plt.tight_layout(rect=[0, 0, 1, 0.96])
     return fig
 

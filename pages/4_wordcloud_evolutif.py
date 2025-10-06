@@ -65,7 +65,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     for col in options:
         missing_data_warning(df, col=col, map=WC_MAP)
-    st.write("\n\n")
+    st.write("\n\n\n")
 
 
 
@@ -107,10 +107,10 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         )
         
         st.info(f"🕒 Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).\n\n"
-            f"💡Recommandation automatique : nuage de mots évolutif **{suggestion}**.")
+            f"Recommandation automatique : nuage de mots évolutif **{suggestion}**.")
         
         time_slices=create_time_slices(df, granularity="Annuel", step_year=1)
-        st.write("\n\n")
+    st.write("\n\n\n")
 
 
 
@@ -121,7 +121,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         value=["management","gestion","marketing", "recherche",'research','study',"social","use","cas"],
         maxtags=50
     )        
-    st.write("\n\n")
+    st.write("\n\n\n")
 
 
     #-----------nltk stopwords----------------
@@ -169,7 +169,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         "Nombre de mots maximum affichés:", 
         min_value=1, max_value=1000, value=100, step=1, key="max_words"
     )
-    st.write("\n\n")
+    st.write("\n\n\n")
 
 
 
