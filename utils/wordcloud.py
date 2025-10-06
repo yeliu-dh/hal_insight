@@ -73,7 +73,7 @@ def preprocess_text(text, stopwords, lang='fr'):
 
 
 
-def collect_clean_texts_by_col(df, options, stopwords, col=None, lang_col="language_s"):
+def collect_clean_texts_by_col(df, options, stopwords, col="Global", lang_col="language_s"):
     """
     收集文本，支持：
     - col=None: 全局（只分语言）
@@ -92,7 +92,7 @@ def collect_clean_texts_by_col(df, options, stopwords, col=None, lang_col="langu
         df["_col_list"] = df[col].fillna("nan").apply(
             lambda x: [v.strip() for v in str(x).split(";") if v.strip()]
         )
-    elif col==None:
+    elif col=="Global":
         # 全局只有一个虚拟类别
         df["_col_list"] = [["Global"]] * len(df)
 
@@ -236,7 +236,7 @@ def generate_keyness_wc(df, options, time_slices, max_words=100, stopwords=None,
 
     # --- 全局词频 ---
     
-    text_groups = collect_clean_texts_by_col(df, options, stopwords, col=None)
+    text_groups = collect_clean_texts_by_col(df, options, stopwords, col="Global")
     for cat, langs in text_groups.items(): 
         texts_all = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
     global_freq = pd.Series(texts_all.split()).value_counts()
@@ -263,7 +263,7 @@ def generate_keyness_wc(df, options, time_slices, max_words=100, stopwords=None,
         
         # 时间段内clean_text
         df_slice = df[mask]
-        sliced_text_groups = collect_clean_texts_by_col(df_slice, options, stopwords, col=None)
+        sliced_text_groups = collect_clean_texts_by_col(df_slice, options, stopwords, col="Global")
         for cat, langs in sliced_text_groups.items(): 
             text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
 
