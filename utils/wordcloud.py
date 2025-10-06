@@ -139,7 +139,7 @@ def generate_wc(text, max_words, stopwords, title="Nuage de mots"):
 
 def generate_wc_param(df, options, group_by, wc_par_lang, include_nan, max_words, stopwords):
     #1. collect:
-    text_groups = collect_clean_texts_by_col(df, options, stopwords, col=group_by)
+    text_groups = collect_clean_texts_by_col(df, options,include_nan, stopwords, col=group_by)
     # text_groups={
     #   "cat1": {"en": "clean text", "fr": "..."},
     #   "cat2": {"en": "...", "fr": "..."}
@@ -200,10 +200,7 @@ def generate_wc_param(df, options, group_by, wc_par_lang, include_nan, max_words
                     else :
                         st.warning(f"texte invalie dans la catégorie {cat}-{lang}!")
 
-
     return wc
-    st.pyplot(wc)
-
 
 
 
