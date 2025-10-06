@@ -11,11 +11,11 @@ def missing_data_warning(df, col=None, map:dict=None, show_distribution=False):
     if show_distribution:
         dist = df[col].value_counts(normalize=True)* 100
         dist_str = ", ".join([f"{k}: {v:.1f}%" for k, v in dist.items()])
-        st.info(f"⚠️ Les {col_readable} sont manquants dans {df[col].isna().sum()}"
+        st.info(f"Les {col_readable} sont manquants dans {df[col].isna().sum()}"
             f" ({df[col].isna().sum()*100/len(df):.2f}%) articles!"    
             f" {dist_str}.")
     else :
-        st.info(f"⚠️ Les {col_readable} sont manquants dans {df[col].isna().sum()}"
+        st.info(f"Les {col_readable} sont manquants dans {df[col].isna().sum()}"
                 f" ({df[col].isna().sum()*100/len(df):.2f}%) articles!"
         )
 
@@ -66,58 +66,3 @@ def data_uploader(key="uploaded_df"):
     else:
         st.info("Aucun fichier importé. Veuillez chercher des articles ou charger un CSV.")
 
-
-
-
-# def csv_uploader(key="uploaded_df"):
-#     """
-#     通用 CSV 上传器:
-#     - 优先使用 session_state 中已有 df（来自搜索页或之前上传）
-#     - 用户可以随时上传新 CSV 覆盖
-#     """
-#     st.subheader("📂 Importer vos données")
-
-#     uploaded_file = st.file_uploader(
-#         "Charger / Changer un fichier CSV", 
-#         type=["csv"], 
-#         key=f"{key}_file"
-#     )
-
-#     # 如果用户主动上传 -> 覆盖 session_state
-#     if uploaded_file is not None:
-#         st.session_state[key] = pd.read_csv(uploaded_file)
-#         st.success(f"✅ CSV chargé manu: {len(st.session_state[key])} lignes au total.")
-
-#     # 优先显示已有数据（可能来自搜索页）
-#     if key in st.session_state and st.session_state[key] is not None:
-#         st.success(f"✅ CSV chargé : {len(st.session_state[key])} lignes au total.")
-#         st.dataframe(st.session_state[key].head())
-#     else:
-#         st.info("⚠ Aucun fichier importé. Veuillez chercher des articles ou charger un CSV.")
-
-
-
-
-# def csv_uploader(key="uploaded_df"):
-#     """
-#     通用 CSV 上传器:
-#     - 如果 session_state 中已有 df，则显示 ✅ 状态和数据头
-#     - 否则显示上传器
-#     - 用户可以随时重新上传，更新 session_state
-#     """
-#     st.subheader("📂 Importer vos données")
-
-#     uploaded_file = st.file_uploader(
-#         "Charger / Changer un fichier CSV", 
-#         type=["csv"], 
-#         key=f"{key}_file"
-#     )
-
-#     if uploaded_file is not None:#存在df
-#         st.session_state[key] = pd.read_csv(uploaded_file)
-
-#     #再次判断,不是直接upload储存的,从session中提取已有数据
-#     if key in st.session_state and st.session_state[key] is not None:
-#         st.success(f"✅ CSV chargé : {len(st.session_state[key])} lignes au total.")
-#         #apercu
-#         st.dataframe(st.session_state[key].head())  # 显示前几行

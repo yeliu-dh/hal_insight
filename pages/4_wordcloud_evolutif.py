@@ -22,7 +22,7 @@ from utils.wordcloud import generate_keyness_wc
 
 
 st.set_page_config(page_title="HAL insight", page_icon="🛸")
-st.title("☁️ Wordcloud ")
+st.title("☁️ Nuage de mots évolutif ")
 
 
 # -------------------------------
@@ -57,7 +57,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             "abstract_s":'résumés'}
     
     options = st.multiselect(
-    "Choisir le texte:",
+    "📑 Choisir le texte:",
     options=["keyword_s", "abstract_s"],
     default=["keyword_s","abstract_s"],  # 默认选择
     format_func=lambda x: WC_MAP[x]#只改变显示
@@ -96,17 +96,16 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         else:
             suggestion = "Tous les 3 ou 5 ans"
             default_index = 3
-        # st.write(f"🕒 Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois)")
 
         # ---- Radio 选择 ----
         granularity = st.radio(
-            "Sélectionnez la granularité temporelle :",
+            "🕒 Sélectionnez la granularité temporelle :",
             ["Mensuel","Trimestriel", "Annuel", "Tous les 3 ans","Tous les 5 ans"],
             index=default_index,
             horizontal=True,
         )
         
-        st.info(f"🕒 Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).\n\n"
+        st.info(f"Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).\n\n"
             f"Recommandation automatique : nuage de mots évolutif **{suggestion}**.")
         
         time_slices=create_time_slices(df, granularity="Annuel", step_year=1)
@@ -116,7 +115,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
    # ----------------- user stopwords ---------------
     user_stopwords = st_tags(
-        label="Ajouter des mots à ignorer",
+        label="🗷 Ajouter des mots à ignorer",
         text="Tapez un mot et appuyez sur Entrée",
         value=["management","gestion","marketing", "recherche",'research','study',"social","use","cas"],
         maxtags=50
@@ -166,7 +165,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     # --------------- max words ------------------
     max_words = st.number_input(
-        "Nombre de mots maximum affichés:", 
+        "⬆️ Nombre de mots maximum affichés:", 
         min_value=1, max_value=1000, value=100, step=1, key="max_words"
     )
     st.write("\n\n\n")

@@ -29,7 +29,7 @@ from utils.wordcloud import generate_wc
 
 
 st.set_page_config(page_title="HAL insight", page_icon="🛸")
-st.title("☁️ Wordcloud ")
+st.title("☁️ Nuage de mots global ")
 
 
 # -------------------------------
@@ -52,7 +52,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     df = st.session_state.uploaded_df.copy()
 
     # -----------------PART1 总体词云 ----------------------------------
-    st.subheader("Nuage de mots global")
     # param:
     # if "overall_wc" not in st.session_state:
     #     st.session_state["overall_wc"] = None
@@ -73,7 +72,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             "abstract_s":'résumés'}
     
     options = st.multiselect(
-    "Choisir le texte:",
+    "📑 Choisir le texte:",
     options=["keyword_s", "abstract_s"],
     default=["keyword_s","abstract_s"],  # 默认选择
     format_func=lambda x: WC_MAP[x]#只改变显示
@@ -85,7 +84,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     # ----------------- user stopwords ---------------
     user_stopwords = st_tags(
-        label="Ajouter des mots à ignorer",
+        label="🗷 Ajouter des mots à ignorer",
         text="Tapez un mot et appuyez sur Entrée",
         value=["management","gestion","marketing", "recherche",'research','study',"social","use","cas"],
         maxtags=50
@@ -133,7 +132,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     # --------------- max words ------------------
     max_words = st.number_input(
-        "Nombre de mots maximum affichés:", 
+        "⬆️ Nombre de mots maximum affichés:", 
         min_value=1, max_value=1000, value=100, step=1, key="max_words"
     )
 
