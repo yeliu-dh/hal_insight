@@ -86,7 +86,8 @@ def collect_clean_texts_by_col(df, options, stopwords, exclude_nan=False, col="G
     }
     """
     dict_texts = defaultdict(lambda: defaultdict(str))
-    if exclude_nan and col!='Global':# exclude_nan==t-> dropna()
+    if exclude_nan and col!='Global':
+        # exclude_nan==t-> dropna()，若global，不会筛选
         df=df.dropna(subset=[col])
         st.write(f'apres drop nan : {len(df)}')
 
@@ -168,6 +169,7 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
             f"<h3 style='text-align: center;'> {suptitle} </h3>",
             unsafe_allow_html=True
         )
+
         for cat, langs in text_groups.items(): 
             combined_text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
             
@@ -308,20 +310,25 @@ def compute_keyness(freq_slice, global_freq, method="llr"):
     return keyness_scores
 
 
-def generate_keyness_wc(df, options, time_slices, max_words=100, stopwords=None, method="llr"):
+def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_words=100, stopwords=None, method="llr"):
     """
     根据时间片生成 keyness 演变词云
     """
+    #
     df = df.copy()
     df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
-    df["year"] = df["submittedDate_s"].dt.year
+    df["year"] = df["submittedDate_s"].dt.year #筛选用
+
 
     # --- 全局词频 ---
+    text_groups = collect_clean_texts_by_col(df, options, stopwords, exclude_nan, col=group_by)
     
-    text_groups = collect_clean_texts_by_col(df, options, stopwords, col="Global")
+    # text_groups = collect_clean_texts_by_col(df, options, stopwords, col="Global")
     for cat, langs in text_groups.items(): 
         texts_all = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
     global_freq = pd.Series(texts_all.split()).value_counts()
+    
+    # if group_by=='Global':
 
     # --- 绘图布局 ---
     if len(time_slices)>=3:    
@@ -355,7 +362,7 @@ def generate_keyness_wc(df, options, time_slices, max_words=100, stopwords=None,
         ax.axis("off")
 
         if text:
-            freq_slice = pd.Series(text.split()).value_counts()
+            freq_slice = pd.Series(text.split()).value_counts() # 局部词频
             keyness = compute_keyness(freq_slice, global_freq, method=method)
 
             wc = WordCloud(
@@ -384,6 +391,8 @@ def generate_keyness_wc(df, options, time_slices, max_words=100, stopwords=None,
 
     fig.suptitle(f"Évolution du nuage de mots ({start_label} ~ {end_label})", fontsize=16)
     plt.tight_layout(rect=[0, 0, 1, 0.96])
+
+
     return fig
 
 

@@ -171,6 +171,29 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     # st.write("\n\n\n")
     st.markdown("<br>", unsafe_allow_html=True)
 
+    
+    # ------------ctg-------------------
+    #radio多选,checkbox单选
+    COL_MAP = {
+        "Global": "global",
+        "Axe": "par axe",
+        "Cl. FNEGE": "par classe FNEGE"
+    }
+    group_by = st.radio(
+        "☐ Group :",
+        ["Global", "Axe","Cl. FNEGE"], 
+        index=0,
+        format_func=lambda x: COL_MAP.get(x, x), 
+        horizontal=True
+    )
+    st.markdown("<br>", unsafe_allow_html=True)
+
+
+
+    #--------------exclure nan--------------
+    exclude_nan = st.checkbox("Exclure les valeurs Nan? ", value=False, key="nan")
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.divider()
 
     # ---------------WC-------------------------
     # 按钮生成+储存
@@ -178,7 +201,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     with cols[1]:   
         button=st.button("Générer")  
     if button:    
-        with st.spinner("Générer...")
-        evolutif_wc= generate_keyness_wc(df, options, time_slices, max_words=100, stopwords=stopwords, method="llr")
-        # evolutif_wc=generate_keyness_wc(df, options, time_slices, max_words=max_words, stopwords=stopwords, method="llr")
-        st.pyplot(evolutif_wc)
+        with st.spinner("Générer..."):
+            evolutif_wc= generate_keyness_wc(df, options, time_slices, max_words=100, stopwords=stopwords, method="llr")
+            # evolutif_wc=generate_keyness_wc(df, options, time_slices, max_words=max_words, stopwords=stopwords, method="llr")
+            st.pyplot(evolutif_wc)
