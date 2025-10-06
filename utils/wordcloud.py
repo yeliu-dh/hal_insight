@@ -88,14 +88,14 @@ def collect_clean_texts_by_col(df, options, stopwords, include_nan=False, col="G
     dict_texts = defaultdict(lambda: defaultdict(str))
     if include_nan and col!='Global':# t-> dropna()
         df=df.dropna(subset=[col])
-    st.write(f'apres drop nan : {len(df)}')
+        st.write(f'apres drop nan : {len(df)}')
+
 
     if col and col in df.columns:
         # 处理多分类列:若全部dropna，填充也不会有“nan”
         df["_col_list"] = df[col].fillna("nan").apply(
             lambda x: [v.strip() for v in str(x).split(";") if v.strip()]
-        )
-        
+        )        
     elif col=="Global":
         # 全局只有一个虚拟类别
         df["_col_list"] = [["Global"]] * len(df)
