@@ -244,12 +244,12 @@ def generate_keyness_wc(df, options, time_slices, max_words=100, stopwords=None,
     # --- 绘图布局 ---
     if len(time_slices)>=3:    
         n_cols = 3
-        n_rows = math.ceil(len(time_slices) / n_cols)
-        fig, axes = plt.subplots(n_rows, n_cols, figsize=(n_cols * 5, n_rows * 5))
-        axes = np.array(axes).reshape(n_rows, n_cols)  # 保证二维结构
-
     else:
         n_cols=len(time_slices)
+
+    n_rows = math.ceil(len(time_slices) / n_cols)
+    fig, axes = plt.subplots(n_rows, n_cols, figsize=(n_cols * 5, n_rows * 5))
+    axes = np.array(axes).reshape(n_rows, n_cols)  # 保证二维结构
 
     for idx, t in enumerate(time_slices):
         # 时间切片可为 (start_date, end_date) 或 (start_year, end_year)

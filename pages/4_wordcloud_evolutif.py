@@ -65,7 +65,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     for col in options:
         missing_data_warning(df, col=col, map=WC_MAP)
     # st.write("\n\n\n")
-    st.markdown("<br><br><br>", unsafe_allow_html=True)
+    st.markdown("<br><br>", unsafe_allow_html=True)
 
 
 
@@ -111,7 +111,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         
         time_slices=create_time_slices(df, granularity="Annuel", step_year=1)
     # st.write("\n\n\n")
-    st.markdown("<br><br><br>", unsafe_allow_html=True)
+    st.markdown("<br><br>", unsafe_allow_html=True)
 
 
    # ----------------- user stopwords ---------------
@@ -121,7 +121,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         value=["management","gestion","marketing", "recherche",'research','study',"social","use","cas"],
         maxtags=50
     )        
-    st.markdown("<br><br><br>", unsafe_allow_html=True)
+    st.markdown("<br><br>", unsafe_allow_html=True)
     # st.write("\n\n\n")
 
 
@@ -171,7 +171,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         min_value=1, max_value=1000, value=100, step=1, key="max_words"
     )
     # st.write("\n\n\n")
-    st.markdown("<br><br><br>", unsafe_allow_html=True)
+    st.markdown("<br><br>", unsafe_allow_html=True)
 
 
 
