@@ -73,7 +73,7 @@ def preprocess_text(text, stopwords, lang='fr'):
 
 
 
-def collect_clean_texts_by_col(df, options, stopwords, include_nan=False, col="Global", lang_col="language_s"):
+def collect_clean_texts_by_col(df, options, stopwords, exclude_nan=False, col="Global", lang_col="language_s"):
     """
     收集文本，支持：
     - col=None: 全局（只分语言）
@@ -86,10 +86,9 @@ def collect_clean_texts_by_col(df, options, stopwords, include_nan=False, col="G
     }
     """
     dict_texts = defaultdict(lambda: defaultdict(str))
-    if include_nan and col!='Global':# t-> dropna()
+    if exclude_nan and col!='Global':# exclude_nan==t-> dropna()
         df=df.dropna(subset=[col])
         st.write(f'apres drop nan : {len(df)}')
-
 
     if col and col in df.columns:
         # 处理多分类列:若全部dropna，填充也不会有“nan”
@@ -104,7 +103,6 @@ def collect_clean_texts_by_col(df, options, stopwords, include_nan=False, col="G
     for option_col in options:
         if option_col not in df.columns:
             continue
-
         for _, row in df.iterrows():
             lang = str(row.get(lang_col, "fr")).lower()  #没有则默认法语
             text = str(row[option_col])
@@ -137,9 +135,9 @@ def generate_wc(text, max_words, stopwords, title="Nuage de mots"):
 
 
 
-def generate_wc_param(df, options, group_by, wc_par_lang, include_nan, max_words, stopwords):
+def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words, stopwords):
     #1. collect:
-    text_groups=collect_clean_texts_by_col(df, options, stopwords, include_nan, col=group_by, lang_col="language_s")
+    text_groups=collect_clean_texts_by_col(df, options, stopwords, exclude_nan, col=group_by, lang_col="language_s")
     # text_groups={
     #   "cat1": {"en": "clean text", "fr": "..."},
     #   "cat2": {"en": "...", "fr": "..."}
