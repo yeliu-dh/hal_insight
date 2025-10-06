@@ -12,14 +12,12 @@ def missing_data_warning(df, col=None, map:dict=None, show_distribution=False):
         dist = df[col].value_counts(normalize=True)* 100
         dist_str = ", ".join([f"{k}: {v:.1f}%" for k, v in dist.items()])
         st.info(f"Les {col_readable} sont manquants dans {df[col].isna().sum()}"
-            f" ({df[col].isna().sum()*100/len(df):.2f}%) articles!"    
+            f" ({df[col].isna().sum()*100/len(df):.2f}%) articles! \n\n"    
             f" {dist_str}.")
     else :
         st.info(f"Les {col_readable} sont manquants dans {df[col].isna().sum()}"
                 f" ({df[col].isna().sum()*100/len(df):.2f}%) articles!"
         )
-
-
     return
 
 def data_uploader(key="uploaded_df"):

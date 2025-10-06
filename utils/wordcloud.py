@@ -73,7 +73,7 @@ def preprocess_text(text, stopwords, lang='fr'):
 
 
 
-def collect_clean_texts_by_col(df, options, stopwords, col="Global", lang_col="language_s"):
+def collect_clean_texts_by_col(df, options, include_nan=False, stopwords, col="Global", lang_col="language_s"):
     """
     收集文本，支持：
     - col=None: 全局（只分语言）
@@ -86,12 +86,16 @@ def collect_clean_texts_by_col(df, options, stopwords, col="Global", lang_col="l
     }
     """
     dict_texts = defaultdict(lambda: defaultdict(str))
+    if include_nan and col!='Global':# t-> dropna()
+        df=df.dropna(subset=[col])
+    st.write(f'apres drop nan : {len(df)}')
 
     if col and col in df.columns:
-        # 处理多分类列
+        # 处理多分类列:若全部dropna，填充也不会有“nan”
         df["_col_list"] = df[col].fillna("nan").apply(
             lambda x: [v.strip() for v in str(x).split(";") if v.strip()]
         )
+        
     elif col=="Global":
         # 全局只有一个虚拟类别
         df["_col_list"] = [["Global"]] * len(df)
@@ -130,6 +134,76 @@ def generate_wc(text, max_words, stopwords, title="Nuage de mots"):
     ax.axis("off")  # 去掉坐标轴
     ax.set_title(title, fontsize=16)
     return fig
+
+
+
+def generate_wc_param(df, options, group_by, wc_par_lang, include_nan, max_words, stopwords):
+    #1. collect:
+    text_groups = collect_clean_texts_by_col(df, options, stopwords, col=group_by)
+    # text_groups={
+    #   "cat1": {"en": "clean text", "fr": "..."},
+    #   "cat2": {"en": "...", "fr": "..."}
+    # }
+
+    #2.a title
+    COL_MAP = {
+        "Global": "global",
+        "Axe": "par axe",
+        "Cl. FNEGE": "par classe FNEGE"
+    }    
+    group_by_readable=COL_MAP.get(group_by, group_by)
+    # 2.b date
+    if "submittedDate_s" in df.columns:
+        df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
+        latest_date = df["submittedDate_s"].max()
+        latest_y = latest_date.strftime("%Y") if pd.notnull(latest_date) else "Aucune date valide"
+
+        earliest_date=df["submittedDate_s"].min()
+        earliest_y = earliest_date.strftime("%Y") if pd.notnull(latest_date) else "Aucune date valide"
+        period_y=f"{earliest_y}~{latest_y}"#图标题
+
+
+    # wc
+    if not wc_par_lang:  # 不分语言 → 合并 EN + FR
+        title=f"Nuage de mots {group_by_readable} entre {period_y}"
+        for cat, langs in text_groups.items(): 
+            combined_text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
+            
+            if group_by=="Global":
+                title=" "
+            else:
+                title=f"{group_by} {cat}"
+
+            if combined_text:
+                wc = generate_wc(
+                    langs.get("en", "") + " " + langs.get("fr", ""),  # lang 随便传一个
+                    max_words,
+                    stopwords,
+                    title=title
+                )
+
+    else:
+        # 分语言 → EN/FR 左右列显示，每个类别单独一行
+        title=f"Nuage de mots {group_by_readable} par langue entre {period_y}"
+        for cat, langs in text_groups.items():
+            cols = st.columns(2)
+            for i, lang in enumerate(langs.keys()):
+                with cols[i]:
+                    if group_by=="Global":
+                        title=lang
+                    else:
+                        title=f"{group_by} {cat}-{lang}"
+                    
+                    text = langs.get(lang, "").strip()
+                    if text:
+                        wc = generate_wc(text, max_words, stopwords, title=title)
+                    else :
+                        st.warning(f"texte invalie dans la catégorie {cat}-{lang}!")
+
+
+    return wc
+    st.pyplot(wc)
+
 
 
 

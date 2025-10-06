@@ -18,7 +18,7 @@ import simplemma
 from utils.upload import data_uploader, missing_data_warning
 from utils.wordcloud import collect_clean_texts_by_col
 from utils.wordcloud import preprocess_text
-from utils.wordcloud import generate_wc
+from utils.wordcloud import generate_wc, generate_wc_param
 
 # #------------CACHE--------------
 # @st.cache_resource
@@ -58,14 +58,16 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     
     #--------period in years--------------------
     df = st.session_state.uploaded_df.copy()
-    if "submittedDate_s" in df.columns:
-        df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
-        latest_date = df["submittedDate_s"].max()
-        latest_y = latest_date.strftime("%Y") if pd.notnull(latest_date) else "Aucune date valide"
+    ## move to generate_wc_param:
 
-        earliest_date=df["submittedDate_s"].min()
-        earliest_y = earliest_date.strftime("%Y") if pd.notnull(latest_date) else "Aucune date valide"
-        period_y=f"{earliest_y}~{latest_y}"#图标题
+    # if "submittedDate_s" in df.columns:
+    #     df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
+    #     latest_date = df["submittedDate_s"].max()
+    #     latest_y = latest_date.strftime("%Y") if pd.notnull(latest_date) else "Aucune date valide"
+
+    #     earliest_date=df["submittedDate_s"].min()
+    #     earliest_y = earliest_date.strftime("%Y") if pd.notnull(latest_date) else "Aucune date valide"
+    #     period_y=f"{earliest_y}~{latest_y}"#图标题
 
 
     # ---------------文本范围-------------------
@@ -80,9 +82,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     )
 
     for col in options:
-        missing_data_warning(df, col=col, map=WC_MAP)
-   
+        missing_data_warning(df, col=col, map=WC_MAP,show_distribution=True)
     st.markdown("<br>", unsafe_allow_html=True)#不容易被 Markdown 渲染压缩掉
+
 
     # ----------------- user stopwords ---------------
     user_stopwords = st_tags(
@@ -149,7 +151,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         "Cl. FNEGE": "par classe FNEGE"
     }
     group_by = st.radio(
-        "☐ Afficher :",
+        "☐ Group :",
         ["Global", "Axe","Cl. FNEGE"], 
         index=0,
         format_func=lambda x: COL_MAP.get(x, x), 
@@ -160,22 +162,20 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     wc_par_lang = st.checkbox("Afficher par langue ?", value=False, key="wc_lang")#key用于储存在session state中
     missing_data_warning(df, col="language_s", map={"language_s":'langue'}, show_distribution=True)
 
-
+    #--------------inclure nan--------------
+    include_nan = st.checkbox("Inclure les valeurs Nan? ", value=False, key="nan")
 
 
     #------------------traiter les textes-------------------
-    if group_by == "Global":
-        text_groups = collect_clean_texts_by_col(df, options, stopwords, col="Global")
-    elif group_by == "Axe":
-        text_groups = collect_clean_texts_by_col(df, options,stopwords, col="Axe")
-    elif group_by == "Cl. FNEGE":
-        text_groups = collect_clean_texts_by_col(df, options,stopwords, col="Cl. FNEGE")
-    # text_groups={
-    #   "cat1": {"en": "clean text", "fr": "..."},
-    #   "cat2": {"en": "...", "fr": "..."}
-    # }
+    # if group_by == "Global":
+    #     text_groups = collect_clean_texts_by_col(df, options, stopwords, col="Global")
+    # elif group_by == "Axe":
+    #     text_groups = collect_clean_texts_by_col(df, options,stopwords, col="Axe")
+    # elif group_by == "Cl. FNEGE":
+    #     text_groups = collect_clean_texts_by_col(df, options,stopwords, col="Cl. FNEGE")
+  
+    # group_by_readable=COL_MAP.get(group_by, group_by)
 
-    group_by_readable=COL_MAP.get(group_by, group_by)
 
     # 按钮生成+储存
     cols=st.columns([4,1])
@@ -184,180 +184,42 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     if overall_button:
         with st.spinner("Générer..."):
-            if not wc_par_lang:  # 不分语言 → 合并 EN + FR
-                st.subheader(f"Nuage de mots {group_by_readable} entre {period_y}")
+            wc=generate_wc_param()
+            st.pyplot(wc)
 
-                for cat, langs in text_groups.items(): 
-                    combined_text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
+            # if not wc_par_lang:  # 不分语言 → 合并 EN + FR
+            #     title=f"Nuage de mots {group_by_readable} entre {period_y}"
+            #     for cat, langs in text_groups.items(): 
+            #         combined_text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
                     
-                    if group_by=="Global":
-                        title=" "
-                    else:
-                        title=f"{group_by} {cat}"
+            #         if group_by=="Global":
+            #             title=" "
+            #         else:
+            #             title=f"{group_by} {cat}"
 
-                    if combined_text:
-                        global_wc = generate_wc(
-                            langs.get("en", "") + " " + langs.get("fr", ""),  # lang 随便传一个
-                            max_words,
-                            stopwords,
-                            title=title
-                        )
-                        st.pyplot(global_wc)
-            else:
-                # 分语言 → EN/FR 左右列显示，每个类别单独一行
-                st.subheader(f"Nuage de mots {group_by_readable} par langue entre {period_y}")
-                for cat, langs in text_groups.items():
-                    cols = st.columns(2)
-                    for i, lang in enumerate(langs.keys()):
-                        with cols[i]:
-                            if group_by=="Global":
-                                title=lang
-                            else:
-                                title=f"{group_by} {cat}-{lang}"
+            #         if combined_text:
+            #             global_wc = generate_wc(
+            #                 langs.get("en", "") + " " + langs.get("fr", ""),  # lang 随便传一个
+            #                 max_words,
+            #                 stopwords,
+            #                 title=title
+            #             )
+            #             st.pyplot(global_wc)
+            # else:
+            #     # 分语言 → EN/FR 左右列显示，每个类别单独一行
+            #     st.subheader(f"Nuage de mots {group_by_readable} par langue entre {period_y}")
+            #     for cat, langs in text_groups.items():
+            #         cols = st.columns(2)
+            #         for i, lang in enumerate(langs.keys()):
+            #             with cols[i]:
+            #                 if group_by=="Global":
+            #                     title=lang
+            #                 else:
+            #                     title=f"{group_by} {cat}-{lang}"
                             
-                            text = langs.get(lang, "").strip()
-                            if text:
-                                wc = generate_wc(text, max_words, stopwords, title=title)
-                                st.pyplot(wc)
-                            else :
-                                st.warning(f"texte invalie dans la catégorie {cat}-{lang}!")
-
-
-
-    # # # ------------------PART2 演变词云 ------------------------------------------------------------------------------------------------
-    # # ---------------文本范围-------------------
-    # option = st.multiselect(
-    # "Choisir la granularité temporelle",
-    # ["keywords", "abstract"],
-    # default=["keywords"]  # 默认选 keywords，你可以改成 []
-    # )
-
-    # try:
-    #     texts = []
-    #     if "keywords" in option and "keyword_s" in df.columns:
-    #         st.info(f"⚠️ Les mots clés sont manquants dans {df.keyword_s.isna().sum()} "
-    #                 f"({df.keyword_s.isna().sum()*100/len(df):.2f}%) articles!")
-    #         texts.append(" ".join(df["keyword_s"].dropna().astype(str)).lower())
-
-    #     if "abstract" in option and "abstract_s" in df.columns:
-    #         st.info(f"⚠️ Les résumés sont manquants dans {df.abstract_s.isna().sum()} "
-    #                 f"({df.abstract_s.isna().sum()*100/len(df):.2f}%) articles!")
-    #         texts.append(" ".join(df["abstract_s"].dropna().astype(str)).lower())
-
-    #     if texts:
-    #         text = " ".join(texts)   # 拼接两个来源的文本
-    #     else:
-    #         st.warning("⚠️ Aucune colonne sélectionnée ou inexistante dans le CSV.")
-    #         text = ""
-
-    # except Exception as e:
-    #     st.error(f"⚠️ {e}")
-
-
-    # # ---------------- 用户输入 ----------------
-    # col1, col2, col3 = st.columns(3)
-    # with col1:
-    #     start_year = st.number_input("Année de début", min_value=1900, max_value=2100, value=2010)
-    # with col2:
-    #     end_year = st.number_input("Année de fin", min_value=1900, max_value=2100, value=2020)
-    # with col3:
-    #     step_year = st.number_input("Intervalle de temps", min_value=1, max_value=20, value=3)
-
-    # # ---------------- 时间段切片 ----------------
-    # time_slices = [(y, min(y + step_year - 1, end_year)) for y in range(start_year, end_year+1, step_year)]
-
-    # # --------------- max words ------------------
-    # max_words = st.number_input(
-    #     "max_words:", 
-    #     min_value=1, max_value=1000, value=100, step=1, key="max_words"
-    # )
-
-    # # ----------------- stopwords ---------------
-    # user_stopwords = st_tags(
-    #     label="Ajouter des mots à ignorer",
-    #     text="Tapez un mot et appuyez sur Entrée",
-    #     value=[],
-    #     maxtags=50
-    # )
-    # french_stopwords = {"et", "de", "la", "le", "les","l","l'", "des", "un", "une", 
-    #                     "du", "en", "au","d","dans","à","par","pour","sur","sont","aux","au",
-    #                     "leur","leurs","qui","ou","il","elle","ils","elles","je","tu","vous","nous","se",
-    #                     "et","ce",'qui','que',"est","qu","avec","ont","ces",'celle','ceux','celles',
-    #                     'comme','afin','ne',"son",'ses'}
-    
-    
-    # stopwords = set(STOPWORDS).union(french_stopwords).union(user_stopwords)
-
-
-    # # ---------------- 生成 keyness 词云 ----------------
-
-    # # 按钮生成+储存
-    # evolutif_button=st.button("Générer")
-    # if evolutif_button:
-    #     st.session_state["evolutif_wc"] = (generate_wc(text, max_words, stopwords, title="Nuage de mots global"))
-
-    # # 渲染
-    # if st.session_state["evolutif_wc"] is not None:
-    #     st.pyplot(st.session_state["evolutif_wc"])
-
-
-    # if st.button("Générer"):
-    #     st.session_state["evolutif_wc"] = generate_keyness_wc(
-    #     df,
-    #     time_slices,
-    #     max_words=max_words,
-    #     stopwords=stopwords,
-    #     method="llr"  # 或 "chi2"
-    # )
-
-    # if st.session_state["evolutif_wc"] is not None:
-    #     st.pyplot(st.session_state["evolutif_wc"])
-
-
-    # # # 这里示例用简单频率代替 keyness
-    # # # 如果需要严格 keyness，可用 log-likelihood 或 chi-square
-
-    # # texts_all = " ".join(df["keyword_s"].dropna().astype(str).str.lower())
-    # # global_freq = pd.Series(texts_all.split()).value_counts()
-
-    # # n_cols = 3
-    # # n_rows = math.ceil(len(time_slices)/n_cols)
-    # # fig, axes = plt.subplots(n_rows, n_cols, figsize=(n_cols*5, n_rows*5))
-
-    # # for idx, (y_start, y_end) in enumerate(time_slices):
-    # #     df_slice = df[(df["year"] >= y_start) & (df["year"] <= y_end)]
-    # #     if df_slice.empty:
-    # #         text = ""
-    # #     else:
-    # #         text = " ".join(df_slice["keyword_s"].dropna().astype(str).str.lower())
-
-    # #     # 简单 keyness：词频 / 全局词频
-    # #     freq_slice = pd.Series(text.split()).value_counts()
-    # #     keyness = (freq_slice / global_freq).fillna(0).to_dict()
-
-    # #     wc = WordCloud(width=400, height=400, background_color="white").generate_from_frequencies(keyness)
-
-    # #     row, col = divmod(idx, n_cols)
-    # #     ax = axes[row, col] if n_rows>1 else axes[col]
-    # #     ax.imshow(wc, interpolation="bilinear")
-    # #     ax.set_title(f"{y_start}-{y_end}", fontsize=12)
-    # #     ax.axis("off")
-
-    # # # 删除多余子图
-    # # for j in range(idx+1, n_rows*n_cols):
-    # #     row, col = divmod(j, n_cols)
-    # #     ax = axes[row, col] if n_rows>1 else axes[col]
-    # #     ax.axis("off")
-
-    # # st.pyplot(fig)
-
-
-
-
-
-
-
-
-
-
-
+            #                 text = langs.get(lang, "").strip()
+            #                 if text:
+            #                     wc = generate_wc(text, max_words, stopwords, title=title)
+            #                     st.pyplot(wc)
+            #                 else :
+            #                     st.warning(f"texte invalie dans la catégorie {cat}-{lang}!")

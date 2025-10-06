@@ -176,8 +176,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     # 按钮生成+储存
     cols=st.columns([4,1])
     with cols[1]:   
-        button=st.button("Générer")      
+        button=st.button("Générer")  
     if button:    
+        with st.spinner("Générer...")
         evolutif_wc= generate_keyness_wc(df, options, time_slices, max_words=100, stopwords=stopwords, method="llr")
         # evolutif_wc=generate_keyness_wc(df, options, time_slices, max_words=max_words, stopwords=stopwords, method="llr")
         st.pyplot(evolutif_wc)
