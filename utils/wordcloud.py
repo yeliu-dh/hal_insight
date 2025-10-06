@@ -179,7 +179,7 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
                     stopwords,
                     title=title
                 )
-            fig.suptitle(suptitle, fontsize=16, ha="center")
+            fig.suptitle(suptitle, fontsize=10, ha="center")
             st.pyplot(fig)
 
 
