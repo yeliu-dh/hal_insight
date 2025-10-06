@@ -65,7 +65,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     for col in options:
         missing_data_warning(df, col=col, map=WC_MAP)
     # st.write("\n\n\n")
-    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)#不容易被 Markdown 渲染压缩掉
 
 
     # ----------------时间颗粒----------------
@@ -108,8 +108,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         
 
         time_slices=create_time_slices(df, granularity=granularity)
-    # st.write("\n\n\n")
-    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
+
 
 
    # ----------------- user stopwords ---------------
@@ -169,8 +169,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         min_value=1, max_value=1000, value=100, step=1, key="max_words"
     )
     # st.write("\n\n\n")
-    st.markdown("<br><br>", unsafe_allow_html=True)
-
+    st.markdown("<br>", unsafe_allow_html=True)
 
 
     # ---------------WC-------------------------

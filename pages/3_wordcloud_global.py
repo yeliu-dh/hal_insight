@@ -65,8 +65,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
         earliest_date=df["submittedDate_s"].min()
         earliest_y = earliest_date.strftime("%Y") if pd.notnull(latest_date) else "Aucune date valide"
-        period_y=f"{earliest_y}~{latest_y}"
- 
+        period_y=f"{earliest_y}~{latest_y}"#图标题
+
+
     # ---------------文本范围-------------------
     WC_MAP={"keyword_s":"mots clés",
             "abstract_s":'résumés'}
@@ -81,6 +82,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     for col in options:
         missing_data_warning(df, col=col, map=WC_MAP)
    
+    st.markdown("<br>", unsafe_allow_html=True)#不容易被 Markdown 渲染压缩掉
 
     # ----------------- user stopwords ---------------
     user_stopwords = st_tags(
@@ -89,6 +91,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         value=["management","gestion","marketing", "recherche",'research','study',"social","use","cas"],
         maxtags=50
     )
+    st.markdown("<br>", unsafe_allow_html=True)
 
     #-----------nltk stopwords----------------
     stop_en=['won', 'an', 'having', "mightn't", 'the', "hasn't", 'more', 'in', 'only', 'under',
@@ -135,6 +138,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         "⬆️ Nombre de mots maximum affichés:", 
         min_value=1, max_value=1000, value=100, step=1, key="max_words"
     )
+    st.markdown("<br>", unsafe_allow_html=True)
 
 
     # ------------ctg-------------------
@@ -151,6 +155,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         format_func=lambda x: COL_MAP.get(x, x), 
         horizontal=True
     )
+
     #-----------langue----------------------
     wc_par_lang = st.checkbox("Afficher par langue ?", value=False, key="wc_lang")#key用于储存在session state中
     missing_data_warning(df, col="language_s", map={"language_s":'langue'}, show_distribution=True)
