@@ -73,7 +73,7 @@ def preprocess_text(text, stopwords, lang='fr'):
 
 
 
-def collect_clean_texts_by_col(df, options, include_nan=False, stopwords, col="Global", lang_col="language_s"):
+def collect_clean_texts_by_col(df, options, stopwords, include_nan=False, col="Global", lang_col="language_s"):
     """
     收集文本，支持：
     - col=None: 全局（只分语言）
@@ -139,7 +139,7 @@ def generate_wc(text, max_words, stopwords, title="Nuage de mots"):
 
 def generate_wc_param(df, options, group_by, wc_par_lang, include_nan, max_words, stopwords):
     #1. collect:
-    text_groups = collect_clean_texts_by_col(df, options,include_nan, stopwords, col=group_by)
+    text_groups=collect_clean_texts_by_col(df, options, stopwords, include_nan, col=group_by, lang_col="language_s")
     # text_groups={
     #   "cat1": {"en": "clean text", "fr": "..."},
     #   "cat2": {"en": "...", "fr": "..."}

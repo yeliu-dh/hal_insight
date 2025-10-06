@@ -16,9 +16,9 @@ import simplemma
 
 #my utils:分行导入，不然容易失败
 from utils.upload import data_uploader, missing_data_warning
-# from utils.wordcloud import preprocess_text
-# from utils.wordcloud import collect_clean_texts_by_col
-# from utils.wordcloud import generate_wc
+from utils.wordcloud import preprocess_text
+from utils.wordcloud import collect_clean_texts_by_col
+from utils.wordcloud import generate_wc
 from utils.wordcloud import generate_wc_param
 
 # #------------CACHE--------------
