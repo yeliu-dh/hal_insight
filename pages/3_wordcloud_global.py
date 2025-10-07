@@ -152,7 +152,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         "Cl. FNEGE": "par classe FNEGE"
     }
     group_by = st.radio(
-        "💾G roup :",
+        "💾 Group :",
         ["Global", "Axe","Cl. FNEGE"], 
         index=0,
         format_func=lambda x: COL_MAP.get(x, x), 

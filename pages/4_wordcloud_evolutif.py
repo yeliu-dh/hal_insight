@@ -103,8 +103,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             index=default_index,
             horizontal=True,
         )        
-        st.info(f"Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).\n\n"
-            f"Granularité recommandée: **{suggestion}**.")
+        st.info(f"Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois). Granularité recommandée: **{suggestion}**.")
         
 
         time_slices=create_time_slices(df, granularity=granularity)
@@ -178,7 +177,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         "Cl. FNEGE": "par classe FNEGE"
     }
     group_by = st.radio(
-        "☐ Group :",
+        "💾 Group :",
         ["Global", "Axe","Cl. FNEGE"], 
         index=0,
         format_func=lambda x: COL_MAP.get(x, x), 
@@ -187,7 +186,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     st.markdown("<br>", unsafe_allow_html=True)
 
     #--------------exclure nan--------------
-    exclude_nan = st.checkbox("Exclure les valeurs Nan? ", value=False, key="nan")
+    exclude_nan = st.checkbox("Exclure les valeurs Nan? ", value=False, key="nan")# 默认保留nan
     st.markdown("<br>", unsafe_allow_html=True)
     st.divider()
 
@@ -198,6 +197,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         button=st.button("Générer")  
     if button:    
         with st.spinner("Générer..."):
-            evolutif_wc= generate_keyness_wc(df, options, time_slices, max_words=100, stopwords=stopwords, method="llr")
+            evolutif_wc= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_words=max_words, stopwords=stopwords, method="llr")
+
+            # evolutif_wc= generate_keyness_wc(df, options, time_slices, max_words=100, stopwords=stopwords, method="llr")
             # evolutif_wc=generate_keyness_wc(df, options, time_slices, max_words=max_words, stopwords=stopwords, method="llr")
             st.pyplot(evolutif_wc)
