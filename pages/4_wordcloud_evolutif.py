@@ -168,9 +168,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         "⬆️ Nombre de mots maximum affichés:", 
         min_value=1, max_value=1000, value=100, step=1, key="max_words"
     )
-    # st.write("\n\n\n")
     st.markdown("<br>", unsafe_allow_html=True)
-
     
     # ------------ctg-------------------
     #radio多选,checkbox单选
@@ -187,8 +185,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         horizontal=True
     )
     st.markdown("<br>", unsafe_allow_html=True)
-
-
 
     #--------------exclure nan--------------
     exclude_nan = st.checkbox("Exclure les valeurs Nan? ", value=False, key="nan")

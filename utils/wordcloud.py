@@ -267,7 +267,9 @@ def create_time_slices(df, granularity):
 
     # else:  # 默认年度
     #     time_slices = [(y, y) for y in range(start_year, end_year + 1)]
-    st.info(f"Granularité {granularity}:{time_slices}")
+    # st.info(f"Granularité {granularity}:{time_slices}")
+
+    
     return time_slices
 
 
