@@ -21,7 +21,7 @@ from utils.wordcloud import generate_keyness_wc
 
 
 
-st.set_page_config(page_title="HAL insight", page_icon="🛸")
+st.set_page_config(page_title="HAL insight", page_icon="🛸",layout="wide")
 st.title("☁️ Nuage de mots évolutif ")
 
 
@@ -198,7 +198,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     if button:    
         with st.spinner("Générer..."):
             evolutif_wc= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_words=max_words, stopwords=stopwords, method="llr")
-
             # evolutif_wc= generate_keyness_wc(df, options, time_slices, max_words=100, stopwords=stopwords, method="llr")
             # evolutif_wc=generate_keyness_wc(df, options, time_slices, max_words=max_words, stopwords=stopwords, method="llr")
             st.pyplot(evolutif_wc)

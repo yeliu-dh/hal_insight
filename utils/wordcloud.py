@@ -323,8 +323,7 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_wor
 
 
     # --- 全局词频 ---
-    text_groups = collect_clean_texts_by_col(df, options, stopwords, exclude_nan, col=group_by)
-    
+    text_groups = collect_clean_texts_by_col(df, options, stopwords, exclude_nan, col=group_by)    
     # text_groups = collect_clean_texts_by_col(df, options, stopwords, col="Global")
     for cat, langs in text_groups.items(): 
         texts_all = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
@@ -333,8 +332,8 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_wor
     # if group_by=='Global':
 
     # --- 绘图布局 ---
-    if len(time_slices)>=3:    
-        n_cols = 3
+    if len(time_slices)>=5:    
+        n_cols = 5
     else:
         n_cols=len(time_slices)
 
@@ -393,6 +392,8 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_wor
 
     fig.suptitle(f"Évolution du nuage de mots ({start_label} ~ {end_label})", fontsize=16)
     plt.tight_layout(rect=[0, 0, 1, 0.96])
+
+    # if group_by=="Axe":
 
 
     return fig
