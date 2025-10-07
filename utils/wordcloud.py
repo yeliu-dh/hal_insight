@@ -106,7 +106,7 @@ def collect_clean_texts_by_col(df, options, stopwords, exclude_nan=False, col="G
             continue
         for _, row in df.iterrows():
             lang = str(row.get(lang_col, "fr")).lower()  #没有则默认法语
-            text = str(row[option_col])
+            text = str(row[option_col])#是否忽略无文本的值？
             text = preprocess_text(text, stopwords, lang=lang)
             
             for cat in row["_col_list"]:
@@ -314,7 +314,7 @@ def compute_keyness(freq_slice, global_freq, method="llr"):
 
 def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_words=100, stopwords=None, method="llr"):
     """
-    根据时间片生成 keyness 演变词云
+    根据时间片生成 keyness 演变词云+小图
     """
     #
     df = df.copy()
@@ -332,8 +332,8 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_wor
     # if group_by=='Global':
 
     # --- 绘图布局 ---
-    if len(time_slices)>=5:    
-        n_cols = 5
+    if len(time_slices)>=4:    
+        n_cols = 4 #按季度可以一年为一行
     else:
         n_cols=len(time_slices)
 

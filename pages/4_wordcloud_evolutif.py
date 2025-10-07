@@ -186,7 +186,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     st.markdown("<br>", unsafe_allow_html=True)
 
     #--------------exclure nan--------------
-    exclude_nan = st.checkbox("Exclure les valeurs Nan? ", value=False, key="nan")# 默认保留nan
+    exclude_nan = st.checkbox("Exclure les lignes sans étiquette (dropna)? ", value=False, key="nan")# 默认保留nan
     st.markdown("<br>", unsafe_allow_html=True)
     st.divider()
 
