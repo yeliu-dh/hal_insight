@@ -188,13 +188,14 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     #--------------exclure nan--------------
     exclude_nan = st.checkbox("Exclure les lignes sans étiquette (dropna)? ", value=False, key="nan")# 默认保留nan
     st.markdown("<br>", unsafe_allow_html=True)
-    st.divider()
 
     # ---------------WC-------------------------
     # 按钮生成+储存
     cols=st.columns([4,1])
     with cols[1]:   
         button=st.button("Générer")  
+    st.divider()
+
     if button:    
         with st.spinner("Générer..."):
             evolutif_wc= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_words=max_words, stopwords=stopwords, method="llr")

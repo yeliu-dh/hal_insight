@@ -86,12 +86,12 @@ def collect_clean_texts_by_col(df, options, stopwords, exclude_nan=False, col="G
     }
     """
     dict_texts = defaultdict(lambda: defaultdict(str))
-    if exclude_nan and col!='Global':
+    if exclude_nan and col!='Global':#如需dropna且是按照axe/CL分类生成wc
         # exclude_nan==t-> dropna()，若global，不会筛选
         df=df.dropna(subset=[col])
-        st.write(f'apres drop nan : {len(df)}')
+        st.write(f'Après dropnan : {len(df)} lignes!')
 
-    if col and col in df.columns:
+    if col and col in df.columns:#和exploded都行
         # 处理多分类列:若全部dropna，填充也不会有“nan”
         df["_col_list"] = df[col].fillna("nan").apply(
             lambda x: [v.strip() for v in str(x).split(";") if v.strip()]
@@ -312,6 +312,10 @@ def compute_keyness(freq_slice, global_freq, method="llr"):
     return keyness_scores
 
 
+
+
+
+
 def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_words=100, stopwords=None, method="llr"):
     """
     根据时间片生成 keyness 演变词云+小图
@@ -322,26 +326,40 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_wor
     df["year"] = df["submittedDate_s"].dt.year #筛选用
 
 
+    # --- 绘图布局 ---
+    if group_by=="Global":    
+        n_cols = 4 if len(time_slices) >=  4 else len(time_slices) #按季度可以一年为一行
+        n_rows = math.ceil(len(time_slices) / n_cols)# 计算所需行数
+        fig, axes = plt.subplots(n_rows, n_cols, figsize=(n_cols * 5, n_rows * 5))# 按照行数列数计算图的大小
+        axes = np.array(axes).reshape(n_rows, n_cols)  # 保证二维结构
+
+
     # --- 全局词频 ---
     text_groups = collect_clean_texts_by_col(df, options, stopwords, exclude_nan, col=group_by)    
-    # text_groups = collect_clean_texts_by_col(df, options, stopwords, col="Global")
+    # text_groups={
+    #   "Global": {"en": "clean text", "fr": "..."},
+    # }
     for cat, langs in text_groups.items(): 
         texts_all = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
     global_freq = pd.Series(texts_all.split()).value_counts()
     
-    # if group_by=='Global':
 
-    # --- 绘图布局 ---
-    if len(time_slices)>=4:    
-        n_cols = 4 #按季度可以一年为一行
-    else:
-        n_cols=len(time_slices)
 
-    n_rows = math.ceil(len(time_slices) / n_cols)
-    fig, axes = plt.subplots(n_rows, n_cols, figsize=(n_cols * 5, n_rows * 5))
-    axes = np.array(axes).reshape(n_rows, n_cols)  # 保证二维结构
+   
+    # df_exploded = explode_axes(df, "Axe")
+    # if group_by=="Axe":
+    #     # text_groups={
+    #     #   "1": {"en": "clean text", "fr": "..."},
+    #     #   "2": {"en": "...", "fr": "..."}
+    #     # }
+    #     for axe, langs in text_groups.items(): 
+    #         texts_axe = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
+    #         axe_freq = pd.Series(texts_all.split()).value_counts()
 
-    for idx, t in enumerate(time_slices):
+
+
+
+    for idx, t in enumerate(time_slices):#不变
         # 时间切片可为 (start_date, end_date) 或 (start_year, end_year)
         if isinstance(t[0], pd.Timestamp):  # 月/季度模式
             mask = (df["submittedDate_s"] >= t[0]) & (df["submittedDate_s"] <= t[1])
@@ -358,9 +376,10 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_wor
             text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
 
         # 选择当前子图的位置：在cols数固定的情况下，按照idx自动排列到某一行
-        row, col = divmod(idx, n_cols)
+        row, col = divmod(idx, n_cols)#已知idx即可计算小图的位置
         ax = axes[row, col]
         ax.axis("off")
+
 
         if text:
             freq_slice = pd.Series(text.split()).value_counts() # 局部词频
@@ -392,10 +411,120 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_wor
 
     fig.suptitle(f"Évolution du nuage de mots ({start_label} ~ {end_label})", fontsize=16)
     plt.tight_layout(rect=[0, 0, 1, 0.96])
-
-    # if group_by=="Axe":
-
-
     return fig
+# collect设置是否按语言分？更快？
 
 
+
+
+
+# def explode_axes(df, axe_col="Axe"):# 处理某一列上的多个值
+#     df = df.copy()
+#     df[axe_col] = df[axe_col].fillna('nan').astype(str).str.split("[,;]") # axe中有nan所以type:objet，先变成str
+#     df = df.explode(axe_col)
+#     df[axe_col] = df[axe_col].str.strip()
+#     return df[df[axe_col].notna() & (df[axe_col] != "")]
+
+
+# def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_words=100, stopwords=None, method="llr"):
+#     """
+#     根据时间片生成 keyness 演变词云+小图
+#     """
+#     #
+#     df = df.copy()
+#     df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
+#     df["year"] = df["submittedDate_s"].dt.year #筛选用
+
+
+#     # --- 绘图布局 ---
+#     n_cols = 4 if len(time_slices) >=  4 else len(time_slices) #按季度可以一年为一行
+#     n_rows = math.ceil(len(time_slices) / n_cols)# 计算所需行数
+#     fig, axes = plt.subplots(n_rows, n_cols, figsize=(n_cols * 5, n_rows * 5))# 按照行数列数计算图的大小
+#     axes = np.array(axes).reshape(n_rows, n_cols)  # 保证二维结构
+
+
+#     # --- 全局词频 ---
+#     if group_by=="Global":
+#         text_groups = collect_clean_texts_by_col(df, options, stopwords, exclude_nan, col=group_by)    
+#         # text_groups={
+#         #   "Global": {"en": "clean text", "fr": "..."},
+#         # }
+#         for cat, langs in text_groups.items(): 
+#             texts_all = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
+#         global_freq = pd.Series(texts_all.split()).value_counts()
+    
+
+
+   
+#     df_exploded = explode_axes(df, "Axe")
+#     if group_by=="Axe":
+#         # text_groups={
+#         #   "1": {"en": "clean text", "fr": "..."},
+#         #   "2": {"en": "...", "fr": "..."}
+#         # }
+#         for axe, langs in text_groups.items(): 
+#             texts_axe = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
+#             axe_freq = pd.Series(texts_all.split()).value_counts()
+
+
+
+
+#     for idx, t in enumerate(time_slices):#不变
+#         # 时间切片可为 (start_date, end_date) 或 (start_year, end_year)
+#         if isinstance(t[0], pd.Timestamp):  # 月/季度模式
+#             mask = (df["submittedDate_s"] >= t[0]) & (df["submittedDate_s"] <= t[1])
+#             label = t[0].strftime("%Y-%m")
+#         else:
+#             y_start, y_end = t
+#             mask = (df["year"] >= y_start) & (df["year"] <= y_end)
+#             label = f"{y_start}-{y_end}" if y_start != y_end else str(y_start)
+        
+#         # 时间段内clean_text
+#         df_slice = df[mask]
+#         sliced_text_groups = collect_clean_texts_by_col(df_slice, options, stopwords, col="Global")
+#         for cat, langs in sliced_text_groups.items(): 
+#             text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
+
+#         # 选择当前子图的位置：在cols数固定的情况下，按照idx自动排列到某一行
+#         row, col = divmod(idx, n_cols)#已知idx即可计算小图的位置
+#         ax = axes[row, col]
+#         ax.axis("off")
+
+
+#         if text:
+#             freq_slice = pd.Series(text.split()).value_counts() # 局部词频
+#             keyness = compute_keyness(freq_slice, global_freq, method=method)
+
+#             wc = WordCloud(
+#                 width=400, height=400, background_color="white",
+#                 max_words=max_words, stopwords=stopwords
+#             ).generate_from_frequencies(keyness)
+
+#             ax.imshow(wc, interpolation="bilinear")
+#             ax.set_title(label, fontsize=12)
+#         else:
+#             ax.text(0.5, 0.5, f"Aucune donnée\n{label}",
+#                     ha="center", va="center", fontsize=10, color="gray")
+
+#     # 清理多余空白子图
+#     for j in range(len(time_slices), n_rows * n_cols):
+#         row, col = divmod(j, n_cols)
+#         axes[row, col].axis("off")
+
+#     # --- 添加全局标题 ---
+#     if isinstance(time_slices[0][0], pd.Timestamp):
+#         start_label = time_slices[0][0].strftime("%Y-%m")
+#         end_label = time_slices[-1][1].strftime("%Y-%m")
+#     else:
+#         start_label = str(time_slices[0][0])
+#         end_label = str(time_slices[-1][1])
+
+#     fig.suptitle(f"Évolution du nuage de mots ({start_label} ~ {end_label})", fontsize=16)
+#     plt.tight_layout(rect=[0, 0, 1, 0.96])
+
+
+
+#     return fig
+
+
+# # collect设置是否按语言分？更快？
