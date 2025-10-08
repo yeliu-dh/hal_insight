@@ -87,9 +87,11 @@ def collect_clean_texts_by_col(df, options, stopwords, exclude_nan=False, col="G
     """
     dict_texts = defaultdict(lambda: defaultdict(str))
     if exclude_nan and col!='Global':#如需dropna且是按照axe/CL分类生成wc
-        # exclude_nan==t-> dropna()，若global，不会筛选
+        # exclude_nan==t-> dropna()，若global，不需要筛选
+
         df=df.dropna(subset=[col])
-        st.write(f'Après dropnan : {len(df)} lignes!')
+        df=df[df[col]!="nan"]#有时候可能已经填充了！
+        st.write(f'Après dropnan : {len(df)} lignes !')
 
     if col and col in df.columns:#和exploded都行
         # 处理多分类列:若全部dropna，填充也不会有“nan”
@@ -314,6 +316,20 @@ def compute_keyness(freq_slice, global_freq, method="llr"):
 
 
 
+def explode_by_col(df, col="Axe"):
+    """"
+    空值填nan，
+    多值按照，/；分割成list
+    =>在某一col上explode；
+    检查notna
+
+    """
+    df = df.copy()
+    df[col] = df[col].fillna('nan').astype(str).str.split("[,;]") # axe中有nan所以type:objet，先变成str
+    df = df.explode(col)
+    df[col] = df[col].str.strip()
+    return df[df[col].notna() & (df[col] != "")]
+
 
 
 def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_words=100, stopwords=None, method="llr"):
@@ -327,37 +343,30 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_wor
 
 
     # --- 绘图布局 ---
+    
     if group_by=="Global":    
         n_cols = 4 if len(time_slices) >=  4 else len(time_slices) #按季度可以一年为一行
-        n_rows = math.ceil(len(time_slices) / n_cols)# 计算所需行数
-        fig, axes = plt.subplots(n_rows, n_cols, figsize=(n_cols * 5, n_rows * 5))# 按照行数列数计算图的大小
-        axes = np.array(axes).reshape(n_rows, n_cols)  # 保证二维结构
-
+    else:#输入已经筛选过的df!
+        n_cols=len(time_slices)
+    n_rows = math.ceil(len(time_slices) / n_cols)# 计算所需行数
+    fig, axes = plt.subplots(n_rows, n_cols, figsize=(n_cols * 5, n_rows * 5))# 按照行数列数计算图的大小
+    axes = np.array(axes).reshape(n_rows, n_cols)  # 保证二维结构
+    
 
     # --- 全局词频 ---
     text_groups = collect_clean_texts_by_col(df, options, stopwords, exclude_nan, col=group_by)    
     # text_groups={
     #   "Global": {"en": "clean text", "fr": "..."},
     # }
+    # 或
+    # text_groups={
+    #     #   "1": {"en": "clean text", "fr": "..."}
+    # }
+
     for cat, langs in text_groups.items(): 
         texts_all = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
     global_freq = pd.Series(texts_all.split()).value_counts()
     
-
-
-   
-    # df_exploded = explode_axes(df, "Axe")
-    # if group_by=="Axe":
-    #     # text_groups={
-    #     #   "1": {"en": "clean text", "fr": "..."},
-    #     #   "2": {"en": "...", "fr": "..."}
-    #     # }
-    #     for axe, langs in text_groups.items(): 
-    #         texts_axe = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
-    #         axe_freq = pd.Series(texts_all.split()).value_counts()
-
-
-
 
     for idx, t in enumerate(time_slices):#不变
         # 时间切片可为 (start_date, end_date) 或 (start_year, end_year)
@@ -369,9 +378,10 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_wor
             mask = (df["year"] >= y_start) & (df["year"] <= y_end)
             label = f"{y_start}-{y_end}" if y_start != y_end else str(y_start)
         
-        # 时间段内clean_text
+        #串联这个时间片中所有clean_text
         df_slice = df[mask]
-        sliced_text_groups = collect_clean_texts_by_col(df_slice, options, stopwords, col="Global")
+        sliced_text_groups= collect_clean_texts_by_col(df_slice, options, stopwords, exclude_nan=exclude_nan, col=group_by, lang_col="language_s")
+        # 若是df_by_axe，则只有一个cat
         for cat, langs in sliced_text_groups.items(): 
             text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
 
@@ -400,30 +410,38 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_wor
     for j in range(len(time_slices), n_rows * n_cols):
         row, col = divmod(j, n_cols)
         axes[row, col].axis("off")
+    
+    
+    if group_by=="Global":
+        # --- 添加全局标题 ---
+        if isinstance(time_slices[0][0], pd.Timestamp):
+            start_label = time_slices[0][0].strftime("%Y-%m")
+            end_label = time_slices[-1][1].strftime("%Y-%m")
+        else:
+            start_label = str(time_slices[0][0])
+            end_label = str(time_slices[-1][1])
 
-    # --- 添加全局标题 ---
-    if isinstance(time_slices[0][0], pd.Timestamp):
-        start_label = time_slices[0][0].strftime("%Y-%m")
-        end_label = time_slices[-1][1].strftime("%Y-%m")
-    else:
-        start_label = str(time_slices[0][0])
-        end_label = str(time_slices[-1][1])
+        fig.suptitle(f"Évolution du nuage de mots ({start_label} ~ {end_label})", fontsize=16)
+        plt.tight_layout(rect=[0, 0, 1, 0.96])
 
-    fig.suptitle(f"Évolution du nuage de mots ({start_label} ~ {end_label})", fontsize=16)
-    plt.tight_layout(rect=[0, 0, 1, 0.96])
+    elif group_by=="Axe" :
+        axe_map = {
+                "1": "Performances et responsabilités",
+                "2": "Société de services et services à la société",
+                "3": "Innovations, transformations et résistances organisationnelles et sociétales",
+                "4": "Ouvrages pédagogiques",
+                "nan":'nan'
+            }
+            
+        fig.suptitle(f"Axe {axe_map.get(text_groups.keys(),"XXX")}", fontsize=16)
+        plt.tight_layout(rect=[0, 0, 1, 0.96])
+
     return fig
+
+
 # collect设置是否按语言分？更快？
 
 
-
-
-
-# def explode_axes(df, axe_col="Axe"):# 处理某一列上的多个值
-#     df = df.copy()
-#     df[axe_col] = df[axe_col].fillna('nan').astype(str).str.split("[,;]") # axe中有nan所以type:objet，先变成str
-#     df = df.explode(axe_col)
-#     df[axe_col] = df[axe_col].str.strip()
-#     return df[df[axe_col].notna() & (df[axe_col] != "")]
 
 
 # def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_words=100, stopwords=None, method="llr"):

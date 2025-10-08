@@ -15,6 +15,7 @@ import simplemma
 
 #my utils:
 from utils.upload import data_uploader, missing_data_warning
+from utils.wordcloud import explode_by_col
 from utils.wordcloud import collect_clean_texts_by_col
 from utils.wordcloud import create_time_slices
 from utils.wordcloud import generate_keyness_wc
@@ -198,7 +199,30 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     if button:    
         with st.spinner("Générer..."):
-            evolutif_wc= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_words=max_words, stopwords=stopwords, method="llr")
-            # evolutif_wc= generate_keyness_wc(df, options, time_slices, max_words=100, stopwords=stopwords, method="llr")
-            # evolutif_wc=generate_keyness_wc(df, options, time_slices, max_words=max_words, stopwords=stopwords, method="llr")
-            st.pyplot(evolutif_wc)
+            if group_by=="Global":
+                evolutif_wc= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_words=max_words, stopwords=stopwords, method="llr")
+                st.pyplot(evolutif_wc)
+            
+        
+            
+            elif group_by=="Axe":
+                #---所有演变图的大标题----
+                df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
+                start_ym=df["submittedDate_s"].min().strftime("%Y-%m")
+                end_ym=df["submittedDate_s"].max().strftime("%Y-%m")  
+                st.subheader(f"Évolution du nuage de mots ({start_ym} ~ {end_ym})")
+                
+                
+                axe_map = {
+                    "1": "Performances et responsabilités",
+                    "2": "Société de services et services à la société",
+                    "3": "Innovations, transformations et résistances organisationnelles et sociétales",
+                    "4": "Ouvrages pédagogiques",
+                    "nan":'nan'
+                }
+                exploded_df=explode_by_col(df, col='Axe')   
+                for axe in axe_map.keys():
+                    df_slice=exploded_df[exploded_df['Axe']==axe]
+                    evolutif_wc_by_axe=generate_keyness_wc(df_slice, options, exclude_nan, group_by, time_slices, max_words=max_words, stopwords=stopwords, method="llr")                                
+                    st.pyplot(evolutif_wc_by_axe)
+
