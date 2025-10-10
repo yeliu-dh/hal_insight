@@ -437,9 +437,9 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
                 }
             fig.suptitle(f"{group_by} {col_val}-{axe_map.get(col_val,'?')}", fontsize=16)
             plt.tight_layout(rect=[0, 0, 1, 0.96])
-            
+
         elif group_by=="Cl. FNEGE":
-            fig.suptitle(f"{group_by} {col_val}-{axe_map.get(col_val,'?')}", fontsize=16)
+            fig.suptitle(f"{group_by} {col_val}", fontsize=16)
             plt.tight_layout(rect=[0, 0, 1, 0.96])
 
     return fig

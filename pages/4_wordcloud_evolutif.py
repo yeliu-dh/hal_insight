@@ -209,7 +209,13 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
                 start_ym=df["submittedDate_s"].min().strftime("%Y-%m")
                 end_ym=df["submittedDate_s"].max().strftime("%Y-%m")  
-                st.subheader(f"Évolution du nuage de mots ({start_ym} ~ {end_ym})")
+                # st.subheader(f"Évolution du nuage de mots ({start_ym} ~ {end_ym})")
+                
+                st.markdown(
+                    f"<h3 style='text-align: center;'>Évolution du nuage de mots ({start_ym} ~ {end_ym})</h3>",
+                    unsafe_allow_html=True
+                ) #居中显示大标题
+
 
                 exploded_df=explode_by_col(df, col=group_by)   
                 ctg=sorted(exploded_df[group_by].unique())
