@@ -86,15 +86,15 @@ def collect_clean_texts_by_col(df_input, options, stopwords, exclude_nan=False, 
     }
     """
     df=df_input.copy()
-    st.write(f'df input :{len(df)} lignes !')
+    # st.write(f'df input :{len(df)} lignes !')
 
     dict_texts = defaultdict(lambda: defaultdict(str))
     if exclude_nan==True and col!='Global':#如需dropna且是按照axe/CL分类生成wc
         # exclude_nan==t-> dropna()，若global，不需要筛选
         df=df.dropna(subset=[col])
         df=df[df[col]!="nan"]#有时候NAN可能已经填充了！
-        st.write(f'Après dropnan : {len(df)} lignes ! {df[col].value_counts()}\n\n'
-                 f"--------------------------------------------------------------")
+        # st.write(f'Après dropnan : {len(df)} lignes ! {df[col].value_counts()}\n\n'
+        #          f"--------------------------------------------------------------")
 
     if col and col in df.columns:#和exploded都行
         # 处理多分类列:若全部dropna，填充也不会有“nan”
@@ -356,8 +356,7 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
     
 
     # --- 全局词频 ---
-    st.write("freq global:")
-
+    # st.write("freq global:")
     text_groups = collect_clean_texts_by_col(df, options, stopwords, exclude_nan, col=group_by)    
     # text_groups={
     #   "Global": {"en": "clean text", "fr": "..."},

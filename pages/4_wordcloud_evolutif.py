@@ -216,15 +216,19 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                     unsafe_allow_html=True
                 ) #居中显示大标题
 
-                exploded_df=explode_by_col(df, col=group_by)   
-                ctg=sorted(exploded_df[group_by].unique())
-                for col_val in ctg:
+                exploded_df=explode_by_col(df, col=group_by)#已fillna
+                if exclude_nan:
+                    ctg=sorted([v for v in exploded_df[group_by].unique() if v !="nan"])
+                else :                
+                    ctg=sorted(exploded_df[group_by].unique())
+
+                for col_val in ctg :
                     df_slice=exploded_df[exploded_df[group_by]==col_val]
 
                     # evolutif_wc_by_axe= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col=None, max_words=100, stopwords=None, method="llr"):
                     evolutif_wc_by_axe=generate_keyness_wc(df_slice, options, exclude_nan, group_by, time_slices, col_val=col_val, max_words=max_words, stopwords=stopwords, method="llr")                                
                     st.pyplot(evolutif_wc_by_axe)
-                    st.write("====================================================================")
+                    # st.write("====================================================================")
            
 
             # # elif group_by=="Axe":
