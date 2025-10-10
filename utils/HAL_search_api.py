@@ -125,7 +125,6 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         "rows": rows,
         "wt": "json",
         "sort": "submittedDate_t"
-
     }   
 
     # 构建 URL 用于打印检查
@@ -145,9 +144,10 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
             "q": q,
             "fq": fq,
             "fl": ",".join(fields),
-            "rows": rows,
+            "rows":  rows,
             "start": start,
-            "wt": "json"
+            "wt": "json",
+            "sort":"submittedDate_t"
         }
 
         resp = requests.get(BASE_URL, params=params, timeout=15)

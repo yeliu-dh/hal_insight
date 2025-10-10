@@ -81,8 +81,8 @@ def collect_clean_texts_by_col(df, options, stopwords, exclude_nan=False, col="G
     
     返回 dict 格式:
     {
-      "cat1": {"en": "clean text", "fr": "..."},
-      "cat2": {"en": "...", "fr": "..."}
+      "1": {"en": "clean text", "fr": "..."},
+      "2": {"en": "...", "fr": "..."}
     }
     """
     dict_texts = defaultdict(lambda: defaultdict(str))
@@ -116,7 +116,8 @@ def collect_clean_texts_by_col(df, options, stopwords, exclude_nan=False, col="G
 
     df.drop(columns=["_col_list"], inplace=True, errors="ignore")
     
-    return dict(dict_texts)
+    # return dict(dict_texts)
+    return {k : dict_texts[k] for k in sorted(dict_texts.keys())}#按照顺序重新排序
 
 
 def generate_wc(text, max_words, stopwords, title="Nuage de mots"):
@@ -142,8 +143,8 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
     #1. collect:
     text_groups=collect_clean_texts_by_col(df, options, stopwords, exclude_nan, col=group_by, lang_col="language_s")
     # text_groups={
-    #   "cat1": {"en": "clean text", "fr": "..."},
-    #   "cat2": {"en": "...", "fr": "..."}
+    #   "(axe)1": {"en": "clean text", "fr": "..."},
+    #   "(axe)2": {"en": "...", "fr": "..."}
     # }
 
     #2.a title

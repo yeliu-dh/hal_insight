@@ -165,7 +165,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     missing_data_warning(df, col="language_s", map={"language_s":'langue'}, show_distribution=True)
 
     #--------------exclure nan--------------
-    exclude_nan = st.checkbox("Exclure les valeurs Nan? ", value=False, key="nan")
+    exclude_nan = st.checkbox("Exclure les valeurs Nan ? ", value=False, key="nan")
 
 
     #------------------traiter les textes-------------------
