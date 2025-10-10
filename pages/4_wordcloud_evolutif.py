@@ -209,7 +209,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
                 start_ym=df["submittedDate_s"].min().strftime("%Y-%m")
                 end_ym=df["submittedDate_s"].max().strftime("%Y-%m")  
-                # st.subheader(f"Évolution du nuage de mots ({start_ym} ~ {end_ym})")
+                # st.subheader(f"nnÉvolution du nuage de mots ({start_ym} ~ {end_ym})")
                 
                 st.markdown(
                     f"<h3 style='text-align: center;'>Évolution du nuage de mots ({start_ym} ~ {end_ym})</h3>",
@@ -224,6 +224,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                     # evolutif_wc_by_axe= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col=None, max_words=100, stopwords=None, method="llr"):
                     evolutif_wc_by_axe=generate_keyness_wc(df_slice, options, exclude_nan, group_by, time_slices, col_val=col_val, max_words=max_words, stopwords=stopwords, method="llr")                                
                     st.pyplot(evolutif_wc_by_axe)
+                    st.write("====================================================================")
            
 
             # # elif group_by=="Axe":

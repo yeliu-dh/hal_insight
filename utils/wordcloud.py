@@ -94,7 +94,7 @@ def collect_clean_texts_by_col(df_input, options, stopwords, exclude_nan=False, 
         df=df.dropna(subset=[col])
         df=df[df[col]!="nan"]#有时候NAN可能已经填充了！
         st.write(f'Après dropnan : {len(df)} lignes ! {df[col].value_counts()}\n\n'
-                 f"---------------------------------------------------------------")
+                 f"--------------------------------------------------------------")
 
     if col and col in df.columns:#和exploded都行
         # 处理多分类列:若全部dropna，填充也不会有“nan”
@@ -356,6 +356,8 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
     
 
     # --- 全局词频 ---
+    st.write("freq global:")
+
     text_groups = collect_clean_texts_by_col(df, options, stopwords, exclude_nan, col=group_by)    
     # text_groups={
     #   "Global": {"en": "clean text", "fr": "..."},
@@ -364,7 +366,6 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
     # text_groups={
     #     # "1": {"en": "clean text", "fr": "..."}
     # }
-    st.write("freq global:")
     for cat, langs in text_groups.items(): 
         texts_all = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
     global_freq = pd.Series(texts_all.split()).value_counts()
