@@ -158,7 +158,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                'toi', 'ou', "être", "avoir","faire", "et", "de", "la", "le", "les","l","l'", "des", "un", "une", 
                 "du", "en", "au","d","dans","à","par","pour","sur","sont","aux","au", "leur","leurs","qui","ou","il","elle","ils","elles",
                 "je","tu","vous","nous","se","et","ce",'qui','que',"est","qu","avec","ont","ces",'celle','ceux','celles',
-                'comme','afin','ne',"son",'ses',"none","nan","de","des",'la'
+                'comme','afin','ne',"son",'ses',"none","nan","de","des",'la', "pouvoir"
             ]    
     # 转小写+去重
     stopwords = set(w.lower() for w in (stop_en + stop_fr + user_stopwords))
@@ -211,7 +211,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 start_ym=df["submittedDate_s"].min().strftime("%Y-%m")
                 end_ym=df["submittedDate_s"].max().strftime("%Y-%m")  
                 st.subheader(f"Évolution du nuage de mots ({start_ym} ~ {end_ym})")
-                
+        
                 
                 axe_map = {
                     "1": "Performances et responsabilités",
@@ -223,6 +223,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 exploded_df=explode_by_col(df, col='Axe')   
                 for axe in axe_map.keys():
                     df_slice=exploded_df[exploded_df['Axe']==axe]
-                    evolutif_wc_by_axe=generate_keyness_wc(df_slice, options, exclude_nan, group_by, time_slices, max_words=max_words, stopwords=stopwords, method="llr")                                
+                    # evolutif_wc_by_axe= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col=None, max_words=100, stopwords=None, method="llr"):
+
+                    evolutif_wc_by_axe=generate_keyness_wc(df_slice, options, exclude_nan, group_by, time_slices, col_val=axe, max_words=max_words, stopwords=stopwords, method="llr")                                
                     st.pyplot(evolutif_wc_by_axe)
 

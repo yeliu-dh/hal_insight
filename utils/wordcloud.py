@@ -90,7 +90,7 @@ def collect_clean_texts_by_col(df, options, stopwords, exclude_nan=False, col="G
         # exclude_nan==t-> dropna()，若global，不需要筛选
 
         df=df.dropna(subset=[col])
-        df=df[df[col]!="nan"]#有时候可能已经填充了！
+        df=df[df[col]!="nan"]#有时候NAN可能已经填充了！
         st.write(f'Après dropnan : {len(df)} lignes !')
 
     if col and col in df.columns:#和exploded都行
@@ -332,8 +332,7 @@ def explode_by_col(df, col="Axe"):
     return df[df[col].notna() & (df[col] != "")]
 
 
-
-def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_words=100, stopwords=None, method="llr"):
+def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val=None, max_words=100, stopwords=None, method="llr"):
     """
     根据时间片生成 keyness 演变词云+小图
     """
@@ -361,7 +360,7 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_wor
     # }
     # 或
     # text_groups={
-    #     #   "1": {"en": "clean text", "fr": "..."}
+    #     # "1": {"en": "clean text", "fr": "..."}
     # }
 
     for cat, langs in text_groups.items(): 
@@ -379,10 +378,9 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_wor
             mask = (df["year"] >= y_start) & (df["year"] <= y_end)
             label = f"{y_start}-{y_end}" if y_start != y_end else str(y_start)
         
-        #串联这个时间片中所有clean_text
+        #串联这个时间片中所有clean_text。若是df_by_axe，则只有一个cat
         df_slice = df[mask]
         sliced_text_groups= collect_clean_texts_by_col(df_slice, options, stopwords, exclude_nan=exclude_nan, col=group_by, lang_col="language_s")
-        # 若是df_by_axe，则只有一个cat
         for cat, langs in sliced_text_groups.items(): 
             text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
 
@@ -392,8 +390,10 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_wor
         ax.axis("off")
 
 
+
+        # --- 局部词频 ---
         if text:
-            freq_slice = pd.Series(text.split()).value_counts() # 局部词频
+            freq_slice = pd.Series(text.split()).value_counts()
             keyness = compute_keyness(freq_slice, global_freq, method=method)
 
             wc = WordCloud(
@@ -425,7 +425,7 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_wor
         fig.suptitle(f"Évolution du nuage de mots ({start_label} ~ {end_label})", fontsize=16)
         plt.tight_layout(rect=[0, 0, 1, 0.96])
 
-    elif group_by=="Axe" :
+    elif group_by=="Axe" and col_val!=None :
         axe_map = {
                 "1": "Performances et responsabilités",
                 "2": "Société de services et services à la société",
@@ -434,10 +434,25 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_wor
                 "nan":'nan'
             }
             
-        fig.suptitle(f"Axe {axe_map.get(text_groups.keys(),'XXX')}", fontsize=16)
+        fig.suptitle(f"Axe {axe_map.get(text_groups.keys()[col_val],'XXX')}", fontsize=16)
         plt.tight_layout(rect=[0, 0, 1, 0.96])
 
     return fig
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # collect设置是否按语言分？更快？
