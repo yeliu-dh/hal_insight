@@ -434,7 +434,7 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
                 "nan":'nan'
             }
             
-        fig.suptitle(f"Axe {axe_map.get(text_groups.keys()[col_val],'XXX')}", fontsize=16)
+        fig.suptitle(f"Axe {axe_map.get(text_groups.get([col_val],'?'),'XXX')}", fontsize=16)
         plt.tight_layout(rect=[0, 0, 1, 0.96])
 
     return fig
