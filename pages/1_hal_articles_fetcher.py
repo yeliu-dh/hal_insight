@@ -176,6 +176,7 @@ with cols[1]:
     search_button = st.button("⚡ Chercher")
 
 st.divider()
+df = None#初始化
 
 if search_button and not invalid_date:
     with st.spinner("Chercher..."):
@@ -197,6 +198,7 @@ if search_button and not invalid_date:
             )        
         except Exception as e:
             st.error(f"⚠️ {e}")
+            st.stop()#==break
 
 
     # -----------处理 domain----------------

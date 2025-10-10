@@ -181,13 +181,14 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
             doc_info[col] = value
         info.append(doc_info)
 
+    # if not data.get('response', {}).get('docs'):
     df = pd.DataFrame(info)
     df=df.drop_duplicates(subset='halId_s')
 
-    if 'publicationDate_s' in df.columns:
-        df['publicationDate_s'] = pd.to_datetime(df['publicationDate_s'], errors='coerce')
-        df = df.sort_values(by='publicationDate_s', ascending=False)
-    
+    if 'submittedDate_s' in df.columns:
+        df['submittedDate_s'] = pd.to_datetime(df['submittedDate_s'], errors='coerce')
+        df = df.sort_values(by='submittedDate_s', ascending=False)
+        
     return df
 
 
