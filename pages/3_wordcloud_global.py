@@ -153,7 +153,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     }
     group_by = st.radio(
         "💾 Group :",
-        ["Global", "Axe","Cl. FNEGE"], 
+        ["Global", "Axe"],#"Cl. FNEGE"] 
         index=0,
         format_func=lambda x: COL_MAP.get(x, x), 
         horizontal=True

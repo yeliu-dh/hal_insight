@@ -86,12 +86,15 @@ def collect_clean_texts_by_col(df_input, options, stopwords, exclude_nan=False, 
     }
     """
     df=df_input.copy()
+    st.write(f'df input :{len(df)} lignes !')
+
     dict_texts = defaultdict(lambda: defaultdict(str))
-    if exclude_nan and col!='Global':#如需dropna且是按照axe/CL分类生成wc
+    if exclude_nan==True and col!='Global':#如需dropna且是按照axe/CL分类生成wc
         # exclude_nan==t-> dropna()，若global，不需要筛选
         df=df.dropna(subset=[col])
         df=df[df[col]!="nan"]#有时候NAN可能已经填充了！
-        st.write(f'Après dropnan : {len(df)} lignes !')
+        st.write(f'Après dropnan : {len(df)} lignes !\n\n'
+                 f'{df[col].values_counts()}')
 
     if col and col in df.columns:#和exploded都行
         # 处理多分类列:若全部dropna，填充也不会有“nan”
@@ -115,8 +118,7 @@ def collect_clean_texts_by_col(df_input, options, stopwords, exclude_nan=False, 
                 dict_texts[cat][lang] += " " + text
 
     df.drop(columns=["_col_list"], inplace=True, errors="ignore")
-    
-    # return dict(dict_texts)
+
     return {k : dict_texts[k] for k in sorted(dict_texts.keys())}#按照顺序重新排序
 
 

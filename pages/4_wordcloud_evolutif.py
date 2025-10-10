@@ -179,8 +179,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     }
     group_by = st.radio(
         "💾 Group :",
-        # ["Global", "Axe","Cl. FNEGE"], 
-        ["Global", "Axe"], 
+        ["Global", "Axe"], #"Cl. FNEGE"
         index=0,
         format_func=lambda x: COL_MAP.get(x, x), 
         horizontal=True
@@ -204,7 +203,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 evolutif_wc= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_words=max_words, stopwords=stopwords, method="llr")
                 st.pyplot(evolutif_wc)
             
-            # elif group_by=="Axe":
+            # elif group_by=="Axe" or groupby=="":
             else:
                 #---所有演变图的大标题----
                 df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
