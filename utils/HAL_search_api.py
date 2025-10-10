@@ -1,3 +1,6 @@
+
+import streamlit as st
+
 def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_month=None,
                        doc_types=None, domains=None,keywords=None, languages=None,labs=None, authors=None, text=None,
                        fields:list=None, rows=100, max_records=5000):
@@ -151,7 +154,7 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         }
 
         resp = requests.get(BASE_URL, params=params, timeout=15)
-        print(f"[DEBUG] Response status: {resp.status_code} | start={start}")
+        st.info(f"[DEBUG] Response status: {resp.status_code} | start={start}")
 
         resp.raise_for_status()
         data = resp.json()
