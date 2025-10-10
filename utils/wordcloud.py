@@ -425,17 +425,22 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
         fig.suptitle(f"Évolution du nuage de mots ({start_label} ~ {end_label})", fontsize=16)
         plt.tight_layout(rect=[0, 0, 1, 0.96])
 
-    elif group_by=="Axe" and col_val!=None :
-        axe_map = {
-                "1": "Performances et responsabilités",
-                "2": "Société de services et services à la société",
-                "3": "Innovations, transformations et résistances organisationnelles et sociétales",
-                "4": "Ouvrages pédagogiques",
-                "nan":'nan'
-            }
+    # elif group_by=="Axe" and col_val!=None :
+    elif col_val!=None:
+        if group_by=="Axe":
+            axe_map = {
+                    "1": "Performances et responsabilités",
+                    "2": "Société de services et services à la société",
+                    "3": "Innovations, transformations et résistances organisationnelles et sociétales",
+                    "4": "Ouvrages pédagogiques",
+                    "nan":'nan'
+                }
+            fig.suptitle(f"{group_by} {col_val}-{axe_map.get(col_val,'?')}", fontsize=16)
+            plt.tight_layout(rect=[0, 0, 1, 0.96])
             
-        fig.suptitle(f"Axe {axe_map.get(col_val,'?')}", fontsize=16)
-        plt.tight_layout(rect=[0, 0, 1, 0.96])
+        elif group_by=="Cl. FNEGE":
+            fig.suptitle(f"{group_by} {col_val}-{axe_map.get(col_val,'?')}", fontsize=16)
+            plt.tight_layout(rect=[0, 0, 1, 0.96])
 
     return fig
 
