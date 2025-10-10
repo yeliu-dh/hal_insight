@@ -94,7 +94,7 @@ def collect_clean_texts_by_col(df_input, options, stopwords, exclude_nan=False, 
         df=df.dropna(subset=[col])
         df=df[df[col]!="nan"]#有时候NAN可能已经填充了！
         st.write(f'Après dropnan : {len(df)} lignes !\n\n'
-                 f'{df[col].values_counts()}')
+                 f'{df[col].value_counts()}')
 
     if col and col in df.columns:#和exploded都行
         # 处理多分类列:若全部dropna，填充也不会有“nan”
