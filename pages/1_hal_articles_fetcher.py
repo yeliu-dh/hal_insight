@@ -195,14 +195,16 @@ if search_button and not invalid_date:
                 fields=fields,
                 rows=100,
                 max_records=max_records
-            )        
+            )
+            if df.empty:
+                st.warning("Aucun résultat trouvé.")
+                st.stop()    
         except Exception as e:
             st.error(f"⚠️ {e}")
             st.stop()#==break
 
 
     # -----------处理 domain----------------
-
     if "domain_s" in df.columns:   
         df["domain_s"] = df["domain_s"].apply(lambda x : map_domains(x, map=DOMAIN_MAP))
 
@@ -224,10 +226,10 @@ if search_button and not invalid_date:
         
     df = st.session_state.get("uploaded_df", None)
 
-    if df is None or df.empty:
-        st.warning("0 résultat!")
+    # if df is None or df.empty:
+    #     st.warning("0 résultat!")
 
-    else:
+    if not df.empty :
         #-------------show----------------------
         st.success(f"✅ {len(df)} articles trouvés!")
         st.success(f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")

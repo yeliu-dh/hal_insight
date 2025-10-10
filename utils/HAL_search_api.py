@@ -151,6 +151,8 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         }
 
         resp = requests.get(BASE_URL, params=params, timeout=15)
+        print(f"[DEBUG] Response status: {resp.status_code} | start={start}")
+
         resp.raise_for_status()
         data = resp.json()
 
@@ -167,8 +169,6 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         start += rows
         if start >= total_found or start >= max_records:
             break
-
-
     
     # ========= 整理到 DataFrame =========
     info = []
