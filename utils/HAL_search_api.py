@@ -157,6 +157,11 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
             print(resp.text[:500])  # 打印前500字符看是什么
             raise
 
+        if "response" not in data:
+            print("[ERROR] JSON 中没有 'response' 字段！")
+            print("返回内容预览：", data)
+            raise KeyError("'response'")
+
 
 
         resp.raise_for_status()
