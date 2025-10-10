@@ -382,7 +382,7 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
         sliced_text_groups= collect_clean_texts_by_col(df_slice, options, stopwords, exclude_nan=exclude_nan, col=group_by, lang_col="language_s")
         text=" "
         for cat, langs in sliced_text_groups.items(): 
-            text += " "+(langs.get("en", "") + " " + langs.get("fr", "")).strip()
+            text +=(langs.get("en", "") + " " + langs.get("fr", "")).strip()
 
         # 选择当前子图的位置：在cols数固定的情况下，按照idx自动排列到某一行
         row, col = divmod(idx, n_cols)#已知idx即可计算小图的位置
