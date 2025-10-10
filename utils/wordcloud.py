@@ -378,7 +378,6 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
         
         #串联这个时间片中所有clean_text。若是df_by_axe，则只有一个cat
         df_slice = df[mask]
-        st.write(f'time slice: {t}') 
         sliced_text_groups= collect_clean_texts_by_col(df_slice, options, stopwords, exclude_nan=exclude_nan, col=group_by, lang_col="language_s")
         for cat, langs in sliced_text_groups.items(): 
             text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
