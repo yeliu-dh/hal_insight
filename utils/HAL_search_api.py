@@ -1,4 +1,3 @@
-
 import streamlit as st
 
 def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_month=None,
@@ -100,10 +99,6 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         q="*:*"
 
 
-
-
-
-
     # response = requests.get(url, params=params).json()
 
     # if "response" in response:
@@ -116,7 +111,6 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     #         print("没有查询到结果")
     # else:
     #     print("查询返回异常")
-
 
 
     # CHECK: 
@@ -155,6 +149,15 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
 
         resp = requests.get(BASE_URL, params=params, timeout=15)
         st.info(f"[DEBUG] Response status: {resp.status_code} | start={start}")
+        
+        try:
+            data = resp.json()
+        except ValueError:
+            print("[ERROR] 返回内容不是有效的 JSON：")
+            print(resp.text[:500])  # 打印前500字符看是什么
+            raise
+
+
 
         resp.raise_for_status()
         data = resp.json()
