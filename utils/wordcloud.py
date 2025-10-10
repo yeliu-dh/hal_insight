@@ -361,6 +361,7 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
     # text_groups={
     #     # "1": {"en": "clean text", "fr": "..."}
     # }
+    
     for cat, langs in text_groups.items(): 
         texts_all = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
     global_freq = pd.Series(texts_all.split()).value_counts()
@@ -379,8 +380,9 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
         #串联这个时间片中所有clean_text。若是df_by_axe，则只有一个cat
         df_slice = df[mask]
         sliced_text_groups= collect_clean_texts_by_col(df_slice, options, stopwords, exclude_nan=exclude_nan, col=group_by, lang_col="language_s")
+        text=" "
         for cat, langs in sliced_text_groups.items(): 
-            text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
+            text += " "+(langs.get("en", "") + " " + langs.get("fr", "")).strip()
 
         # 选择当前子图的位置：在cols数固定的情况下，按照idx自动排列到某一行
         row, col = divmod(idx, n_cols)#已知idx即可计算小图的位置
@@ -404,6 +406,7 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
         else:
             ax.text(0.5, 0.5, f"Aucune donnée\n{label}",
                     ha="center", va="center", fontsize=10, color="gray")
+            continue
 
     # 清理多余空白子图
     for j in range(len(time_slices), n_rows * n_cols):
