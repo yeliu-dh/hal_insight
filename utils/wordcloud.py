@@ -73,7 +73,7 @@ def preprocess_text(text, stopwords, lang='fr'):
 
 
 
-def collect_clean_texts_by_col(df, options, stopwords, exclude_nan=False, col="Global", lang_col="language_s"):
+def collect_clean_texts_by_col(df_input, options, stopwords, exclude_nan=False, col="Global", lang_col="language_s"):
     """
     收集文本，支持：
     - col=None: 全局（只分语言）
@@ -85,10 +85,10 @@ def collect_clean_texts_by_col(df, options, stopwords, exclude_nan=False, col="G
       "2": {"en": "...", "fr": "..."}
     }
     """
+    df=df_input.copy()
     dict_texts = defaultdict(lambda: defaultdict(str))
     if exclude_nan and col!='Global':#如需dropna且是按照axe/CL分类生成wc
         # exclude_nan==t-> dropna()，若global，不需要筛选
-
         df=df.dropna(subset=[col])
         df=df[df[col]!="nan"]#有时候NAN可能已经填充了！
         st.write(f'Après dropnan : {len(df)} lignes !')
@@ -412,6 +412,8 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
         row, col = divmod(j, n_cols)
         axes[row, col].axis("off")
     
+
+    #--------------标题----------------------------
     
     if group_by=="Global":
         # --- 添加全局标题 ---
