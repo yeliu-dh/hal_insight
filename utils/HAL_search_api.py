@@ -147,20 +147,16 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
 
     # 7. 日期
     if start_year and start_month:
-        start_date = f"{start_year}-{start_month:02d}"
-
-        # start_date = f"{start_year}-{start_month:02d}-01 00:00:00"
-        # start_date = f"{start_year}-{start_month:02d}-01T00:00:00Z"
-        # 你生成的是 ISO 8601 带 T 和 Z，而你存储的 modifiedDate_s 是空格分隔且没有 Z
+        start_date = f"{start_year}-{start_month:02d}-01"
     else:
         start_date = None
-    
-    # end_day = calendar.monthrange(end_year, end_month)[1]#按月份决定最后一天是29/30/31
-    end_date = f"{end_year}-{end_month:02d}"
 
-    # f"{end_year}-{end_month:02d}-{end_day:02d} 23:59:59"
-    # end_date = f"{end_year}-{end_month:02d}-{end_day:02d}T23:59:59Z"
-    
+    if end_year and end_month:
+        end_day = calendar.monthrange(end_year, end_month)[1]  # 当月最后一天
+        end_date = f"{end_year:04d}-{end_month:02d}-{end_day:02d}"
+    else:
+        raise ValueError("Préciser l'année de fin ou/et le mois de fin!")
+
     if start_date:
         fq.append(f'submittedDate_s:[{start_date} TO {end_date}]')#publicationDate_s,modifiedDate_s
         # print(f"PERIODE : {start_date} TO {end_date}")
