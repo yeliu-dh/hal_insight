@@ -115,19 +115,19 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
 
     # CHECK: 
     #输入筛选条件
-    params = {
-        "q": q,
-        "fq": fq,
-        "fl": ",".join(fields),
-        "rows": rows,
-        "wt": "json",
-        "sort": "submittedDate_t"
-    }   
+    # params = {
+    #     "q": q,
+    #     "fq": fq,
+    #     "fl": ",".join(fields),
+    #     "rows": rows,
+    #     "wt": "json",
+    #     "sort": "submittedDate_t"
+    # }   
 
-    # 构建 URL 用于打印检查
-    query_string = urllib.parse.urlencode(params, doseq=True)
-    full_url = BASE_URL + "?" + query_string
-    print(f'QUERY URL : {full_url} \n')
+    # # 构建 URL 用于打印检查
+    # query_string = urllib.parse.urlencode(params, doseq=True)
+    # full_url = BASE_URL + "?" + query_string
+    # print(f'QUERY URL : {full_url} \n')
 
 
     # ========= 请求循环 =========
@@ -137,15 +137,28 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     total_found = None
 
     while True:
-        params = {
-            "q": q,
-            "fq": fq,
-            "fl": ",".join(fields),
-            "rows":  rows,
-            "start": start,
-            "wt": "json",
-            "sort":"submittedDate_t"
-        }
+        # params = {
+        #     "q": q,
+        #     "fq": fq,
+        #     "fl": ",".join(fields),
+        #     "rows":  rows,
+        #     "start": start,
+        #     "wt": "json",
+        #     "sort":"submittedDate_t"
+        # }
+
+        # 10/2025 maj
+        params = [
+            ("q", q),
+            ("fl", ",".join(fields)),
+            ("rows", rows),
+            ("start", start),
+            ("wt", "json"),
+            ("sort", "submittedDate_t")
+        ]
+        for f in fq:
+            params.append(("fq", f))
+
 
         resp = requests.get(BASE_URL, params=params, timeout=15)
         st.info(f"[DEBUG] Response status: {resp.status_code} | start={start}")
