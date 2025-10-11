@@ -11,26 +11,26 @@ import sys
 import os
 
 # # 把项目根目录 (/mount/src/hal_insight) 加入 Python 路径
-# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 # #file 得出当前脚本所在文件夹（pages），join+".."表示回到上一级路径，abs表示绝对化，sys.append则为加入系统路径
 # #=> ../mount/src/hal_insight
 
 
-ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-if ROOT_DIR not in sys.path:
-    sys.path.insert(0, ROOT_DIR)  # 插入到 sys.path 开头，优先查找
+# ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+# if ROOT_DIR not in sys.path:
+#     sys.path.insert(0, ROOT_DIR)  # 插入到 sys.path 开头，优先查找
 
 
 # my utils
-# from utils.HAL_search_api import fetch_hal_articles
-# from utils.mapping import load_mapping_json
-# from utils.mapping import map_domains
-# from utils.mapping import add_axe
-# from utils.ranking import add_classement_fnege
+from utils.HAL_search_api import fetch_hal_articles
+from utils.mapping import load_mapping_json
+from utils.mapping import map_domains
+from utils.mapping import add_axe
+from utils.ranking import add_classement_fnege
 
 
 # pages/1_hal_articles_fetcher.py
-from init_imports import *
+# from init_imports import *
 
 
 st.set_page_config(page_title="HAL insight", page_icon="🛸")
