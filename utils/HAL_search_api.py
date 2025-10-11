@@ -38,8 +38,11 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     exemple d'url (11/10/2025):
     http://api.archives-ouvertes.fr/search/?q=*:*&wt=xml&fq=submittedDate_tdate:[NOW-1MONTHS/DAY TO NOW/HOUR]&fq=submitType_s:(-notice)&fl=label_s,submittedDate_tdate,submitType_s&sort=submittedDate_tdate asc
     
-    # https://api.archives-ouvertes.fr/search/?q=*:*&wt=xml&fq=submittedDate_tdate:[2025-11-01T00:00:00Z-1YEARS/DAY%20TO%20NOW/DAY]&fl=label_s,submittedDate_tdate,submitType_s&sort=submittedDate_tdate%20asc
+    https://api.archives-ouvertes.fr/search/?q=*:*&wt=xml&fq=submittedDate_tdate:[2025-11-01T00:00:00Z-1YEARS/DAY%20TO%20NOW/DAY]&fl=label_s,submittedDate_tdate,submitType_s&sort=submittedDate_tdate%20asc
+    
     """
+
+
     import requests
     import pandas as pd
     import calendar
@@ -119,51 +122,39 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     # -------------构建搜索条件--------------------
     fq = []
 
-    # ========== 文档类型 ==========
+    # 1. 文档类型
     if doc_types:
-        # 多个值用 OR 连接，外面用括号包起来
-        or_clause = " OR ".join([f'docType_s:"{t}"' for t in doc_types])
-        fq.append(f"({or_clause})")
+        fq.append(f'docType_s:({ " OR ".join([f"\\"{t}\\"" for t in doc_types]) })')
 
-    # ========== 学科领域 ==========
-    if domains:
-        or_clause = " OR ".join([f'domain_s:"{d}"' for d in domains])
-        fq.append(f"({or_clause})")
-
-    # ========== 关键词 ==========
-    if keywords:
-        or_clause = " OR ".join([f'keyword_s:"{k}"' for k in keywords])
-        fq.append(f"({or_clause})")
-
-    # ========== 语言 ==========
-    if languages:
-        or_clause = " OR ".join([f'language_s:"{lang}"' for lang in languages])
-        fq.append(f"({or_clause})")
-
-    # ========== 实验室 ==========
+    # 2. 实验室
     if labs:
-        # 注意空格要 URL 编码
-        import urllib.parse
-        or_clause = " OR ".join([
-            f'labStructName_s:"{urllib.parse.quote(lab)}"' for lab in labs
-        ])
-        fq.append(f"({or_clause})")
+        fq.append(f'labStructName_s:({ " OR ".join([f"\\"{lab}\\"" for lab in labs]) })')
 
-    # # ========== 日期 ==========
-    # if start_year and start_month and end_year and end_month:
-    #     start_date = f"{start_year:04d}-{start_month:02d}-01"
-    #     import calendar
-    #     end_day = calendar.monthrange(end_year, end_month)[1]
-    #     end_date = f"{end_year:04d}-{end_month:02d}-{end_day:02d}"
-    #     fq.append(f"submittedDate_tdate:[{start_date} TO {end_date}]")
+    # 3. 领域
+    if domains:
+        fq.append(f'domain_s:({ " OR ".join([f"\\"{d}\\"" for d in domains]) })')
 
+    # 4. 关键词
+    if keywords:
+        fq.append(f'keyword_s:({ " OR ".join([f"\\"{kw}\\"" for kw in keywords]) })')
 
+    # 5. 语言
+    if languages:
+        fq.append(f'language_s:({ " OR ".join([f"\\"{lang}\\"" for lang in languages]) })')
 
-    # #------------------q-------------------------
-    if text:
-        q = " AND ".join(text)  # 所有关键词都必须出现
-    else:
-        q="*:*"
+    # 6. 作者
+    if authors:
+        fq.append(f'authFullName_s:({ " OR ".join([f"\\"{a}\\"" for a in authors]) })')
+
+    # 7. 日期范围（时间类型字段）
+    if start_year and end_year:
+        start_date = f"{start_year:04d}-01-01"
+        end_date = f"{end_year:04d}-12-31"
+        fq.append(f'submittedDate_tdate:[{start_date} TO {end_date}]')
+
+    # 8. 自由文本（全文搜索）
+    q = " AND ".join(text) if text else "*:*"
+
 
 
     # response = requests.get(url, params=params).json()
@@ -216,26 +207,26 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
 
 
         # # 固定条件测试：
-        params = [
-            ("q", "*:*"),
-            ("fq", 'docType_s:("ART" OR "OUV")'),
-            ("fl", ','.join(fields)),
-            ("rows", rows),
-            ("wt", "json"), 
-        ]
+        # params = [
+        #     ("q", "*:*"),
+        #     ("fq", 'docType_s:("ART" OR "OUV")'),
+        #     ("fl", ','.join(fields)),
+        #     ("rows", rows),
+        #     ("wt", "json"), 
+        # ]
 
 
 
         # 10/2025 updates:fq=单独条件
-        # params = [
-        #     ("q", "*:*"),
-        #     ("fl", ",".join(fields)),
-        #     ("rows", rows),
-        #     ("wt", "json"),
-        #     # ("sort", "submittedDate_tdate desc")
-        # ]
-        # for f in fq:
-        #    params.append(("fq", f))
+        params = [
+        ("q", "*:*"),
+        ("fl", ",".join(fields)),
+        ("rows", rows),
+        ("wt", "json"),
+        ("sort", "submittedDate_tdate desc")
+    ]
+        for f in fq:
+            params.append(("fq", f))
 
     
         resp = requests.get(BASE_URL, params=params, timeout=15)
