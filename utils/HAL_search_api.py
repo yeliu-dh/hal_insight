@@ -188,7 +188,8 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         params = [
             ("q", "*:*"),
             ("fq", 'docType_s:"ART"'),
-            ("rows", 1),
+            ("fq", 'submittedDate_tdate:[{start_date} TO {end_date}]')
+            ("rows", rows),
             ("wt", "json")
         ]
 
