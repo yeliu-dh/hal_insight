@@ -189,7 +189,7 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
             ("q", "*:*"),
             ("fq", 'docType_s:"ART"'),
             # ("fq", ''),
-            ("fl", ','.join(fields))
+            ("fl", ','.join(fields)),
             ("rows", 5),
             ("wt", "json")
         ]
