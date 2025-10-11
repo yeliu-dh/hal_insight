@@ -147,7 +147,7 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         #     "sort":"submittedDate_t"
         # }
 
-        # 10/2025 maj
+        # 10/2025 updates:
         params = [
             ("q", q),
             ("fl", ",".join(fields)),
@@ -163,20 +163,31 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         resp = requests.get(BASE_URL, params=params, timeout=15)
         st.info(f"[DEBUG] Response status: {resp.status_code} | start={start}")
         
-        try:
-            data = resp.json()
-        except ValueError:
-            st.write("[ERROR] 返回内容不是有效的 JSON：")
-            st.write(resp.text[:500])  # 打印前500字符看是什么
-            raise
+        # try:
+        #     data = resp.json()
+        # except ValueError:
+        #     st.write("[ERROR] 返回内容不是有效的 JSON：")
+        #     st.write(resp.text[:500])  # 打印前500字符看是什么
+        #     raise
 
-        if "response" not in data:
-            st.write("[ERROR] JSON 中没有 'response' 字段！")
-            st.write("返回内容预览：", data)
-            raise KeyError("'response'")
+        # if "response" not in data:
+        #     st.write("[ERROR] JSON 中没有 'response' 字段！")
+        #     st.write("返回内容预览：", data)
+        #     raise KeyError("'response'")
+
+
 
         resp.raise_for_status()
         data = resp.json()
+
+        if "error" in data:
+            st.error(f"HAL API error: {data['error']}")
+            raise ValueError(f"HAL API error: {data['error']}")
+
+        if "response" not in data:
+            print("[ERROR] JSON 中没有 'response' 字段！返回内容预览：", data)
+            raise KeyError("'response'")
+        
 
         if total_found is None:
             total_found = data["response"]["numFound"]
