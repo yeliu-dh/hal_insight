@@ -149,13 +149,13 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         ])
         fq.append(f"({or_clause})")
 
-    # ========== 日期 ==========
-    if start_year and start_month and end_year and end_month:
-        start_date = f"{start_year:04d}-{start_month:02d}-01"
-        import calendar
-        end_day = calendar.monthrange(end_year, end_month)[1]
-        end_date = f"{end_year:04d}-{end_month:02d}-{end_day:02d}"
-        fq.append(f"submittedDate_tdate:[{start_date} TO {end_date}]")
+    # # ========== 日期 ==========
+    # if start_year and start_month and end_year and end_month:
+    #     start_date = f"{start_year:04d}-{start_month:02d}-01"
+    #     import calendar
+    #     end_day = calendar.monthrange(end_year, end_month)[1]
+    #     end_date = f"{end_year:04d}-{end_month:02d}-{end_day:02d}"
+    #     fq.append(f"submittedDate_tdate:[{start_date} TO {end_date}]")
 
 
 
@@ -232,7 +232,7 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
             ("fl", ",".join(fields)),
             ("rows", rows),
             ("wt", "json"),
-            ("sort", "submittedDate_tdate desc")
+            # ("sort", "submittedDate_tdate desc")
         ]
         for f in fq:
            params.append(("fq", f))
@@ -242,7 +242,7 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         print(resp.json())
 
         resp = requests.get(BASE_URL, params=params, timeout=15)
-        st.info(f"[DEBUG] Response status: {resp.status_code} | start={start}")
+        # st.info(f"[DEBUG] Response status: {resp.status_code} | start={start}")
         
 
         resp.raise_for_status()
