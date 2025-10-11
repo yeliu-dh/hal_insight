@@ -128,45 +128,25 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         input = [f'"{t}"' for t in labs]
         fq.append(f'labStructName_s:({" OR ".join(input)})')
 
-    if domains:
-        input = [f'"{t}"' for t in domains]
-        fq.append(f'domain_s:({" OR ".join(input)})')
+    # if domains:
+    #     input = [f'"{t}"' for t in domains]
+    #     fq.append(f'domain_s:({" OR ".join(input)})')
 
-    if keywords:
-        input = [f'"{t}"' for t in keywords]
-        fq.append(f'keyword_s:({" OR ".join(input)})')
+    # if keywords:
+    #     input = [f'"{t}"' for t in keywords]
+    #     fq.append(f'keyword_s:({" OR ".join(input)})')
 
-    if languages:
-        input = [f'"{t}"' for t in languages]
-        fq.append(f'language_s:({" OR ".join(input)})')
-    if authors:
-        input = [f'"{t}"' for t in authors]
-        fq.append(f'authFullName_s:({" OR ".join(input)})')
+    # if languages:
+    #     input = [f'"{t}"' for t in languages]
+    #     fq.append(f'language_s:({" OR ".join(input)})')
+    # if authors:
+    #     input = [f'"{t}"' for t in authors]
+    #     fq.append(f'authFullName_s:({" OR ".join(input)})')
 
     # # 1. 文档类型
     # if doc_types:
         
     #     fq.append(f'docType_s:({ " OR ".join([f"\\"{t}\\"" for t in doc_types]) })')
-
-    # # 2. 实验室
-    # if labs:
-    #     fq.append(f'labStructName_s:({ " OR ".join([f"\\"{lab}\\"" for lab in labs]) })')
-
-    # # 3. 领域
-    # if domains:
-    #     fq.append(f'domain_s:({ " OR ".join([f"\\"{d}\\"" for d in domains]) })')
-
-    # # 4. 关键词
-    # if keywords:
-    #     fq.append(f'keyword_s:({ " OR ".join([f"\\"{kw}\\"" for kw in keywords]) })')
-
-    # # 5. 语言
-    # if languages:
-    #     fq.append(f'language_s:({ " OR ".join([f"\\"{lang}\\"" for lang in languages]) })')
-
-    # # 6. 作者
-    # if authors:
-    #     fq.append(f'authFullName_s:({ " OR ".join([f"\\"{a}\\"" for a in authors]) })')
 
     # 7. 日期
     if start_year and start_month:
@@ -263,6 +243,11 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     ]
         for f in fq:
             params.append(("fq", f))
+        
+        # 构建 URL 用于打印检查
+        query_string = urllib.parse.urlencode(params, doseq=True)
+        full_url = BASE_URL + "?" + query_string
+        st.info(f'QUERY URL : {full_url} \n')
 
     
         resp = requests.get(BASE_URL, params=params, timeout=15)
