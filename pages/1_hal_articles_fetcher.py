@@ -10,13 +10,20 @@ import io
 import sys
 import os
 
-# 把项目根目录 (/mount/src/hal_insight) 加入 Python 路径
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-#file 得出当前脚本所在文件夹（pages），join+".."表示回到上一级路径，abs表示绝对化，sys.append则为加入系统路径
-#=> ../mount/src/hal_insight
+# # 把项目根目录 (/mount/src/hal_insight) 加入 Python 路径
+# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+# #file 得出当前脚本所在文件夹（pages），join+".."表示回到上一级路径，abs表示绝对化，sys.append则为加入系统路径
+# #=> ../mount/src/hal_insight
+
+
+import sys, os
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if ROOT_DIR not in sys.path:
+    sys.path.append(ROOT_DIR)
+
 
 # my utils
-from utils.HAL_search_api import fetch_articles
+from utils.HAL_search_api import fetch_hal_articles
 from utils.mapping import load_mapping_json
 from utils.mapping import map_domains
 from utils.mapping import add_axe
@@ -181,7 +188,7 @@ df = None#初始化
 if search_button and not invalid_date:
     with st.spinner("Chercher..."):
         try:
-            df = fetch_articles(
+            df = fetch_hal_articles(
                 start_year=start_year,
                 start_month=start_month,
                 end_year=end_year,
