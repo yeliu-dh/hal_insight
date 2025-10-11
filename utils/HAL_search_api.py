@@ -128,20 +128,20 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         input = [f'"{t}"' for t in labs]
         fq.append(f'labStructName_s:({" OR ".join(input)})')
 
-    # if domains:
-    #     input = [f'"{t}"' for t in domains]
-    #     fq.append(f'domain_s:({" OR ".join(input)})')
+    if domains:
+        input = [f'"{t}"' for t in domains]
+        fq.append(f'domain_s:({" OR ".join(input)})')
 
-    # if keywords:
-    #     input = [f'"{t}"' for t in keywords]
-    #     fq.append(f'keyword_s:({" OR ".join(input)})')
+    if keywords:
+        input = [f'"{t}"' for t in keywords]
+        fq.append(f'keyword_s:({" OR ".join(input)})')
 
-    # if languages:
-    #     input = [f'"{t}"' for t in languages]
-    #     fq.append(f'language_s:({" OR ".join(input)})')
-    # if authors:
-    #     input = [f'"{t}"' for t in authors]
-    #     fq.append(f'authFullName_s:({" OR ".join(input)})')
+    if languages:
+        input = [f'"{t}"' for t in languages]
+        fq.append(f'language_s:({" OR ".join(input)})')
+    if authors:
+        input = [f'"{t}"' for t in authors]
+        fq.append(f'authFullName_s:({" OR ".join(input)})')
 
     # # 1. 文档类型
     # if doc_types:
@@ -170,8 +170,6 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
 
     # 8. 自由文本（全文搜索）
     q = " AND ".join(text) if text else "*:*"
-
-
 
     # response = requests.get(url, params=params).json()
 
@@ -248,14 +246,14 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         # 构建 URL 用于打印检查
         query_string = urllib.parse.urlencode(params, doseq=True)
         full_url = BASE_URL + "?" + query_string
-        st.info(f'QUERY URL : {full_url} \n')
+        # st.info(f'QUERY URL : {full_url} \n')
 
     
         resp = requests.get(BASE_URL, params=params, timeout=15)
         print(resp.json())
 
         resp = requests.get(BASE_URL, params=params, timeout=15)
-        st.info(f"[DEBUG] Response status: {resp.status_code} | start={start}")
+        # st.info(f"[DEBUG] Response status: {resp.status_code} | start={start}")
         
 
         resp.raise_for_status()
