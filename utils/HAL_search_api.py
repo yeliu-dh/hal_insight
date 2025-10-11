@@ -74,9 +74,8 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     # if labs:
     #     fq.append("(" + " OR ".join([f'labStructName_s:"{lab}"' for lab in labs]) + ")")
 
-
+    # 日期1:
     # #HAL（以及 Solr/Elasticsearch）检索时，如果字段是字符串 (_s 后缀通常是 string 类型)，直接用 [start TO end] 比较的是字典序，而不是时间
-
 
     # # if start_year is not None and start_month is not None:
     # #     start_date = f"{start_year}-{start_month:02d}"
@@ -100,7 +99,7 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     # #     fq.append(f'submittedDate_s:[* TO {end_date}]')  # * 表示不限下限
 
 
-    # # 日期范围
+    # # 日期范围2
     # if start_year and start_month:
     #     start_date = f"{start_year:04d}-{start_month:02d}-01"
     # else:
@@ -146,11 +145,35 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     if authors:
         fq.append(f'authFullName_s:({ " OR ".join([f"\\"{a}\\"" for a in authors]) })')
 
-    # 7. 日期范围（时间类型字段）
-    if start_year and end_year:
-        start_date = f"{start_year:04d}-01-01"
-        end_date = f"{end_year:04d}-12-31"
-        fq.append(f'submittedDate_tdate:[{start_date} TO {end_date}]')
+    # 7. 日期
+    if start_year and start_month:
+        start_date = f"{start_year}-{start_month:02d}"
+
+        # start_date = f"{start_year}-{start_month:02d}-01 00:00:00"
+        # start_date = f"{start_year}-{start_month:02d}-01T00:00:00Z"
+        # 你生成的是 ISO 8601 带 T 和 Z，而你存储的 modifiedDate_s 是空格分隔且没有 Z
+    else:
+        start_date = None
+    
+    # end_day = calendar.monthrange(end_year, end_month)[1]#按月份决定最后一天是29/30/31
+    end_date = f"{end_year}-{end_month:02d}"
+
+    # f"{end_year}-{end_month:02d}-{end_day:02d} 23:59:59"
+    # end_date = f"{end_year}-{end_month:02d}-{end_day:02d}T23:59:59Z"
+    
+    if start_date:
+        fq.append(f'submittedDate_s:[{start_date} TO {end_date}]')#publicationDate_s,modifiedDate_s
+        # print(f"PERIODE : {start_date} TO {end_date}")
+    else:
+        fq.append(f'submittedDate_s:[* TO {end_date}]')  # * 表示不限下限
+
+
+
+    # # 7. 日期范围（时间类型字段）
+    # if start_year and end_year:
+    #     start_date = f"{start_year:04d}-01-01"
+    #     end_date = f"{end_year:04d}-12-31"
+    #     fq.append(f'submittedDate_tdate:[{start_date} TO {end_date}]')
 
     # 8. 自由文本（全文搜索）
     q = " AND ".join(text) if text else "*:*"
@@ -223,7 +246,7 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         ("fl", ",".join(fields)),
         ("rows", rows),
         ("wt", "json"),
-        ("sort", "submittedDate_tdate desc")
+        ("sort", "submittedDate_s")#"submittedDate_tdate desc"
     ]
         for f in fq:
             params.append(("fq", f))
