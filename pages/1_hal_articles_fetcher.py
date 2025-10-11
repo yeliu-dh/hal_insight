@@ -16,7 +16,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 #=> ../mount/src/hal_insight
 
 # my utils
-from utils.HAL_search_api import fetch_hal_articles
+from utils.HAL_search_api import fetch_articles
 from utils.mapping import load_mapping_json
 from utils.mapping import map_domains
 from utils.mapping import add_axe
@@ -181,7 +181,7 @@ df = None#初始化
 if search_button and not invalid_date:
     with st.spinner("Chercher..."):
         try:
-            df = fetch_hal_articles(
+            df = fetch_articles(
                 start_year=start_year,
                 start_month=start_month,
                 end_year=end_year,

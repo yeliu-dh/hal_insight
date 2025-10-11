@@ -1,7 +1,7 @@
 import streamlit as st
 import calendar
 
-def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_month=None,
+def fetch_articles(start_year=None, start_month=None, end_year=None, end_month=None,
                        doc_types=None, domains=None,keywords=None, languages=None,labs=None, authors=None, text=None,
                        fields:list=None, rows=100, max_records=5000):
     """
