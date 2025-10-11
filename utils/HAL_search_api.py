@@ -37,9 +37,9 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     
     exemple d'url (11/10/2025):
     http://api.archives-ouvertes.fr/search/?q=*:*&wt=xml&fq=submittedDate_tdate:[NOW-1MONTHS/DAY TO NOW/HOUR]&fq=submitType_s:(-notice)&fl=label_s,submittedDate_tdate,submitType_s&sort=submittedDate_tdate asc
+    
+    # https://api.archives-ouvertes.fr/search/?q=*:*&wt=xml&fq=submittedDate_tdate:[2025-11-01T00:00:00Z-1YEARS/DAY%20TO%20NOW/DAY]&fl=label_s,submittedDate_tdate,submitType_s&sort=submittedDate_tdate%20asc
     """
-
-
     import requests
     import pandas as pd
     import calendar
@@ -216,26 +216,26 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
 
 
         # # 固定条件测试：
-        # params = [
-        #     ("q", "*:*"),
-        #     ("fq", 'docType_s:"ART"'),
-        #     ("fl", ','.join(fields)),
-        #     ("rows", rows),
-        #     ("wt", "json"), 
-        # ]
+        params = [
+            ("q", "*:*"),
+            ("fq", 'docType_s:(ART OR OUV)'),
+            ("fl", ','.join(fields)),
+            ("rows", rows),
+            ("wt", "json"), 
+        ]
 
 
 
         # 10/2025 updates:fq=单独条件
-        params = [
-            ("q", "*:*"),
-            ("fl", ",".join(fields)),
-            ("rows", rows),
-            ("wt", "json"),
-            # ("sort", "submittedDate_tdate desc")
-        ]
-        for f in fq:
-           params.append(("fq", f))
+        # params = [
+        #     ("q", "*:*"),
+        #     ("fl", ",".join(fields)),
+        #     ("rows", rows),
+        #     ("wt", "json"),
+        #     # ("sort", "submittedDate_tdate desc")
+        # ]
+        # for f in fq:
+        #    params.append(("fq", f))
 
     
         resp = requests.get(BASE_URL, params=params, timeout=15)
