@@ -164,13 +164,6 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         fq.append(f'submittedDate_s:[* TO {end_date}]')  # * 表示不限下限
 
 
-
-    # # 7. 日期范围（时间类型字段）
-    # if start_year and end_year:
-    #     start_date = f"{start_year:04d}-01-01"
-    #     end_date = f"{end_year:04d}-12-31"
-    #     fq.append(f'submittedDate_tdate:[{start_date} TO {end_date}]')
-
     # 8. 自由文本（全文搜索）
     q = " AND ".join(text) if text else "*:*"
 
@@ -238,10 +231,11 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
 
         # 10/2025 updates:fq=单独条件
         params = [
-        ("q", "*:*"),
+        ("q", q),
         ("fl", ",".join(fields)),
         ("rows", rows),
         ("wt", "json"),
+        ("start", start),
         ("sort", "submittedDate_s")#"submittedDate_tdate desc"
     ]
         for f in fq:
