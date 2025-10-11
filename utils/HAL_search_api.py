@@ -88,7 +88,6 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     if start_date:
         fq.append(f'submittedDate_s:[{start_date} TO {end_date}]')#publicationDate_s,modifiedDate_s
         # print(f"PERIODE : {start_date} TO {end_date}")
-
     else:
         fq.append(f'submittedDate_s:[* TO {end_date}]')  # * 表示不限下限
 
@@ -147,35 +146,31 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         #     "sort":"submittedDate_t"
         # }
 
-        # 10/2025 updates:
-        params = [
-            ("q", q),
-            ("fl", ",".join(fields)),
-            ("rows", rows),
-            ("start", start),
-            ("wt", "json"),
-            ("sort", "submittedDate_t")
-        ]
-        for f in fq:
-            params.append(("fq", f))
+        # # 10/2025 updates:
+        # params = [
+        #     ("q", q),
+        #     ("fl", ",".join(fields)),
+        #     ("rows", rows),
+        #     ("start", start),
+        #     ("wt", "json"),
+        #     ("sort", "submittedDate_t")
+        # ]
+        # for f in fq:
+        #     params.append(("fq", f))
 
+
+        #测试
+        params = [
+            ("q", "*:*"),
+            ("rows", 1),
+            ("wt", "json")
+        ]
+        resp = requests.get(BASE_URL, params=params, timeout=15)
+        print(resp.json())
 
         resp = requests.get(BASE_URL, params=params, timeout=15)
         st.info(f"[DEBUG] Response status: {resp.status_code} | start={start}")
         
-        # try:
-        #     data = resp.json()
-        # except ValueError:
-        #     st.write("[ERROR] 返回内容不是有效的 JSON：")
-        #     st.write(resp.text[:500])  # 打印前500字符看是什么
-        #     raise
-
-        # if "response" not in data:
-        #     st.write("[ERROR] JSON 中没有 'response' 字段！")
-        #     st.write("返回内容预览：", data)
-        #     raise KeyError("'response'")
-
-
 
         resp.raise_for_status()
         data = resp.json()
