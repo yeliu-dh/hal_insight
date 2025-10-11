@@ -176,22 +176,21 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         #     ("rows", rows),
         #     ("start", start),
         #     ("wt", "json"),
-        #     ("sort", "submittedDate_t")
+        #     ("sort", "submittedDate_tdate desc")  # 使用 tdate 字段排序
         # ]
+
+        # # 每个 fq 条件单独添加
         # for f in fq:
         #     params.append(("fq", f))
-        params = [
-            ("q", q),
-            ("fl", ",".join(fields)),
-            ("rows", rows),
-            ("start", start),
-            ("wt", "json"),
-            ("sort", "submittedDate_tdate desc")  # 使用 tdate 字段排序
-        ]
 
-        # 每个 fq 条件单独添加
-        for f in fq:
-            params.append(("fq", f))
+
+        #固定条件测试：
+        params = [
+            ("q", "*:*"),
+            ("fq", 'docType_s:"ART"'),
+            ("rows", 1),
+            ("wt", "json")
+        ]
 
 
 
