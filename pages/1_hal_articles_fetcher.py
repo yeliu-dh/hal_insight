@@ -160,7 +160,7 @@ fields = st.multiselect(
 )
 
 rows_range = list(range(0, 5001))
-max_records = st.selectbox("Limite de requête une fois", rows_range, index=10)
+max_records = st.selectbox("Limite de requête une fois", rows_range, index="300")
 
 st.markdown("<br>", unsafe_allow_html=True)
 
