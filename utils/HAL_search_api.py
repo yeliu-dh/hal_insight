@@ -153,16 +153,14 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         try:
             data = resp.json()
         except ValueError:
-            print("[ERROR] 返回内容不是有效的 JSON：")
-            print(resp.text[:500])  # 打印前500字符看是什么
+            st.write("[ERROR] 返回内容不是有效的 JSON：")
+            st.write(resp.text[:500])  # 打印前500字符看是什么
             raise
 
         if "response" not in data:
-            print("[ERROR] JSON 中没有 'response' 字段！")
-            print("返回内容预览：", data)
+            st.write("[ERROR] JSON 中没有 'response' 字段！")
+            st.write("返回内容预览：", data)
             raise KeyError("'response'")
-
-
 
         resp.raise_for_status()
         data = resp.json()
