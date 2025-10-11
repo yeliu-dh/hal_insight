@@ -218,7 +218,7 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         # # 固定条件测试：
         params = [
             ("q", "*:*"),
-            ("fq", 'docType_s:(ART OR OUV)'),
+            ("fq", 'docType_s:("ART" OR "OUV")'),
             ("fl", ','.join(fields)),
             ("rows", rows),
             ("wt", "json"), 
