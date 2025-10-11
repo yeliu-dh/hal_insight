@@ -54,65 +54,110 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
                   "labStructName_s", "keyword_s", "abstract_s", "urlFulltextEsr_s"]
     
 
-    # 构建过滤条件
+    # # 构建过滤条件
+    # fq = []
+    # if doc_types:
+    #     fq.append("(" + " OR ".join([f'docType_s:"{t}"' for t in doc_types]) + ")") 
+    #     #formule：(docType_s:"ART" OR docType_s:"COMM")
+    # if domains:
+    #     fq.append("(" + " OR ".join([f'domain_s:"{t}"' for t in domains]) + ")") 
+
+    # if keywords:
+    #     fq.append("(" + " OR ".join([f'keyword_s:"{t}"' for t in keywords]) + ")") 
+
+    # if languages:
+    #     fq.append("(" + " OR ".join([f'language_s:"{t}"' for t in languages]) + ")") 
+
+    # if labs:
+    #     fq.append("(" + " OR ".join([f'labStructName_s:"{lab}"' for lab in labs]) + ")")
+
+
+    # #HAL（以及 Solr/Elasticsearch）检索时，如果字段是字符串 (_s 后缀通常是 string 类型)，直接用 [start TO end] 比较的是字典序，而不是时间
+
+
+    # # if start_year is not None and start_month is not None:
+    # #     start_date = f"{start_year}-{start_month:02d}"
+
+    # #     # start_date = f"{start_year}-{start_month:02d}-01 00:00:00"
+    # #     # start_date = f"{start_year}-{start_month:02d}-01T00:00:00Z"
+    # #     # 你生成的是 ISO 8601 带 T 和 Z，而你存储的 modifiedDate_s 是空格分隔且没有 Z
+    # # else:
+    # #     start_date = None
+    
+    # # # end_day = calendar.monthrange(end_year, end_month)[1]#按月份决定最后一天是29/30/31
+    # # end_date = f"{end_year}-{end_month:02d}"
+
+    # # # f"{end_year}-{end_month:02d}-{end_day:02d} 23:59:59"
+    # # # end_date = f"{end_year}-{end_month:02d}-{end_day:02d}T23:59:59Z"
+    
+    # # if start_date:
+    # #     fq.append(f'submittedDate_s:[{start_date} TO {end_date}]')#publicationDate_s,modifiedDate_s
+    # #     # print(f"PERIODE : {start_date} TO {end_date}")
+    # # else:
+    # #     fq.append(f'submittedDate_s:[* TO {end_date}]')  # * 表示不限下限
+
+
+    # # 日期范围
+    # if start_year and start_month:
+    #     start_date = f"{start_year:04d}-{start_month:02d}-01"
+    # else:
+    #     start_date = "*"
+
+    # # end_month / end_year 必须存在
+    # end_day = 28
+    # if end_year and end_month:
+    #     end_day = calendar.monthrange(end_year, end_month)[1]
+    #     end_date = f"{end_year:04d}-{end_month:02d}-{end_day:02d}"
+    # else:
+    #     end_date = "NOW"
+
+    # # 用 _tdate 字段，如果 HAL 返回 JSON 也可用 submittedDate_s 改成 YYYY-MM-DD 格式
+    # fq.append(f'submittedDate_tdate:[{start_date} TO {end_date}]')
+
+
+
+    # -------------构建搜索条件--------------------
     fq = []
+
+    # ========== 文档类型 ==========
     if doc_types:
-        fq.append("(" + " OR ".join([f'docType_s:"{t}"' for t in doc_types]) + ")") 
-        #formule：(docType_s:"ART" OR docType_s:"COMM")
+        # 多个值用 OR 连接，外面用括号包起来
+        or_clause = " OR ".join([f'docType_s:"{t}"' for t in doc_types])
+        fq.append(f"({or_clause})")
+
+    # ========== 学科领域 ==========
     if domains:
-        fq.append("(" + " OR ".join([f'domain_s:"{t}"' for t in domains]) + ")") 
+        or_clause = " OR ".join([f'domain_s:"{d}"' for d in domains])
+        fq.append(f"({or_clause})")
 
+    # ========== 关键词 ==========
     if keywords:
-        fq.append("(" + " OR ".join([f'keyword_s:"{t}"' for t in keywords]) + ")") 
+        or_clause = " OR ".join([f'keyword_s:"{k}"' for k in keywords])
+        fq.append(f"({or_clause})")
 
+    # ========== 语言 ==========
     if languages:
-        fq.append("(" + " OR ".join([f'language_s:"{t}"' for t in languages]) + ")") 
+        or_clause = " OR ".join([f'language_s:"{lang}"' for lang in languages])
+        fq.append(f"({or_clause})")
 
+    # ========== 实验室 ==========
     if labs:
-        fq.append("(" + " OR ".join([f'labStructName_s:"{lab}"' for lab in labs]) + ")")
+        # 注意空格要 URL 编码
+        import urllib.parse
+        or_clause = " OR ".join([
+            f'labStructName_s:"{urllib.parse.quote(lab)}"' for lab in labs
+        ])
+        fq.append(f"({or_clause})")
 
-
-    #HAL（以及 Solr/Elasticsearch）检索时，如果字段是字符串 (_s 后缀通常是 string 类型)，直接用 [start TO end] 比较的是字典序，而不是时间
-
-
-    # if start_year is not None and start_month is not None:
-    #     start_date = f"{start_year}-{start_month:02d}"
-
-    #     # start_date = f"{start_year}-{start_month:02d}-01 00:00:00"
-    #     # start_date = f"{start_year}-{start_month:02d}-01T00:00:00Z"
-    #     # 你生成的是 ISO 8601 带 T 和 Z，而你存储的 modifiedDate_s 是空格分隔且没有 Z
-    # else:
-    #     start_date = None
-    
-    # # end_day = calendar.monthrange(end_year, end_month)[1]#按月份决定最后一天是29/30/31
-    # end_date = f"{end_year}-{end_month:02d}"
-
-    # # f"{end_year}-{end_month:02d}-{end_day:02d} 23:59:59"
-    # # end_date = f"{end_year}-{end_month:02d}-{end_day:02d}T23:59:59Z"
-    
-    # if start_date:
-    #     fq.append(f'submittedDate_s:[{start_date} TO {end_date}]')#publicationDate_s,modifiedDate_s
-    #     # print(f"PERIODE : {start_date} TO {end_date}")
-    # else:
-    #     fq.append(f'submittedDate_s:[* TO {end_date}]')  # * 表示不限下限
-
-
-    # 日期范围
-    if start_year and start_month:
+    # ========== 日期 ==========
+    if start_year and start_month and end_year and end_month:
         start_date = f"{start_year:04d}-{start_month:02d}-01"
-    else:
-        start_date = "*"
-
-    # end_month / end_year 必须存在
-    end_day = 28
-    if end_year and end_month:
+        import calendar
         end_day = calendar.monthrange(end_year, end_month)[1]
         end_date = f"{end_year:04d}-{end_month:02d}-{end_day:02d}"
-    else:
-        end_date = "NOW"
+        fq.append(f"submittedDate_tdate:[{start_date} TO {end_date}]")
 
-    # 用 _tdate 字段，如果 HAL 返回 JSON 也可用 submittedDate_s 改成 YYYY-MM-DD 格式
-    fq.append(f'submittedDate_tdate:[{start_date} TO {end_date}]')
+
 
     # #------------------q-------------------------
     if text:
@@ -169,34 +214,30 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         #     "sort":"submittedDate_t"
         # }
 
-        # 10/2025 updates:fq=单独条件
+
+        # # 固定条件测试：
         # params = [
-        #     ("q", q),
-        #     ("fl", ",".join(fields)),
+        #     ("q", "*:*"),
+        #     ("fq", 'docType_s:"ART"'),
+        #     ("fl", ','.join(fields)),
         #     ("rows", rows),
-        #     ("start", start),
-        #     ("wt", "json"),
-        #     ("sort", "submittedDate_tdate desc")  # 使用 tdate 字段排序
+        #     ("wt", "json"), 
         # ]
 
-        # # 每个 fq 条件单独添加
-        # for f in fq:
-        #     params.append(("fq", f))
 
 
-        #固定条件测试：
+        # 10/2025 updates:fq=单独条件
         params = [
             ("q", "*:*"),
-            ("fq", 'docType_s:"ART"'),
-            ("fl", ','.join(fields)),
+            ("fl", ",".join(fields)),
             ("rows", rows),
-            ("wt", "json"), 
+            ("wt", "json"),
+            ("sort", "submittedDate_tdate desc")
         ]
+        for f in fq:
+           params.append(("fq", f))
 
-
-
-
-
+    
         resp = requests.get(BASE_URL, params=params, timeout=15)
         print(resp.json())
 
