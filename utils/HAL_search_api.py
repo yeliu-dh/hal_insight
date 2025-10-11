@@ -150,21 +150,22 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
 
     # 7. 日期
     if start_year and start_month:
-        start_date = f"{start_year}-{start_month:02d}-01"
+        start_date = f"{start_year}-{start_month:02d}-01T00:00:00Z"
     else:
         start_date = None
 
     if end_year and end_month:
         end_day = calendar.monthrange(end_year, end_month)[1]  # 当月最后一天
-        end_date = f"{end_year:04d}-{end_month:02d}-{end_day:02d}"
+        end_date = f"{end_year:04d}-{end_month:02d}-{end_day:02d}T23:59:59Z"
     else:
         raise ValueError("Préciser l'année de fin ou/et le mois de fin!")
 
+    #submittedDate_s
     if start_date:
-        fq.append(f'submittedDate_s:[{start_date} TO {end_date}]')#publicationDate_s,modifiedDate_s
+        fq.append(f'submittedDate_tdate:[{start_date} TO {end_date}]')#publicationDate_s,modifiedDate_s
         # print(f"PERIODE : {start_date} TO {end_date}")
     else:
-        fq.append(f'submittedDate_s:[* TO {end_date}]')  # * 表示不限下限
+        fq.append(f'submittedDate_tdate:[* TO {end_date}]')  # * 表示不限下限
 
 
     # 8. 自由文本（全文搜索）
@@ -239,7 +240,7 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         ("rows", rows),
         ("wt", "json"),
         ("start", start),
-        ("sort", "submittedDate_s")#"submittedDate_tdate desc"
+        ("sort", "submittedDate_tdate desc")#"submittedDate_tdate desc"
     ]
         for f in fq:
             params.append(("fq", f))
