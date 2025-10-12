@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
+from utils.mapping import map_axe
 
 def wrap_text(text, max_len=30):
     # 调整图例 ：textwrap.wrap 会在空格处换行，不会切断单词
@@ -10,33 +11,38 @@ def wrap_text(text, max_len=30):
     return "<br>".join(lines)
 
 
+
+# utils.wordcloud.py
+def explode_by_col(df, col):
+    """"
+    空值填nan，
+    多值按照，/；分割成list
+    =>在某一col上explode；
+    检查notna
+
+    """
+    df = df.copy()
+    df[col] = df[col].fillna('nan').astype(str).str.split("[,;]") # axe中有nan所以type:objet，先变成str
+    df = df.explode(col)
+    df[col] = df[col].str.strip()
+    return df[df[col].notna() & (df[col] != "")]
+
+
 def make_pie_chart(df, col, title, top_n=5):
-    
     if col=="Axe":
-        # 定义映射字典
-        axe_map = {
-            "1": "Performances et responsabilités",
-            "2": "Société de services et services à la société",
-            "3": "Innovations, transformations et résistances organisationnelles et sociétales",
-            "4": "Ouvrages pédagogiques"
-        }
+        df=map_axe(df, col)
 
-        # 拆分、映射、再合并
-        df['Axe'] = (
-            df['Axe']
-            .fillna('nan')
-            .astype(str)
-            .str.split(';')                  # 拆分多个值
-            .apply(lambda lst: [axe_map.get(x.strip(), x.strip()) for x in lst])  # 映射
-            .apply(lambda lst: ';'.join(lst))  # 再合并成字符串
-        )
-
-    if col=='domain_s' or col=="Axe":
-        counts=df[col].fillna('nan').str.split(";").explode().str.strip().value_counts()
-    else:
-        counts = df[col].fillna("nan").value_counts()
+    #--------------处理multivalues str-----------------
+    df=explode_by_col(df, col)
+    counts=df[col].value_counts()
+    
+    # if col=='domain_s' or col=="Axe":
+    #     counts=df[col].fillna('nan').str.split(";").explode().str.strip().value_counts()
+    # else:
+    #     counts = df[col].fillna("nan").value_counts()
     
 
+    # ---------------TOP N---------------------------
     # 如果类别大于top_n, 只保留 top_n，其余归为 "其他"
     if len(counts) > top_n:
         counts = pd.concat([
@@ -47,7 +53,7 @@ def make_pie_chart(df, col, title, top_n=5):
     counts_df = counts.reset_index()
     counts_df.columns = [col, "count"]
 
-    # 标签分行，见上函数
+    #------------ 标签文本分行，见上函数----------------
     counts_df[col] = counts_df[col].apply(lambda x: wrap_text(str(x)))
 
     fig = px.pie(
@@ -103,11 +109,17 @@ def make_pie_chart(df, col, title, top_n=5):
 
 
 def make_bar_chart(df, col, title, top_n=10):
-    if col=='domain_s' or col=="Axe":
-        counts=df[col].fillna('nan').str.split(";").explode().str.strip().value_counts()
-    else:
-        counts = df[col].fillna("nan").value_counts()
-            
+    # if col=='domain_s' or col=="Axe":
+    #     counts=df[col].fillna('nan').str.split(";").explode().str.strip().value_counts()
+    # else:
+    #     counts = df[col].fillna("nan").value_counts()
+    
+    
+    #--------------处理multivalues str-----------------
+    df=explode_by_col(df, col)
+    counts=df[col].value_counts()
+
+
     if len(counts) > top_n:
         counts = pd.concat([
             counts.head(top_n),

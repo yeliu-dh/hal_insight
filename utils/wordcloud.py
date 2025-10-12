@@ -48,6 +48,7 @@ def collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "
 def preprocess_text(text, stopwords, lang='fr'):
     """
     对文本列表做lemmatization和停用词过滤
+    nb. 使用simplelemma进行分词和还原
     """
 
     # 确认输入的是str

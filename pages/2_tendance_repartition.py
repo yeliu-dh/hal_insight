@@ -240,14 +240,15 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         for col, title in {
             "docType_s": "Répartition par type de document",
             "domain_s": "Répartition par domaine scientifique",
+            "Axe":"Répartition par axe thématique ",
             "journalTitle_s":"Répartition par journal",
-            'Cl. FNEGE':"Répartition par classement du journal",
-            "Axe":"Répartition par axe thématique "
+            'Cl. FNEGE':"Répartition par classement du journal"
             # "language_s": "Répartition par langue",
             # "country_s": "Répartition par pays"
         }.items():      
             
             if col in df.columns:
+                #------------param------------------
                 cols = st.columns(2)
                 with cols[0]:
                     # 如果是 domain_s 默认选中 "bar"，否则默认 "pie"
@@ -265,6 +266,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                         f"Top N:", 
                         min_value=1, max_value=100, value=5, step=1, key=f"topn_{col}"
                     )
+
+                #------------------------plot---------------------------------
             
                 if chart_type == "pie":
                     fig = make_pie_chart(df, col, title, top_n=top_n)
