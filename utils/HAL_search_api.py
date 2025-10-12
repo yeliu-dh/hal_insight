@@ -57,7 +57,7 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
                   "labStructName_s", "keyword_s", "abstract_s", "urlFulltextEsr_s"]
     
 
-    # # 构建过滤条件
+    # # 构建过滤条件[无法继续使用]
     # fq = []
     # if doc_types:
     #     fq.append("(" + " OR ".join([f'docType_s:"{t}"' for t in doc_types]) + ")") 
@@ -98,27 +98,7 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     # # else:
     # #     fq.append(f'submittedDate_s:[* TO {end_date}]')  # * 表示不限下限
 
-
-    # # 日期范围2
-    # if start_year and start_month:
-    #     start_date = f"{start_year:04d}-{start_month:02d}-01"
-    # else:
-    #     start_date = "*"
-
-    # # end_month / end_year 必须存在
-    # end_day = 28
-    # if end_year and end_month:
-    #     end_day = calendar.monthrange(end_year, end_month)[1]
-    #     end_date = f"{end_year:04d}-{end_month:02d}-{end_day:02d}"
-    # else:
-    #     end_date = "NOW"
-
-    # # 用 _tdate 字段，如果 HAL 返回 JSON 也可用 submittedDate_s 改成 YYYY-MM-DD 格式
-    # fq.append(f'submittedDate_tdate:[{start_date} TO {end_date}]')
-
-
-
-    # -------------构建搜索条件--------------------
+    # -------------构建搜索条件v2 11/10/25--------------------
     fq = []
     if doc_types:
         input = [f'"{t}"' for t in doc_types]
@@ -143,12 +123,7 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         input = [f'"{t}"' for t in authors]
         fq.append(f'authFullName_s:({" OR ".join(input)})')
 
-    # # 1. 文档类型
-    # if doc_types:
-        
-    #     fq.append(f'docType_s:({ " OR ".join([f"\\"{t}\\"" for t in doc_types]) })')
-
-    # 7. 日期
+    # 日期范围：submittedDate_s不能继续使用！
     if start_year and start_month:
         start_date = f"{start_year}-{start_month:02d}-01T00:00:00Z"
     else:
@@ -160,7 +135,7 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     else:
         raise ValueError("Préciser l'année de fin ou/et le mois de fin!")
 
-    #submittedDate_s
+    
     if start_date:
         fq.append(f'submittedDate_tdate:[{start_date} TO {end_date}]')#publicationDate_s,modifiedDate_s
         # print(f"PERIODE : {start_date} TO {end_date}")
@@ -171,6 +146,8 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     # 8. 自由文本（全文搜索）
     q = " AND ".join(text) if text else "*:*"
 
+
+    #==================URL check==================
     # response = requests.get(url, params=params).json()
 
     # if "response" in response:
@@ -202,6 +179,7 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     # print(f'QUERY URL : {full_url} \n')
 
 
+
     # ========= 请求循环 =========
     all_docs = []#储存所有结果
 
@@ -209,6 +187,7 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     total_found = None
 
     while True:
+        #[无法使用]
         # params = {
         #     "q": q,
         #     "fq": fq,
@@ -218,7 +197,6 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         #     "wt": "json",
         #     "sort":"submittedDate_t"
         # }
-
 
         # # 固定条件测试：
         # params = [
@@ -242,6 +220,8 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     ]
         for f in fq:
             params.append(("fq", f))
+        
+
         
         # 构建 URL 用于打印检查
         query_string = urllib.parse.urlencode(params, doseq=True)
