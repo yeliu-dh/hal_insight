@@ -1,16 +1,18 @@
 from wordcloud import WordCloud, STOPWORDS
 import matplotlib.pyplot as plt
 import seaborn as sns    
-
 import math
 import pandas as pd
 import numpy as np
 from scipy.stats import chi2_contingency
-
 import re
 import streamlit as st
 import simplemma
 from collections import defaultdict
+
+#my utils:
+from utils.plot import wrap_text
+
 
 def collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "fr"))-> dict:
     """
@@ -187,7 +189,8 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
                     "4": "Ouvrages pédagogiques",
                     "nan":'nan'
                 }
-                title=f"{group_by} {cat}- {axe_map.get(cat,'?')}"
+                title_raw = f"{group_by} {cat} - {axe_map.get(cat, '?')}"
+                title = wrap_text(title_raw, max_len=35)
 
             if combined_text:
                 fig = generate_wc(
@@ -447,12 +450,14 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
                     "4": "Ouvrages pédagogiques",
                     "nan":'nan'
                 }
-            fig.suptitle(f"{group_by} {col_val}-{axe_map.get(col_val,'?')}", fontsize=16)
+            title_raw=f"{group_by} {col_val}-{axe_map.get(col_val,'?')}"
+            title = wrap_text(title_raw, max_len=35)
+            fig.suptitle(title, fontsize=16)
             plt.tight_layout(rect=[0, 0, 1, 0.96])
 
-        elif group_by=="Cl. FNEGE":
-            fig.suptitle(f"{group_by} {col_val}", fontsize=16)
-            plt.tight_layout(rect=[0, 0, 1, 0.96])
+        # elif group_by=="Cl. FNEGE":
+        #     fig.suptitle(f"{group_by} {col_val}", fontsize=16)
+        #     plt.tight_layout(rect=[0, 0, 1, 0.96])
 
     return fig
 

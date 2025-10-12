@@ -6,9 +6,29 @@ import plotly.express as px
 from utils.mapping import map_axe
 import streamlit as st
 
+# def wrap_text(text, max_len=30):
+#     import textwrap
+#     # 调整图例 ：textwrap.wrap 会在空格处换行，不会切断单词
+#     lines = textwrap.wrap(text, width=max_len, break_long_words=False, replace_whitespace=False)
+#     return "<br>".join(lines)
+
+
 def wrap_text(text, max_len=30):
-    # 调整图例 ：textwrap.wrap 会在空格处换行，不会切断单词
-    lines = textwrap.wrap(text, width=max_len, break_long_words=False, replace_whitespace=False)
+    import textwrap
+    """
+    在 空格 处换行，而不会拆开单词；
+
+    把太长的文字（超过 max_len）自动插入 <br>；
+
+    返回一个 HTML 字符串，适合用于 Streamlit 或 Plotly 的可视化标签。
+        
+    """
+    lines = textwrap.wrap(
+        text, 
+        width=max_len, 
+        break_long_words=False, 
+        replace_whitespace=False
+    )
     return "<br>".join(lines)
 
 
