@@ -49,6 +49,7 @@ def preprocess_text(text, stopwords, lang='fr'):
     """
     对文本列表做lemmatization和停用词过滤
     nb. 使用simplelemma进行分词和还原
+
     """
 
     # 确认输入的是str
@@ -151,7 +152,7 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
     COL_MAP = {
         "Global": "global",
         "Axe": "par axe",
-        "Cl. FNEGE": "par classe FNEGE"
+        "Cl. FNEGE": "par classe FNEGE"#去除
     }    
     group_by_readable=COL_MAP.get(group_by, group_by)
     # 2.b date
@@ -171,15 +172,22 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
         st.markdown(
             f"<h3 style='text-align: center;'> {suptitle} </h3>",
             unsafe_allow_html=True
-        )
+        )#居中希纳是
 
         for cat, langs in text_groups.items(): 
             combined_text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
             
             if group_by=="Global":
                 title=" "
-            else:
-                title=f"{group_by} {cat}"
+            elif group_by=='Axe': # axe
+                axe_map = {
+                    "1": "Performances et responsabilités",
+                    "2": "Société de services et services à la société",
+                    "3": "Innovations, transformations et résistances organisationnelles et sociétales",
+                    "4": "Ouvrages pédagogiques",
+                    "nan":'nan'
+                }
+                title=f"{group_by} {cat}- {axe_map.get(cat,'?')}"
 
             if combined_text:
                 fig = generate_wc(
