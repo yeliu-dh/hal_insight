@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
 from utils.mapping import map_axe
+import streamlit as st
 
 def wrap_text(text, max_len=30):
     # 调整图例 ：textwrap.wrap 会在空格处换行，不会切断单词
