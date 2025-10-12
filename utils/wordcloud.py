@@ -190,7 +190,7 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
                 }
                 title_raw = f"{group_by} {cat} - {axe_map.get(cat, '?')}"
                 # title = wrap_text(title_raw, max_len=35)
-                title = wrap_text(text, max_len=50, html=False)
+                title = wrap_text(title_raw, max_len=50, html=False)
 
             #画图：
             combined_text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
