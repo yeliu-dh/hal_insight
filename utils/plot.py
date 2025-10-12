@@ -31,6 +31,7 @@ def explode_by_col(df, col):
 def make_pie_chart(df, col, title, top_n=5):
     if col=="Axe":
         df=map_axe(df, col)
+        st.write('axe mapped!')
 
     #--------------处理multivalues str-----------------
     df=explode_by_col(df, col)
