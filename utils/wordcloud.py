@@ -176,9 +176,8 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
             unsafe_allow_html=True
         )#居中希纳是
 
-        for cat, langs in text_groups.items(): 
-            combined_text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
-            
+        for cat, langs in text_groups.items():             
+            #小图标题
             if group_by=="Global":
                 title=" "
             elif group_by=='Axe': # axe
@@ -190,8 +189,11 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
                     "nan":'nan'
                 }
                 title_raw = f"{group_by} {cat} - {axe_map.get(cat, '?')}"
-                title = wrap_text(title_raw, max_len=35)
+                # title = wrap_text(title_raw, max_len=35)
+                title = wrap_text(text, max_len=50, html=False)
 
+            #画图：
+            combined_text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
             if combined_text:
                 fig = generate_wc(
                     langs.get("en", "") + " " + langs.get("fr", ""),  # lang 随便传一个

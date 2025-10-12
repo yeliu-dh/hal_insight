@@ -13,7 +13,20 @@ import streamlit as st
 #     return "<br>".join(lines)
 
 
-def wrap_text(text, max_len=30):
+# def wrap_text(text, max_len=30):
+#     import textwrap
+   
+#     lines = textwrap.wrap(
+#         text, 
+#         width=max_len, 
+#         break_long_words=False, 
+#         replace_whitespace=False
+#     )
+#     return "<br>".join(lines)
+
+
+
+def wrap_text(text, max_len=30, html=True):
     import textwrap
     """
     在 空格 处换行，而不会拆开单词；
@@ -21,15 +34,13 @@ def wrap_text(text, max_len=30):
     把太长的文字（超过 max_len）自动插入 <br>；
 
     返回一个 HTML 字符串，适合用于 Streamlit 或 Plotly 的可视化标签。
-        
+
+    可选使用\n（适用于str）或者 <br>（适用于网页）   
+    默认是在网页中显示   
     """
-    lines = textwrap.wrap(
-        text, 
-        width=max_len, 
-        break_long_words=False, 
-        replace_whitespace=False
-    )
-    return "<br>".join(lines)
+
+    lines = textwrap.wrap(text, width=max_len, break_long_words=False)
+    return ("<br>" if html else "\n").join(lines)
 
 
 
