@@ -29,7 +29,9 @@ def explode_by_col(df, col):
     return df[df[col].notna() & (df[col] != "")]
 
 
+
 def make_pie_chart(df, col, title, top_n=5):
+    #----------------map axe---------------------------
     if col=="Axe":
         df=map_axe(df, col)
         st.write('axe mapped!')
@@ -37,12 +39,6 @@ def make_pie_chart(df, col, title, top_n=5):
     #--------------处理multivalues str-----------------
     df=explode_by_col(df, col)
     counts=df[col].value_counts()
-    
-    # if col=='domain_s' or col=="Axe":
-    #     counts=df[col].fillna('nan').str.split(";").explode().str.strip().value_counts()
-    # else:
-    #     counts = df[col].fillna("nan").value_counts()
-    
 
     # ---------------TOP N---------------------------
     # 如果类别大于top_n, 只保留 top_n，其余归为 "其他"
@@ -111,12 +107,10 @@ def make_pie_chart(df, col, title, top_n=5):
 
 
 def make_bar_chart(df, col, title, top_n=10):
-    # if col=='domain_s' or col=="Axe":
-    #     counts=df[col].fillna('nan').str.split(";").explode().str.strip().value_counts()
-    # else:
-    #     counts = df[col].fillna("nan").value_counts()
-    
-    
+    #----------------map axe---------------------------
+    if col=="Axe":
+        df=map_axe(df, col)
+
     #--------------处理multivalues str-----------------
     df=explode_by_col(df, col)
     counts=df[col].value_counts()
