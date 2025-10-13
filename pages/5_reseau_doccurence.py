@@ -1,6 +1,6 @@
-import streamlit as st
+import streamlit as st 
 import numpy as np
-# import igraph as ig
+# import igraph as ig #非纯py，不适合安装在st cloud
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
