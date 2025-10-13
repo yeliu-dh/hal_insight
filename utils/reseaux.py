@@ -18,6 +18,16 @@ def generate_network(df, options):
     df 必须包含两列：
     - 'authFullName_s': 字符串，如 'Annick Vignes; Julien Lefournier; Antoine Rieu'
     - 'keyword_s': 字符串，如 'Adjustment strategy; New form of employment'
+    def safe_count(col, split=False, unique=True):
+            if col not in df.columns:
+                return None
+            series = df[col].dropna()
+            if split:
+                series = series.str.split(";").explode()
+            return series.nunique() if unique else len(series)
+
+            
+
     """
     COL_MAP={
             "authFullName_s":'authors',
@@ -30,7 +40,8 @@ def generate_network(df, options):
     df['authFullName_s'] = df['authFullName_s'].fillna("nan").apply(lambda x: [a.strip() for a in x.split(';') if a.strip()])
     for opt in options:
         if opt =="keyword_s":#关键词不清洗？
-            df['keyword_s'] = df['keyword_s'].fillna('nan').apply(lambda x: [k.strip() for k in x.split(';') if k.strip()])
+            df=df.dropna(subset='keyword_s')
+            df['keyword_s'] = df['keyword_s'].apply(lambda x: [k.strip() for k in x.split(';') if k.strip()])
     
         # elif opt=='abstract_s':
 
@@ -48,7 +59,7 @@ def generate_network(df, options):
     # counter“作者–关键词”
     edge_weights = Counter(edges)
     # edges = list(edge_weights.keys())
-    edges = [e for e, w in edge_weights.items() if w > 1]#滤过权重过小的边
+    edges = [e for e, w in edge_weights.items() if w >=1]#滤过权重过小的边
     weights = list(edge_weights.values())
 
 

@@ -37,6 +37,7 @@ if "started" not in st.session_state:
 # -------------------------------
 # 2️⃣ 检查/上传 CSV
 # -------------------------------
+st.markdown("<br>", unsafe_allow_html=True)#不容易被 Markdown 渲染压缩掉
 data_uploader()# 调用上传器（会自动处理已有/新上传）
 st.divider() 
 
@@ -65,7 +66,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     for col in options:
         missing_data_warning(df, col=col, map=WC_MAP)
-    # st.write("\n\n\n")
     st.markdown("<br>", unsafe_allow_html=True)#不容易被 Markdown 渲染压缩掉
 
 
@@ -170,7 +170,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     )
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # ------------ctg-------------------
+    # ------------group_by-------------------
     #radio多选,checkbox单选
     COL_MAP = {
         "Global": "global",

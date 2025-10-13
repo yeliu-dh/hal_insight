@@ -44,6 +44,7 @@ if "started" not in st.session_state:
 # -------------------------------
 # 2️⃣ 检查/上传 CSV
 # -------------------------------
+st.markdown("<br>", unsafe_allow_html=True)#不容易被 Markdown 渲染压缩掉
 data_uploader()# 调用上传器（会自动处理已有/新上传）
 st.divider() 
 
