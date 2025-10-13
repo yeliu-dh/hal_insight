@@ -7,47 +7,12 @@ import numpy as np
 from scipy.stats import chi2_contingency
 import re
 import streamlit as st
-import simplemma
 from collections import defaultdict
 
 #my utils:
 from utils.plot import wrap_text
 
-
-def collect_texts_by_language(df, options, lang_col="language_s", langs=("en", "fr"))-> dict:
-    """
-    从 DataFrame 收集指定列的文本，并按语言分开。
-    
-    Parameters:
-        df (pd.DataFrame): 数据
-        columns (list): 要收集的列，例如 ["keyword_s", "abstract_s"]
-        lang_col (str): 语言列名
-        langs (tuple): 需要分开的语言
-    
-    Returns:
-        dict: { "en": [文本], "fr": [文本] }
-    """
-    WC_MAP={"keyword_s":"mots clés",
-            "abstract_s":'résumés'}
-    
-    texts = {lang: [] for lang in langs}
-
-    for col in options:
-        # st.info(f"⚠️ Les {WC_MAP.get(col,'...')} sont manquants dans {df[col].isna().sum()}"
-        #         f" ({df[col].isna().sum()*100/len(df):.2f}%) articles!")
-        if col not in df.columns:
-            continue
-        for lang in langs:
-            #选择莫语言+不为空的行：
-            subset = df[(df[lang_col] == lang) & df[col].notna()]
-            if not subset.empty:
-                texts[lang].append(" ".join(subset[col].astype(str)).lower())# lang:['keyword_str','resume_str']
-    for lang in texts:
-        texts[lang] = " ".join(texts[lang])    
-
-    return texts
-
-def preprocess_text(text, stopwords, lang='fr'):
+def preprocess_text(text, stopwords=None, lang='fr'):
     """
     对文本列表做lemmatization和停用词过滤
     nb. 使用simplelemma进行分词和还原
@@ -61,7 +26,6 @@ def preprocess_text(text, stopwords, lang='fr'):
     elif not isinstance(text, str):  # 如果是其他类型，转成字符串
         text = str(text)
 
-
     # 去除标点和非字母+lower()
     text = text.lower().strip()
     text = re.sub(r"[^a-zA-ZÀ-ÿ\s]", " ", text)
@@ -70,11 +34,11 @@ def preprocess_text(text, stopwords, lang='fr'):
     text = re.sub(r"\s+", " ", text).strip()
 
     # lemmatisation + enlever les stopwords
+    import simplemma
     clean_tokens=[simplemma.lemmatize(word, lang=lang) for word in text.split()]
     clean_text=" ".join([w for w in clean_tokens if w.isalpha() and w not in stopwords])
 
     return clean_text
-
 
 
 def collect_clean_texts_by_col(df_input, options, stopwords, exclude_nan=False, col="Global", lang_col="language_s"):
@@ -452,11 +416,8 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
                     "4": "Ouvrages pédagogiques",
                     "nan":'nan'
                 }
-            
-            title_raw = f"{group_by} {cat} - {axe_map.get(cat, '?')}"
+            title_raw=f"{group_by} {col_val}-{axe_map.get(col_val,'?')}"            
             title = wrap_text(title_raw, max_len=50, html=False)
-            # title_raw=f"{group_by} {col_val}-{axe_map.get(col_val,'?')}"
-            # title = wrap_text(title_raw, max_len=35)
             fig.suptitle(title, fontsize=16)
             plt.tight_layout(rect=[0, 0, 1, 0.96])
 
