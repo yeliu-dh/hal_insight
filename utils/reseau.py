@@ -177,13 +177,13 @@ def generate_network(df, options, n=10, min_freq=2):
             freq = author_freq.get(node_id, 1)
             node['color'] = 'firebrick'
             node['shape'] = 'text'
-            node['font'] = {'size': 10 + freq * 2, 'color': 'firebrick'}
+            node['font'] = {'size': 10 + freq , 'color': 'firebrick'}
             node['title'] = f"Auteur : {node_id}<br>Connexions : {freq}"
         else:
             # 关键词节点：蓝色，字体大小固定
             node['color'] = 'royalblue'
             node['shape'] = 'text'
-            node['font'] = {'size': 12, 'color': 'royalblue'}
+            node['font'] = {'size': 15, 'color': 'royalblue'}
             node['title'] = f"Mot-clé : {node_id}"
 
     # ------------------ 设置边样式 ------------------
