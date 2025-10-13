@@ -191,8 +191,8 @@ def generate_network(df, options, n=10, min_freq=2):
         src = edge['from']
         dst = edge['to']
         w = G[src][dst].get('weight', 1)
-        edge['width'] = max(1, w / 2)
-        edge['color'] = 'gray'#lightgray
+        edge['width'] = max(1, w)
+        edge['color'] = 'lightgray'
         edge['title'] = f"Cooccurrence : {int(w)}"
 
     # ------------------ 渲染 ------------------
