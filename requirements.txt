@@ -24,3 +24,4 @@ requests==2.32.3
 simplemma==1.1.2
 
 networkx==3.4.2
+pyvis==0.3.2
