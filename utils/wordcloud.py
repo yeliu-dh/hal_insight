@@ -26,17 +26,20 @@ def preprocess_text(text, stopwords=None, lang='fr'):
     elif not isinstance(text, str):  # 如果是其他类型，转成字符串
         text = str(text)
 
-    # 去除标点和非字母+lower()
-    text = text.lower().strip()
-    text = re.sub(r"[^a-zA-ZÀ-ÿ\s]", " ", text)
+    #如果不是nan/'nan'
+    if text.lower().strip()!="nan" and text.notna():
 
-    # 去除多余的空格：
-    text = re.sub(r"\s+", " ", text).strip()
+        # 去除标点和非字母+lower()
+        text = text.lower().strip()
+        text = re.sub(r"[^a-zA-ZÀ-ÿ\s]", " ", text)
 
-    # lemmatisation + enlever les stopwords
-    import simplemma
-    clean_tokens=[simplemma.lemmatize(word, lang=lang) for word in text.split()]
-    clean_text=" ".join([w for w in clean_tokens if w.isalpha() and w not in stopwords])
+        # 去除多余的空格：
+        text = re.sub(r"\s+", " ", text).strip()
+
+        # lemmatisation + enlever les stopwords
+        import simplemma
+        clean_tokens=[simplemma.lemmatize(word, lang=lang) for word in text.split()]
+        clean_text=" ".join([w for w in clean_tokens if w.isalpha() and w not in stopwords])
 
     return clean_text
 
