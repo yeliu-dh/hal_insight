@@ -126,21 +126,33 @@ def generate_network(df, options, n=10, min_freq=2):
     author_keywords = defaultdict(list)
     for (author, keyword), weight in edge_weights.items():
         author_keywords[author].append((keyword, weight))
-
-
-    # 按权重排序并取前 n 个（且过滤掉权重太小的）
+    
+    
+    # # 按权重排序并取前 n 个（且过滤掉权重太小的）    
     filtered_edges = []
-    for author, kw_list in author_keywords.items():
-        # 按频率从高到低排序
-        kw_list = sorted(kw_list, key=lambda x: x[1], reverse=True)
-        # 选出权重 >= min_freq 且排名 <= n 的
-        top_kw = [(author, kw) for kw, w in kw_list[:n] if w >= min_freq]
-        filtered_edges.extend(top_kw)
+    filtered_edge_weights = {}
 
-    # 重新生成边列表与权重字典
-    filtered_edge_weights = {e: edge_weights.get(e, 1) for e in filtered_edges}
-    # edges = list(filtered_edge_weights.keys())
-    # weights = list(filtered_edge_weights.values())
+    for author, kw_list in author_keywords.items():
+        kw_list = sorted(kw_list, key=lambda x: x[1], reverse=True)
+        for kw, w in kw_list[:n]:
+            if w >= min_freq:
+                filtered_edges.append((author, kw))
+                filtered_edge_weights[(author, kw)] = w
+
+
+
+    # filtered_edges = []
+    # for author, kw_list in author_keywords.items():
+    #     # 按频率从高到低排序
+    #     kw_list = sorted(kw_list, key=lambda x: x[1], reverse=True)
+    #     # 选出权重 >= min_freq 且排名 <= n 的
+    #     top_kw = [(author, kw) for kw, w in kw_list[:n] if w >= min_freq]
+    #     filtered_edges.extend(top_kw)
+
+    # # 重新生成边列表与权重字典
+    # filtered_edge_weights = {e: edge_weights.get(e, 1) for e in filtered_edges}
+    # # edges = list(filtered_edge_weights.keys())
+    # # weights = list(filtered_edge_weights.values())
 
 
     # ------------------ 构建 NetworkX 图 ------------------
