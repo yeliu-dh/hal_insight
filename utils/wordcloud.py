@@ -43,8 +43,6 @@ from utils.plot import wrap_text
 #     # lemmatisation + enlever les stopwords
 #     clean_tokens=[simplemma.lemmatize(word, lang=lang) for word in text.split()]
 #     clean_text=" ".join([w for w in clean_tokens if w.isalpha() and w not in stopwords])
-
-
 #     return clean_text
 
 
@@ -59,8 +57,10 @@ def preprocess_text(text, stopwords=None, lang='fr'):
     # list -> str
     if isinstance(text, list):
         text = " ".join(map(str, text))
-        # st.warning("Texte sous forme de liste!!!")  # 可注释掉
-    
+        # st.warning("Texte sous forme de liste!!!") 
+    elif not isinstance(text, str):  # 如果是其他类型，转成字符串
+        text = str(text)
+
     text = str(text).lower().strip()
     
     # 去标点 &非字母 & 多余空格
