@@ -90,7 +90,13 @@ def generate_network(df, options):
 
     for opt in options:
         if opt =="keyword_s":#关键词不清洗？
-            df['keyword_s'] = df['keyword_s'].apply(lambda x: [k.strip() for k in x.split(';') if k.strip() and str(x).lower() not in ['nan',"none"]])
+            # df['keyword_s'] = df['keyword_s'].apply(lambda x: [k.strip() for k in x.split(';') if k.strip() and str(x).lower() not in ['nan',"none"]])
+            
+            df['keyword_s'] = df['keyword_s'].apply(
+                lambda x: [k.strip() for k in str(x).split(';')] 
+                if isinstance(x, str) and str(x).lower() not in ['nan','none'] 
+                else []
+            )
             #NaN 会被转换成str
 
         elif opt=='abstract_s':
