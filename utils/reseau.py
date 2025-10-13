@@ -176,37 +176,37 @@ def generate_network(df, options, n=10, min_freq=1):
     net.from_nx(G)
     
 
-    # ====设置节点颜色：作者红色，关键词蓝色===
-    all_authors = {a for authors in df['authFullName_s'] for a in authors}
-    for node in net.nodes:
-        node['color'] = 'firebrick' if node['id'] in all_authors else 'royalblue'
-
-    # # === 设置节点大小和颜色 ===
+    # # ====设置节点颜色：作者红色，关键词蓝色===
     # all_authors = {a for authors in df['authFullName_s'] for a in authors}
-
     # for node in net.nodes:
-    #     node_id = node['id']
-    #     if node_id in all_authors:
-    #         # 作者节点
-    #         node['color'] = 'firebrick'
-    #         node['value'] = author_freq.get(node_id,1) * 3  # 节点大小根据频率调整，可调倍数
-    #         node['title'] = f"Auteur : {node_id}<br>Connexions : {author_freq[node_id]}"
-    #     else:
-    #         # 关键词节点
-    #         node['color'] = 'royalblue'
-    #         node['value'] = 5  # 固定大小
-    #         node['title'] = f"Mot-clé : {node_id}"
+    #     node['color'] = 'firebrick' if node['id'] in all_authors else 'royalblue'
 
-    # # === 设置边粗细和颜色 ===
-    # for edge in net.edges:
-    #     src = edge['from']
-    #     dst = edge['to']
-    #     w = 1
-    #     if G.has_edge(src, dst):
-    #         w = G[src][dst].get('weight', 1)
-    #     edge['width'] = max(1, w / 2)
-    #     edge['color'] = "lightgray"
-    #     edge['title'] = f"Cooccurrence : {int(w)}"
+    # === 设置节点大小和颜色 ===
+    all_authors = {a for authors in df['authFullName_s'] for a in authors}
+
+    for node in net.nodes:
+        node_id = node['id']
+        if node_id in all_authors:
+            # 作者节点
+            node['color'] = 'firebrick'
+            node['value'] = author_freq.get(node_id,1) * 3  # 节点大小根据频率调整，可调倍数
+            node['title'] = f"Auteur : {node_id}<br>Connexions : {author_freq[node_id]}"
+        else:
+            # 关键词节点
+            node['color'] = 'royalblue'
+            node['value'] = 5  # 固定大小
+            node['title'] = f"Mot-clé : {node_id}"
+
+    # === 设置边粗细和颜色 ===
+    for edge in net.edges:
+        src = edge['from']
+        dst = edge['to']
+        w = 1
+        if G.has_edge(src, dst):
+            w = G[src][dst].get('weight', 1)
+        edge['width'] = max(1, w / 2)
+        edge['color'] = "lightgray"
+        edge['title'] = f"Cooccurrence : {int(w)}"
 
 
     #--------------------------渲染图----------------------------------
