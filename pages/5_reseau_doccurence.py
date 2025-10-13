@@ -10,7 +10,7 @@ from utils.upload import data_uploader, missing_data_warning
 # from utils.wordcloud import preprocess_text#clean keywords and abstracts
 # from utils.wordcloud import collect_clean_texts_by_col#fr/en
 # from utils.wordcloud import explode_by_col# authorsname, 
-from utils.reseaux import generate_network
+from utils.reseau import generate_network
 
 st.set_page_config(page_title="HAL insight", page_icon="🛸")
 st.title("🌐Réseau d'occurences ")
