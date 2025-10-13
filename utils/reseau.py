@@ -111,10 +111,14 @@ def generate_network(df, options, n=10, min_freq=1):
     # 2️⃣ 统计每一条“作者–关键词”
     edges = []
     for _, row in df.iterrows():
-        for author in row['authFullName_s']:
-            for w in row['merged_list'] :
-                edges.append((author, w))
-    
+        authors = row.get('authFullName_s', [])# 防止非list值
+        keywords = row.get('merged_list', [])
+        if not isinstance(authors, list) or not isinstance(keywords, list):
+            continue
+        for author in authors:
+            for w in keywords:
+                edges.append((author.strip(), w.strip()))
+
     # counter “作者–词”
     edge_weights = Counter(edges)
     # edges = list(edge_weights.keys())
@@ -137,7 +141,7 @@ def generate_network(df, options, n=10, min_freq=1):
         filtered_edges.extend(top_kw)
 
     # 重新生成边列表与权重字典
-    filtered_edge_weights = {e: edge_weights[e] for e in filtered_edges}
+    filtered_edge_weights = {e: edge_weights.get(e,1) for e in filtered_edges}
     edges = list(filtered_edge_weights.keys())
     weights = list(filtered_edge_weights.values())
 
@@ -146,15 +150,18 @@ def generate_network(df, options, n=10, min_freq=1):
     G = nx.Graph()
     for (a, k), w in filtered_edge_weights.items():
         # if w>1:# ⚠ 滤过权重过小的边
-        G.add_edge(a, k, weight=w, color="lightgray")
+        G.add_edge(a, k, weight=w)
 
 
     # 作者节点大小，边粗细按频率，关键词节点大小固定
+    all_authors = {a for authors in df['authFullName_s'] for a in authors}
     author_freq = Counter()
-    for a, k in G.edges():
-        if a in df['authFullName_s'].explode().values:
-            author_freq[a] += 1
-
+    for u, v, data in G.edges(data=True):
+        w = data.get('weight', 1)
+        if u in all_authors:
+            author_freq[u] += w
+        if v in all_authors:
+            author_freq[v] += w
 
     # 创建 PyVis 力导向图
     net = Network(
@@ -177,7 +184,7 @@ def generate_network(df, options, n=10, min_freq=1):
         if node_id in all_authors:
             # 作者节点
             node['color'] = 'firebrick'
-            node['value'] = author_freq[node_id] * 3  # 节点大小根据频率调整，可调倍数
+            node['value'] = author_freq.get(node_id,1) * 3  # 节点大小根据频率调整，可调倍数
             node['title'] = f"Auteur : {node_id}<br>Connexions : {author_freq[node_id]}"
         else:
             # 关键词节点
@@ -187,10 +194,21 @@ def generate_network(df, options, n=10, min_freq=1):
 
     # === 设置边粗细和颜色 ===
     for edge in net.edges:
-        w = edge['value']  # PyVis 会自动带入 NetworkX 的 weight 属性
-        edge['width'] = w / 2  # 可调比例
+        src = edge['from']
+        dst = edge['to']
+        w = 1
+        if G.has_edge(src, dst):
+            w = G[src][dst].get('weight', 1)
+        edge['width'] = max(1, w / 2)
         edge['color'] = "lightgray"
         edge['title'] = f"Cooccurrence : {int(w)}"
+
+
+    # for edge in net.edges:
+    #     w = edge['value']  # PyVis 会自动带入 NetworkX 的 weight 属性
+    #     edge['width'] = w / 2  # 可调比例
+    #     edge['color'] = "lightgray"
+    #     edge['title'] = f"Cooccurrence : {int(w)}"
 
 
 
