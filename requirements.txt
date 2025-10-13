@@ -22,3 +22,5 @@ regex==2025.9.18
 rapidfuzz==3.14.1
 requests==2.32.3
 simplemma==1.1.2
+
+networkx==3.4.2
