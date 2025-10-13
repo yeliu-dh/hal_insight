@@ -1,4 +1,4 @@
-import igraph as ig
+# import igraph as ig#非纯py，不适合安装在st cloud
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
