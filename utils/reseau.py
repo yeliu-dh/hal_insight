@@ -177,7 +177,7 @@ def generate_network(df, options, n=10, min_freq=2):
             freq = author_freq.get(node_id, 1)
             node['color'] = 'firebrick'
             node['shape'] = 'text'
-            node['font'] = {'size': 10 + freq , 'color': 'firebrick'}
+            node['font'] = {'size': 10 + freq, 'color': 'black'}#red :firebrick
             node['title'] = f"Auteur : {node_id}<br>Connexions : {freq}"
         else:
             # 关键词节点：蓝色，字体大小固定
@@ -192,7 +192,7 @@ def generate_network(df, options, n=10, min_freq=2):
         dst = edge['to']
         w = G[src][dst].get('weight', 1)
         edge['width'] = max(1, w / 2)
-        edge['color'] = 'lightgray'
+        edge['color'] = 'gray'#lightgray
         edge['title'] = f"Cooccurrence : {int(w)}"
 
     # ------------------ 渲染 ------------------
