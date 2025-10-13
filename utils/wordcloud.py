@@ -40,7 +40,8 @@ def preprocess_text(text, stopwords=None, lang='fr'):
         import simplemma
         clean_tokens=[simplemma.lemmatize(word, lang=lang) for word in text.split()]
         clean_text=" ".join([w for w in clean_tokens if w.isalpha() and w not in stopwords])
-
+    else :
+        clean_text=" "
     return clean_text
 
 
