@@ -7,13 +7,13 @@ import matplotlib.patches as mpatches
 
 #my utils
 from utils.upload import data_uploader, missing_data_warning
-from utils.wordcloud import preprocess_text#clean keywords and abstracts
-from utils.wordcloud import collect_clean_texts_by_col#fr/en
-from utils.wordcloud import explode_by_col# authorsname, 
-
+# from utils.wordcloud import preprocess_text#clean keywords and abstracts
+# from utils.wordcloud import collect_clean_texts_by_col#fr/en
+# from utils.wordcloud import explode_by_col# authorsname, 
+from utils.reseaux import generate_network
 
 st.set_page_config(page_title="HAL insight", page_icon="🛸",layout="wide")
-st.title("☁️ Nuage de mots évolutif ")
+st.title("🌐Réseau d'occurences ")
 
 # -------------------------------
 # 1️⃣ 初始化 Session State
@@ -36,6 +36,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         
 
 #=======================================================================================#
+    st.subheader("🔢 Modifier les paramètres")
+
     # ---------------TEXTE-------------------
     WC_MAP={"keyword_s":"mots clés",
             "abstract_s":'résumés'}
@@ -48,7 +50,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     )
 
     for col in options:
-        missing_data_warning(df, col=col, map=WC_MAP)
+        missing_data_warning(df, col=col, map=WC_MAP,show_distribution=False)
     st.markdown("<br>", unsafe_allow_html=True)#不容易被 Markdown 渲染压缩掉
 
     # --------------- top K freq d'occurence ------------------
@@ -61,3 +63,16 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     #----------------------------langue?----------------------
     wc_par_lang = st.checkbox("Afficher par langue ?", value=False, key="wc_lang")#key用于储存在session state中
     missing_data_warning(df, col="language_s", map={"language_s":'langue'}, show_distribution=True)
+
+
+
+    #==========================générer================================
+    cols=st.columns([4,1])
+    with cols[1]:   
+        button=st.button("Générer")  
+    st.divider()
+
+    if button:    
+        with st.spinner("Générer..."):
+            generate_network(df, options)
+
