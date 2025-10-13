@@ -67,7 +67,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     # --------------- min_freq ------------------
     min_freq = st.number_input(
         "⬇️​ Fréquence minimale:", 
-        min_value=1, max_value=10, value=1, step=1, key="min_freq"
+        min_value=1, max_value=100, value=5, step=1, key="min_freq"
     )
     st.markdown("<br>", unsafe_allow_html=True)
     
