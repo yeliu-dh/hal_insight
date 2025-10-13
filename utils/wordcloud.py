@@ -359,7 +359,7 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
     
     if group_by=="Global":    
         n_cols = 4 if len(time_slices) >=  4 else len(time_slices) #按季度可以一年为一行
-    else:#输入已经筛选过的df!
+    else: # 输入已经筛选过的df!
         n_cols=len(time_slices)
     n_rows = math.ceil(len(time_slices) / n_cols)# 计算所需行数
     fig, axes = plt.subplots(n_rows, n_cols, figsize=(n_cols * 5, n_rows * 5))# 按照行数列数计算图的大小
@@ -452,8 +452,11 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
                     "4": "Ouvrages pédagogiques",
                     "nan":'nan'
                 }
-            title_raw=f"{group_by} {col_val}-{axe_map.get(col_val,'?')}"
-            title = wrap_text(title_raw, max_len=35)
+            
+            title_raw = f"{group_by} {cat} - {axe_map.get(cat, '?')}"
+            title = wrap_text(title_raw, max_len=50, html=False)
+            # title_raw=f"{group_by} {col_val}-{axe_map.get(col_val,'?')}"
+            # title = wrap_text(title_raw, max_len=35)
             fig.suptitle(title, fontsize=16)
             plt.tight_layout(rect=[0, 0, 1, 0.96])
 

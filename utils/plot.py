@@ -37,6 +37,17 @@ def wrap_text(text, max_len=30, html=True):
 
     可选使用\n（适用于str）或者 <br>（适用于网页）   
     默认是在网页中显示   
+
+
+    replace_whitespace=True（默认）
+        会把文本中所有的空白字符（\n, \t, \r, 等）都替换成普通的 " "（空格）。
+        这样可以避免出现“奇怪的换行”或“制表符错位”等问题。
+
+    replace_whitespace=False
+        则会保留原文中的这些空白字符，不会替换。
+        例如：原来有换行符 \n，它就会被保留下来
+
+
     """
 
     lines = textwrap.wrap(text, width=max_len, break_long_words=False)
