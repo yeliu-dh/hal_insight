@@ -12,7 +12,7 @@ from utils.upload import data_uploader, missing_data_warning
 # from utils.wordcloud import explode_by_col# authorsname, 
 from utils.reseau import generate_network
 
-st.set_page_config(page_title="HAL insight", page_icon="🛸")
+st.set_page_config(page_title="HAL insight", page_icon="🛸",layout="wide")
 st.title("🌐Réseau d'occurences ")
 
 # -------------------------------
@@ -66,7 +66,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     
     # --------------- min_freq ------------------
     min_freq = st.number_input(
-        "⬇️​ Fréquence minimale:", 
+        "⬇️​ Fréquence minimale (>=):", 
         min_value=1, max_value=100, value=5, step=1, key="min_freq"
     )
     st.markdown("<br>", unsafe_allow_html=True)
