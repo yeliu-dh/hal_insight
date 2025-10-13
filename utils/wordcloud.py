@@ -12,37 +12,69 @@ from collections import defaultdict
 #my utils:
 from utils.plot import wrap_text
 
+# def preprocess_text(text, stopwords=None, lang='fr'):
+#     """
+#     检查text不为nan，否则返回" "
+#     对文本列表做lemmatization和停用词过滤
+#     nb. 使用simplelemma进行分词和还原
+
+#     """
+#     import re, simplemma
+#     stopwords = stopwords or []
+
+#      # 处理 None / NaN
+#     if text is None or str(text).lower().strip() in ['nan', 'none']:
+#         return ""
+    
+#     # 确认输入的是str    
+#     elif isinstance(text, list):  # 如果传进来是list，先拼接
+#         text = " ".join(map(str, text))
+#         # st.warning("Texte sous forme de liste!!!")
+#     elif not isinstance(text, str):  # 如果是其他类型，转成字符串
+#         text = str(text)
+
+#     # 去除标点和非字母+lower()
+#     text = text.lower().strip()
+#     text = re.sub(r"[^a-zA-ZÀ-ÿ\s]", " ", text)
+
+#     # 去除多余的空格：
+#     text = re.sub(r"\s+", " ", text).strip()
+
+#     # lemmatisation + enlever les stopwords
+#     clean_tokens=[simplemma.lemmatize(word, lang=lang) for word in text.split()]
+#     clean_text=" ".join([w for w in clean_tokens if w.isalpha() and w not in stopwords])
+
+
+#     return clean_text
+
+
 def preprocess_text(text, stopwords=None, lang='fr'):
-    """
-    对文本列表做lemmatization和停用词过滤
-    nb. 使用simplelemma进行分词和还原
-
-    """
-
-    # 确认输入的是str
-    if isinstance(text, list):  # 如果传进来是list，先拼接
+    import re, simplemma
+    stopwords = stopwords or []
+    
+    # 处理 None / NaN
+    if text is None or str(text).lower().strip() in ['nan', 'none']:
+        return ""
+    
+    # list -> str
+    if isinstance(text, list):
         text = " ".join(map(str, text))
-        st.warning("Texte sous forme de liste!!!")
-    elif not isinstance(text, str):  # 如果是其他类型，转成字符串
-        text = str(text)
-
-    #如果不是nan/'nan'
-    if text.lower().strip()!="nan" and text.notna():
-
-        # 去除标点和非字母+lower()
-        text = text.lower().strip()
-        text = re.sub(r"[^a-zA-ZÀ-ÿ\s]", " ", text)
-
-        # 去除多余的空格：
-        text = re.sub(r"\s+", " ", text).strip()
-
-        # lemmatisation + enlever les stopwords
-        import simplemma
-        clean_tokens=[simplemma.lemmatize(word, lang=lang) for word in text.split()]
-        clean_text=" ".join([w for w in clean_tokens if w.isalpha() and w not in stopwords])
-    else :
-        clean_text=" "
+        # st.warning("Texte sous forme de liste!!!")  # 可注释掉
+    
+    text = str(text).lower().strip()
+    
+    # 去标点 &非字母 & 多余空格
+    text = re.sub(r"[^a-zA-ZÀ-ÿ\s]", " ", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    
+    # lemmatize + 去停用词
+    clean_tokens = [simplemma.lemmatize(word, lang=lang) for word in text.split()]
+    clean_text = " ".join([w for w in clean_tokens if w.isalpha() and w not in stopwords])
+    
     return clean_text
+
+
+
 
 
 def collect_clean_texts_by_col(df_input, options, stopwords, exclude_nan=False, col="Global", lang_col="language_s"):
