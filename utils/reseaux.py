@@ -1,4 +1,5 @@
 # import igraph as ig#非纯py，不适合安装在st cloud
+import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -58,6 +59,8 @@ def generate_network(df, options):
     
     # counter“作者–关键词”
     edge_weights = Counter(edges)
+    st.info(edge_weights)
+
     # edges = list(edge_weights.keys())
     edges = [e for e, w in edge_weights.items() if w >=1]#滤过权重过小的边
     weights = list(edge_weights.values())
