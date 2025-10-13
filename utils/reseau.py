@@ -87,7 +87,6 @@ def generate_network(df, options, n=10, min_freq=1):
     # 转小写+去重
     stopwords = set(w.lower() for w in (stop_en + stop_fr))
 
-
     for opt in options:
         if opt =="keyword_s":#关键词不清洗？
             df['keyword_s'] = df['keyword_s'].fillna('nan').apply(lambda x: [k.strip() for k in x.split(';') if k.strip() and str(x).lower() not in ['nan',"none"]])
@@ -122,7 +121,6 @@ def generate_network(df, options, n=10, min_freq=1):
     # edges = [e for e, w in edge_weights.items() if w >=1]#滤过权重过小的边
     # weights = list(edge_weights.values())
 
-
     # 把 Counter 的结果转成 {author: [(keyword, weight), ...]}
     author_keywords = defaultdict(list)
     for (author, keyword), weight in edge_weights.items():
@@ -146,9 +144,17 @@ def generate_network(df, options, n=10, min_freq=1):
 
     # === 3️⃣ PyVis 动态力导向图 ===
     G = nx.Graph()
-    for (a, k), w in edge_weights.items():
-        if w>1:# ⚠ 滤过权重过小的边
-            G.add_edge(a, k, weight=w, color="lightgray")
+    for (a, k), w in filtered_edge_weights.items():
+        # if w>1:# ⚠ 滤过权重过小的边
+        G.add_edge(a, k, weight=w, color="lightgray")
+
+
+    # 作者节点大小，边粗细按频率，关键词节点大小固定
+    author_freq = Counter()
+    for a, k in G.edges():
+        if a in df['authFullName_s'].explode().values:
+            author_freq[a] += 1
+
 
     # 创建 PyVis 力导向图
     net = Network(
@@ -162,16 +168,48 @@ def generate_network(df, options, n=10, min_freq=1):
     # 把 networkx 图导入 pyvis
     net.from_nx(G)
 
-    # 设置节点颜色：作者红色，关键词蓝色
+
+    # === 设置节点大小和颜色 ===
     all_authors = {a for authors in df['authFullName_s'] for a in authors}
+
     for node in net.nodes:
-        node['color'] = 'firebrick' if node['id'] in all_authors else 'royalblue'
+        node_id = node['id']
+        if node_id in all_authors:
+            # 作者节点
+            node['color'] = 'firebrick'
+            node['value'] = author_freq[node_id] * 3  # 节点大小根据频率调整，可调倍数
+            node['title'] = f"Auteur : {node_id}<br>Connexions : {author_freq[node_id]}"
+        else:
+            # 关键词节点
+            node['color'] = 'royalblue'
+            node['value'] = 5  # 固定大小
+            node['title'] = f"Mot-clé : {node_id}"
+
+    # === 设置边粗细和颜色 ===
+    for edge in net.edges:
+        w = edge['value']  # PyVis 会自动带入 NetworkX 的 weight 属性
+        edge['width'] = w / 2  # 可调比例
+        edge['color'] = "lightgray"
+        edge['title'] = f"Cooccurrence : {int(w)}"
+
+
+
+    #--------------------------渲染图----------------------------------
+    #  物理布局（力导向算法）
+    net.force_atlas_2based() 
 
     # 打开“physics”控制面板（用户可以调节力导向参数）
     net.show_buttons(filter_=['physics'])
 
     # 生成并显示图（Streamlit 环境) # st.pyplot仅适用于静态图
     html(net.generate_html(), height=700)
+
+
+
+    # # ====设置节点颜色：作者红色，关键词蓝色===
+    # all_authors = {a for authors in df['authFullName_s'] for a in authors}
+    # for node in net.nodes:
+    #     node['color'] = 'firebrick' if node['id'] in all_authors else 'royalblue'
 
 
 
