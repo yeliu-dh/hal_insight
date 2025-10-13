@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 # import unidecode
-from collections import Counter
+from collections import Counter, defaultdict
 import pandas as pd
 
 import networkx as nx
@@ -16,7 +16,7 @@ from streamlit.components.v1 import html #在st中显示
 from utils.upload import missing_data_warning
 from utils.wordcloud import preprocess_text
 
-def generate_network(df, options):
+def generate_network(df, options, n=10, min_freq=1):
     """
     df 必须包含两列：
     - 'authFullName_s': 字符串，如 'Annick Vignes; Julien Lefournier; Antoine Rieu'
@@ -91,12 +91,6 @@ def generate_network(df, options):
     for opt in options:
         if opt =="keyword_s":#关键词不清洗？
             df['keyword_s'] = df['keyword_s'].fillna('nan').apply(lambda x: [k.strip() for k in x.split(';') if k.strip() and str(x).lower() not in ['nan',"none"]])
-            
-            # df['keyword_s'] = df['keyword_s'].fillna('nan').apply(
-            #     lambda x: [k.strip() for k in str(x).split(';')] 
-            #     if isinstance(x, str) and str(x).lower() not in ['nan','none'] 
-            #     else []
-            # )
             #NaN 会被转换成str
 
         elif opt=='abstract_s':
@@ -115,7 +109,6 @@ def generate_network(df, options):
         axis=1
     )
 
-
     # 2️⃣ 统计每一条“作者–关键词”
     edges = []
     for _, row in df.iterrows():
@@ -125,10 +118,31 @@ def generate_network(df, options):
     
     # counter “作者–词”
     edge_weights = Counter(edges)
-    # st.info(edge_weights)
     # edges = list(edge_weights.keys())
-    edges = [e for e, w in edge_weights.items() if w >=1]#滤过权重过小的边
-    weights = list(edge_weights.values())
+    # edges = [e for e, w in edge_weights.items() if w >=1]#滤过权重过小的边
+    # weights = list(edge_weights.values())
+
+
+    # 把 Counter 的结果转成 {author: [(keyword, weight), ...]}
+    author_keywords = defaultdict(list)
+    for (author, keyword), weight in edge_weights.items():
+        author_keywords[author].append((keyword, weight))
+
+
+    # 按权重排序并取前 n 个（且过滤掉权重太小的）
+    filtered_edges = []
+    for author, kw_list in author_keywords.items():
+        # 按频率从高到低排序
+        kw_list = sorted(kw_list, key=lambda x: x[1], reverse=True)
+        # 选出权重 >= min_freq 且排名 <= n 的
+        top_kw = [(author, kw) for kw, w in kw_list[:n] if w >= min_freq]
+        filtered_edges.extend(top_kw)
+
+    # 重新生成边列表与权重字典
+    filtered_edge_weights = {e: edge_weights[e] for e in filtered_edges}
+    edges = list(filtered_edge_weights.keys())
+    weights = list(filtered_edge_weights.values())
+
 
     # === 3️⃣ PyVis 动态力导向图 ===
     G = nx.Graph()

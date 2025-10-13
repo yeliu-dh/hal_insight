@@ -55,13 +55,23 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         missing_data_warning(df, col=col, map=WC_MAP,show_distribution=False)
     st.markdown("<br>", unsafe_allow_html=True)#不容易被 Markdown 渲染压缩掉
 
-    # --------------- top K freq d'occurence ------------------
-    k = st.number_input(
-        "⬆️ Fréquence d'occurence top K:", 
-        min_value=1, max_value=100, value=10, step=1, key="max_words"
+
+    
+    # --------------- top N mots pour un auteur ------------------
+    n = st.number_input(
+        " ⬆️ Top N mots pour un auteur:", 
+        min_value=1, max_value=100, value=10, step=1, key="top_n"
     )
     st.markdown("<br>", unsafe_allow_html=True)
     
+    # --------------- min_freq ------------------
+    min_freq = st.number_input(
+        "⬇️​ Fréquence minimale:", 
+        min_value=1, max_value=10, value=1, step=1, key="min_freq"
+    )
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+
     #----------------------------langue?----------------------
     wc_par_lang = st.checkbox("Afficher par langue ?", value=False, key="wc_lang")#key用于储存在session state中
     missing_data_warning(df, col="language_s", map={"language_s":'langue'}, show_distribution=True)
@@ -82,5 +92,5 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             ) #居中显示大标题
 
 
-            generate_network(df, options)
+            generate_network(df, options,n=n, min_freq=min_freq)
 
