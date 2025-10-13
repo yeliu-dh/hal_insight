@@ -16,7 +16,7 @@ from streamlit.components.v1 import html #在st中显示
 from utils.upload import missing_data_warning
 from utils.wordcloud import preprocess_text
 
-def generate_network(df, options, n=10, min_freq=1):
+def generate_network(df, options, n=10, min_freq=2):
     """
     df 必须包含两列：
     - 'authFullName_s': 字符串，如 'Annick Vignes; Julien Lefournier; Antoine Rieu'
@@ -121,9 +121,6 @@ def generate_network(df, options, n=10, min_freq=1):
 
     # counter “作者–词”
     edge_weights = Counter(edges)
-    # edges = list(edge_weights.keys())
-    # edges = [e for e, w in edge_weights.items() if w >=1]#滤过权重过小的边
-    # weights = list(edge_weights.values())
 
     # 把 Counter 的结果转成 {author: [(keyword, weight), ...]}
     author_keywords = defaultdict(list)
@@ -141,19 +138,17 @@ def generate_network(df, options, n=10, min_freq=1):
         filtered_edges.extend(top_kw)
 
     # 重新生成边列表与权重字典
-    filtered_edge_weights = {e: edge_weights.get(e,1) for e in filtered_edges}
-    edges = list(filtered_edge_weights.keys())
-    weights = list(filtered_edge_weights.values())
+    filtered_edge_weights = {e: edge_weights.get(e, 1) for e in filtered_edges}
+    # edges = list(filtered_edge_weights.keys())
+    # weights = list(filtered_edge_weights.values())
 
 
-    # === 3️⃣ PyVis 动态力导向图 ===
+    # ------------------ 构建 NetworkX 图 ------------------
     G = nx.Graph()
     for (a, k), w in filtered_edge_weights.items():
-        # if w>1:# ⚠ 滤过权重过小的边
         G.add_edge(a, k, weight=w)
 
-
-    # 作者节点大小，边粗细按频率，关键词节点大小固定
+    # 统计作者节点总权重，用于字体大小
     all_authors = {a for authors in df['authFullName_s'] for a in authors}
     author_freq = Counter()
     for u, v, data in G.edges(data=True):
@@ -163,7 +158,7 @@ def generate_network(df, options, n=10, min_freq=1):
         if v in all_authors:
             author_freq[v] += w
 
-    # 创建 PyVis 力导向图
+    # ------------------ 创建 PyVis 图 ------------------
     net = Network(
         height="700px",
         width="100%",
@@ -172,50 +167,112 @@ def generate_network(df, options, n=10, min_freq=1):
         notebook=False
     )
 
-    # 把 networkx 图导入 pyvis
     net.from_nx(G)
-    
 
-    # # ====设置节点颜色：作者红色，关键词蓝色===
-    # all_authors = {a for authors in df['authFullName_s'] for a in authors}
-    # for node in net.nodes:
-    #     node['color'] = 'firebrick' if node['id'] in all_authors else 'royalblue'
-
-    # === 设置节点大小和颜色 ===
-    all_authors = {a for authors in df['authFullName_s'] for a in authors}
-
+    # ------------------ 设置节点样式 ------------------
     for node in net.nodes:
         node_id = node['id']
         if node_id in all_authors:
-            # 作者节点
+            # 作者节点：红色，字体大小随权重变化
+            freq = author_freq.get(node_id, 1)
             node['color'] = 'firebrick'
-            node['value'] = author_freq.get(node_id,1) * 3  # 节点大小根据频率调整，可调倍数
-            node['title'] = f"Auteur : {node_id}<br>Connexions : {author_freq[node_id]}"
+            node['shape'] = 'text'
+            node['font'] = {'size': 10 + freq * 2, 'color': 'firebrick'}
+            node['title'] = f"Auteur : {node_id}<br>Connexions : {freq}"
         else:
-            # 关键词节点
+            # 关键词节点：蓝色，字体大小固定
             node['color'] = 'royalblue'
-            node['value'] = 5  # 固定大小
+            node['shape'] = 'text'
+            node['font'] = {'size': 12, 'color': 'royalblue'}
             node['title'] = f"Mot-clé : {node_id}"
 
-    # === 设置边粗细和颜色 ===
+    # ------------------ 设置边样式 ------------------
     for edge in net.edges:
         src = edge['from']
         dst = edge['to']
-        w = 1
-        if G.has_edge(src, dst):
-            w = G[src][dst].get('weight', 1)
+        w = G[src][dst].get('weight', 1)
         edge['width'] = max(1, w / 2)
-        edge['color'] = "lightgray"
+        edge['color'] = 'lightgray'
         edge['title'] = f"Cooccurrence : {int(w)}"
 
+    # ------------------ 渲染 ------------------
+    net.force_atlas_2based()  # 力导向布局
+    net.show_buttons(filter_=['physics'])  # 显示物理参数控制
 
-    #--------------------------渲染图----------------------------------
-    #  物理布局（力导向算法）
-    net.force_atlas_2based() 
-
-    # 打开“physics”控制面板（用户可以调节力导向参数）
-    net.show_buttons(filter_=['physics'])
-
-    # 生成并显示图（Streamlit 环境) # st.pyplot仅适用于静态图
+    # Streamlit 显示
     html(net.generate_html(), height=700)
+
+
+
+    # # === 3️⃣ PyVis 动态力导向图 ===
+    # G = nx.Graph()
+    # for (a, k), w in filtered_edge_weights.items():
+    #     G.add_edge(a, k, weight=w)
+
+
+    # # 作者节点大小，边粗细按频率，关键词节点大小固定
+    # all_authors = {a for authors in df['authFullName_s'] for a in authors}
+    # author_freq = Counter()
+    # for u, v, data in G.edges(data=True):
+    #     w = data.get('weight', 1)
+    #     if u in all_authors:
+    #         author_freq[u] += w
+    #     if v in all_authors:
+    #         author_freq[v] += w
+
+    # # 创建 PyVis 力导向图
+    # net = Network(
+    #     height="700px",
+    #     width="100%",
+    #     bgcolor="#ffffff",
+    #     font_color="black",
+    #     notebook=False
+    # )
+
+    # # 把 networkx 图导入 pyvis
+    # net.from_nx(G)
+    
+
+    # # # ====设置节点颜色：作者红色，关键词蓝色===
+    # # all_authors = {a for authors in df['authFullName_s'] for a in authors}
+    # # for node in net.nodes:
+    # #     node['color'] = 'firebrick' if node['id'] in all_authors else 'royalblue'
+
+    # # === 设置节点大小和颜色 ===
+    # all_authors = {a for authors in df['authFullName_s'] for a in authors}
+
+    # for node in net.nodes:
+    #     node_id = node['id']
+    #     if node_id in all_authors:
+    #         # 作者节点
+    #         node['color'] = 'firebrick'
+    #         node['value'] = author_freq.get(node_id,1) * 3  # 节点大小根据频率调整，可调倍数
+    #         node['title'] = f"Auteur : {node_id}<br>Connexions : {author_freq[node_id]}"
+    #     else:
+    #         # 关键词节点
+    #         node['color'] = 'royalblue'
+    #         node['value'] = 5  # 固定大小
+    #         node['title'] = f"Mot-clé : {node_id}"
+
+    # # === 设置边粗细和颜色 ===
+    # for edge in net.edges:
+    #     src = edge['from']
+    #     dst = edge['to']
+    #     w = 1
+    #     if G.has_edge(src, dst):
+    #         w = G[src][dst].get('weight', 1)
+    #     edge['width'] = max(1, w / 2)
+    #     edge['color'] = "lightgray"
+    #     edge['title'] = f"Cooccurrence : {int(w)}"
+
+
+    # #--------------------------渲染图----------------------------------
+    # #  物理布局（力导向算法）
+    # net.force_atlas_2based() 
+
+    # # 打开“physics”控制面板（用户可以调节力导向参数）
+    # net.show_buttons(filter_=['physics'])
+
+    # # 生成并显示图（Streamlit 环境) # st.pyplot仅适用于静态图
+    # html(net.generate_html(), height=700)
 
