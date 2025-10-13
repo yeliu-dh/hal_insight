@@ -13,6 +13,8 @@ from streamlit.components.v1 import html #在st中显示
 
 #my utils 
 from utils.upload import missing_data_warning
+from utils.wordcloud import wrap_text
+
 
 def generate_network(df, options):
     """
