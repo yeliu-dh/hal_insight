@@ -133,13 +133,11 @@ def generate_network(df, options, n=10, min_freq=2):
     filtered_edge_weights = {}
 
     for author, kw_list in author_keywords.items():
-        kw_list = sorted(kw_list, key=lambda x: x[1], reverse=True)
+        kw_list = sorted(kw_list, key=lambda x: x[1], reverse=True)#按照weight排序
         for kw, w in kw_list[:n]:
             if w >= min_freq:
                 filtered_edges.append((author, kw))
                 filtered_edge_weights[(author, kw)] = w
-
-
 
     # filtered_edges = []
     # for author, kw_list in author_keywords.items():
@@ -157,8 +155,10 @@ def generate_network(df, options, n=10, min_freq=2):
 
     # ------------------ 构建 NetworkX 图 ------------------
     G = nx.Graph()
-    for (a, k), w in filtered_edge_weights.items():
+    for (a, k), w in filtered_edge_weights.items():  # ⚠ 用筛选后的权重
         G.add_edge(a, k, weight=w)
+
+
 
     # 统计作者节点总权重，用于字体大小
     all_authors = {a for authors in df['authFullName_s'] for a in authors}
