@@ -83,6 +83,78 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         missing_data_warning(df, col=col, map=WC_MAP,show_distribution=False)
     st.markdown("<br>", unsafe_allow_html=True)#不容易被 Markdown 渲染压缩掉
 
+  # ------------gourpby-------------------
+    #radio多选,checkbox单选
+    COL_MAP = {
+        "Global": "global",
+        "Axe": "par axe",
+        "Cl. FNEGE": "par classe FNEGE"
+    }
+    group_by = st.radio(
+        "💾 Groupe des textes :",
+        ["Global", "Axe"],#"Cl. FNEGE" 
+        index=0,
+        format_func=lambda x: COL_MAP.get(x, x), 
+        horizontal=True
+    )
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    
+    #---------------langue-------------------
+    wc_par_lang = st.checkbox("Afficher par langue ?", value=False, key="wc_lang")#key用于储存在session state中
+    missing_data_warning(df, col="language_s", map={"language_s":'langue'}, show_distribution=True)
+
+
+    #--------------exclure nan--------------
+    exclude_nan = st.checkbox("Exclure les lignes sans étiquette d'axe ? ", value=False, key="nan")
+    st.divider()
+
+
+
+
+    # ----------------时间颗粒----------------
+    if "submittedDate_s" in df.columns:
+        df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
+        latest_date = df["submittedDate_s"].max()
+        latest_ym = latest_date.strftime("%Y-%m") if pd.notnull(latest_date) else "Aucune date valide"
+
+        earliest_date=df["submittedDate_s"].min()
+        earliest_ym = earliest_date.strftime("%Y-%m") if pd.notnull(latest_date) else "Aucune date valide"
+    
+        #time period in month 
+        if pd.notnull(earliest_date) and pd.notnull(latest_date):
+            period_m = (latest_date.year - earliest_date.year) * 12 + (latest_date.month - earliest_date.month)
+        else:
+            period_m = 0
+
+                
+        # # ---- 自动推荐时间粒度并设置 radio 默认选项 ----
+        if period_m <= 12:#一年内，按月度或者季度显示
+            suggestion = "Mensuel ou Trimestriel"
+            default_index = 1
+        elif period_m <= 60:#3/5年内，按年度显示
+            suggestion = "Annuel"
+            default_index = 2
+        else:
+            suggestion = "Tous les 3 ou 5 ans"
+            default_index = 3
+
+        # ----radio ----
+        granularity = st.radio(
+            "🕒 Granularité temporelle :",
+            ["Toute la période → wc global","Mensuel","Trimestriel", "Annuel", "Tous les 3 ans","Tous les 5 ans"],
+            index=default_index,
+            horizontal=True,
+        )  
+        if granularity!="Toute la période → wc global":
+            time_slices=create_time_slices(df, granularity=granularity)
+  
+        st.info(f"Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).\n\n"
+                f"Granularité recommandée pour le nuage de mots évolutif: **{suggestion}**. \n\n"
+                f"NB. Si vous générez le nuage de mots évolutif, la figure ne différencie pas les langues.")
+      
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.divider()
 
     # ----------------- user stopwords ---------------
     user_stopwords = st_tags(
@@ -143,74 +215,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     
     
-    # ----------------时间颗粒----------------
-    if "submittedDate_s" in df.columns:
-        df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
-        latest_date = df["submittedDate_s"].max()
-        latest_ym = latest_date.strftime("%Y-%m") if pd.notnull(latest_date) else "Aucune date valide"
-
-        earliest_date=df["submittedDate_s"].min()
-        earliest_ym = earliest_date.strftime("%Y-%m") if pd.notnull(latest_date) else "Aucune date valide"
-    
-        #time period in month 
-        if pd.notnull(earliest_date) and pd.notnull(latest_date):
-            period_m = (latest_date.year - earliest_date.year) * 12 + (latest_date.month - earliest_date.month)
-        else:
-            period_m = 0
-
-                
-        # # ---- 自动推荐时间粒度并设置 radio 默认选项 ----
-        if period_m <= 12:#一年内，按月度或者季度显示
-            suggestion = "Mensuel ou Trimestriel"
-            default_index = 1
-        elif period_m <= 60:#3/5年内，按年度显示
-            suggestion = "Annuel"
-            default_index = 2
-        else:
-            suggestion = "Tous les 3 ou 5 ans"
-            default_index = 3
-
-        # ----radio ----
-        granularity = st.radio(
-            "🕒 Granularité temporelle :",
-            ["Toute la période → wc global","Mensuel","Trimestriel", "Annuel", "Tous les 3 ans","Tous les 5 ans"],
-            index=default_index,
-            horizontal=True,
-        )  
-        if granularity!="Toute la période → wc global":
-            time_slices=create_time_slices(df, granularity=granularity)
-  
-        st.info(f"Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).\n\n"
-                f"Granularité recommandée pour le nuage de mots évolutif: **{suggestion}**. \n\n"
-                f"NB. Si vous générez le nuage de mots évolutif, la figure ne différencie pas les langues.")
-      
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    # ------------gourpby-------------------
-    #radio多选,checkbox单选
-    COL_MAP = {
-        "Global": "global",
-        "Axe": "par axe",
-        "Cl. FNEGE": "par classe FNEGE"
-    }
-    group_by = st.radio(
-        "💾 Groupe des textes :",
-        ["Global", "Axe"],#"Cl. FNEGE" 
-        index=0,
-        format_func=lambda x: COL_MAP.get(x, x), 
-        horizontal=True
-    )
-    st.markdown("<br>", unsafe_allow_html=True)
-
-
-    #--------------exclure nan--------------
-    exclude_nan = st.checkbox("Exclure les lignes sans étiquette d'axe? ", value=False, key="nan")
-
-
-    #---------------langue-------------------
-    wc_par_lang = st.checkbox("Afficher par langue ?", value=False, key="wc_lang")#key用于储存在session state中
-    missing_data_warning(df, col="language_s", map={"language_s":'langue'}, show_distribution=True)
-
 
     # 按钮生成+储存
     cols=st.columns([4,1])
