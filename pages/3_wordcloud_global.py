@@ -192,6 +192,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             index=default_index,
             horizontal=True,
         )  
+        if granularity!="Toute la période → wc global":
+            time_slices=create_time_slices(df, granularity=granularity)
+  
         st.info(f"Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).\n\n"
                 f"Granularité recommandée pour le nuage de mots évolutif: **{suggestion}**. \n\n"
                 f"NB. Si vous générez le nuage de mots évolutif, la figure ne différencie pas les langues.")
@@ -217,7 +220,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         if granularity=="Toute la période → wc global":
             with st.spinner("Générer le nuage de mots global..."):
                 wc=generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words, stopwords)
-        else :# evo
+       
+       
+        elif generate_button and time_slices :# granlarity → évolutif
             with st.spinner("Générer le nuage de mots évolutif..."):
                 if group_by=="Global":
                     evolutif_wc= generate_keyness_wc(df, options, exclude_nan, group_by, granularity=granularity, max_words=max_words, stopwords=stopwords, method="llr")
