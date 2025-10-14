@@ -248,9 +248,7 @@ def create_time_slices(df, granularity):
 
     # else:  # 默认年度
     #     time_slices = [(y, y) for y in range(start_year, end_year + 1)]
-    # st.info(f"Granularité {granularity}:{time_slices}")
-
-    
+    # st.info(f"Granularité {granularity}:{time_slices}")    
     return time_slices
 
 
@@ -310,7 +308,7 @@ def explode_by_col(df, col="Axe"):
     return df[df[col].notna() & (df[col] != "")]
 
 
-def generate_keyness_wc(df, options, exclude_nan, group_by, granularity, col_val=None, max_words=100, stopwords=None, method="llr"):
+def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val=None, max_words=100, stopwords=None, method="llr"):
     """
     根据时间片生成 keyness 演变词云+小图
     """
@@ -321,7 +319,7 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, granularity, col_val
        
     
     #-----------time_slices-------------:
-    time_slices=create_time_slices(df, granularity=granularity)
+    # time_slices=create_time_slices(df, granularity=granularity)
 
     # ------------- 绘图布局 -------------
     
