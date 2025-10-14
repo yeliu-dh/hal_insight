@@ -16,6 +16,8 @@ from streamlit.components.v1 import html #在st中显示
 from utils.upload import missing_data_warning
 from utils.wordcloud import preprocess_text
 
+
+
 def generate_network(df, options, n=10, min_freq=2):
     """
     df 必须包含两列：
@@ -30,7 +32,7 @@ def generate_network(df, options, n=10, min_freq=2):
              }
     
     # 1️⃣ 把col中的值变成list
-    ## authors 
+    ## authors 列填nan，按；拆成list
     df['authFullName_s'] = df['authFullName_s'].fillna("nan").apply(lambda x: [a.strip() for a in x.split(';') if a.strip()])
 
 
@@ -44,7 +46,6 @@ def generate_network(df, options, n=10, min_freq=2):
             axis=1
         )
     ]
-
 
     # 清洗options列上的值    
     #-----------nltk stopwords----------------
@@ -88,19 +89,26 @@ def generate_network(df, options, n=10, min_freq=2):
     stopwords = set(w.lower() for w in (stop_en + stop_fr))
 
     for opt in options:
-        if opt =="keyword_s":#关键词不清洗？
-            df['keyword_s'] = df['keyword_s'].fillna('nan').apply(lambda x: [k.strip().lower() for k in x.split(';') if k.strip() and str(x).lower() not in ['nan',"none"]])
-            #NaN 会被转换成str
+        # if opt =="keyword_s":#关键词不清洗？
+        #     df['keyword_s'] = df['keyword_s'].fillna('nan').apply(lambda x: [k.strip().lower() for k in x.split(';') if k.strip() and str(x).lower() not in ['nan',"none"]])
+        #     #NaN 会被转换成str
 
-        elif opt=='abstract_s':
-            df["abstract_s"]=df.apply(lambda row: preprocess_text(text=row["abstract_s"], stopwords=stopwords, lang=row["language_s"]),
-                                    axis=1
-                                      )
-            #需保证x是str
-            df["abstract_s"]=df['abstract_s'].apply(lambda x: [k.strip() for k in x.split() if k.strip()])
+        # elif opt=='abstract_s':
+        #     df["abstract_s"]=df.apply(lambda row: preprocess_text(text=row["abstract_s"], stopwords=stopwords, lang=row["language_s"]),
+        #                             axis=1
+        #                               )
+        #     #需保证x是str
+        #     df["abstract_s"]=df['abstract_s'].apply(lambda x: [k.strip() for k in x.split() if k.strip()])
             
         # 多语言清洗：
         # keyword = unidecode(keyword.lower().strip())
+
+        df[opt]=df.apply(lambda row: preprocess_text(text=row[opt], stopwords=stopwords, lang=row["language_s"]),
+                                    axis=1
+        )
+        df[opt]=df[opt].apply(lambda x: [k.strip() for k in x.split() if k.strip()])
+
+
 
     # 取options上的list中的值，如果是list的话
     df["merged_list"] = df[options].apply(
