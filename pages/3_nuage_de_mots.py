@@ -93,7 +93,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     
     #---------------langue-------------------
-    wc_par_lang = st.checkbox("Afficher par langue ? (le nuage de mots évolutif ne différencie pas les langues.)", value=False, key="wc_lang")#key用于储存在session state中
+    wc_par_lang = st.checkbox("Afficher par langue ?", value=False, key="wc_lang")#key用于储存在session state中
+    st.write("Le nuage de mots évolutif ne différencie pas les langues.")
     missing_data_warning(df, col="language_s", map={"language_s":'langue'}, show_distribution=True)
 
 
@@ -142,8 +143,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             time_slices=create_time_slices(df, granularity=granularity)
   
         st.info(f"Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).\n\n"
-                f"Granularité recommandée pour le nuage de mots évolutif: **{suggestion}**. \n\n"
-                f"NB. Si vous générez le nuage de mots évolutif, la figure ne différencie pas les langues.")
+                f"Granularité recommandée pour le nuage de mots évolutif: **{suggestion}**. \n\n")
+        
       
     st.markdown("<br>", unsafe_allow_html=True)
     st.divider()
