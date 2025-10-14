@@ -53,21 +53,13 @@ data_uploader()# 调用上传器（会自动处理已有/新上传）
 st.divider() 
 
 
-st.subheader("🔢 Modifier les paramètres")
 if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None:
     # 若df存在则视为开始
     st.session_state.started=True
     df = st.session_state.uploaded_df.copy()
-
-    # -----------------PART1 总体词云 ----------------------------------
-    # param:
-    # if "overall_wc" not in st.session_state:
-    #     st.session_state["overall_wc"] = None
+   
     
-    #--------period in years--------------------
-    df = st.session_state.uploaded_df.copy()
-    ## move to generate_wc_param:
-
+    st.subheader("🔢 Modifier les paramètres")
     # ---------------文本范围-------------------
     WC_MAP={"keyword_s":"mots clés",
             "abstract_s":'résumés'}
