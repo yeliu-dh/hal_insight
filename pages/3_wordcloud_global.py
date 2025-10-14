@@ -149,7 +149,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         "Cl. FNEGE": "par classe FNEGE"
     }
     group_by = st.radio(
-        "💾 Group :",
+        "💾 Groupe des textes :",
         ["Global", "Axe"],#"Cl. FNEGE" 
         index=0,
         format_func=lambda x: COL_MAP.get(x, x), 
@@ -187,13 +187,13 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
         # ---- Radio 选择 ----
         granularity = st.radio(
-            "🕒 Sélectionnez la granularité temporelle :",
+            "🕒 Granularité temporelle :",
             ["Toute la période → wc global","Mensuel","Trimestriel", "Annuel", "Tous les 3 ans","Tous les 5 ans"],
-            index=0, #default_index,
+            index=default_index,
             horizontal=True,
         )  
         st.info(f"Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).\n\n"
-                f"Granularité recommandée: **{suggestion}** pour le nuage de mots évolutif.\n\n"
+                f"Granularité recommandée pour le nuage de mots évolutif: **{suggestion}**. \n\n"
                 f"NB. Si vous générez le nuage de mots évolutif, la figure ne différencie pas les langues.")
       
     st.markdown("<br>", unsafe_allow_html=True)
@@ -212,11 +212,12 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     with cols[1]:   
         generate_button=st.button("Générer")      
 
+
     if generate_button :
         if granularity=="Toute la période → wc global":
             with st.spinner("Générer le nuage de mots global..."):
                 wc=generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words, stopwords)
-        else :
+        else :# evo
             with st.spinner("Générer le nuage de mots évolutif..."):
                 if group_by=="Global":
                     evolutif_wc= generate_keyness_wc(df, options, exclude_nan, group_by, granularity=granularity, max_words=max_words, stopwords=stopwords, method="llr")
