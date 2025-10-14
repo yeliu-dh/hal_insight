@@ -141,22 +141,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     st.markdown("<br>", unsafe_allow_html=True)
 
 
-    # ------------gourpby-------------------
-    #radio多选,checkbox单选
-    COL_MAP = {
-        "Global": "global",
-        "Axe": "par axe",
-        "Cl. FNEGE": "par classe FNEGE"
-    }
-    group_by = st.radio(
-        "💾 Groupe des textes :",
-        ["Global", "Axe"],#"Cl. FNEGE" 
-        index=0,
-        format_func=lambda x: COL_MAP.get(x, x), 
-        horizontal=True
-    )
-    st.markdown("<br>", unsafe_allow_html=True)
-
+    
     
     # ----------------时间颗粒----------------
     if "submittedDate_s" in df.columns:
@@ -185,7 +170,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             suggestion = "Tous les 3 ou 5 ans"
             default_index = 3
 
-        # ---- Radio 选择 ----
+        # ----radio ----
         granularity = st.radio(
             "🕒 Granularité temporelle :",
             ["Toute la période → wc global","Mensuel","Trimestriel", "Annuel", "Tous les 3 ans","Tous les 5 ans"],
@@ -201,14 +186,31 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
       
     st.markdown("<br>", unsafe_allow_html=True)
 
+    # ------------gourpby-------------------
+    #radio多选,checkbox单选
+    COL_MAP = {
+        "Global": "global",
+        "Axe": "par axe",
+        "Cl. FNEGE": "par classe FNEGE"
+    }
+    group_by = st.radio(
+        "💾 Groupe des textes :",
+        ["Global", "Axe"],#"Cl. FNEGE" 
+        index=0,
+        format_func=lambda x: COL_MAP.get(x, x), 
+        horizontal=True
+    )
+    st.markdown("<br>", unsafe_allow_html=True)
+
+
+    #--------------exclure nan--------------
+    exclude_nan = st.checkbox("Exclure les lignes sans étiquette d'axe? ", value=False, key="nan")
+
 
     #---------------langue-------------------
     wc_par_lang = st.checkbox("Afficher par langue ?", value=False, key="wc_lang")#key用于储存在session state中
     missing_data_warning(df, col="language_s", map={"language_s":'langue'}, show_distribution=True)
 
-
-    #--------------exclure nan--------------
-    exclude_nan = st.checkbox("Exclure les lignes sans étiquette (dropna)? ", value=False, key="nan")
 
     # 按钮生成+储存
     cols=st.columns([4,1])
