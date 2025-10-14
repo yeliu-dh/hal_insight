@@ -20,8 +20,8 @@ from utils.wordcloud import preprocess_text
 from utils.wordcloud import collect_clean_texts_by_col
 from utils.wordcloud import generate_wc
 from utils.wordcloud import generate_wc_param
-from utils.wordcloud import explode_by_col
 
+from utils.wordcloud import explode_by_col
 from utils.wordcloud import create_time_slices
 from utils.wordcloud import generate_keyness_wc
 
@@ -225,7 +225,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         elif generate_button and time_slices :# granlarity → évolutif
             with st.spinner("Générer le nuage de mots évolutif..."):
                 if group_by=="Global":
-                    evolutif_wc= generate_keyness_wc(df, options, exclude_nan, group_by, granularity=granularity, max_words=max_words, stopwords=stopwords, method="llr")
+                    evolutif_wc= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices=time_slices, max_words=max_words, stopwords=stopwords, method="llr")
                     st.pyplot(evolutif_wc)
                 
                 # elif group_by=="Axe" or groupby=="":
@@ -249,6 +249,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                     for col_val in ctg :
                         df_slice=exploded_df[exploded_df[group_by]==col_val]
 
-                        evolutif_wc_by_axe=generate_keyness_wc(df_slice, options, exclude_nan, group_by, granularity=granularity, col_val=col_val, max_words=max_words, stopwords=stopwords, method="llr")                                
+                        evolutif_wc_by_axe=generate_keyness_wc(df_slice, options, exclude_nan, group_by, time_slices=time_slices, col_val=col_val, max_words=max_words, stopwords=stopwords, method="llr")                                
                         st.pyplot(evolutif_wc_by_axe)
             
