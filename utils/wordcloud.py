@@ -12,38 +12,6 @@ from collections import defaultdict
 #my utils:
 from utils.plot import wrap_text
 
-# def preprocess_text(text, stopwords=None, lang='fr'):
-#     """
-#     检查text不为nan，否则返回" "
-#     对文本列表做lemmatization和停用词过滤
-#     nb. 使用simplelemma进行分词和还原
-
-#     """
-#     import re, simplemma
-#     stopwords = stopwords or []
-
-#      # 处理 None / NaN
-#     if text is None or str(text).lower().strip() in ['nan', 'none']:
-#         return ""
-    
-#     # 确认输入的是str    
-#     elif isinstance(text, list):  # 如果传进来是list，先拼接
-#         text = " ".join(map(str, text))
-#         # st.warning("Texte sous forme de liste!!!")
-#     elif not isinstance(text, str):  # 如果是其他类型，转成字符串
-#         text = str(text)
-
-#     # 去除标点和非字母+lower()
-#     text = text.lower().strip()
-#     text = re.sub(r"[^a-zA-ZÀ-ÿ\s]", " ", text)
-
-#     # 去除多余的空格：
-#     text = re.sub(r"\s+", " ", text).strip()
-
-#     # lemmatisation + enlever les stopwords
-#     clean_tokens=[simplemma.lemmatize(word, lang=lang) for word in text.split()]
-#     clean_text=" ".join([w for w in clean_tokens if w.isalpha() and w not in stopwords])
-#     return clean_text
 
 
 def preprocess_text(text, stopwords=None, lang='fr'):
@@ -72,8 +40,6 @@ def preprocess_text(text, stopwords=None, lang='fr'):
     clean_text = " ".join([w for w in clean_tokens if w.isalpha() and w not in stopwords])
     
     return clean_text
-
-
 
 
 
@@ -139,7 +105,6 @@ def generate_wc(text, max_words, stopwords, title="Nuage de mots"):
     ax.axis("off")  # 去掉坐标轴
     ax.set_title(title, fontsize=16)
     return fig
-
 
 
 def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words, stopwords):
@@ -345,17 +310,20 @@ def explode_by_col(df, col="Axe"):
     return df[df[col].notna() & (df[col] != "")]
 
 
-def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val=None, max_words=100, stopwords=None, method="llr"):
+def generate_keyness_wc(df, options, exclude_nan, group_by, granularity, col_val=None, max_words=100, stopwords=None, method="llr"):
     """
     根据时间片生成 keyness 演变词云+小图
     """
-    #
+    # 规范日期格式
     df = df.copy()
     df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
     df["year"] = df["submittedDate_s"].dt.year #筛选用
+       
+    
+    #-----------time_slices-------------:
+    time_slices=create_time_slices(df, granularity=granularity)
 
-
-    # --- 绘图布局 ---
+    # ------------- 绘图布局 -------------
     
     if group_by=="Global":    
         n_cols = 4 if len(time_slices) >=  4 else len(time_slices) #按季度可以一年为一行

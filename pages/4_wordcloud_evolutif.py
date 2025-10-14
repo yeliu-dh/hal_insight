@@ -200,21 +200,20 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     if button:    
         with st.spinner("Générer..."):
             if group_by=="Global":
-                evolutif_wc= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, max_words=max_words, stopwords=stopwords, method="llr")
+                evolutif_wc= generate_keyness_wc(df, options, exclude_nan, group_by, granularity=granularity, max_words=max_words, stopwords=stopwords, method="llr")
                 st.pyplot(evolutif_wc)
             
             # elif group_by=="Axe" or groupby=="":
             else:
-                #---所有演变图的大标题----
+                #-----居中显示所有演变图的大标题------
                 df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
                 start_ym=df["submittedDate_s"].min().strftime("%Y-%m")
                 end_ym=df["submittedDate_s"].max().strftime("%Y-%m")  
-                # st.subheader(f"nnÉvolution du nuage de mots ({start_ym} ~ {end_ym})")
                 
                 st.markdown(
                     f"<h3 style='text-align: center;'>Évolution du nuage de mots ({start_ym} ~ {end_ym})</h3>",
                     unsafe_allow_html=True
-                ) #居中显示大标题
+                ) 
 
                 exploded_df=explode_by_col(df, col=group_by)#已fillna
                 if exclude_nan:
@@ -225,30 +224,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 for col_val in ctg :
                     df_slice=exploded_df[exploded_df[group_by]==col_val]
 
-                    # evolutif_wc_by_axe= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col=None, max_words=100, stopwords=None, method="llr"):
-                    evolutif_wc_by_axe=generate_keyness_wc(df_slice, options, exclude_nan, group_by, time_slices, col_val=col_val, max_words=max_words, stopwords=stopwords, method="llr")                                
+                    evolutif_wc_by_axe=generate_keyness_wc(df_slice, options, exclude_nan, group_by, granularity=granularity, col_val=col_val, max_words=max_words, stopwords=stopwords, method="llr")                                
                     st.pyplot(evolutif_wc_by_axe)
                     # st.write("====================================================================")
            
-
-            # # elif group_by=="Axe":
-            # else:
-            #     #---所有演变图的大标题----
-            #     df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
-            #     start_ym=df["submittedDate_s"].min().strftime("%Y-%m")
-            #     end_ym=df["submittedDate_s"].max().strftime("%Y-%m")  
-            #     st.subheader(f"Évolution du nuage de mots ({start_ym} ~ {end_ym})")
-        
-            #     axe_map = {
-            #         "1": "Performances et responsabilités",
-            #         "2": "Société de services et services à la société",
-            #         "3": "Innovations, transformations et résistances organisationnelles et sociétales",
-            #         "4": "Ouvrages pédagogiques",
-            #         "nan":'nan'
-            #     }
-            #     exploded_df=explode_by_col(df, col='Axe')   
-            #     for axe in axe_map.keys():
-            #         df_slice=exploded_df[exploded_df['Axe']==axe]
-            #         # evolutif_wc_by_axe= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col=None, max_words=100, stopwords=None, method="llr"):
-            #         evolutif_wc_by_axe=generate_keyness_wc(df_slice, options, exclude_nan, group_by, time_slices, col_val=axe, max_words=max_words, stopwords=stopwords, method="llr")                                
-            #         st.pyplot(evolutif_wc_by_axe)
