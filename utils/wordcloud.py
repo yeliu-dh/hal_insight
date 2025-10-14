@@ -193,7 +193,7 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
                         st.pyplot(fig)
 
                     else :
-                        st.warning(f"texte invalie dans la catégorie {cat}-{lang}!")
+                        st.warning(f"Texte invalide dans la catégorie {cat}-{lang}!")
     return 
 
 
