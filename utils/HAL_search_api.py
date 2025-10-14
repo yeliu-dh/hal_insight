@@ -227,10 +227,9 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         query_string = urllib.parse.urlencode(params, doseq=True)
         full_url = BASE_URL + "?" + query_string
         # st.info(f'QUERY URL : {full_url} \n')
-
-    
+        
         resp = requests.get(BASE_URL, params=params, timeout=15)
-        print(resp.json())
+        # print(resp.json())
 
         resp = requests.get(BASE_URL, params=params, timeout=15)
         # st.info(f"[DEBUG] Response status: {resp.status_code} | start={start}")

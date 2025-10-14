@@ -175,26 +175,27 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
                 
         # # ---- 自动推荐时间粒度并设置 radio 默认选项 ----
-        # if period_m <= 12:#一年内，按月度或者季度显示
-        #     suggestion = "Mensuel ou Trimestriel"
-        #     default_index = 1
-        # elif period_m <= 60:#3/5年内，按年度显示
-        #     suggestion = "Annuel"
-        #     default_index = 2
-        # else:
-        #     suggestion = "Tous les 3 ou 5 ans"
-        #     default_index = 3
+        if period_m <= 12:#一年内，按月度或者季度显示
+            suggestion = "Mensuel ou Trimestriel"
+            default_index = 1
+        elif period_m <= 60:#3/5年内，按年度显示
+            suggestion = "Annuel"
+            default_index = 2
+        else:
+            suggestion = "Tous les 3 ou 5 ans"
+            default_index = 3
 
         # ---- Radio 选择 ----
         granularity = st.radio(
-            "🕒 Sélectionnez la granularité temporelle pour le nuage de mots évolutif :",
-            ["Toute la période","Mensuel","Trimestriel", "Annuel", "Tous les 3 ans","Tous les 5 ans"],
+            "🕒 Sélectionnez la granularité temporelle :",
+            ["Toute la période → wc global","Mensuel","Trimestriel", "Annuel", "Tous les 3 ans","Tous les 5 ans"],
             index=0, #default_index,
             horizontal=True,
-        )        
-        st.info(f"Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois). Granularité recommandée: **{suggestion}**.\n\n"
-                f"Si vous générez le nuage de mots évolutif, la figure ne différencie pas les langues.")
-        
+        )  
+        st.info(f"Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).\n\n"
+                f"Granularité recommandée: **{suggestion}** pour le nuage de mots évolutif.\n\n"
+                f"NB. Si vous générez le nuage de mots évolutif, la figure ne différencie pas les langues.")
+      
     st.markdown("<br>", unsafe_allow_html=True)
 
 
@@ -212,7 +213,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         generate_button=st.button("Générer")      
 
     if generate_button :
-        if granularity=="Toute la période":
+        if granularity=="Toute la période → wc global":
             with st.spinner("Générer le nuage de mots global..."):
                 wc=generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words, stopwords)
         else :
