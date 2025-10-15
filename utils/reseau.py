@@ -167,13 +167,14 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
         node_freq[v] += w
 
     # ------------------ 节点大小动态归一化 ------------------
-    min_size, max_size = 20, 80
+    # min_size, max_size = 20, 80
+
     # 若节点词频统计存在：选择所有词频中最小值和最大值
     min_freq_val = min(node_freq.values()) if node_freq else 1
     max_freq_val = max(node_freq.values()) if node_freq else 1
     
     #把节点大小（按频率）映射到15~80之间
-    def scale_size(freq):
+    def scale_size(freq, min_freq_val, max_freq_val, min_size=20, max_size=80):
         if max_freq_val == min_freq_val:
             return (min_size + max_size) / 2
         return min_size + (freq - min_freq_val) * (max_size - min_size) / (max_freq_val - min_freq_val)
@@ -200,13 +201,14 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
     min_w = min(filtered_edge_weights.values()) if filtered_edge_weights else 1
     max_w = max(filtered_edge_weights.values()) if filtered_edge_weights else 1
 
-    def scale_edge_width(w):
-        return 1 + (w - min_w) * (10 - 1) / (max_w - min_w) if max_w != min_w else 5
+
+    # def scale_edge_width(w):
+    #     return 1 + (w - min_w) * (10 - 1) / (max_w - min_w) if max_w != min_w else 5
 
     for edge in net.edges:
         src,dst = edge['from'], edge['to']
         w = G[src][dst].get('weight', 1)
-        edge['width'] = scale_edge_width(w)#max(7, w*7)
+        edge['width'] = scale_size(freq, min_freq_val=min_w, max_freq_val=max_w, min_size=7, max_size=20) # max(7, w*7)
         edge['color'] = 'gray'
         edge['title'] = f"Cooccurrence : {int(w)}"
 
