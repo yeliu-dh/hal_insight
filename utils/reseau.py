@@ -121,8 +121,8 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
     G = nx.Graph()
     # input de G :{(author, keyword):weight}
     for (a, k), w in filtered_edge_weights.items():  # ⚠ 用筛选后的权重
-        # if k in valid_keywords:  # 只添加有连接的关键词
-        G.add_edge(a, k, weight=w)
+        if k in valid_keywords:  # 只添加有连接的关键词
+            G.add_edge(a, k, weight=w)
 
     # # 移除孤立节点（没有任何连接）
     # isolated_nodes = list(nx.isolates(G))
@@ -154,7 +154,7 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
 
 
     #=============================设置节点样式 ============================
-    s# ------------------ 动态归一化 ------------------
+    # ------------------ 动态归一化 ------------------
     node_freq = Counter()
 
     # 遍历边，统计每个节点的总连接权重
@@ -164,7 +164,7 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
         node_freq[v] += w
 
     # ------------------ 动态归一化 ------------------
-    min_size, max_size = 15, 80
+    min_size, max_size = 20, 80
     # 若节点词频统计存在：选择所有词频中最小值和最大值
     min_freq_val = min(node_freq.values()) if node_freq else 1
     max_freq_val = max(node_freq.values()) if node_freq else 1
@@ -185,12 +185,12 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
             node['color'] = 'firebrick'
             node['shape'] = 'text'
             node['size'] = scaled
-            # node['title'] = f"Auteur : {node_id}<br>Connexions : {freq}"
+            node['title'] = f"Auteur : {node_id},Connexions : {freq}"
         else:
             node['color'] = 'royalblue'
             node['shape'] = 'text'
             node['size'] = scaled
-            # node['title'] = f"Mot-clé : {node_id}<br>Connexions : {freq}"
+            node['title'] = f"Mot-clé : {node_id}, Connexions : {freq}"
 
     for edge in net.edges:
         src = edge['from']
@@ -200,7 +200,7 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
         # edge['width'] = max(2, w*2)
         edge['width'] = scale_size(w)
         edge['color'] = 'lightgray'
-        # edge['title'] = f"Cooccurrence : {int(w)}"
+        edge['title'] = f"Cooccurrence : {int(w)}"
 
 
    
