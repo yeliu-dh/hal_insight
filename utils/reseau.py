@@ -165,7 +165,7 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
             # 关键词节点：蓝色，字体大小固定
             node['color'] = 'royalblue'
             node['shape'] = 'text'
-            node['font'] = {'size':10, 'color': 'royalblue'}
+            node['font'] = {'size':20, 'color': 'royalblue'}
             # node['title'] = f"Mot-clé : {node_id}"
 
     # ------------------ 设置边样式 ------------------
