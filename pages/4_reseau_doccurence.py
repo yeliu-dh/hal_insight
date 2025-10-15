@@ -101,6 +101,5 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 f"<h3 style='text-align: center;'>Réseau d'occurence auteurs-mots clés</h3>",
                 unsafe_allow_html=True
             ) #居中显示大标题
-
-            generate_network(df, options,n=n, min_freq=min_freq)
+            generate_network(df, options,n=n, stopwords=user_stopwords, min_freq=min_freq)
 
