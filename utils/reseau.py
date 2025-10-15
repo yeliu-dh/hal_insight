@@ -185,7 +185,7 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
     for node in net.nodes:
         node_id = node['id']
         freq = node_freq.get(node_id, 1)
-        scaled = scale_size(freq)
+        scaled = scale_size(freq, min_freq_val, max_freq_val) 
 
         if node_id in all_authors:
             node['shape'] = 'text'
