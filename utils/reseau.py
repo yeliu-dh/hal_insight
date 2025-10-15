@@ -18,7 +18,7 @@ from utils.wordcloud import preprocess_text
 
 
 
-def generate_network(df, options, n=10, min_freq=2):
+def generate_network(df, options, stopwords, n=10, min_freq=2):
     """
     df 必须包含两列：
     - 'authFullName_s': 字符串，如 'Annick Vignes; Julien Lefournier; Antoine Rieu'
@@ -63,8 +63,8 @@ def generate_network(df, options, n=10, min_freq=2):
         #                               )
         #     #需保证x是str
         #     df["abstract_s"]=df['abstract_s'].apply(lambda x: [k.strip() for k in x.split() if k.strip()])
-        
-        df[opt]=df.apply(lambda row: preprocess_text(text=row[opt], lang=row["language_s"]),
+
+        df[opt]=df.apply(lambda row: preprocess_text(text=row[opt], stopwords=stopwords, lang=row["language_s"]),
                                     axis=1
         ) #nan只返回""
         df[opt]=df[opt].apply(lambda x: [k.strip() for k in x.split() if k.strip()])
