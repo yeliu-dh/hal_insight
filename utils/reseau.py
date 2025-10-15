@@ -182,14 +182,16 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
         scaled = scale_size(freq)
 
         if node_id in all_authors:
-            node['color'] = 'firebrick'
+            # node['color'] = 'firebrick'
             node['shape'] = 'text'
-            node['size'] = scaled
+            node['font'] = {'size': scaled, 'color': 'black'}
+            # node['size'] = scaled
             node['title'] = f"Auteur : {node_id},Connexions : {freq}"
         else:
-            node['color'] = 'royalblue'
+            # node['color'] = 'royalblue'
             node['shape'] = 'text'
-            node['size'] = scaled
+            node['font'] = {'size': scaled, 'color': 'royalblue'}
+            # node['size'] = scaled
             node['title'] = f"Mot-clé : {node_id}, Connexions : {freq}"
 
     for edge in net.edges:
