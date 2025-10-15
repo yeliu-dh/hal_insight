@@ -50,6 +50,7 @@ if "started" not in st.session_state:
 # -------------------------------
 st.markdown("<br>", unsafe_allow_html=True)#不容易被 Markdown 渲染压缩掉
 data_uploader()# 调用上传器（会自动处理已有/新上传）
+st.markdown("<br>", unsafe_allow_html=True)
 st.divider() 
 
 
@@ -94,7 +95,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     
     #---------------langue-------------------
     wc_par_lang = st.checkbox("Afficher par langue ?", value=False, key="wc_lang")#key用于储存在session state中
-    st.write("Le nuage de mots évolutif ne différencie pas les langues.")
+    st.write("(Si vous choisissez le nuage de mots évolutif, il n’est pas séparé par langue.)")
     missing_data_warning(df, col="language_s", map={"language_s":'langue'}, show_distribution=True)
 
 
