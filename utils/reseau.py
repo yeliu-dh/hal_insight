@@ -25,7 +25,6 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
     - 'keyword_s': 字符串，如 'Adjustment strategy; New form of employment'
 
     """
-
     #=======================================1️⃣ texte==========================================
     COL_MAP={
             "authFullName_s":'authors',
@@ -208,7 +207,7 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
         src,dst = edge['from'], edge['to']
         w = G[src][dst].get('weight', 1)
         edge['width'] = scale_edge_width(w)#max(7, w*7)
-        edge['color'] = 'lightgray'
+        edge['color'] = 'gray'
         edge['title'] = f"Cooccurrence : {int(w)}"
 
 
