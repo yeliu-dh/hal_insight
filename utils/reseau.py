@@ -114,15 +114,15 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
             filtered_edges.append((author, k))
             filtered_edge_weights[(author, k)] = w
 
-    valid_keywords = {kw for _, kw in filtered_edges}
+    # valid_keywords = {kw for _, kw in filtered_edges}
     
 
     #==============================构建 NetworkX 图==================================
     G = nx.Graph()
     # input de G :{(author, keyword):weight}
     for (a, k), w in filtered_edge_weights.items():  # ⚠ 用筛选后的权重
-        if k in valid_keywords:  # 只添加有连接的关键词
-            G.add_edge(a, k, weight=w)
+        # if k in valid_keywords:  # 只添加有连接的关键词
+        G.add_edge(a, k, weight=w)
 
     # # 移除孤立节点（没有任何连接）
     # isolated_nodes = list(nx.isolates(G))
@@ -182,24 +182,19 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
         scaled = scale_size(freq)
 
         if node_id in all_authors:
-            # node['color'] = 'firebrick'
             node['shape'] = 'text'
             node['font'] = {'size': scaled, 'color': 'black'}
-            # node['size'] = scaled
             node['title'] = f"Auteur : {node_id},Connexions : {freq}"
         else:
-            # node['color'] = 'royalblue'
             node['shape'] = 'text'
             node['font'] = {'size': scaled, 'color': 'royalblue'}
-            # node['size'] = scaled
             node['title'] = f"Mot-clé : {node_id}, Connexions : {freq}"
 
     for edge in net.edges:
         src = edge['from']
         dst = edge['to']
         w = G[src][dst].get('weight', 1)
-        edge['width'] = max(10, w*10)
-        # edge['width'] = scale_size(w)
+        edge['width'] = max(7, w*7)
         edge['color'] = 'lightgray'
         edge['title'] = f"Cooccurrence : {int(w)}"
 
