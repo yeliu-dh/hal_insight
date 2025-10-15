@@ -198,22 +198,32 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
 
 
     # ------------------ 设置边样式 ------------------
-    min_w = min(filtered_edge_weights.values()) if filtered_edge_weights else 1
-    max_w = max(filtered_edge_weights.values()) if filtered_edge_weights else 1
+    # min_w = min(filtered_edge_weights.values()) if filtered_edge_weights else 1
+    # max_w = max(filtered_edge_weights.values()) if filtered_edge_weights else 1
+
+    # 先计算所有边的权重 min/max
+    all_weights = [data.get('weight', 1) for _, _, data in G.edges(data=True)]
+    min_w = min(all_weights) if all_weights else 1
+    max_w = max(all_weights) if all_weights else 1
+
+    # for edge in net.edges:
+    #     src,dst = edge['from'], edge['to']
+    #     w = G[src][dst].get('weight', 1)
+    #     edge['width'] = scale_size(freq, min_freq_val=min_w, max_freq_val=max_w, min_size=5, max_size=20) # max(7, w*7)
+    #     edge['color'] = 'lightgray'
+    #     edge['title'] = f"Cooccurrence : {int(w)}"
 
 
-    # def scale_edge_width(w):
-    #     return 1 + (w - min_w) * (10 - 1) / (max_w - min_w) if max_w != min_w else 5
-
+    # 设置边样式
     for edge in net.edges:
-        src,dst = edge['from'], edge['to']
+        src, dst = edge['from'], edge['to']
         w = G[src][dst].get('weight', 1)
-        edge['width'] = scale_size(freq, min_freq_val=min_w, max_freq_val=max_w, min_size=7, max_size=20) # max(7, w*7)
-        edge['color'] = 'gray'
+        edge['width'] = scale_size(w, min_w, max_w, min_size=2, max_size=10)
+        edge['color'] = 'lightgray'
         edge['title'] = f"Cooccurrence : {int(w)}"
 
 
-   
+
     # for node in net.nodes:
     #     node_id = node['id']
     #     if node_id in all_authors:
