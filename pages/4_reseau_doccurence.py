@@ -1,4 +1,5 @@
-import streamlit as st 
+import streamlit as st
+from streamlit_tags import st_tags
 import numpy as np
 # import igraph as ig #非纯py，不适合安装在st cloud
 import matplotlib.pyplot as plt
@@ -56,6 +57,16 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     st.markdown("<br>", unsafe_allow_html=True)#不容易被 Markdown 渲染压缩掉
 
 
+
+    # ----------------- user stopwords ---------------
+    user_stopwords = st_tags(
+        label="🗷 Ajouter des mots à ignorer",
+        text="Tapez un mot et appuyez sur Entrée",
+        value=["management","gestion","marketing", "recherche",'research','study',"social","use","cas"],
+        maxtags=50
+    )
+    st.markdown("<br>", unsafe_allow_html=True)
+
     
     # --------------- top N mots pour un auteur ------------------
     n = st.number_input(
@@ -90,7 +101,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 f"<h3 style='text-align: center;'>Réseau d'occurence auteurs-mots clés</h3>",
                 unsafe_allow_html=True
             ) #居中显示大标题
-
 
             generate_network(df, options,n=n, min_freq=min_freq)
 

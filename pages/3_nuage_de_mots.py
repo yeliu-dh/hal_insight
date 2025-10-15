@@ -100,7 +100,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 
     #--------------exclure nan--------------
-    exclude_nan = st.checkbox("Exclure les lignes sans étiquette d'axe ? ", value=False, key="nan")
+    exclude_nan = st.checkbox("Exclure les lignes sans étiquette d'axe ? ", value=True, key="nan")
     st.divider()
 
 
@@ -125,13 +125,16 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         # # ---- 自动推荐时间粒度并设置 radio 默认选项 ----
         if period_m <= 12:#一年内，按月度或者季度显示
             suggestion = "Mensuel ou Trimestriel"
-            default_index = 1
+            default_index = 2
         elif period_m <= 60:#3/5年内，按年度显示
             suggestion = "Annuel"
-            default_index = 2
+            default_index = 3
         else:
             suggestion = "Tous les 3 ou 5 ans"
-            default_index = 3
+            default_index = 4
+
+        if wc_par_lang :#若按照语言分，则选择全时间段
+            default_index=0
 
         # ----radio ----
         granularity = st.radio(
