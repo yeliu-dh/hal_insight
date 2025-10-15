@@ -26,14 +26,14 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
 
     """
 
-    #=======================================texte==========================================
+    #=======================================1️⃣ texte==========================================
     COL_MAP={
             "authFullName_s":'authors',
              'keywords_s':"mots clés",
              "abstract_s":"résumés"
              }
     
-    # 1️⃣ 把col中的值变成list
+    # 把col中的值变成list
     ## authors 列填nan，按；拆成list
     df['authFullName_s'] = df['authFullName_s'].fillna("nan").apply(lambda x: [a.strip() for a in x.split(';') if a.strip()])
 
@@ -77,8 +77,8 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
     )
 
 
-    #==============================compter les noeuds et lignes==================================
-    # 2️⃣ 统计每一条“作者–关键词”
+    #==============================2️⃣compter les noeuds et lignes==================================
+    #  统计每一条“作者–关键词”
     edges = []
     for _, row in df.iterrows():
         authors = row.get('authFullName_s', [])# 防止非list值
@@ -88,35 +88,48 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
         for author in authors:
             for w in keywords:
                 edges.append((author.strip(), w.strip()))
+                # [(A, mot_a),(A_mot_b),(B, mot_a),...]
 
-    # counter “作者–词”
+
+    # counter “作者–词”， 频率大于min freq
     edge_weights = Counter(edges)
+    edge_weights = {pair: w for pair, w in edge_weights.items() if w >= min_freq}
+    #{(A, mot_a):10,
+    # (A, mot_b):20, 
+    # ...}
 
-    # 把 Counter 的结果转成 {author: [(keyword, weight), ...]}
+
+    # DETOUR： 把 Counter 的结果转成 {author: [(keyword, weight), ...]}来筛选 top N
     author_keywords = defaultdict(list)
     for (author, keyword), weight in edge_weights.items():
         author_keywords[author].append((keyword, weight))
-    
-    
-    # # 按权重排序并取前 n 个（且过滤掉权重太小的）    
+    st.info(f"{len(author_keywords.keys())} auteurs, {len(author_keywords.values())} keywords more than {min_freq}!")
+
+
     filtered_edges = []
     filtered_edge_weights = {}
-
     for author, kw_list in author_keywords.items():
         kw_list = sorted(kw_list, key=lambda x: x[1], reverse=True)#按照weight排序
-        for kw, w in kw_list[:n]:
-            if w >= min_freq:
-                filtered_edges.append((author, kw))
-                filtered_edge_weights[(author, kw)] = w
+        for k, w in kw_list[:n]:
+            filtered_edges.append((author, k))
+            filtered_edge_weights[(author, k)] = w
 
+    valid_keywords = {kw for _, kw in filtered_edges}
+    
 
-    # ------------------ 构建 NetworkX 图 ------------------
+    #==============================构建 NetworkX 图==================================
     G = nx.Graph()
+    # input de G :{(author, keyword):weight}
     for (a, k), w in filtered_edge_weights.items():  # ⚠ 用筛选后的权重
-        G.add_edge(a, k, weight=w)
+        if k in valid_keywords:  # 只添加有连接的关键词
+            G.add_edge(a, k, weight=w)
+
+    # # 移除孤立节点（没有任何连接）
+    # isolated_nodes = list(nx.isolates(G))
+    # G.remove_nodes_from(isolated_nodes)
 
 
-
+    #==============================设置节点样式=======================================
     # 统计作者节点总权重，用于字体大小
     all_authors = {a for authors in df['authFullName_s'] for a in authors}
     author_freq = Counter()
