@@ -59,7 +59,7 @@ def preprocess_text(text, stopwords, lang='fr'):
     import re, simplemma    
     # 处理 None / NaN
     if text is None or str(text).lower().strip() in ['nan', 'none']:
-        return ""
+        return " "
     
     # list -> str
     if isinstance(text, list):

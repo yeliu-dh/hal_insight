@@ -34,8 +34,12 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
              }
     
     # 把col中的值变成list
-    ## authors 列填nan，按；拆成list
-    df['authFullName_s'] = df['authFullName_s'].fillna("nan").apply(lambda x: [a.strip() for a in x.split(';') if a.strip()])
+    ## authors 列填nan，按；拆成list，要求authors不为“nan”
+    def clean_authors(x):
+        if isinstance(x, str) and x.strip().lower() not in ['nan', 'none', '']:
+            return [a.strip() for a in x.split(';') if a.strip()]
+        return []  # 返回空 list
+    df['authFullName_s'] = df['authFullName_s'].apply(clean_authors)
 
 
     # ⭐ 筛选options任何一列非空行：
@@ -64,9 +68,10 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
         #     #需保证x是str
         #     df["abstract_s"]=df['abstract_s'].apply(lambda x: [k.strip() for k in x.split() if k.strip()])
 
-        df[opt]=df.apply(lambda row: preprocess_text(text=row[opt], stopwords=stopwords, lang=row["language_s"]),
+        df[opt]=df.apply(lambda row: preprocess_text(text=row[opt], stopwords=stopwords, lang=row.get("language_s", "fr")),
                                     axis=1
         ) #nan只返回""
+
         df[opt]=df[opt].apply(lambda x: [k.strip() for k in x.split() if k.strip()])
 
 
@@ -103,7 +108,7 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
     author_keywords = defaultdict(list)
     for (author, keyword), weight in edge_weights.items():
         author_keywords[author].append((keyword, weight))
-    st.info(f"{len(author_keywords.keys())} auteurs, {len(author_keywords.values())} keywords more than {min_freq}!")
+    # st.info(f"{len(author_keywords.keys())} auteurs, {len(author_keywords.values())} keywords more than {min_freq}!")
 
 
     filtered_edges = []
@@ -124,21 +129,21 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
         # if k in valid_keywords:  # 只添加有连接的关键词
         G.add_edge(a, k, weight=w)
 
-    # # 移除孤立节点（没有任何连接）
-    # isolated_nodes = list(nx.isolates(G))
-    # G.remove_nodes_from(isolated_nodes)
+    # 移除孤立节点（没有任何连接）
+    isolated_nodes = list(nx.isolates(G))
+    G.remove_nodes_from(isolated_nodes)
 
 
     #==============================设置节点样式=======================================
-    # 统计作者节点总权重，用于字体大小
-    all_authors = {a for authors in df['authFullName_s'] for a in authors}
-    author_freq = Counter()
-    for u, v, data in G.edges(data=True):
-        w = data.get('weight', 1)
-        if u in all_authors:
-            author_freq[u] += w
-        if v in all_authors:
-            author_freq[v] += w
+    # # 统计作者节点总权重，用于字体大小
+    # all_authors = {a for authors in df['authFullName_s'] for a in authors}
+    # author_freq = Counter()
+    # for u, v, data in G.edges(data=True):
+    #     w = data.get('weight', 1)
+    #     if u in all_authors:
+    #         author_freq[u] += w
+    #     if v in all_authors:
+    #         author_freq[v] += w
 
     # ------------------ 创建 PyVis 图 ------------------
     net = Network(
@@ -150,7 +155,6 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
     )
 
     net.from_nx(G)
-
 
 
     #=============================设置节点样式 ============================
