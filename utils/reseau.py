@@ -151,31 +151,83 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
 
     net.from_nx(G)
 
+
+
+    #=============================设置节点样式 ============================
+    s# ------------------ 动态归一化 ------------------
+    node_freq = Counter()
+
+    # 遍历边，统计每个节点的总连接权重
+    for u, v, data in G.edges(data=True):
+        w = data.get("weight", 1)
+        node_freq[u] += w
+        node_freq[v] += w
+
+    # ------------------ 动态归一化 ------------------
+    min_size, max_size = 15, 80
+    # 若节点词频统计存在：选择所有词频中最小值和最大值
+    min_freq_val = min(node_freq.values()) if node_freq else 1
+    max_freq_val = max(node_freq.values()) if node_freq else 1
+    
+    #把节点大小（按频率）映射到15~80之间
+    def scale_size(freq):
+        if max_freq_val == min_freq_val:
+            return (min_size + max_size) / 2
+        return min_size + (freq - min_freq_val) * (max_size - min_size) / (max_freq_val - min_freq_val)
+    
     # ------------------ 设置节点样式 ------------------
     for node in net.nodes:
         node_id = node['id']
+        freq = node_freq.get(node_id, 1)
+        scaled = scale_size(freq)
+
         if node_id in all_authors:
-            # 作者节点：红色，字体大小随权重变化
-            freq = author_freq.get(node_id, 1)
             node['color'] = 'firebrick'
             node['shape'] = 'text'
-            node['font'] = {'size': min(freq*2,100), 'color': 'black'}#red :firebrick
-            node['title'] = f"Connexions : {freq}"
+            node['size'] = scaled
+            # node['title'] = f"Auteur : {node_id}<br>Connexions : {freq}"
         else:
-            # 关键词节点：蓝色，字体大小固定
             node['color'] = 'royalblue'
             node['shape'] = 'text'
-            node['font'] = {'size':20, 'color': 'royalblue'}
-            # node['title'] = f"Mot-clé : {node_id}"
+            node['size'] = scaled
+            # node['title'] = f"Mot-clé : {node_id}<br>Connexions : {freq}"
 
-    # ------------------ 设置边样式 ------------------
     for edge in net.edges:
         src = edge['from']
         dst = edge['to']
         w = G[src][dst].get('weight', 1)
-        edge['width'] = max(2, w*2)
+
+        # edge['width'] = max(2, w*2)
+        edge['width'] = scale_size(w)
         edge['color'] = 'lightgray'
-        edge['title'] = f"Cooccurrence : {int(w)}"
+        # edge['title'] = f"Cooccurrence : {int(w)}"
+
+
+   
+    # for node in net.nodes:
+    #     node_id = node['id']
+    #     if node_id in all_authors:
+    #         # 作者节点：红色，字体大小随权重变化
+    #         freq = author_freq.get(node_id, 1)
+    #         node['color'] = 'firebrick'
+    #         node['shape'] = 'text'
+    #         node['font'] = {'size': min(freq*2,100), 'color': 'black'}#red :firebrick
+    #         node['title'] = f"Connexions : {freq}"
+    #     else:
+    #         # 关键词节点：蓝色，字体大小固定
+    #         node['color'] = 'royalblue'
+    #         node['shape'] = 'text'
+    #         node['font'] = {'size':20, 'color': 'royalblue'}
+    #         # node['title'] = f"Mot-clé : {node_id}"
+
+    # # ------------------ 设置边样式 ------------------
+    # for edge in net.edges:
+    #     src = edge['from']
+    #     dst = edge['to']
+    #     w = G[src][dst].get('weight', 1)
+    #     edge['width'] = max(2, w*2)
+    #     edge['color'] = 'lightgray'
+    #     edge['title'] = f"Cooccurrence : {int(w)}"
 
     # ------------------ 渲染 ------------------
     net.force_atlas_2based()  # 力导向布局
