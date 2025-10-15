@@ -36,7 +36,7 @@ def generate_network(df, options, n=10, min_freq=2):
     df['authFullName_s'] = df['authFullName_s'].fillna("nan").apply(lambda x: [a.strip() for a in x.split(';') if a.strip()])
 
 
-    # 筛选options任何一列非空行：
+    # ⭐ 筛选options任何一列非空行：
     df = df[
     df[options].apply(
             lambda row: any(
@@ -105,9 +105,8 @@ def generate_network(df, options, n=10, min_freq=2):
 
         df[opt]=df.apply(lambda row: preprocess_text(text=row[opt], stopwords=stopwords, lang=row["language_s"]),
                                     axis=1
-        )
+        ) #nan只返回""
         df[opt]=df[opt].apply(lambda x: [k.strip() for k in x.split() if k.strip()])
-
 
 
     # 取options上的list中的值，如果是list的话
