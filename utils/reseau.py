@@ -121,8 +121,8 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
     G = nx.Graph()
     # input de G :{(author, keyword):weight}
     for (a, k), w in filtered_edge_weights.items():  # ⚠ 用筛选后的权重
-        if k in valid_keywords:  # 只添加有连接的关键词
-            G.add_edge(a, k, weight=w)
+        # if k in valid_keywords:  # 只添加有连接的关键词
+        G.add_edge(a, k, weight=w)
 
     # # 移除孤立节点（没有任何连接）
     # isolated_nodes = list(nx.isolates(G))
@@ -159,13 +159,13 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
             freq = author_freq.get(node_id, 1)
             node['color'] = 'firebrick'
             node['shape'] = 'text'
-            node['font'] = {'size': min(freq,100), 'color': 'black'}#red :firebrick
+            node['font'] = {'size': min(freq*2,100), 'color': 'black'}#red :firebrick
             node['title'] = f"Connexions : {freq}"
         else:
             # 关键词节点：蓝色，字体大小固定
             node['color'] = 'royalblue'
             node['shape'] = 'text'
-            node['font'] = {'size':30, 'color': 'royalblue'}
+            node['font'] = {'size':10, 'color': 'royalblue'}
             # node['title'] = f"Mot-clé : {node_id}"
 
     # ------------------ 设置边样式 ------------------
