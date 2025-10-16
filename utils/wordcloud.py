@@ -14,7 +14,7 @@ from utils.plot import wrap_text
 
 
 
-def preprocess_text(text, stopwords, lang='fr'):
+def preprocess_text(text, stopwords:list=[], lang='fr'):
     # stopwords==user_stopwords 
     #-----------nltk stopwords----------------
     stop_en=['won', 'an', 'having', "mightn't", 'the', "hasn't", 'more', 'in', 'only', 'under',
