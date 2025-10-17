@@ -16,6 +16,7 @@ import simplemma
 
 #my utils:分行导入，不然容易失败
 from utils.upload import data_uploader, missing_data_warning
+from utils.upload import load_external_json
 from utils.wordcloud import preprocess_text
 from utils.wordcloud import collect_clean_texts_by_col
 from utils.wordcloud import generate_wc
@@ -25,12 +26,15 @@ from utils.wordcloud import explode_by_col
 from utils.wordcloud import create_time_slices
 from utils.wordcloud import generate_keyness_wc
 
-# #------------CACHE--------------
-# @st.cache_resource
-# def load_spacy_models():
-#     nlp_fr = spacy.load("fr_core_news_sm")
-#     nlp_en = spacy.load("en_core_web_sm")
-#     return nlp_fr, nlp_en
+
+# #====================CACHE=========================#
+# @st.cache_data 
+# def get_stopwords():   
+#     stopwords_nltk=load_external_json('json_data',"stopwords_nltk")
+#     stopwords_nltk=list(stopwords_nltk.values())
+#     return stopwords_nltk
+
+# stopwords=get_stopwords()
 
 
 st.set_page_config(page_title="HAL insight", page_icon="🛸")
@@ -183,7 +187,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     if generate_button :
         if granularity=="Toute la période → wc global":
             with st.spinner("Générer le nuage de mots global..."):
-                wc=generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words, stopwords)
+                wc=generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words, user_stopwords)
        
        
         elif generate_button and time_slices :# granlarity → évolutif
@@ -213,6 +217,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                     for col_val in ctg :
                         df_slice=exploded_df[exploded_df[group_by]==col_val]
 
-                        evolutif_wc_by_axe=generate_keyness_wc(df_slice, options, exclude_nan, group_by, time_slices=time_slices, col_val=col_val, max_words=max_words, stopwords=stopwords, method="llr")                                
+                        evolutif_wc_by_axe=generate_keyness_wc(df_slice, options, exclude_nan, group_by, time_slices=time_slices, col_val=col_val, max_words=max_words, stopwords=user_stopwords, method="llr")                                
                         st.pyplot(evolutif_wc_by_axe)
             

@@ -309,6 +309,7 @@ def explode_by_col(df, col="Axe"):
     =>在某一col上explode；
     检查notna
 
+
     """
     df = df.copy()
     df[col] = df[col].fillna('nan').astype(str).str.split("[,;]") # axe中有nan所以type:objet，先变成str
@@ -320,6 +321,7 @@ def explode_by_col(df, col="Axe"):
 def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val=None, max_words=100, stopwords=None, method="llr"):
     """
     根据时间片生成 keyness 演变词云+小图
+    stopwords==user_stopwords
     """
     # 规范日期格式
     df = df.copy()
@@ -381,13 +383,17 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
 
 
         # --- 局部词频 ---
+        stopwords_nltk=load_external_json('json_data',"stopwords_nltk")
+        stopwords_nltk=list(stopwords_nltk.values())
+        
         if text:
             freq_slice = pd.Series(text.split()).value_counts()
             keyness = compute_keyness(freq_slice, global_freq, method=method)
 
             wc = WordCloud(
                 width=400, height=400, background_color="white",
-                max_words=max_words, stopwords=stopwords
+                max_words=max_words, stopwords=set(w.lower() for w in (stopwords_nltk + stopwords))
+
             ).generate_from_frequencies(keyness)
 
             ax.imshow(wc, interpolation="bilinear")

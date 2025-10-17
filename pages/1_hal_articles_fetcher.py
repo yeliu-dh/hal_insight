@@ -258,7 +258,7 @@ if search_button and not invalid_date:
         
         st.dataframe(df)
 
-        missing_data_warning(df, col='file_s')
+        missing_data_warning(df, col='files_s')
 
         #  ----------------SAVE TO LOCAL----------------- 
         #file name 
