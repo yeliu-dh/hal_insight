@@ -24,7 +24,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 # my utils
 from utils.upload import load_external_json
 from utils.HAL_search_api import fetch_hal_articles
-from utils.mapping import load_mapping_json
 
 
 from utils.mapping import map_domains
