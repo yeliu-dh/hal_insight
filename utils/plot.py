@@ -124,13 +124,15 @@ def assign_time_unit(df, date_col="submittedDate_s"):
     return df
 
 
-def keywords_trendline(df, options, keywords=None):
-    min_date = df["submittedDate_s"].min()
-    max_date = df["submittedDate_s"].max()
-    if pd.notnull(min_date) and pd.notnull(max_date):
-        min_label = min_date.strftime("%b %Y")
-        max_label = max_date.strftime("%b %Y")
-        fig_title = f"Évolution des mots clés ({min_label} – {max_label})"
+def keywords_trendline(df, options, keywords):
+    if "submittedDate_s" in df.columns:    
+        min_date = df["submittedDate_s"].min()
+        max_date = df["submittedDate_s"].max()
+        if pd.notnull(min_date) and pd.notnull(max_date):
+            min_label = min_date.strftime("%b %Y")
+            max_label = max_date.strftime("%b %Y")
+            fig_title = f"Évolution des mots clés ({min_label} – {max_label})"
+
     else:
         fig_title = "Évolution des mots clés"
 

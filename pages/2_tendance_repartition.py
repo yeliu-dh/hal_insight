@@ -262,7 +262,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 
         #--------------画图----------------------
-        fig=keywords_trendline(df,options, keywords)
+        # def keywords_trendline(df, options, keywords):
+
+        fig=keywords_trendline(df, options, keywords)
         st.pyplot(fig)
         st.divider()
         st.markdown("<br>", unsafe_allow_html=True)
