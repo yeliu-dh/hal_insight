@@ -152,7 +152,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
   
         st.info(f"Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).\n\n"
                 f"Granularité recommandée pour le nuage de mots évolutif: **{suggestion}**. \n\n"
-                f"Le nuage de mots évolutif est calculé à l'aide de méthode de **keyness**,met en évidence les mots caractéristiques de chaque période.")
+                f"Le nuage de mots évolutif est calculé à l'aide de méthode de **keyness**, mettant en évidence les mots caractéristiques de chaque période.")
         
       
     st.markdown("<br>", unsafe_allow_html=True)

@@ -9,14 +9,14 @@ import plotly.express as px
 from PIL import Image
 import io
 
-#my utils:
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from utils.upload import data_uploader
-from utils.plot import make_bar_chart, make_pie_chart
-
-
+#my utils:
+from utils.upload import data_uploader, missing_data_warning
+from utils.plot import keywords_trendline, make_bar_chart, make_pie_chart
+from utils.plot import assign_time_unit
+from utils.wordcloud import preprocess_text
 
 # session state :
 #上传csv，保存在session state中，相当于一个外部字典，不会再操作(刷新)中丢失
@@ -116,8 +116,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         display_metric(col2, "Nombre total de langues", total_languages)
         display_metric(col3, "Nombre total de pays", total_countries)
         col4 = st.empty()  # 占位不显示内容
-
-        st.write("\n\n")
+        st.divider()
+        st.markdown("<br>", unsafe_allow_html=True)
+        
 
 
         # # -------------------- 增强版 趋势折线图 --------------------
@@ -224,6 +225,63 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             )
 
             st.altair_chart(chart, use_container_width=True)
+        st.divider()
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        # ===========keyword trendline==================
+        st.header("📈 Tendance des mots clés production scientifique")
+        # ---------------文本范围-------------------
+        WC_MAP={"keyword_s":"mots clés",
+                "abstract_s":'résumés',
+                "files_s":"texte intégral"}
+        
+        options = st.multiselect(
+        "📑 Choisir le texte:",
+        options=["keyword_s", "abstract_s"],
+        default=["keyword_s","abstract_s"],  # 默认选择
+        format_func=lambda x: WC_MAP[x]#只改变显示
+        )
+
+        # 缺失值
+        for col in options:
+            missing_data_warning(df, col=col, map=WC_MAP,show_distribution=False)
+        st.markdown("<br>", unsafe_allow_html=True)#不容易被 Markdown 渲染压缩掉
+        
+        # 清洗，合并文本
+        for opt in options:
+            df[f'{opt}_clean']=df.apply(lambda row: preprocess_text(row[opt], stopwords=None, lang=row["language_s"]) ,axis=1)
+                                       
+        df["text_clean"] = df[options].apply(
+        lambda row: [item for col in options for item in (row[col] or []) if isinstance(row[col], list)],
+        axis=1
+        )
+
+        #打时间标签
+        df, x_label_format = assign_time_unit(df)
+
+
+        # -----------------待搜索关键词 ---------------
+        keywords = st_tags(
+            label="Mots clés",
+            text="Tapez un mot et appuyez sur Entrée",
+            value=["management"],
+            maxtags=50
+        )
+        st.markdown("<br>", unsafe_allow_html=True)
+        fig=keywords_trendline(df, keywords)
+        st.pyplot(fig)
+
+
+
+
+
+
+
+
+
+
+        st.divider()
+        st.markdown("<br>", unsafe_allow_html=True)
 
 
 ### ------------------------PIE OR BAR-------------------------------- 

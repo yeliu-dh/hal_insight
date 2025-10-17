@@ -1,10 +1,13 @@
 import textwrap
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 import seaborn as sns
 import plotly.express as px
 from utils.mapping import map_axe
 import streamlit as st
+
 
 # def wrap_text(text, max_len=30):
 #     import textwrap
@@ -54,7 +57,6 @@ def wrap_text(text, max_len=30, html=True):
     return ("<br>" if html else "\n").join(lines)
 
 
-
 # utils.wordcloud.py
 def explode_by_col(df, col):
     """"
@@ -69,6 +71,100 @@ def explode_by_col(df, col):
     df = df.explode(col)
     df[col] = df[col].str.strip()
     return df[df[col].notna() & (df[col] != "")]
+
+
+
+def assign_time_unit(df, date_col="submittedDate_s"):
+    """
+    给 DataFrame 增加一个 'time_unit' 列，根据整个 df 的时间范围自动选择粒度：
+    - <=12个月：按月
+    - 12~36个月：按季度
+    - >36个月：按年
+
+    参数：
+        df : pd.DataFrame
+        date_col : str，日期列名，默认 "submittedDate_s"
+
+    返回：
+        df : 增加 'time_unit' 列的 DataFrame
+        period_m : 总月份数
+        x_label_format : 可用于 matplotlib 的时间格式化字符串
+    """
+    if date_col in df.columns:
+        df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
+        earliest_date = df[date_col].min()
+        latest_date = df[date_col].max()
+
+        if pd.notnull(earliest_date) and pd.notnull(latest_date):
+            period_m = (latest_date.year - earliest_date.year) * 12 + \
+                       (latest_date.month - earliest_date.month) + 1
+
+            # 自动选择时间粒度
+            if period_m <= 12:
+                df['time_unit'] = df[date_col].dt.to_period('M')
+                x_label_format = "%Y-%m"
+            elif period_m <= 36:
+                df['time_unit'] = df[date_col].dt.to_period('Q')
+                x_label_format = "Q%q-%Y"
+            else:
+                df['time_unit'] = df[date_col].dt.to_period('Y')
+                x_label_format = "%Y"
+        else:
+            period_m = 0
+            df['time_unit'] = pd.NaT
+            x_label_format = "%Y-%m"
+    else:
+        period_m = 0
+        df['time_unit'] = pd.NaT
+        x_label_format = "%Y-%m"
+
+    return df
+
+
+def keywords_trendline(df, keywords):
+    # 初始化 trend_data
+    trend_data = {kw: df.groupby('time_unit')['text_clean'].apply(lambda texts: sum(kw in t for t in texts)) 
+                for kw in keywords}
+
+
+    colors = cm.viridis(np.linspace(0,1,len(keywords)))
+
+    fig, ax = plt.subplots(figsize=(10,5))
+    for i, kw in enumerate(keywords):
+        series = trend_data[kw]
+        # 转换 PeriodIndex 为 datetime 方便绘图
+        ax.plot(series.index.to_timestamp(), series.values, label=kw, color=colors[i])
+
+    ax.set_xlabel("Temps")
+    ax.set_ylabel("Nombre d'occurrences")
+    ax.grid(True)
+    ax.legend()
+    plt.xticks(rotation=45)
+    # plt.show()
+    return plt
+
+
+
+            
+
+
+
+
+
+
+
+# colors = cm.viridis(np.linspace(0,1,len(keywords)))
+
+# for i, kw in enumerate(keywords):
+#     plt.plot(trend_data[kw].index, trend_data[kw].values, label=kw, color=colors[i])
+# plt.xlabel("Année / Mois")
+# plt.ylabel("Nombre d'occurrences")
+# plt.title("Évolution des mots-clés")
+# plt.grid(True)
+# plt.legend()
+# plt.show()
+
+
 
 
 
@@ -227,3 +323,6 @@ def make_bar_chart(df, col, title, top_n=10):
 
             # 显示图例（默认在右侧）
             # fig.update_layout(legend_title_text="文献类型")
+
+
+

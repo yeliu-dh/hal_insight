@@ -16,11 +16,10 @@ from utils.upload import load_external_json
 def preprocess_text(text, stopwords=None, lang='fr'):
     stopwords_nltk=load_external_json("json_data/stopwords_nltk.json")
     #list
-    
+
     # stopwords==user_stopwords 
     if stopwords==None:
         stopwords=[]
-
     # 转小写+去重
     stopwords = set(w.lower() for w in (stopwords_nltk + stopwords))
 
