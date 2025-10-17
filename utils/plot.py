@@ -43,30 +43,13 @@ def keywords_trendline(df, options, keywords):
             if any(df["text_clean"].str.contains(kw, na=False))
         }
 
-    # trend_data = {}
-    # all_periods = df['time_unit'].dropna().unique().sort_values()  # 确保所有时间单位都覆盖
-    # missing_keywords = []
-
-    # for kw in keywords:
-    #     series = df.groupby('time_unit')['text_clean'].apply(lambda texts: sum(kw in t for t in texts))
-
-    #     # 如果关键字完全没出现，就创建一个全 0 的序列
-    #     # if series.sum() == 0:
-    #     #     missing_keywords.append(kw)
-    #     #     series = pd.Series(0, index=all_periods)
-        
-    #     if series.sum()!=0:
-    #     # else:
-    #         # 对齐索引，填补缺失时间段为 0
-    #         series = series.reindex(all_periods, fill_value=0)
-    #     trend_data[kw] = series
-
+   
 
     # 画图
     colors = cm.viridis(np.linspace(0,1,len(keywords)))
 
     fig, ax = plt.subplots(figsize=(10,5))
-    for i, kw in enumerate(keywords):
+    for i, kw in enumerate(trend_data.keys()):
         series = trend_data[kw]
         # 转换 PeriodIndex 为 datetime 方便绘图
         ax.plot(series.index.to_timestamp(), series.values, label=kw, color=colors[i])
