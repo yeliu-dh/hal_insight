@@ -254,4 +254,22 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
     net.show_buttons(filter_=['physics'])  # 显示物理参数控制
 
     # Streamlit 显示
-    html(net.generate_html(), height=700)
+    html_code=net.generate_html()
+    html(html_code, height=700)
+
+    #===================下载===================
+    html_path = "reseau_auteurs_mots.html"
+    # 服务器端（Streamlit Cloud 上）文件的存储路径。
+    # 临时在服务器上生成并保存 HTML 文件，以便 st.download_button 可以读取它。
+    with open(html_path, "w", encoding="utf-8") as f:
+        f.write(html_code)  
+    
+    # 添加下载按钮
+    with open(html_path, "rb") as f:
+        st.download_button(
+            label="📥 Télécharger le graphique (HTML)",
+            data=f,
+            file_name="reseau_auteurs_mots.html",
+            mime="text/html"
+        )
+        
