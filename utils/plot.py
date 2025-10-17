@@ -9,8 +9,7 @@ from utils.mapping import map_axe
 import streamlit as st
 
 #my utils:
-from utils.preprocess import preprocess_text, assign_time_unit, explode_by_col
-
+from utils.preprocess import preprocess_text, assign_time_unit, explode_by_col, wrap_text
 
 def keywords_trendline(df, options, keywords):
     fig_title = "Évolution des mots clés"
@@ -40,28 +39,27 @@ def keywords_trendline(df, options, keywords):
     # # 初始化 trend_data
     # trend_data = {kw: df.groupby('time_unit')['text_clean'].apply(lambda texts: sum(kw in t for t in texts)) 
     #             for kw in keywords}
+
     trend_data = {}
-    missing_keywords = []  # 用于收集未出现的词
+    all_periods = df['time_unit'].dropna().unique().sort_values()  # 确保所有时间单位都覆盖
+    missing_keywords = []
 
     for kw in keywords:
         series = df.groupby('time_unit')['text_clean'].apply(lambda texts: sum(kw in t for t in texts))
+
+        # 如果关键字完全没出现，就创建一个全 0 的序列
         if series.sum() == 0:
             missing_keywords.append(kw)
+            series = pd.Series(0, index=all_periods)
+
         else:
-            trend_data[kw] = series
+            # 对齐索引，填补缺失时间段为 0
+            series = series.reindex(all_periods, fill_value=0)
 
-    # 如果有关键词没出现，显示 warning
-    if missing_keywords:
-        st.warning(
-            f"⚠️ Les mots suivants n'ont été trouvés dans aucun texte : "
-            + ", ".join(missing_keywords)
-        )
-    # 如果所有关键词都没出现，可以提前返回
-    if len(trend_data) == 0:
-        st.stop()  # Streamlit 会停止执行并显示 warning
+        trend_data[kw] = series
 
-        
 
+    # 画图
     colors = cm.viridis(np.linspace(0,1,len(keywords)))
 
     fig, ax = plt.subplots(figsize=(10,5))
