@@ -121,11 +121,11 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
     # valid_keywords = {kw for _, kw in filtered_edges}
 
     for (a, k), w in filtered_edge_weights.items():
-        print(f"author:{a}")
-        print(f"keyword:{k}")
-        print(f"weight:{w}")
+        st.write(f"author:{a}")
+        st.write(f"keyword:{k}")
+        st.write(f"weight:{w}")
         break 
-    
+
 
     # st.write(filtered_edge_weights[0].items())
     # [
