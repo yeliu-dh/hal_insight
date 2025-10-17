@@ -118,21 +118,35 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
             filtered_edges.append((author, k))
             filtered_edge_weights[(author, k)] = w
 
-    # valid_keywords = {kw for _, kw in filtered_edges}
-    
-    st.write(filtered_edge_weights)
+    # valid_keywords = {kw for _, kw in filtered_edges}    
+    # st.write(filtered_edge_weights)
 
     #==============================构建 NetworkX 图==================================
+    # etworkX Graph 重复添加边会覆盖权重
+    # 如果你用的是 nx.Graph()（无向图），重复添加同一条边时 weight 会被覆盖。
+
+
+    # G = nx.Graph()
+    # # input de G :{(author, keyword):weight}
+    # for (a, k), w in filtered_edge_weights.items():  # ⚠ 用筛选后的权重
+    #     G.add_edge(a, k, weight=w)
+
     G = nx.Graph()
-    # input de G :{(author, keyword):weight}
-    for (a, k), w in filtered_edge_weights.items():  # ⚠ 用筛选后的权重
-        # if k in valid_keywords:  # 只添加有连接的关键词
-        G.add_edge(a, k, weight=w)
+    for (a, k), w in filtered_edge_weights.items():
+        if G.has_edge(a, k):#之后增加w
+            G[a][k]['weight'] += w  # 累加
+        else:#第一次初始化
+            G.add_edge(a, k, weight=w)
+
+
+
 
     # 移除孤立节点（没有任何连接）
     isolated_nodes = list(nx.isolates(G))
     G.remove_nodes_from(isolated_nodes)
 
+
+    
 
     #==============================设置节点样式=======================================
     # # 统计作者节点总权重，用于字体大小
