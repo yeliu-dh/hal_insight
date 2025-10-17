@@ -14,7 +14,7 @@ from utils.plot import wrap_text
 from utils.upload import load_external_json
  
 def preprocess_text(text, stopwords=None, lang='fr'):
-    stopwords_nltk=load_external_json('json_data',"stopwords_nltk")
+    stopwords_nltk=load_external_json("json_data/stopwords_nltk.json")
     stopwords_nltk=list(stopwords_nltk.values())
  
     # stopwords==user_stopwords 

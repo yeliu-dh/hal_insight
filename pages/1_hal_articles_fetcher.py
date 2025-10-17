@@ -39,24 +39,13 @@ st.set_page_config(page_title="HAL insight", page_icon="🛸")
 
 #====================CACHE=========================#
 @st.cache_data 
-# @st.cache_data 是装饰器，只能用在函数定义上，不能直接装饰一个变量
-# 不能直接写# DOMAIN_MAP = load_json(domain_file)
-# def get_mappings():
-#     return {
-#         "DOMAIN_MAP": load_mapping_json("domain_map.json"),
-#         "LANG_MAP": load_mapping_json("lang_map.json"),
-#         "DOC_TYPE_MAP": load_mapping_json("doctype_map.json"),
-#         "CLASSEMENT": load_mapping_json("classement_fnege.json"),#/classement.json
-#     }
-
-
 def get_mappings():
     mapping_folder='json_data'
     return {
-        "DOMAIN_MAP": load_external_json(mapping_folder,"domain_map.json"),
-        "LANG_MAP": load_external_json(mapping_folder, "lang_map.json"),
-        "DOC_TYPE_MAP": load_external_json(mapping_folder, "doctype_map.json"),
-        "CLASSEMENT": load_external_json(mapping_folder, "classement_fnege.json"),#/classement.json
+        "DOMAIN_MAP": load_external_json(f"{mapping_folder}/domain_map.json"),
+        "LANG_MAP": load_external_json(f"{mapping_folder}/lang_map.json"),
+        "DOC_TYPE_MAP": load_external_json(f"{mapping_folder}/doctype_map.json"),
+        "CLASSEMENT": load_external_json(f"{mapping_folder}/classement_fnege.json"),#/classement.json
     }
 
 maps = get_mappings()

@@ -17,11 +17,11 @@ def save_as_json(data, path):
 
 # BASE_DIR = Path(__file__).parent.parent # 当前文件的上上级文件路径==HAL_INSIGHT
 
-def load_external_json(folder_name, file_name: str):
+def load_external_json(file_path):
     BASE_DIR = Path(__file__).parent.parent # 当前文件的上上级文件路径
-    file_path = BASE_DIR / folder_name / file_name
+    file_path = BASE_DIR / file_path
     st.write(file_path)
-    
+
     if not file_path.exists():
         raise FileNotFoundError(f"{file_name} not found in {file_path}")
     with open(file_path, "r", encoding="utf-8") as f:
