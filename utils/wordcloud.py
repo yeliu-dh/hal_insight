@@ -22,12 +22,13 @@ def preprocess_text(text, stopwords=None, lang='fr'):
     # stopwords==user_stopwords 
     if stopwords==None:
         stopwords=[]
+
     # 转小写+去重
     stopwords = set(w.lower() for w in (stopwords_nltk + stopwords))
 
     import re, simplemma    
     # 处理 None / NaN
-    if text is None or str(text).lower().strip() in ['nan', 'none']:
+    if text is None or str(text).lower().strip() in ['nan', 'none'," "]:
         return " "
     
     # list -> str
