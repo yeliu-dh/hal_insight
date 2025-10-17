@@ -12,26 +12,6 @@ import streamlit as st
 from utils.wordcloud import preprocess_text
 
 
-# def wrap_text(text, max_len=30):
-#     import textwrap
-#     # 调整图例 ：textwrap.wrap 会在空格处换行，不会切断单词
-#     lines = textwrap.wrap(text, width=max_len, break_long_words=False, replace_whitespace=False)
-#     return "<br>".join(lines)
-
-
-# def wrap_text(text, max_len=30):
-#     import textwrap
-   
-#     lines = textwrap.wrap(
-#         text, 
-#         width=max_len, 
-#         break_long_words=False, 
-#         replace_whitespace=False
-#     )
-#     return "<br>".join(lines)
-
-
-
 def wrap_text(text, max_len=30, html=True):
     import textwrap
     """
@@ -43,8 +23,6 @@ def wrap_text(text, max_len=30, html=True):
 
     可选使用\n（适用于str）或者 <br>（适用于网页）   
     默认是在网页中显示   
-
-
     replace_whitespace=True（默认）
         会把文本中所有的空白字符（\n, \t, \r, 等）都替换成普通的 " "（空格）。
         这样可以避免出现“奇怪的换行”或“制表符错位”等问题。
@@ -55,7 +33,6 @@ def wrap_text(text, max_len=30, html=True):
 
 
     """
-
     lines = textwrap.wrap(text, width=max_len, break_long_words=False)
     return ("<br>" if html else "\n").join(lines)
 
