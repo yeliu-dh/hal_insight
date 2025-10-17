@@ -248,12 +248,14 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
         src, dst = edge['from'], edge['to']
         # 从 NetworkX 图 G 中读取边的 weight
         if (src, dst) in filtered_edge_weights.keys():
-            w= filtered_edge_weights.get((src, dst),"?")
+            w= filtered_edge_weights.get((src, dst),1)
+            st.write(src, dst, w)
             # w = G[src][dst].get('weight', 1)
             # st.write(src, dst, w)
-        # else:
-        #     w = ""
-            # st.error(f"weight invalide!")
+        else:
+            w = ""
+            st.error(f"weight invalide!")
+        
         # w = G[src][dst].get('weight', 1)
 
 
