@@ -125,6 +125,8 @@ def assign_time_unit(df, date_col="submittedDate_s"):
 
 
 def keywords_trendline(df, options, keywords):
+    fig_title = "Évolution des mots clés"
+
     if "submittedDate_s" in df.columns:    
         min_date = df["submittedDate_s"].min()
         max_date = df["submittedDate_s"].max()
@@ -132,9 +134,6 @@ def keywords_trendline(df, options, keywords):
             min_label = min_date.strftime("%b %Y")
             max_label = max_date.strftime("%b %Y")
             fig_title = f"Évolution des mots clés ({min_label} – {max_label})"
-
-    else:
-        fig_title = "Évolution des mots clés"
 
 
     # 清洗，合并文本
@@ -150,10 +149,30 @@ def keywords_trendline(df, options, keywords):
     df = assign_time_unit(df)
 
 
-    # 初始化 trend_data
-    trend_data = {kw: df.groupby('time_unit')['text_clean'].apply(lambda texts: sum(kw in t for t in texts)) 
-                for kw in keywords}
+    # # 初始化 trend_data
+    # trend_data = {kw: df.groupby('time_unit')['text_clean'].apply(lambda texts: sum(kw in t for t in texts)) 
+    #             for kw in keywords}
+    trend_data = {}
+    missing_keywords = []  # 用于收集未出现的词
 
+    for kw in keywords:
+        series = df.groupby('time_unit')['text_clean'].apply(lambda texts: sum(kw in t for t in texts))
+        if series.sum() == 0:
+            missing_keywords.append(kw)
+        else:
+            trend_data[kw] = series
+
+    # 如果有关键词没出现，显示 warning
+    if missing_keywords:
+        st.warning(
+            f"⚠️ Les mots suivants n'ont été trouvés dans aucun texte : "
+            + ", ".join(missing_keywords)
+        )
+    # 如果所有关键词都没出现，可以提前返回
+    if len(trend_data) == 0:
+        st.stop()  # Streamlit 会停止执行并显示 warning
+
+        
 
     colors = cm.viridis(np.linspace(0,1,len(keywords)))
 
