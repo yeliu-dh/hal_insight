@@ -13,10 +13,17 @@ import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 #my utils:
-from utils.upload import data_uploader, missing_data_warning
-from utils.plot import keywords_trendline, make_bar_chart, make_pie_chart
-from utils.plot import assign_time_unit
+from utils.upload import data_uploader
+from utils.upload import missing_data_warning
+
 from utils.wordcloud import preprocess_text
+from utils.plot import assign_time_unit
+
+from utils.plot import keywords_trendline
+from utils.plot import make_bar_chart
+from utils.plot import make_pie_chart
+
+
 
 # session state :
 #上传csv，保存在session state中，相当于一个外部字典，不会再操作(刷新)中丢失
@@ -257,8 +264,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         )
 
         #打时间标签
-        df, x_label_format = assign_time_unit(df)
-
+        df = assign_time_unit(df)
 
         # -----------------待搜索关键词 ---------------
         keywords = st_tags(
@@ -268,14 +274,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             maxtags=50
         )
         st.markdown("<br>", unsafe_allow_html=True)
+
         fig=keywords_trendline(df, keywords)
         st.pyplot(fig)
-
-
-
-
-
-
 
 
 

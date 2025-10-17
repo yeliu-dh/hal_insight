@@ -141,7 +141,7 @@ def keywords_trendline(df, keywords):
     ax.legend()
     plt.xticks(rotation=45)
     # plt.show()
-    return plt
+    return fig
 
 
 
