@@ -82,7 +82,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     )
     
     if "abstract_s" in options:
-        st.info('Si vous voulez inclure les résumés, la fréquence minimale 7~10 recommendée.')
+        st.info('Si vous voulez inclure les résumés, la fréquence minimale >= 10 recommendée.')
 
 
     st.markdown("<br>", unsafe_allow_html=True)
@@ -95,13 +95,15 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 
     #==========================générer================================
-    cols=st.columns([4,1])
+    cols=st.columns([5,1])#wide layout 需要5:1
     with cols[1]:   
         button=st.button("Générer")  
     st.divider()
 
     if button:    
         with st.spinner("Générer..."):
+            st.info("Déplacez les mots avec le souri pour une visualisation plus claire.")
+            
             st.markdown(
                 f"<h3 style='text-align: center;'>Réseau d'occurence auteurs-mots clés</h3>",
                 unsafe_allow_html=True
