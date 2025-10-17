@@ -265,11 +265,14 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
         f.write(html_code)  
     
     # 添加下载按钮
-    with open(html_path, "rb") as f:
-        st.download_button(
-            label="📥 Télécharger le graphique (HTML)",
-            data=f,
-            file_name="reseau_auteurs_mots.html",
-            mime="text/html"
-        )
+    cols=st.columns([4,1])
+    with cols[1]:
+            
+        with open(html_path, "rb") as f:
+            st.download_button(
+                label="📥 Télécharger le graphique (HTML)",
+                data=f,
+                file_name="reseau_auteurs_mots.html",
+                mime="text/html"
+            )
         
