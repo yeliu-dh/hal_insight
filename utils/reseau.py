@@ -120,12 +120,11 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
 
     # valid_keywords = {kw for _, kw in filtered_edges}
 
-    for (a, k), w in filtered_edge_weights.items():
-        st.write(f"author:{a}")
-        st.write(f"keyword:{k}")
-        st.write(f"weight:{w}")
-        break 
-
+    # for (a, k), w in filtered_edge_weights.items():
+    #     st.write(f"author:{a}")#Philippe Lépinard
+    #     st.write(f"keyword:{k}")#ludopédagogie
+    #     st.write(f"weight:{w}")#11
+    #     break 
 
     # st.write(filtered_edge_weights[0].items())
     # [
@@ -158,14 +157,10 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
             G.add_edge(a, k, weight=w)
 
 
-
-
     # 移除孤立节点（没有任何连接）
     isolated_nodes = list(nx.isolates(G))
     G.remove_nodes_from(isolated_nodes)
-
-
-    
+  
 
     #==============================设置节点样式=======================================
     # # 统计作者节点总权重，用于字体大小
@@ -251,37 +246,20 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
     # 设置边样式
     for edge in net.edges:
         src, dst = edge['from'], edge['to']
-        w = G[src][dst].get('weight', 1)
+        # 从 NetworkX 图 G 中读取边的 weight
+        if G.has_edge(src, dst):
+            w = G[src][dst].get('weight', 1)
+        else:
+            w = 1
+            st.error(f"weight invalide!")
+        # w = G[src][dst].get('weight', 1)
+
+
         edge['width'] = scale_size(w, min_w, max_w, min_size=2, max_size=10)
         edge['color'] = 'lightgray'
         edge['title'] = f"Cooccurrence : {int(w)}"
 
 
-
-    # for node in net.nodes:
-    #     node_id = node['id']
-    #     if node_id in all_authors:
-    #         # 作者节点：红色，字体大小随权重变化
-    #         freq = author_freq.get(node_id, 1)
-    #         node['color'] = 'firebrick'
-    #         node['shape'] = 'text'
-    #         node['font'] = {'size': min(freq*2,100), 'color': 'black'}#red :firebrick
-    #         node['title'] = f"Connexions : {freq}"
-    #     else:
-    #         # 关键词节点：蓝色，字体大小固定
-    #         node['color'] = 'royalblue'
-    #         node['shape'] = 'text'
-    #         node['font'] = {'size':20, 'color': 'royalblue'}
-    #         # node['title'] = f"Mot-clé : {node_id}"
-
-    # # ------------------ 设置边样式 ------------------
-    # for edge in net.edges:
-    #     src = edge['from']
-    #     dst = edge['to']
-    #     w = G[src][dst].get('weight', 1)
-    #     edge['width'] = max(2, w*2)
-    #     edge['color'] = 'lightgray'
-    #     edge['title'] = f"Cooccurrence : {int(w)}"
 
     # ------------------ 渲染 ------------------
     net.force_atlas_2based()  # 力导向布局
