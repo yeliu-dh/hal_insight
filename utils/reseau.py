@@ -247,7 +247,6 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
     min_w = min(all_weights) if all_weights else 1
     max_w = max(all_weights) if all_weights else 1
 
-
     # 设置边样式
     for edge in net.edges:
         src, dst = edge['from'], edge['to']
@@ -258,7 +257,8 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
         else:
             w = 1
             st.warning(f"Edge {src}<->{dst} : weight not found")
-
+        st.write(src, dst, w)
+        
         # for edge in net.edges:
         #     src, dst = edge['from'], edge['to']
         #     # 从 NetworkX 图 G 中读取边的 weight
