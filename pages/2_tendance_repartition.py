@@ -16,9 +16,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.upload import data_uploader
 from utils.upload import missing_data_warning
 
-from utils.wordcloud import preprocess_text
-from utils.plot import assign_time_unit
-
 from utils.plot import keywords_trendline
 from utils.plot import make_bar_chart
 from utils.plot import make_pie_chart
@@ -203,16 +200,16 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             if pd.notnull(min_date) and pd.notnull(max_date):
                 min_label = min_date.strftime("%b %Y")
                 max_label = max_date.strftime("%b %Y")
-                chart_title = f"Tendance de production scientifique ({min_label} – {max_label})"
+                chart_title = f"Évolution de production scientifique ({min_label} – {max_label})"
             else:
-                chart_title = "Tendance de production scientifique"
+                chart_title = "Évolution de production scientifique"
 
             # -------------------------------
             # 4e. 双折线趋势图（当期 + 累计）
             # Q:quantitative连续变量，O:ordinal 序数型,T:temporal, N:nominal
             # -------------------------------
+           
             base = alt.Chart(trend).encode(x="Period:O")
-
             line_count = base.mark_line(point=True, color="#440154").encode(
                 y=alt.Y("count:Q", axis=alt.Axis(title="Articles (période)")),
                 tooltip=["Period:O", "count:Q"]
@@ -249,40 +246,24 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         format_func=lambda x: WC_MAP[x]#只改变显示
         )
 
-        # 缺失值
+        # 缺失值警告
         for col in options:
             missing_data_warning(df, col=col, map=WC_MAP,show_distribution=False)
         st.markdown("<br>", unsafe_allow_html=True)#不容易被 Markdown 渲染压缩掉
         
-        # 清洗，合并文本
-        for opt in options:
-            df[f'{opt}_clean']=df.apply(lambda row: preprocess_text(row[opt], stopwords=None, lang=row["language_s"]) ,axis=1)
-                                       
-        df["text_clean"] = df[options].apply(
-        lambda row: " ".join([row[col] for col in options if isinstance(row[col], str)]),
-        axis=1
-    )
-
-        
-
-        #打时间标签
-        df = assign_time_unit(df)
-
         # -----------------待搜索关键词 ---------------
         keywords = st_tags(
             label="Mots clés",
             text="Tapez un mot et appuyez sur Entrée",
-            value=["management"],
+            value=["management","gestion","marketing"],
             maxtags=50
         )
         st.markdown("<br>", unsafe_allow_html=True)
 
-        fig=keywords_trendline(df, keywords)
+
+        #--------------画图----------------------
+        fig=keywords_trendline(df,options, keywords)
         st.pyplot(fig)
-
-
-
-
         st.divider()
         st.markdown("<br>", unsafe_allow_html=True)
 

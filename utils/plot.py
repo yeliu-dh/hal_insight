@@ -8,6 +8,9 @@ import plotly.express as px
 from utils.mapping import map_axe
 import streamlit as st
 
+#my utils:
+from utils.wordcloud import preprocess_text
+
 
 # def wrap_text(text, max_len=30):
 #     import textwrap
@@ -121,7 +124,30 @@ def assign_time_unit(df, date_col="submittedDate_s"):
     return df
 
 
-def keywords_trendline(df, keywords):
+def keywords_trendline(df, options, keywords=None):
+    min_date = df["submittedDate_s"].min()
+    max_date = df["submittedDate_s"].max()
+    if pd.notnull(min_date) and pd.notnull(max_date):
+        min_label = min_date.strftime("%b %Y")
+        max_label = max_date.strftime("%b %Y")
+        fig_title = f"Évolution des mots clés ({min_label} – {max_label})"
+    else:
+        fig_title = "Évolution des mots clés"
+
+
+    # 清洗，合并文本
+    for opt in options:
+        df[f'{opt}_clean']=df.apply(lambda row: preprocess_text(row[opt], stopwords=None, lang=row["language_s"]) ,axis=1)
+                                    
+    df["text_clean"] = df[options].apply(
+        lambda row: " ".join([row[col] for col in options if isinstance(row[col], str)]),
+        axis=1
+    )        
+
+    #打时间标签
+    df = assign_time_unit(df)
+
+
     # 初始化 trend_data
     trend_data = {kw: df.groupby('time_unit')['text_clean'].apply(lambda texts: sum(kw in t for t in texts)) 
                 for kw in keywords}
@@ -139,8 +165,8 @@ def keywords_trendline(df, keywords):
     ax.set_ylabel("Nombre d'occurrences")
     ax.grid(True)
     ax.legend()
+    plt.title(fig_title)
     plt.xticks(rotation=45)
-    # plt.show()
     return fig
 
 
