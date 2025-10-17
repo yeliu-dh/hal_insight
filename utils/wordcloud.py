@@ -12,13 +12,11 @@ from collections import defaultdict
 #my utils:
 from utils.plot import wrap_text
 from utils.upload import load_external_json
-
-
+ 
 def preprocess_text(text, stopwords=None, lang='fr'):
-    
     stopwords_nltk=load_external_json('json_data',"stopwords_nltk")
     stopwords_nltk=list(stopwords_nltk.values())
-
+ 
     # stopwords==user_stopwords 
     if stopwords==None:
         stopwords=[]
@@ -393,7 +391,6 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
             wc = WordCloud(
                 width=400, height=400, background_color="white",
                 max_words=max_words, stopwords=set(w.lower() for w in (stopwords_nltk + stopwords))
-
             ).generate_from_frequencies(keyness)
 
             ax.imshow(wc, interpolation="bilinear")
