@@ -143,7 +143,6 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
     # etworkX Graph 重复添加边会覆盖权重
     # 如果你用的是 nx.Graph()（无向图），重复添加同一条边时 weight 会被覆盖。
 
-
     # G = nx.Graph()
     # # input de G :{(author, keyword):weight}
     # for (a, k), w in filtered_edge_weights.items():  # ⚠ 用筛选后的权重
@@ -227,22 +226,6 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
 
 
     # ------------------ 设置边样式 ------------------
-    # min_w = min(filtered_edge_weights.values()) if filtered_edge_weights else 1
-    # max_w = max(filtered_edge_weights.values()) if filtered_edge_weights else 1
-
-    # 先计算所有边的权重 min/max
-    # all_weights = [data.get('weight', 1) for _, _, data in G.edges(data=True)]
-    # min_w = min(all_weights) if all_weights else 1
-    # max_w = max(all_weights) if all_weights else 1
-
-    # for edge in net.edges:
-    #     src,dst = edge['from'], edge['to']
-    #     w = G[src][dst].get('weight', 1)
-    #     edge['width'] = scale_size(freq, min_freq_val=min_w, max_freq_val=max_w, min_size=5, max_size=20) # max(7, w*7)
-    #     edge['color'] = 'lightgray'
-    #     edge['title'] = f"Cooccurrence : {int(w)}"
-
-
     all_weights = filtered_edge_weights.values()
     min_w = min(all_weights) if all_weights else 1
     max_w = max(all_weights) if all_weights else 1
@@ -256,24 +239,11 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
             w = filtered_edge_weights[(dst, src)]
         else:
             w = 1
-            st.warning(f"Edge {src}<->{dst} : weight not found")
-        st.write(src, dst, w)
-        
-        # for edge in net.edges:
-        #     src, dst = edge['from'], edge['to']
-        #     # 从 NetworkX 图 G 中读取边的 weight
-        #     if (src, dst) in filtered_edge_weights.keys():
-        #         w= filtered_edge_weights.get((src, dst),1)
-        #         st.write(src, dst, w)
-        #         # w = G[src][dst].get('weight', 1)
-        #         # st.write(src, dst, w)
-        #     else:
-        #         w = 1
-        #         st.error(f"weight invalide!")
-            
-        #     # w = G[src][dst].get('weight', 1)
+            # st.warning(f"Edge {src}<->{dst} : weight not found")
+        # st.write(src, dst, w)
 
-        edge['width'] = scale_size(w, min_w, max_w, min_size=1, max_size=20)
+        
+        edge['width'] = scale_size(w, min_w, max_w, min_size=2, max_size=20)
         edge['color'] = 'lightgray'
         edge['title'] = f"Cooccurrence : {int(w)}"
 
