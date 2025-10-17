@@ -119,7 +119,7 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
             filtered_edge_weights[(author, k)] = w
 
     # valid_keywords = {kw for _, kw in filtered_edges}    
-    # st.write(filtered_edge_weights)
+    st.write(filtered_edge_weights.items())
 
     #==============================构建 NetworkX 图==================================
     # etworkX Graph 重复添加边会覆盖权重

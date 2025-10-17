@@ -80,7 +80,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         "⬇️​ Fréquence minimale (>=):", 
         min_value=1, max_value=100, value=3, step=1, key="min_freq"
     )
-    st.info('Si vous voulez inclure les résumés, la fréquence minimale 7~10 recommendée.')
+    
+    if "abstract_s" in options:
+        st.info('Si vous voulez inclure les résumés, la fréquence minimale 7~10 recommendée.')
 
 
     st.markdown("<br>", unsafe_allow_html=True)
