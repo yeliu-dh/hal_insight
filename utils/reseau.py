@@ -149,7 +149,7 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
     # for (a, k), w in filtered_edge_weights.items():  # ⚠ 用筛选后的权重
     #     G.add_edge(a, k, weight=w)
 
-    G = nx.Graph()
+    G = nx.Graph() # NetworkX.Graph() 是无向图（undirected graph），所以 (a, b) 和 (b, a) 是同一条边。
     for (a, k), w in filtered_edge_weights.items():
         if G.has_edge(a, k):#之后增加w
             G[a][k]['weight'] += w  # 累加
@@ -246,17 +246,27 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
     # 设置边样式
     for edge in net.edges:
         src, dst = edge['from'], edge['to']
-        # 从 NetworkX 图 G 中读取边的 weight
-        if (src, dst) in filtered_edge_weights.keys():
-            w= filtered_edge_weights.get((src, dst),1)
-            st.write(src, dst, w)
-            # w = G[src][dst].get('weight', 1)
-            # st.write(src, dst, w)
+        if (src, dst) in filtered_edge_weights:
+            w = filtered_edge_weights[(src, dst)]
+        elif (dst, src) in filtered_edge_weights:
+            w = filtered_edge_weights[(dst, src)]
         else:
             w = 1
-            st.error(f"weight invalide!")
+            st.warning(f"Edge {src}<->{dst} : weight not found")
+
+    # for edge in net.edges:
+    #     src, dst = edge['from'], edge['to']
+    #     # 从 NetworkX 图 G 中读取边的 weight
+    #     if (src, dst) in filtered_edge_weights.keys():
+    #         w= filtered_edge_weights.get((src, dst),1)
+    #         st.write(src, dst, w)
+    #         # w = G[src][dst].get('weight', 1)
+    #         # st.write(src, dst, w)
+    #     else:
+    #         w = 1
+    #         st.error(f"weight invalide!")
         
-        # w = G[src][dst].get('weight', 1)
+    #     # w = G[src][dst].get('weight', 1)
 
 
         edge['width'] = scale_size(w, min_w, max_w, min_size=1, max_size=20)

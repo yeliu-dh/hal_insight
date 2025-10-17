@@ -13,8 +13,6 @@ def save_as_json(data, path):
     print(f"data saved in {path}!")
     return 
 
-
-
 # BASE_DIR = Path(__file__).parent.parent # 当前文件的上上级文件路径==HAL_INSIGHT
 
 def load_external_json(file_path):

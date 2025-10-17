@@ -3,15 +3,23 @@ from pathlib import Path
 import pandas as pd
 import re
 
-# # 项目根目录
-# BASE_DIR = Path(__file__).parent.parent # 当前文件的上上级文件路径
-# MAPPING_DIR = BASE_DIR / "mappings"
+# 项目根目录
+BASE_DIR = Path(__file__).parent.parent # 当前文件的上上级文件路径
+MAPPING_DIR = BASE_DIR / "mappings"
 
-# def load_mapping_json(file_name: str):
+# def load_mapping_json(, file_name: str):
 #     """
 #     加载 mappings 文件夹中的 JSON 字典
 #     """
 #     file_path = MAPPING_DIR / file_name
+#     if not file_path.exists():
+#         raise FileNotFoundError(f"{file_name} not found in {MAPPING_DIR}")
+#     with open(file_path, "r", encoding="utf-8") as f:
+#         return json.load(f)
+# def load_external_json(FOLDER_DIR, file_name: str):
+#     BASE_DIR = Path(__file__).parent.parent # 当前文件的上上级文件路径
+#     file_path = BASE_DIR / FOLDER_DIR / file_name
+    
 #     if not file_path.exists():
 #         raise FileNotFoundError(f"{file_name} not found in {MAPPING_DIR}")
 #     with open(file_path, "r", encoding="utf-8") as f:
