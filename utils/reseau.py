@@ -259,7 +259,7 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
         # w = G[src][dst].get('weight', 1)
 
 
-        edge['width'] = scale_size(w, min_w, max_w, min_size=2, max_size=10)
+        edge['width'] = scale_size(w, min_w, max_w, min_size=1, max_size=20)
         edge['color'] = 'lightgray'
         edge['title'] = f"Cooccurrence : {int(w)}"
 
