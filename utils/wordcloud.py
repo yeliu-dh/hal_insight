@@ -10,91 +10,9 @@ import streamlit as st
 from collections import defaultdict
 
 #my utils:
-from utils.plot import wrap_text
+from utils.preprocess import wrap_text, collect_clean_texts_by_col
 from utils.upload import load_external_json
  
-def preprocess_text(text, stopwords=None, lang='fr'):
-    stopwords_nltk=load_external_json("json_data/stopwords_nltk.json")
-    #list
-
-    # stopwords==user_stopwords 
-    if stopwords==None:
-        stopwords=[]
-    # 转小写+去重
-    stopwords = set(w.lower() for w in (stopwords_nltk + stopwords))
-
-    import re, simplemma    
-    # 处理 None / NaN
-    if text is None or str(text).lower().strip() in ['nan', 'none'," "]:
-        return " "
-    
-    # list -> str
-    if isinstance(text, list):
-        text = " ".join(map(str, text))
-        # st.warning("Texte sous forme de liste!!!") 
-    elif not isinstance(text, str):  # 如果是其他类型，转成字符串
-        text = str(text)
-
-    text = str(text).lower().strip()
-    
-    # 去标点 &非字母 & 多余空格
-    text = re.sub(r"[^a-zA-ZÀ-ÿ\s]", " ", text)
-    text = re.sub(r"\s+", " ", text).strip()
-    
-    # lemmatize + 去停用词
-    clean_tokens = [simplemma.lemmatize(word, lang=lang) for word in text.split()]
-    clean_text = " ".join([w for w in clean_tokens if w.isalpha() and w not in stopwords])
-    
-    return clean_text
-
-
-
-def collect_clean_texts_by_col(df_input, options, stopwords, exclude_nan=False, col="Global", lang_col="language_s"):
-    """
-    收集文本，支持：
-    - col=None: 全局（只分语言）
-    - col="axe" 或 "cl.fnege": 先分分类，再分语言
-    
-    返回 dict 格式:
-    {
-      "1": {"en": "clean text", "fr": "..."},
-      "2": {"en": "...", "fr": "..."}
-    }
-    """
-    df=df_input.copy()
-
-    dict_texts = defaultdict(lambda: defaultdict(str))
-    if exclude_nan==True and col!='Global':#如需dropna且是按照axe/CL分类生成wc
-        # exclude_nan==t-> dropna()，若global，不需要筛选
-        df=df.dropna(subset=[col])
-        df=df[df[col]!="nan"]#有时候NAN可能已经填充了！
-        
-    if col and col in df.columns:#和exploded都行
-        # 处理多分类列:若全部dropna，填充也不会有“nan”
-        df["_col_list"] = df[col].fillna("nan").apply(
-            lambda x: [v.strip() for v in str(x).split(";") if v.strip()]
-        )        
-    elif col=="Global":
-        # 全局只有一个虚拟类别
-        df["_col_list"] = [["Global"]] * len(df)
-
-    # 遍历每个 option 列
-    for option_col in options:
-        if option_col not in df.columns:
-            continue
-        for _, row in df.iterrows():
-            lang = str(row.get(lang_col, "fr")).lower()  #没有则默认法语
-            text = str(row[option_col])#是否忽略无文本的值？
-            text = preprocess_text(text, stopwords, lang=lang)
-            
-            for cat in row["_col_list"]:
-                dict_texts[cat][lang] += " " + text
-
-    df.drop(columns=["_col_list"], inplace=True, errors="ignore")
-
-    return {k : dict_texts[k] for k in sorted(dict_texts.keys())}#按照顺序重新排序
-
-
 def generate_wc(text, max_words, stopwords, title="Nuage de mots"):
     wc = WordCloud(
         width=800,
