@@ -253,7 +253,7 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
             # w = G[src][dst].get('weight', 1)
             # st.write(src, dst, w)
         else:
-            w = ""
+            w = 1
             st.error(f"weight invalide!")
         
         # w = G[src][dst].get('weight', 1)
