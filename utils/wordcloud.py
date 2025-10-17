@@ -15,8 +15,8 @@ from utils.upload import load_external_json
  
 def preprocess_text(text, stopwords=None, lang='fr'):
     stopwords_nltk=load_external_json("json_data/stopwords_nltk.json")
-
-
+    #list
+    
     # stopwords==user_stopwords 
     if stopwords==None:
         stopwords=[]
