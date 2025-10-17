@@ -165,9 +165,10 @@ def keywords_trendline(df, options, keywords):
 
     ax.set_xlabel("Temps")
     ax.set_ylabel("Nombre d'occurrences")
+    ax.set_title(fig_title)
     ax.grid(True)
     ax.legend()
-    plt.title(fig_title)
+    # plt.title(fig_title)
     plt.xticks(rotation=45)
     return fig
 
