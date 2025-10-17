@@ -259,9 +259,10 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             df[f'{opt}_clean']=df.apply(lambda row: preprocess_text(row[opt], stopwords=None, lang=row["language_s"]) ,axis=1)
                                        
         df["text_clean"] = df[options].apply(
-        lambda row: [item for col in options for item in (row[col] or []) if isinstance(row[col], list)],
-        axis=1
-        )
+            lambda row: " "+=row[col] for col in options if isinstance(row[col], str),
+            axis=1
+            )
+        
 
         #打时间标签
         df = assign_time_unit(df)
