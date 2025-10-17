@@ -25,11 +25,10 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.upload import load_external_json
 from utils.HAL_search_api import fetch_hal_articles
 
-
 from utils.mapping import map_domains
 from utils.mapping import add_axe
 from utils.ranking import add_classement_fnege
-
+from utils.upload import missing_data_warning
 
 # pages/1_hal_articles_fetcher.py
 # from init_imports import *
@@ -258,6 +257,8 @@ if search_button and not invalid_date:
         st.success(f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")
         
         st.dataframe(df)
+
+        missing_data_warning(df, col='file_s')
 
         #  ----------------SAVE TO LOCAL----------------- 
         #file name 
