@@ -289,33 +289,34 @@ if df is not None and not df.empty:
 st.divider()
 st.markdown("<br>", unsafe_allow_html=True)
 
+if st.session_state['uploaded_df'] :
+        
+    cols=st.columns([3,1])
+    with cols[1]:
+        pdf_button = st.button("extraire le texte intégral et mettre à jour la base de données")
+        
+        if pdf_button:
+            with st.spinner("Extraction des textes intégraux en cours..."):
+                # 初始化进度条
+                progress_bar = st.progress(0)
+                status_text = st.empty()
 
-cols=st.columns([3,1])
-with cols[1]:
-    pdf_button = st.button("extraire le texte intégral et mettre à jour la base de données")
-    
-    if pdf_button:
-        with st.spinner("Extraction des textes intégraux en cours..."):
-            # 初始化进度条
-            progress_bar = st.progress(0)
-            status_text = st.empty()
+                full_texts = []
+                total = len(df)
+                for i, row in df.iterrows():
+                    url = row.get("files_s")
+                    status_text.text(f"📄 Traitement {i+1}/{total} : {url[:60]}...")
 
-            full_texts = []
-            total = len(df)
-            for i, row in df.iterrows():
-                url = row.get("files_s")
-                status_text.text(f"📄 Traitement {i+1}/{total} : {url[:60]}...")
+                    if isinstance(url, str) and url.startswith("http"):
+                        text = extract_text_from_pdf(url)
+                        full_texts.append(text)
+                    else:
+                        full_texts.append(None)
+                    progress_bar.progress((i + 1) / total)
 
-                if isinstance(url, str) and url.startswith("http"):
-                    text = extract_text_from_pdf(url)
-                    full_texts.append(text)
-                else:
-                    full_texts.append(None)
-                progress_bar.progress((i + 1) / total)
+                # ------------更新DataFrame-------------------
+                df["full_text"] = full_texts
+                st.session_state["uploaded_df"] = df
 
-            # ------------更新DataFrame-------------------
-            df["full_text"] = full_texts
-            st.session_state["uploaded_df"] = df
-
-            st.success("✅ Extraction terminée ! La base de données a été mise à jour avec les textes complets.")
-            st.dataframe(df[["files_s", "full_text"]].head())
+                st.success("✅ Extraction terminée ! La base de données a été mise à jour avec les textes complets.")
+                st.dataframe(df[["files_s", "full_text"]].head())
