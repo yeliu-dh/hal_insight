@@ -33,8 +33,8 @@ from utils.mapping import add_axe
 from utils.ranking import add_classement_fnege
 from utils.upload import missing_data_warning
 
-from utils.pdf2str import extract_text_from_pdf, get_valid_pdf_url
-
+from utils.pdf2str import extract_text_from_pdf
+from utils.pdf2str import get_valid_pdf_url
 
 
 # pages/1_hal_articles_fetcher.py
