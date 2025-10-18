@@ -35,15 +35,13 @@ def keywords_trendline(df, options, keywords):
     #打时间标签
     df = assign_time_unit(df)
 
-
-    # # 初始化 trend_data
+    # 初始化 trend_data
     trend_data = {
             kw: df.groupby('time_unit')['text_clean'].apply(lambda texts: sum(kw in t for t in texts))
             for kw in keywords
             if any(df["text_clean"].str.contains(kw, na=False))
         }
-
-   
+       
 
     # 画图
     colors = cm.viridis(np.linspace(0,1,len(keywords)))
