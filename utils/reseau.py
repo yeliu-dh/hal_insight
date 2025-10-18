@@ -14,7 +14,7 @@ from streamlit.components.v1 import html #在st中显示
 
 #my utils 
 from utils.upload import missing_data_warning
-from utils.wordcloud import preprocess_text
+from utils.preprocess import preprocess_text
 
 
 
@@ -266,8 +266,7 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
     
     # 添加下载按钮
     cols=st.columns([4,1])
-    with cols[1]:
-            
+    with cols[1]:    
         with open(html_path, "rb") as f:
             st.download_button(
                 label="📥 Télécharger le graphique (HTML)",
