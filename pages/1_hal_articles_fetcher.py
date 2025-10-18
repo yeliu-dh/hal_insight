@@ -286,11 +286,10 @@ if df is not None and not df.empty:
         # 这是 XLSX 文件的 MIME 类型，告诉浏览器这是一个 Excel 文件，否则st button可能无法识别文件类型 
 
 
-st.divider()
-st.markdown("<br>", unsafe_allow_html=True)
-
 if st.session_state['uploaded_df'] :
-        
+    st.divider()
+    st.markdown("<br>", unsafe_allow_html=True)
+            
     cols=st.columns([3,1])
     with cols[1]:
         pdf_button = st.button("extraire le texte intégral et mettre à jour la base de données")
