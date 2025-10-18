@@ -9,6 +9,9 @@ from pathlib import Path
 import io
 import sys
 import os
+   
+import math
+
 
 # # 把项目根目录 (/mount/src/hal_insight) 加入 Python 路径
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -30,7 +33,7 @@ from utils.mapping import add_axe
 from utils.ranking import add_classement_fnege
 from utils.upload import missing_data_warning
 
-from utils.pdf2str import extract_text_from_pdf
+from utils.pdf2str import extract_text_from_pdf, get_valid_pdf_url
 
 
 
@@ -292,30 +295,41 @@ if df is not None and not df.empty:
             
     cols=st.columns([3,1])
     with cols[1]:
-        pdf_button = st.button("extraire le texte intégral et mettre à jour la base de données")
-        
-        if pdf_button:
-            with st.spinner("Extraction des textes intégraux en cours..."):
-                # 初始化进度条
-                progress_bar = st.progress(0)
-                status_text = st.empty()
+        pdf_button = st.button(f"extraire le texte intégral \n mettre à jour la base de données")
 
-                full_texts = []
-                total = len(df)
-                for i, row in df.iterrows():
-                    url = row.get("files_s")
-                    status_text.text(f"📄 Traitement {i+1}/{total} : {url[:60]}...")
+    if pdf_button:
+        with st.spinner("Extraction des textes intégraux en cours..."):
+            progress_bar = st.progress(0)
+            status_text = st.empty()
 
-                    if isinstance(url, str) and url.startswith("http"):
-                        text = extract_text_from_pdf(url)
-                        full_texts.append(text)
-                    else:
-                        full_texts.append(None)
+            full_texts = []
+            total = len(df)
+
+            for i, row in df.iterrows():
+                url = get_valid_pdf_url(row.get("files_s"))
+
+                # 更新状态栏
+                if url:
+                    url_preview = url[:60] + ("..." if len(url) > 60 else "")
+                    status_text.text(f"📄 Traitement {i+1}/{total} : {url_preview}")
+                else:
+                    status_text.text(f"⏭️ Sauté {i+1}/{total} : pas d'URL valide")
+                    full_texts.append(None)
                     progress_bar.progress((i + 1) / total)
+                    continue  # 跳过该条
 
-                # ------------更新DataFrame-------------------
-                df["full_text"] = full_texts
-                st.session_state["uploaded_df"] = df
+                try:
+                    text = extract_text_from_pdf(url)
+                    full_texts.append(text)
+                except Exception as e:
+                    st.warning(f"⚠️ Erreur à la ligne {i+1}: {e}")
+                    full_texts.append(None)
 
-                st.success("✅ Extraction terminée ! La base de données a été mise à jour avec les textes complets.")
-                st.dataframe(df[["files_s", "full_text"]].head())
+                progress_bar.progress((i + 1) / total)
+
+            # ---------- 更新 DataFrame ----------
+            df["full_text"] = full_texts
+            st.session_state["uploaded_df"] = df
+
+            st.success("✅ Extraction terminée ! La base de données a été mise à jour avec les textes complets.")
+            st.dataframe(df[["files_s", "full_text"]].head())

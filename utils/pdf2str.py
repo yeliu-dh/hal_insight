@@ -4,7 +4,31 @@ import fitz  # PyMuPDF
 import pandas as pd
 import streamlit as st
 import re
+import math
+import pandas as pd
+import streamlit as st
 
+def get_valid_pdf_url(value):
+    """从 files_s 字段提取第一个有效的 PDF URL。"""
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return None
+    if isinstance(value, (list, tuple)):
+        # 如果是列表，取第一个 http 开头的元素
+        for item in value:
+            if isinstance(item, str) and item.strip().startswith("http"):
+                return item.strip()
+        return None
+    if isinstance(value, str):
+        v = value.strip()
+        # 过滤掉无效字符串
+        if v.startswith("http") and v.lower().endswith(".pdf"):
+            return v
+        elif v.startswith("http"):
+            # 万一不是 .pdf 结尾，也可能是 pdf 下载链接，保留
+            return v
+        else:
+            return None
+    return None
 
 def extract_clean_text(page):
     """去掉页眉页脚区域的文字"""
@@ -57,13 +81,13 @@ def extract_text_from_pdf(pdf_source: str) -> str:
         raw_text = extract_clean_text(page)  # ① 去页眉页脚
         cleaned = clean_text(raw_text)       # ② 清理无关行
         page_texts.append(cleaned)
-        print(f"✅ 已处理第 {i+1}/{len(doc)} 页 ({len(cleaned)} 字符)")
+        # print(f"✅ 已处理第 {i+1}/{len(doc)} 页 ({len(cleaned)} 字符)")
 
     doc.close()
 
     # 拼接所有页形成完整正文
     full_text = "\n".join(page_texts)
-    print(f"提取完成，共 {len(full_text)} 字符。")
+    # print(f"提取完成，共 {len(full_text)} 字符。")
     return full_text
 
 
