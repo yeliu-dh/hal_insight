@@ -242,7 +242,7 @@ if search_button and not invalid_date:
 
 
 df = st.session_state.get("uploaded_df", None)
-if df:
+if df is not None and not df.empty:
     #-------------show----------------------
     st.success(f"✅ {len(df)} articles trouvés!")
     st.success(f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")    
