@@ -286,7 +286,7 @@ if df is not None and not df.empty:
         # 这是 XLSX 文件的 MIME 类型，告诉浏览器这是一个 Excel 文件，否则st button可能无法识别文件类型 
 
 
-if st.session_state['uploaded_df'] :
+#======================pdf=============================================    
     st.divider()
     st.markdown("<br>", unsafe_allow_html=True)
             
