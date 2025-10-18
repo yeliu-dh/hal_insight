@@ -235,14 +235,14 @@ if search_button and not invalid_date:
         st.session_state["uploaded_df"] = df  
         st.session_state["uploaded_df_source"] = "search"
         
-    df = st.session_state.get("uploaded_df", None)
+    # df = st.session_state.get("uploaded_df", None)
 
     # if df is None or df.empty:
     #     st.warning("0 résultat!")
 
 
 df = st.session_state.get("uploaded_df", None)
-if not df.empty :
+if df:
     #-------------show----------------------
     st.success(f"✅ {len(df)} articles trouvés!")
     st.success(f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")    
