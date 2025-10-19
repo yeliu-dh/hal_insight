@@ -345,8 +345,6 @@ if df is not None and not df.empty:
             st.success(f"✅ Extraction des textes ({num_text}/{total}) terminée en {end_time-start_time:.2f} secondes !")
             st.dataframe(df)
         
-
-            
     df = st.session_state.get("uploaded_df_text", None)
     if df is not None and not df.empty:
         #-------------show----------------------
