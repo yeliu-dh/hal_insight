@@ -297,8 +297,7 @@ if df is not None and not df.empty:
 
     if pdf_button:
         # if st.session_state['uploaded_df_text']:
-
-        
+       
         st.session_state['uploaded_df_text']=st.session_state["uploaded_df"]
         df_text=st.session_state['uploaded_df_text'].copy()
 
@@ -360,6 +359,11 @@ if df_text is not None and not df_text.empty:
     cols1=st.columns(4)
     with cols1[1]:
         # as CSV
+        df_str = df.astype(str) # 把所有列转换为字符串，防止 bytes/object 类型引发编码错误
+        # csv_data = df.to_csv(index=False, encoding="utf-8-sig")  # ✅ 返回字符串
+        # csv_data = csv_data.encode("utf-8-sig")                  # ✅ 转成二进制供下载
+
+
         csv_data = df_text.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
         st.download_button(
             label="Télécharger CSV",
