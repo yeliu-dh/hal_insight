@@ -243,7 +243,6 @@ if search_button and not invalid_date:
         st.session_state["uploaded_df_source"] = "search"
         
 
-
 df = st.session_state.get("uploaded_df", None)
 if df is not None and not df.empty:
     #-------------show----------------------
@@ -296,16 +295,16 @@ if df is not None and not df.empty:
 
     if pdf_button:
         st.session_state['uploaded_df_text']=st.session_state["uploaded_df"]
-        df=st.session_state['uploaded_df_text']
+        df_text=st.session_state['uploaded_df_text'].copy()
 
         start_time=time.time()
         with st.spinner("Extraction des textes intégraux en cours..."):
             full_texts = []
-            if "full_text" not in df.columns:
-                df["full_text"] = None
+            if "full_text" not in df_text.columns:
+                df_text["full_text"] = None
             
             
-            total=len(df[df['files_s'].notna()])
+            total=len(df_text[df_text['files_s'].notna()])
             processed =0
                 
             # 初始化进度条和状态文本
@@ -313,22 +312,22 @@ if df is not None and not df.empty:
             status_text = st.empty()
 
 
-            for i, row in df.iterrows():
-                if pd.notnull(df.loc[i, "full_text"]) and isinstance(df.loc[i, "full_text"], str) and len(df.loc[i, "full_text"]) > 20:
+            for i, row in df_text.iterrows():
+                if pd.notnull(df_text.loc[i, "full_text"]) and isinstance(df_text.loc[i, "full_text"], str) and len(df_text.loc[i, "full_text"]) > 20:
                     continue #若存在，值为str，大于20字符，跳过
 
                 url =row.get("files_s", None)
                 if not url:
-                    df.at[i, "full_text"] = None
+                    df_text.at[i, "full_text"] = None
                     continue
 
                 try:
                     text = extract_text_from_pdf(url)
-                    df.at[i, "full_text"] = text
+                    df_text.at[i, "full_text"] = text
 
                 except Exception as e:
                     # st.warning(f"⚠️ Erreur ligne {i+1}: {e}")
-                    df.at[i, "full_text"] = None
+                    df_text.at[i, "full_text"] = None
 
                 # ✅ 每处理一行都更新状态
                 processed += 1
@@ -336,27 +335,28 @@ if df is not None and not df.empty:
                 status_text.text(f"📄 Traitement {processed}/{total} ...")
 
                 # 每次更新一行，就立即保存到 session（确保断掉后能恢复）
-                st.session_state["uploaded_df_text"] = df
+                st.session_state["uploaded_df_text"] = df_text
 
             end_time=time.time()
             progress_bar.empty()
 
-            num_text=len(df[df['full_text'].notna()])
+            num_text=len(df_text[df_text['full_text'].notna()])
             st.success(f"✅ Extraction des textes ({num_text}/{total}) terminée en {end_time-start_time:.2f} secondes !")
-            st.dataframe(df)
+            st.dataframe(df_text)
         
-    df = st.session_state.get("uploaded_df_text", None)
-    if df is not None and not df.empty:
+
+    df_text = st.session_state.get("uploaded_df_text", None)
+    if df_text is not None and not df_text.empty:
         #-------------show----------------------
         st.success(f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")    
-        st.dataframe(df)
+        st.dataframe(df_text)
         #  ----------------SAVE TO LOCAL----------------- 
         #file name 
         today_str = datetime.now().strftime("%d%m%Y")
         cols=st.columns(4)
         with cols[1]:
             # as CSV
-            csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
+            csv_data = df_text.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
             st.download_button(
                 label="Télécharger CSV",
                 data=csv_data,
@@ -369,7 +369,7 @@ if df is not None and not df.empty:
             # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
             xlsx_buffer = io.BytesIO()
             with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
-                df.to_excel(writer, index=False, sheet_name="Articles")
+                df_text.to_excel(writer, index=False, sheet_name="Articles")
             xlsx_data = xlsx_buffer.getvalue()
 
             st.download_button(
