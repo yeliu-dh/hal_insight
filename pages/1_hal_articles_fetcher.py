@@ -334,7 +334,7 @@ if df is not None and not df.empty:
                 progress_bar.progress(done / total)
 
             st.success("✅ Extraction terminée !")
-            st.dataframe(df[["files_s", "full_text"]].head())
+            st.dataframe(df[["files_s", "full_text"]])
 
 
 
