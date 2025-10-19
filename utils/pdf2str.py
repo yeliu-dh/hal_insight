@@ -66,20 +66,29 @@ def clean_text(text):
 def extract_text_from_pdf(url: str) -> str:
     """从本地或URL读取PDF，清理页眉页脚并拼接全文"""
 
-    # 判断是否是URL
-    if url:
-        response = requests.get(url, timeout=20)
-        content_type = response.headers.get("content-type", "").lower()
-        st.info(f"CODE [{response.status_code}]  | type : {content_type}")
+    if not url:
+        st.warning("URL vide")
+        return
 
-        response.raise_for_status()
-        try :
+    # 判断是否是URL
+    try:
+        response = requests.get(url, timeout=20)
+        response.raise_for_status()# requests 库里的一个非常有用的安全检查语句，用来在请求失败（HTTP 错误码）时主动抛出异常。
+        
+        content_type = response.headers.get("content-type", "").lower()
+        st.info(f"CODE [{response.status_code}]  | type : {content_type}\n\n"
+                f"first bytes: {response.content[:8]}")
+        
+        #尝试打开pdf
+        if "pdf" in content_type:       
             pdf_bytes = io.BytesIO(response.content)#把下载的二进制内容包装成一个“文件对象”
             doc = fitz.open(stream=pdf_bytes)
             st.write(f"Page count: {doc.page_count}"
                     f"{doc.metadata}\n\n")
-        except Exception as e:
-            st.warning (f" ⚠ {e}")
+            
+
+    except Exception as e:
+        st.warning (f" ⚠ {e}")
 
 
     # else:

@@ -299,34 +299,22 @@ if df is not None and not df.empty:
     if pdf_button:
         start_time=time.time()
         with st.spinner("Extraction des textes intégraux en cours..."):
-            # progress_bar = st.progress(0)
-            # status_text = st.empty()
-
             full_texts = []
-            # total =len (df[df["files_s"].notna()])
             if "full_text" not in df.columns:
                 df["full_text"] = None
             
-            # count=0
-            for i, row in df[:50].iterrows():
-                
+            for i, row in df.iterrows():
                 if pd.notnull(df.loc[i, "full_text"]) and isinstance(df.loc[i, "full_text"], str) and len(df.loc[i, "full_text"]) > 20:
                     continue #若存在，值为str，大于20字符，跳过
-
 
                 url =row.get("files_s", None)
                 if not url:
                     df.at[i, "full_text"] = None
                     continue
 
-                # # 状态栏
-                # preview = (url[:60] + "...") if len(url) > 60 else url
-                # status_text.text(f"📄 Traitement {i+1}/{total} : {preview}")
-
                 try:
                     text = extract_text_from_pdf(url)
                     df.at[i, "full_text"] = text
-                    # count+=1
 
                 except Exception as e:
                     st.warning(f"⚠️ Erreur ligne {i+1}: {e}")
@@ -334,11 +322,6 @@ if df is not None and not df.empty:
 
                 # 每次更新一行，就立即保存到 session（确保断掉后能恢复）
                 st.session_state["uploaded_df"] = df
-
-                # 更新进度
-                # done = df["full_text"].notnull().sum()
-                # progress_bar.progress(count / total)
-
 
             end_time=time.time()
             st.success(f"✅ Extraction terminée en {end_time-start_time:.2f} secondes !")
