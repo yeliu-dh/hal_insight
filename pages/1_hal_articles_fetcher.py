@@ -318,8 +318,8 @@ if df is not None and not df.empty:
 
 
             for i, row in df_text.iterrows():
-                if pd.notnull(df_text.loc[i, "full_text"]) and isinstance(df_text.loc[i, "full_text"], str) and len(df_text.loc[i, "full_text"]) > 20:
-                    continue #若存在，值为str，大于20字符，跳过
+                # if pd.notnull(df_text.loc[i, "full_text"]) and isinstance(df_text.loc[i, "full_text"], str) and len(df_text.loc[i, "full_text"]) > 20:
+                #     continue #若存在，值为str，大于20字符，跳过
 
                 url =row.get("files_s", None)
                 if not url:
