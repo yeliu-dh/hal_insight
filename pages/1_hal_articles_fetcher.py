@@ -32,9 +32,7 @@ from utils.mapping import map_domains
 from utils.mapping import add_axe
 from utils.ranking import add_classement_fnege
 from utils.upload import missing_data_warning
-
 from utils.pdf2str import extract_text_from_pdf
-from utils.pdf2str import get_valid_pdf_url
 
 
 # pages/1_hal_articles_fetcher.py
@@ -361,7 +359,15 @@ if df is not None and not df.empty:
             cols1=st.columns(4)
             with cols1[1]:
                 # as CSV
-                csv_data_text = df_text.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
+                # csv_data_text = df_text.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
+                csv_data_text = df_text.to_csv(
+                    index=False,
+                    encoding="utf-8-sig",
+                    sep=",",
+                    quoting=1,         # 强制用引号包裹所有字段
+                    escapechar="\\",   # 当字段中出现引号或分隔符时用反斜杠转义
+                ).encode("utf-8-sig")
+
                 st.download_button(
                     label="Télécharger CSV",
                     data=csv_data_text,

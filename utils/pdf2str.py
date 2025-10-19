@@ -8,27 +8,27 @@ import math
 import pandas as pd
 import streamlit as st
 
-def get_valid_pdf_url(value):
-    """从 files_s 字段提取第一个有效的 PDF URL。"""
-    if value is None or (isinstance(value, float) and pd.isna(value)):
-        return None
-    if isinstance(value, (list, tuple)):
-        # 如果是列表，取第一个 http 开头的元素
-        for item in value:
-            if isinstance(item, str) and item.strip().startswith("http"):
-                return item.strip()
-        return None
-    if isinstance(value, str):
-        v = value.strip()
-        # 过滤掉无效字符串
-        if v.startswith("http") and v.lower().endswith(".pdf"):
-            return v
-        elif v.startswith("http"):
-            # 万一不是 .pdf 结尾，也可能是 pdf 下载链接，保留
-            return v
-        else:
-            return None
-    return None
+# def get_valid_pdf_url(value):
+#     """从 files_s 字段提取第一个有效的 PDF URL。"""
+#     if value is None or (isinstance(value, float) and pd.isna(value)):
+#         return None
+#     if isinstance(value, (list, tuple)):
+#         # 如果是列表，取第一个 http 开头的元素
+#         for item in value:
+#             if isinstance(item, str) and item.strip().startswith("http"):
+#                 return item.strip()
+#         return None
+#     if isinstance(value, str):
+#         v = value.strip()
+#         # 过滤掉无效字符串
+#         if v.startswith("http") and v.lower().endswith(".pdf"):
+#             return v
+#         elif v.startswith("http"):
+#             # 万一不是 .pdf 结尾，也可能是 pdf 下载链接，保留
+#             return v
+#         else:
+#             return None
+#     return None
 
 def extract_clean_text(page):
     """去掉页眉页脚区域的文字"""
