@@ -101,7 +101,7 @@ def extract_text_from_pdf(url: str) -> str:
 
     # 拼接所有页形成完整正文
     full_text = "\n".join(page_texts)
-    st.write(f"Page count: {doc.page_count}\n\n"
+    st.write(#f"Page count: {doc.page_count}\n\n"
             f"Text preview{full_text[:100]}\n\n")
     # print(f"提取完成，共 {len(full_text)} 字符。")
     return full_text
