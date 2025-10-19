@@ -294,7 +294,7 @@ if df is not None and not df.empty:
             
     cols=st.columns([3,1])
     with cols[1]:
-        pdf_button = st.button(f"extraire le texte complets \n mettre à jour la base de données")
+        pdf_button = st.button(f"Extraire le texte complets")
 
     if pdf_button:
         start_time=time.time()
@@ -303,6 +303,9 @@ if df is not None and not df.empty:
             if "full_text" not in df.columns:
                 df["full_text"] = None
             
+            
+            total=len(df[df['files_s'].notna()])
+
             for i, row in df.iterrows():
                 if pd.notnull(df.loc[i, "full_text"]) and isinstance(df.loc[i, "full_text"], str) and len(df.loc[i, "full_text"]) > 20:
                     continue #若存在，值为str，大于20字符，跳过
@@ -324,7 +327,9 @@ if df is not None and not df.empty:
                 st.session_state["uploaded_df"] = df
 
             end_time=time.time()
-            st.success(f"✅ Extraction terminée en {end_time-start_time:.2f} secondes !")
+            num_text=len(df[df['full_text'].notna()])
+
+            st.success(f"✅ Extraction des textes ({num_text/total}) terminée en {end_time-start_time:.2f} secondes !")
             st.dataframe(df)
 
 

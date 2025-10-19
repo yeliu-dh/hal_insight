@@ -83,10 +83,6 @@ def extract_text_from_pdf(url: str) -> str:
         if "pdf" in content_type:       
             pdf_bytes = io.BytesIO(response.content)#把下载的二进制内容包装成一个“文件对象”
             doc = fitz.open(stream=pdf_bytes)
-            st.write(f"Page count: {doc.page_count}"
-                    f"{doc.metadata}\n\n")
-            
-
     except Exception as e:
         st.warning (f" ⚠ {e}")
 
@@ -94,20 +90,22 @@ def extract_text_from_pdf(url: str) -> str:
     # else:
     #     doc = fitz.open(pdf_source)
 
-    # page_texts = []
-    # for i, page in enumerate(doc):
-    #     raw_text = extract_clean_text(page)  # ① 去页眉页脚
-    #     cleaned = clean_text(raw_text)       # ② 清理无关行
-    #     page_texts.append(cleaned)
-    #     # print(f"✅ 已处理第 {i+1}/{len(doc)} 页 ({len(cleaned)} 字符)")
+    page_texts = []
+    for i, page in enumerate(doc):
+        raw_text = extract_clean_text(page)  # ① 去页眉页脚
+        cleaned = clean_text(raw_text)       # ② 清理无关行
+        page_texts.append(cleaned)
+        # print(f"✅ 已处理第 {i+1}/{len(doc)} 页 ({len(cleaned)} 字符)")
 
-    # doc.close()
+    doc.close()
 
-    # # 拼接所有页形成完整正文
-    # full_text = "\n".join(page_texts)
-    # # print(f"提取完成，共 {len(full_text)} 字符。")
-    # return full_text
-    return
+    # 拼接所有页形成完整正文
+    full_text = "\n".join(page_texts)
+    st.write(f"Page count: {doc.page_count}"
+            f"{full_text[:100]}\n\n")
+    # print(f"提取完成，共 {len(full_text)} 字符。")
+    return full_text
+    
 
 
 
