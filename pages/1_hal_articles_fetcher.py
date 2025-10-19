@@ -289,11 +289,11 @@ if df is not None and not df.empty:
     st.divider()
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # st.subheader("🔢 Filtrer vos résultats")
+    st.subheader("🔢 Extraire le texte intégral")
         
     cols=st.columns([3,1])
     with cols[1]:
-        pdf_button = st.button(f"Extraire le texte complet")
+        pdf_button = st.button(f"Extraire")
 
     if pdf_button:
         # if st.session_state['uploaded_df_text']:
@@ -359,9 +359,6 @@ if df_text is not None and not df_text.empty and "full_text" in df_text.columns:
     cols1=st.columns(4)
     with cols1[1]:
         # as CSV
-        # df_str = df.astype(str) # 把所有列转换为字符串，防止 bytes/object 类型引发编码错误
-        # csv_data = df.to_csv(index=False, encoding="utf-8-sig")  # ✅ 返回字符串
-        # csv_data = csv_data.encode("utf-8-sig")                  # ✅ 转成二进制供下载
         csv_data_text = df_text.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
         st.download_button(
             label="Télécharger CSV",
