@@ -22,7 +22,7 @@ from utils.preprocess import collect_clean_texts_by_col
 from utils.wordcloud import generate_wc
 from utils.wordcloud import generate_wc_param
 
-from utils.wordcloud import explode_by_col
+from utils.preprocess import explode_by_col
 from utils.wordcloud import create_time_slices
 from utils.wordcloud import generate_keyness_wc
 
@@ -67,7 +67,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     st.subheader("🔢 Modifier les paramètres")
     # ---------------文本范围-------------------
     WC_MAP={"keyword_s":"mots clés",
-            "abstract_s":'résumés'}
+            "abstract_s":'résumés',
+            "full_text":"texte intégral"}
     
     options = st.multiselect(
     "📑 Choisir le texte:",
