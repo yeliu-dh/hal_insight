@@ -73,6 +73,9 @@ def extract_text_from_pdf(pdf_source: str) -> str:
         response.raise_for_status()
         pdf_bytes = io.BytesIO(response.content)
         doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+        st.info(f"[{response.status_code}] {pdf_source}\n\n"
+                f"Texte : {doc[:100]}\n\n")
+
     else:
         doc = fitz.open(pdf_source)
 
