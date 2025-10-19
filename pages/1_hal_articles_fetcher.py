@@ -326,6 +326,7 @@ if df is not None and not df.empty:
                     full_texts.append(None)
 
                 progress_bar.progress((i + 1) / total)
+                break
 
             # ---------- 更新 DataFrame ----------
             df["full_text"] = full_texts
