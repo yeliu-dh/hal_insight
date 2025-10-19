@@ -75,9 +75,9 @@ def extract_text_from_pdf(pdf_source: str) -> str:
         doc = fitz.open(stream=pdf_bytes, filetype="pdf")
         # st.info(f"[{response.status_code}] {pdf_source}\n\n"
         #         f"Texte : {doc[:100]}\n\n")
-        st.info(f"[{response.status_code}] PDF chargé: {len(response.content)} octets"
-                f"{doc.metadata}\n\n"
-                f"Page count: {doc.page_count}")
+        st.info(f"[{response.status_code}] | type: {response.headers['content-type']} | {len(response.content)} octets \n\n"
+                f"Page count: {doc.page_count}"
+                f"{doc.metadata}\n\n")
 
 
 

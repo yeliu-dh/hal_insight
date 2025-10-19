@@ -299,15 +299,15 @@ if df is not None and not df.empty:
     if pdf_button:
         start_time=time.time()
         with st.spinner("Extraction des textes intégraux en cours..."):
-            progress_bar = st.progress(0)
-            status_text = st.empty()
+            # progress_bar = st.progress(0)
+            # status_text = st.empty()
 
             full_texts = []
-            total =len (df[df["files_s"].notna()])
+            # total =len (df[df["files_s"].notna()])
             if "full_text" not in df.columns:
                 df["full_text"] = None
             
-            count=0
+            # count=0
             for i, row in df[:50].iterrows():
                 
                 if pd.notnull(df.loc[i, "full_text"]) and isinstance(df.loc[i, "full_text"], str) and len(df.loc[i, "full_text"]) > 20:
@@ -326,7 +326,7 @@ if df is not None and not df.empty:
                 try:
                     text = extract_text_from_pdf(url)
                     df.at[i, "full_text"] = text
-                    count+=1
+                    # count+=1
 
                 except Exception as e:
                     st.warning(f"⚠️ Erreur ligne {i+1}: {e}")
@@ -337,7 +337,7 @@ if df is not None and not df.empty:
 
                 # 更新进度
                 # done = df["full_text"].notnull().sum()
-                progress_bar.progress(count / total)
+                # progress_bar.progress(count / total)
 
 
             end_time=time.time()
