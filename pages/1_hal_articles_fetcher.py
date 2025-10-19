@@ -70,7 +70,7 @@ st.title("Hal Articles Fetcher")
 # ----------------------- PARAM -----------------------
 # with left_col:
 
-st.subheader("Filtrer vos résultats")
+st.subheader("🔢 Filtrer vos résultats")
 st.markdown("<br>", unsafe_allow_html=True)
 
 text = st_tags(
@@ -242,17 +242,13 @@ if search_button and not invalid_date:
         st.session_state["uploaded_df"] = df  
         st.session_state["uploaded_df_source"] = "search"
         
-    # df = st.session_state.get("uploaded_df", None)
-
-    # if df is None or df.empty:
-    #     st.warning("0 résultat!")
 
 
 df = st.session_state.get("uploaded_df", None)
 if df is not None and not df.empty:
     #-------------show----------------------
-    st.success(f"✅ {len(df)} articles trouvés!")
-    st.success(f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")    
+    st.success(f"✅ {len(df)} articles trouvés!\n\n"
+                f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")    
     st.dataframe(df)
 
     missing_data_warning(df, col='files_s')
@@ -291,12 +287,17 @@ if df is not None and not df.empty:
 #======================pdf=============================================    
     st.divider()
     st.markdown("<br>", unsafe_allow_html=True)
-            
+
+    # st.subheader("🔢 Filtrer vos résultats")
+        
     cols=st.columns([3,1])
     with cols[1]:
         pdf_button = st.button(f"Extraire le texte complet")
 
     if pdf_button:
+        st.session_state['uploaded_df_text']=st.session_state["uploaded_df"]
+        df=st.session_state['uploaded_df_text']
+
         start_time=time.time()
         with st.spinner("Extraction des textes intégraux en cours..."):
             full_texts = []
@@ -326,16 +327,16 @@ if df is not None and not df.empty:
                     df.at[i, "full_text"] = text
 
                 except Exception as e:
-                    st.warning(f"⚠️ Erreur ligne {i+1}: {e}")
+                    # st.warning(f"⚠️ Erreur ligne {i+1}: {e}")
                     df.at[i, "full_text"] = None
 
                 # ✅ 每处理一行都更新状态
                 processed += 1
                 progress_bar.progress(processed / total)
-                status_text.text(f"📄 Traitement {processed}/{total} : {url[:80]}...")
+                status_text.text(f"📄 Traitement {processed}/{total} ...")
 
                 # 每次更新一行，就立即保存到 session（确保断掉后能恢复）
-                st.session_state["uploaded_df"] = df
+                st.session_state["uploaded_df_text"] = df
 
             end_time=time.time()
             progress_bar.empty()
@@ -343,38 +344,77 @@ if df is not None and not df.empty:
             num_text=len(df[df['full_text'].notna()])
             st.success(f"✅ Extraction des textes ({num_text}/{total}) terminée en {end_time-start_time:.2f} secondes !")
             st.dataframe(df)
+        
+
+            
+    df = st.session_state.get("uploaded_df_text", None)
+    if df is not None and not df.empty:
+        #-------------show----------------------
+        st.success(f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")    
+        st.dataframe(df)
+        #  ----------------SAVE TO LOCAL----------------- 
+        #file name 
+        today_str = datetime.now().strftime("%d%m%Y")
+        cols=st.columns(4)
+        with cols[1]:
+            # as CSV
+            csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
+            st.download_button(
+                label="Télécharger CSV",
+                data=csv_data,
+                file_name = f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art_textes.csv",
+                mime="text/csv"
+            )
+
+        with cols[3]:
+            #as XLSX
+            # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
+            xlsx_buffer = io.BytesIO()
+            with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
+                df.to_excel(writer, index=False, sheet_name="Articles")
+            xlsx_data = xlsx_buffer.getvalue()
+
+            st.download_button(
+                label="Télécharger XLSX",
+                data=xlsx_data,
+                file_name=f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art_textes.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+
+
+
 
 
 
           
 
 
-        # #  ----------------SAVE TO LOCAL----------------- 
-        #     #file name 
-        #     today_str = datetime.now().strftime("%d%m%Y")
-        #     cols=st.columns(4)
-        #     with cols[1]:
-        #         # as CSV
-        #         csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
+        #  ----------------SAVE TO LOCAL----------------- 
+            #file name 
+            today_str = datetime.now().strftime("%d%m%Y")
+            cols=st.columns(4)
+            with cols[1]:
+                # as CSV
+                csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
                 
-        #         st.download_button(
-        #             label="Télécharger CSV",
-        #             data=csv_data,
-        #             file_name = f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art1.csv",
-        #             mime="text/csv"
-        #         )
+                st.download_button(
+                    label="Télécharger CSV",
+                    data=csv_data,
+                    file_name = f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art1.csv",
+                    mime="text/csv"
+                )
 
-        #     with cols[3]:
-        #         #as XLSX
-        #         # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
-        #         xlsx_buffer = io.BytesIO()
-        #         with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
-        #             df.to_excel(writer, index=False, sheet_name="Articles")
-        #         xlsx_data = xlsx_buffer.getvalue()
+            with cols[3]:
+                #as XLSX
+                # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
+                xlsx_buffer = io.BytesIO()
+                with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
+                    df.to_excel(writer, index=False, sheet_name="Articles")
+                xlsx_data = xlsx_buffer.getvalue()
 
-        #         st.download_button(
-        #             label="Télécharger XLSX",
-        #             data=xlsx_data,
-        #             file_name=f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art1.xlsx",
-        #             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        #         )
+                st.download_button(
+                    label="Télécharger XLSX",
+                    data=xlsx_data,
+                    file_name=f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art1.xlsx",
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                )
