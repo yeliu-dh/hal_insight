@@ -17,8 +17,8 @@ import simplemma
 #my utils:分行导入，不然容易失败
 from utils.upload import data_uploader, missing_data_warning
 from utils.upload import load_external_json
-from utils.wordcloud import preprocess_text
-from utils.wordcloud import collect_clean_texts_by_col
+from utils.preprocess import preprocess_text
+from utils.preprocess import collect_clean_texts_by_col
 from utils.wordcloud import generate_wc
 from utils.wordcloud import generate_wc_param
 

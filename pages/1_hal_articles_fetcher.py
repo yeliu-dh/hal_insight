@@ -360,6 +360,8 @@ if df is not None and not df.empty:
             with cols1[1]:
                 # as CSV
                 # csv_data_text = df_text.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
+                
+                #full_text中的很多换行符 (\n)、逗号、引号 " " 等特殊字符，无法正常转义
                 csv_data_text = df_text.to_csv(
                     index=False,
                     encoding="utf-8-sig",
