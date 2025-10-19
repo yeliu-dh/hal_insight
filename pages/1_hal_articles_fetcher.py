@@ -303,7 +303,9 @@ if df is not None and not df.empty:
 
             full_texts = []
             total = len(df)
-
+            if "full_text" not in df.columns:
+                df["full_text"] = None
+                        
             for i, row in df[:50].iterrows():
                 # 跳过已完成的
                 if pd.notnull(df.loc[i, "full_text"]) and isinstance(df.loc[i, "full_text"], str) and len(df.loc[i, "full_text"]) > 20:
