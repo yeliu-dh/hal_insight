@@ -193,9 +193,8 @@ cols=st.columns([4,1])
 with cols[1]:
     search_button = st.button("⚡ Chercher")
 
-st.divider()
+# st.divider()
 df = None#初始化
-
 if search_button and not invalid_date:
     with st.spinner("Chercher..."):
         try:
@@ -289,7 +288,7 @@ if df is not None and not df.empty:
     st.divider()
     st.markdown("<br>", unsafe_allow_html=True)
 
-    st.subheader("🔢 Extraire le texte intégral")
+    st.subheader("📄 Extraire le texte intégral")
         
     cols=st.columns([3,1])
     with cols[1]:
