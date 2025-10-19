@@ -79,16 +79,13 @@ def extract_text_from_pdf(url: str) -> str:
         st.info(f"CODE [{response.status_code}]  | type : {content_type}\n\n"
                 f"first bytes: {response.content[:8]}")
         
-        #尝试打开pdf
+        # 若为 pdf
         if "pdf" in content_type:       
             pdf_bytes = io.BytesIO(response.content)#把下载的二进制内容包装成一个“文件对象”
             doc = fitz.open(stream=pdf_bytes)
+   
     except Exception as e:
         st.warning (f" ⚠ {e}")
-
-
-    # else:
-    #     doc = fitz.open(pdf_source)
 
     page_texts = []
     for i, page in enumerate(doc):

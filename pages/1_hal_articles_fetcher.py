@@ -294,7 +294,7 @@ if df is not None and not df.empty:
             
     cols=st.columns([3,1])
     with cols[1]:
-        pdf_button = st.button(f"Extraire le texte complets")
+        pdf_button = st.button(f"Extraire le texte complet")
 
     if pdf_button:
         start_time=time.time()
@@ -305,6 +305,12 @@ if df is not None and not df.empty:
             
             
             total=len(df[df['files_s'].notna()])
+            processed =0
+                
+            # 初始化进度条和状态文本
+            progress_bar = st.progress(0)
+            status_text = st.empty()
+
 
             for i, row in df.iterrows():
                 if pd.notnull(df.loc[i, "full_text"]) and isinstance(df.loc[i, "full_text"], str) and len(df.loc[i, "full_text"]) > 20:
@@ -323,13 +329,19 @@ if df is not None and not df.empty:
                     st.warning(f"⚠️ Erreur ligne {i+1}: {e}")
                     df.at[i, "full_text"] = None
 
+                # ✅ 每处理一行都更新状态
+                processed += 1
+                progress_bar.progress(processed / total)
+                status_text.text(f"📄 Traitement {processed}/{total} : {url[:80]}...")
+
                 # 每次更新一行，就立即保存到 session（确保断掉后能恢复）
                 st.session_state["uploaded_df"] = df
 
             end_time=time.time()
-            num_text=len(df[df['full_text'].notna()])
+            progress_bar.empty()
 
-            st.success(f"✅ Extraction des textes ({num_text}/{total}) terminée en {end_time-start_time:.2f} secondes !")
+            num_text=len(df[df['full_text'].notna()])
+            st.success(f"✅ Extraction des textes ({num_text}/{processed}) terminée en {end_time-start_time:.2f} secondes !")
             st.dataframe(df)
 
 
