@@ -249,7 +249,8 @@ if df is not None and not df.empty:
                 f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")    
     st.dataframe(df)
 
-    missing_data_warning(df, col='files_s')
+    missing_data_warning(df, col='files_s',map={"files_s":"pdf lien"})
+
     #  ----------------SAVE TO LOCAL----------------- 
     #file name 
     today_str = datetime.now().strftime("%d%m%Y")
@@ -285,21 +286,21 @@ if df is not None and not df.empty:
 
 
 #============================PDF2STR=======================================    
-    st.divider()
     st.markdown("<br>", unsafe_allow_html=True)
+    st.divider()
 
     st.subheader("📄 Extraire le texte intégral")
-        
-    cols=st.columns([3,1])
+    st.write("Attention : tous les URLs ne permettent pas forcément d'extraire le texte intégral. "
+            "Certaines URLs peuvent être invalides ou ne pas pointer vers un PDF."
+            )
+                
+    cols=st.columns([4,1])
     with cols[1]:
         pdf_button = st.button(f"Extraire")
 
-    if pdf_button:
-        # if st.session_state['uploaded_df_text']:
-       
+    if pdf_button:       
         st.session_state['uploaded_df_text']=st.session_state["uploaded_df"]
         df_text=st.session_state['uploaded_df_text'].copy()
-
 
 
         start_time=time.time()
@@ -336,7 +337,7 @@ if df is not None and not df.empty:
                 # ✅ 每处理一行都更新状态
                 processed += 1
                 progress_bar.progress(processed / total)
-                status_text.text(f"📄 Traitement {processed}/{total} ...")
+                status_text.text(f"📄 Processus du traitement {processed}/{total} ...")
 
                 # 每次更新一行，就立即保存到 session（确保断掉后能恢复）
                 st.session_state["uploaded_df_text"] = df_text
@@ -346,7 +347,6 @@ if df is not None and not df.empty:
 
             num_text=len(df_text[df_text['full_text'].notna()])
             st.success(f"✅ Extraction des textes ({num_text}/{total}) terminée en {end_time-start_time:.2f} secondes !")
-            # st.dataframe(df_text)
 
 
 
