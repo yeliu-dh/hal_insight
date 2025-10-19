@@ -70,86 +70,39 @@ def extract_text_from_pdf(pdf_source: str) -> str:
     # 判断是否是URL
     if pdf_source.startswith("http"):
         response = requests.get(pdf_source, timeout=20)
+        content_type = response.headers.get("content-type", "").lower()
+        st.info(f"[{response.status_code}]  | type : {content_type}")
+
+
         response.raise_for_status()
-        pdf_bytes = io.BytesIO(response.content)
-        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
-        # st.info(f"[{response.status_code}] {pdf_source}\n\n"
-        #         f"Texte : {doc[:100]}\n\n")
-        st.info(f"[{response.status_code}] | type: {response.headers['content-type']} | {len(response.content)} octets \n\n"
-                f"Page count: {doc.page_count}"
-                f"{doc.metadata}\n\n")
+        try :
+
+            pdf_bytes = io.BytesIO(response.content)#把下载的二进制内容包装成一个“文件对象”
+            doc = fitz.open(stream=pdf_bytes,filetype="pdf")
+            # st.info(f"[{response.status_code}] | type : {response.headers['content-type']} | {len(response.content)} octets \n\n"
+            #         f"Page count: {doc.page_count}"
+            #         f"{doc.metadata}\n\n")
+        except Exception as e:
+            st.warning (f"{e}")
 
 
+    # else:
+    #     doc = fitz.open(pdf_source)
 
-    else:
-        doc = fitz.open(pdf_source)
+    # page_texts = []
+    # for i, page in enumerate(doc):
+    #     raw_text = extract_clean_text(page)  # ① 去页眉页脚
+    #     cleaned = clean_text(raw_text)       # ② 清理无关行
+    #     page_texts.append(cleaned)
+    #     # print(f"✅ 已处理第 {i+1}/{len(doc)} 页 ({len(cleaned)} 字符)")
 
-    page_texts = []
-    for i, page in enumerate(doc):
-        raw_text = extract_clean_text(page)  # ① 去页眉页脚
-        cleaned = clean_text(raw_text)       # ② 清理无关行
-        page_texts.append(cleaned)
-        # print(f"✅ 已处理第 {i+1}/{len(doc)} 页 ({len(cleaned)} 字符)")
+    # doc.close()
 
-    doc.close()
-
-    # 拼接所有页形成完整正文
-    full_text = "\n".join(page_texts)
-    # print(f"提取完成，共 {len(full_text)} 字符。")
-    return full_text
-
-
-
-# def extract_text_from_pdf(pdf_source: str):
-#     """
-#     从本地路径或URL读取PDF，提取正文（测试版本）。
-#     """
-#     print(f"\n=== 调试开始 ===\n来源: {pdf_source}\n")
-
-#     # 判断是否是 URL
-#     if isinstance(pdf_source, str) and pdf_source.startswith("http"):
-#         try:
-#             response = requests.get(pdf_source, timeout=15)
-#             print(f"[HTTP 状态码] {response.status_code}")
-#             response.raise_for_status()
-
-#             content_type = response.headers.get("Content-Type", "")
-#             print(f"[Content-Type] {content_type}")
-
-#             # 检查是不是PDF
-#             if "pdf" not in content_type.lower():
-#                 print("❌ 返回的内容不是 PDF 文件！可能被HAL重定向或403。")
-#                 print(response.text[:500])
-#                 return None
-
-#             # 加载为内存文件
-#             pdf_bytes = io.BytesIO(response.content)
-#             doc = fitz.open(stream=pdf_bytes, filetype="pdf")
-
-#         except Exception as e:
-#             print(f"⚠️ 无法下载或打开PDF: {e}")
-#             return None
-
-#     # else:
-#     #     # 本地路径
-#     #     print("[INFO] 使用本地文件路径打开 PDF")
-#     #     doc = fitz.open(pdf_source)
-
-#     print(f"PDF 页数: {len(doc)}")
-
-#     # 取前两页看内容
-#     for i, page in enumerate(doc[:2]):
-#         text = page.get_text("text")[:500]
-#         print(f"\n--- 第 {i+1} 页预览 ---\n{text}\n")
-
-#     doc.close()
-#     print("\n=== 调试结束 ===")
-
-
-# if __name__ == "__main__":
-#     # 这里是测试运行区
-#     pdf_url = "https://hal.science/hal-05295655/file/J%20Supply%20Chain%20Manag%20-%202025%20-%20Le%20-%20Workers%20Responses%20to%20CSR%20Decoupling%20in%20Garment%20Supply%20Chains%20A%20Hirschmanian-1.pdf"
-#     extract_text_from_pdf(pdf_url)
+    # # 拼接所有页形成完整正文
+    # full_text = "\n".join(page_texts)
+    # # print(f"提取完成，共 {len(full_text)} 字符。")
+    # return full_text
+    return
 
 
 
