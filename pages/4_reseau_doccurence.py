@@ -51,6 +51,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     default=["keyword_s","abstract_s"],  # 默认选择
     format_func=lambda x: WC_MAP[x]#只改变显示
     )
+    st.write("Les textes sélectionnés sont nettoyés (suppression des espaces, ponctuations et mots grammaticaux courants), mis en minuscules et lemmatisés.")
+
 
     for col in options:
         missing_data_warning(df, col=col, map=WC_MAP,show_distribution=False)
@@ -79,8 +81,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         min_value=1, max_value=100, value=3, step=1, key="min_freq"
     )
     
-    if "abstract_s" in options:
-        st.info('Si vous voulez inclure les résumés, la fréquence minimale >= 10 recommendée.')
+    if "abstract_s" in options: #or "full_text" in options:
+        st.info('Les résumés inclus, la fréquence minimale >= 10 recommendée.')
+                # f'Les textes intégraux inclus, la fréquence minimale >= 50 recommendée.')
 
 
     st.markdown("<br>", unsafe_allow_html=True)
@@ -100,7 +103,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     if button:    
         with st.spinner("Générer..."):
-            st.info("Déplacez les mots avec le souri pour une visualisation plus claire.")
+            st.info("Déplacez les mots avec le souri pour une visualisation plus claire." \
+                    "la taille des textes représente leur fréquence dans le texte, la largeur de ligne représente leur fréquence avec")
             
             st.markdown(
                 f"<h3 style='text-align: center;'>Réseau d'occurence auteurs-mots clés</h3>",

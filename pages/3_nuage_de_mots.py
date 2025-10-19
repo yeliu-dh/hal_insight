@@ -76,6 +76,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     default=["keyword_s","abstract_s"],  # 默认选择
     format_func=lambda x: WC_MAP[x]#只改变显示
     )
+    st.write("Les textes choisis sont nettoyés et lemmatisés")
 
     for col in options:
         missing_data_warning(df, col=col, map=WC_MAP,show_distribution=False)
