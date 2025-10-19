@@ -63,22 +63,21 @@ def clean_text(text):
     return "\n".join(cleaned)
 
 
-def extract_text_from_pdf(pdf_source: str) -> str:
+def extract_text_from_pdf(url: str) -> str:
     """从本地或URL读取PDF，清理页眉页脚并拼接全文"""
-    print(f"开始处理 {pdf_source}")
 
     # 判断是否是URL
-    if pdf_source.startswith("http"):
-        response = requests.get(pdf_source, timeout=20)
+    if url:
+        response = requests.get(url, timeout=20)
         content_type = response.headers.get("content-type", "").lower()
         st.info(f"CODE [{response.status_code}]  | type : {content_type}")
 
         response.raise_for_status()
         try :
             pdf_bytes = io.BytesIO(response.content)#把下载的二进制内容包装成一个“文件对象”
-            doc = fitz.open(stream=pdf_bytes,filetype="pdf")
-            # st.info(f"Page count: {doc.page_count}"
-            #         f"{doc.metadata}\n\n")
+            doc = fitz.open(stream=pdf_bytes)
+            st.write(f"Page count: {doc.page_count}"
+                    f"{doc.metadata}\n\n")
         except Exception as e:
             st.warning (f" ⚠ {e}")
 
