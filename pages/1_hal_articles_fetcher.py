@@ -306,7 +306,7 @@ if df is not None and not df.empty:
 
             for i, row in df[:50].iterrows():
                 # 跳过已完成的
-                if pd.notnull(row["full_text"]) and isinstance(row["full_text"], str) and len(row["full_text"]) > 20:
+                if pd.notnull(df.loc[i, "full_text"]) and isinstance(df.loc[i, "full_text"], str) and len(df.loc[i, "full_text"]) > 20:
                     continue  # 已提取，跳过
 
                 url = get_valid_pdf_url(row.get("files_s"))
