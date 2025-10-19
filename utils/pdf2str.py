@@ -65,7 +65,6 @@ def clean_text(text):
 
 def extract_text_from_pdf(url: str) -> str:
     """从本地或URL读取PDF，清理页眉页脚并拼接全文"""
-
     if not url:
         st.warning("URL vide")
         return
@@ -76,8 +75,8 @@ def extract_text_from_pdf(url: str) -> str:
         response.raise_for_status()# requests 库里的一个非常有用的安全检查语句，用来在请求失败（HTTP 错误码）时主动抛出异常。
         
         content_type = response.headers.get("content-type", "").lower()
-        st.info(f"CODE [{response.status_code}]  | type : {content_type}\n\n"
-                f"first bytes: {response.content[:8]}")
+        # st.info(f"CODE [{response.status_code}]  | type : {content_type}\n\n"
+        #         f"first bytes: {response.content[:8]}")
         
         # 若为 pdf
         if "pdf" in content_type:       
@@ -92,15 +91,13 @@ def extract_text_from_pdf(url: str) -> str:
         raw_text = extract_clean_text(page)  # ① 去页眉页脚
         cleaned = clean_text(raw_text)       # ② 清理无关行
         page_texts.append(cleaned)
-        # print(f"✅ 已处理第 {i+1}/{len(doc)} 页 ({len(cleaned)} 字符)")
 
     doc.close()
 
     # 拼接所有页形成完整正文
     full_text = "\n".join(page_texts)
-    st.write(#f"Page count: {doc.page_count}\n\n"
-            f"Text preview{full_text[:100]}\n\n")
-    # print(f"提取完成，共 {len(full_text)} 字符。")
+    # st.write(#f"Page count: {doc.page_count}\n\n"
+    #         f"Text preview{full_text[:100]}\n\n")
     return full_text
     
 
