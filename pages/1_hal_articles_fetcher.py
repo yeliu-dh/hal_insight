@@ -329,7 +329,7 @@ if df is not None and not df.empty:
             end_time=time.time()
             num_text=len(df[df['full_text'].notna()])
 
-            st.success(f"✅ Extraction des textes ({num_text/total}) terminée en {end_time-start_time:.2f} secondes !")
+            st.success(f"✅ Extraction des textes ({num_text}/{total}) terminée en {end_time-start_time:.2f} secondes !")
             st.dataframe(df)
 
 
