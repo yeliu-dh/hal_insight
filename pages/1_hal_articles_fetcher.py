@@ -362,10 +362,10 @@ if df_text is not None and not df_text.empty and "full_text" in df_text.columns:
         # df_str = df.astype(str) # 把所有列转换为字符串，防止 bytes/object 类型引发编码错误
         # csv_data = df.to_csv(index=False, encoding="utf-8-sig")  # ✅ 返回字符串
         # csv_data = csv_data.encode("utf-8-sig")                  # ✅ 转成二进制供下载
-        csv_data = df_text.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
+        csv_data_text = df_text.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
         st.download_button(
             label="Télécharger CSV",
-            data=csv_data,
+            data=csv_data_text,
             file_name = f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art_textes.csv",
             mime="text/csv"
         )
@@ -376,11 +376,11 @@ if df_text is not None and not df_text.empty and "full_text" in df_text.columns:
         xlsx_buffer = io.BytesIO()
         with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
             df_text.to_excel(writer, index=False, sheet_name="Articles")
-        xlsx_data = xlsx_buffer.getvalue()
+        xlsx_data_text = xlsx_buffer.getvalue()
 
         st.download_button(
             label="Télécharger XLSX",
-            data=xlsx_data,
+            data=xlsx_data_text,
             file_name=f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art_textes.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
