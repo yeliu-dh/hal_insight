@@ -296,7 +296,7 @@ if df is not None and not df.empty:
         pdf_button = st.button(f"Extraire le texte complet")
 
     if pdf_button:
-        if st.session_state['uploaded_df_text']:
+        # if st.session_state['uploaded_df_text']:
 
         
         st.session_state['uploaded_df_text']=st.session_state["uploaded_df"]
