@@ -40,23 +40,21 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 #=======================================================================================#
     st.subheader("🔢 Modifier les paramètres")
-
-    # ---------------TEXTE-------------------
+    # ---------------文本范围-------------------
     WC_MAP={"keyword_s":"mots clés",
-            "abstract_s":'résumés'}
+            "abstract_s":'résumés',
+            "full_text":"texte intégral"}
     
     options = st.multiselect(
     "📑 Choisir le texte:",
-    options=["keyword_s", "abstract_s"],
-    default=["keyword_s"],  # 默认选择
+    options=["keyword_s", "abstract_s","full_text"],
+    default=["keyword_s","abstract_s"],  # 默认选择
     format_func=lambda x: WC_MAP[x]#只改变显示
     )
 
     for col in options:
         missing_data_warning(df, col=col, map=WC_MAP,show_distribution=False)
     st.markdown("<br>", unsafe_allow_html=True)#不容易被 Markdown 渲染压缩掉
-
-
 
     # ----------------- user stopwords ---------------
     user_stopwords = st_tags(
