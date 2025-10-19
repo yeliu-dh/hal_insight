@@ -262,8 +262,7 @@ if df is not None and not df.empty:
     cols=st.columns(4)
     with cols[1]:
         # as CSV
-        # csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
-        csv_data = df.to_csv(index=False, encoding="utf-8")      
+        csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
         st.download_button(
             label="Télécharger CSV",
             data=csv_data,
