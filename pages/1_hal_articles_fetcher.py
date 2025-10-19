@@ -283,7 +283,9 @@ if df is not None and not df.empty:
         # 这是 XLSX 文件的 MIME 类型，告诉浏览器这是一个 Excel 文件，否则st button可能无法识别文件类型 
 
 
-#======================pdf=============================================    
+
+
+#============================PDF2STR=======================================    
     st.divider()
     st.markdown("<br>", unsafe_allow_html=True)
 
@@ -348,8 +350,8 @@ if df is not None and not df.empty:
     df_text = st.session_state.get("uploaded_df_text", None)
     if df_text is not None and not df_text.empty:
         #-------------show----------------------
-        st.success(f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")    
-        st.dataframe(df_text)
+        # st.success(f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")    
+        # st.dataframe(df_text)
         #  ----------------SAVE TO LOCAL----------------- 
         #file name 
         today_str = datetime.now().strftime("%d%m%Y")
