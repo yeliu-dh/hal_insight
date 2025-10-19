@@ -295,7 +295,7 @@ if df is not None and not df.empty:
             
     cols=st.columns([3,1])
     with cols[1]:
-        pdf_button = st.button(f"extraire le texte intégral \n mettre à jour la base de données")
+        pdf_button = st.button(f"extraire le texte complets \n mettre à jour la base de données")
 
     if pdf_button:
         with st.spinner("Extraction des textes intégraux en cours..."):
@@ -305,36 +305,40 @@ if df is not None and not df.empty:
             full_texts = []
             total = len(df)
 
-            for i, row in df.iterrows():
-                url = get_valid_pdf_url(row.get("files_s"))
+            for i, row in df[:50].iterrows():
+                # 跳过已完成的
+                if pd.notnull(row["full_text"]) and isinstance(row["full_text"], str) and len(row["full_text"]) > 20:
+                    continue  # 已提取，跳过
 
-                # 更新状态栏
-                if url:
-                    url_preview = url[:60] + ("..." if len(url) > 60 else "")
-                    status_text.text(f"📄 Traitement {i+1}/{total} : {url_preview}")
-                else:
-                    status_text.text(f"⏭️ Sauté {i+1}/{total} : pas d'URL valide")
-                    full_texts.append(None)
-                    progress_bar.progress((i + 1) / total)
-                    continue  # 跳过该条
+                url = get_valid_pdf_url(row.get("files_s"))
+                if not url:
+                    df.at[i, "full_text"] = None
+                    continue
+
+                # 状态栏
+                preview = (url[:60] + "...") if len(url) > 60 else url
+                status_text.text(f"📄 Traitement {i+1}/{total} : {preview}")
 
                 try:
                     text = extract_text_from_pdf(url)
-                    full_texts.append(text)
+                    df.at[i, "full_text"] = text
                 except Exception as e:
-                    st.warning(f"⚠️ Erreur à la ligne {i+1}: {e}")
-                    full_texts.append(None)
+                    st.warning(f"⚠️ Erreur ligne {i+1}: {e}")
+                    df.at[i, "full_text"] = None
 
-                progress_bar.progress((i + 1) / total)
-                
+                # 每次更新一行，就立即保存到 session（确保断掉后能恢复）
+                st.session_state["uploaded_df"] = df
 
-            # ---------- 更新 DataFrame ----------
-            df["full_text"] = full_texts
-            st.session_state["uploaded_df"] = df
+                # 更新进度
+                done = df["full_text"].notnull().sum()
+                progress_bar.progress(done / total)
 
-            st.success("✅ Extraction terminée ! La base de données a été mise à jour avec les textes complets.")
+            st.success("✅ Extraction terminée !")
             st.dataframe(df[["files_s", "full_text"]].head())
 
+
+
+          
 
 
 #  #  ----------------SAVE TO LOCAL----------------- 
