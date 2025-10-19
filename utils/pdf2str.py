@@ -73,10 +73,8 @@ def extract_text_from_pdf(pdf_source: str) -> str:
         content_type = response.headers.get("content-type", "").lower()
         st.info(f"[{response.status_code}]  | type : {content_type}")
 
-
         response.raise_for_status()
         try :
-
             pdf_bytes = io.BytesIO(response.content)#把下载的二进制内容包装成一个“文件对象”
             doc = fitz.open(stream=pdf_bytes,filetype="pdf")
             # st.info(f"[{response.status_code}] | type : {response.headers['content-type']} | {len(response.content)} octets \n\n"
