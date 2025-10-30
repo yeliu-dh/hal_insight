@@ -201,9 +201,12 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         elif generate_button and time_slices is not None:# granlarity → évolutif
             with st.spinner("Générer le nuage de mots évolutif..."):
                 if group_by=="Global":
-                    evolutif_wc= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices=time_slices, max_words=max_words, stopwords=stopwords, method="llr")
-                    st.pyplot(evolutif_wc)
-                
+                    try:
+                        evolutif_wc= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices=time_slices, max_words=max_words, stopwords=stopwords, method="llr")
+                        st.pyplot(evolutif_wc)
+                    except Exception as e:
+                        st.write(e)
+
                 # elif group_by=="Axe" or groupby=="":
                 else:
                     #-----居中显示所有演变图的大标题------
