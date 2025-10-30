@@ -92,8 +92,8 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
                 )
             # fig.tight_layout(rect=[0, 0, 1, 0.95])  # 顶部留 5% 给 suptitle
             # fig.suptitle(suptitle, fontsize=10, ha="center")
-            st.pyplot(fig)
-
+            # st.pyplot(fig)
+            return fig 
 
     else:
         # 分语言 → EN/FR 左右列显示，每个类别单独一行
@@ -114,11 +114,12 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
                     text = langs.get(lang, "").strip()
                     if text:
                         fig = generate_wc(text, max_words, stopwords, title=title)
-                        st.pyplot(fig)
-
+                        # st.pyplot(fig)
+                        return fig
+                    
                     else :
                         st.warning(f"Texte invalide dans la catégorie {cat}-{lang}!")
-    return 
+    # return 
 
 
 
@@ -169,6 +170,8 @@ def create_time_slices(df, granularity):
         step_year = 5
         time_slices = [(y, min(y + step_year - 1, end_year))
                        for y in range(start_year, end_year + 1, step_year)]
+    else:
+        time_slices=None
 
     # else:  # 默认年度
     #     time_slices = [(y, y) for y in range(start_year, end_year + 1)]

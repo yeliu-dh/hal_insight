@@ -196,9 +196,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         if granularity=="Toute la période → wc global":
             with st.spinner("Générer le nuage de mots global..."):
                 wc=generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words, user_stopwords)
+                st.pyplot(wc)
        
-       
-        elif generate_button and time_slices :# granlarity → évolutif
+        elif generate_button and time_slices is not None:# granlarity → évolutif
             with st.spinner("Générer le nuage de mots évolutif..."):
                 if group_by=="Global":
                     evolutif_wc= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices=time_slices, max_words=max_words, stopwords=stopwords, method="llr")
