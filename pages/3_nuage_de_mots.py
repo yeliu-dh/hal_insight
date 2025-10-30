@@ -76,7 +76,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     default=["keyword_s","abstract_s"],  # 默认选择
     format_func=lambda x: WC_MAP[x]#只改变显示
     )
-    st.write("Les textes choisis sont nettoyés et lemmatisés")
+    st.write("Les textes sélectionnés sont nettoyés (suppression des espaces, ponctuations et mots grammaticaux courants), mis en minuscules et lemmatisés.")
+
 
     for col in options:
         missing_data_warning(df, col=col, map=WC_MAP,show_distribution=False)
@@ -164,7 +165,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     user_stopwords = st_tags(
         label="🗷 Ajouter des mots à ignorer",
         text="Tapez un mot et appuyez sur Entrée",
-        value=["management","gestion","marketing", "recherche",'research','study',"social","use","cas"],
+        value=["management","gestion","marketing", "recherche",'research','study',"social","use","cas","article",'entreprise'],
         maxtags=50
     )
     # with st.expander("📘 Voir la liste des stopwords existants"):

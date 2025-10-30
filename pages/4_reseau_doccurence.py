@@ -82,7 +82,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     )
     
     if "abstract_s" in options: #or "full_text" in options:
-        st.info('Les résumés inclus, la fréquence minimale >= 10 recommendée.')
+        st.info('💡​ Les résumés inclus, la fréquence minimale >= 10 recommendée.')
                 # f'Les textes intégraux inclus, la fréquence minimale >= 50 recommendée.')
 
 
@@ -103,7 +103,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     if button:    
         with st.spinner("Générer..."):
-            st.info("Déplacez les mots avec le souri pour une visualisation plus claire." \
+            st.info("Déplacez les mots avec le souri pour une visualisation plus claire.\n\n" \
                     "la taille des textes représente leur fréquence dans le texte, la largeur de ligne représente leur fréquence avec")
             
             st.markdown(
