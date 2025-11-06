@@ -52,7 +52,6 @@ def explode_by_col(df, col):
     多值按照，/；分割成list
     =>在某一col上explode；
     检查notna
-
     """
     df = df.copy()
     df[col] = df[col].fillna('nan').astype(str).str.split("[,;]") # axe中有nan所以type:objet，先变成str
@@ -169,7 +168,7 @@ def collect_clean_texts_by_col(df_input, options, stopwords, exclude_nan=False, 
         df["_col_list"] = df[col].fillna("nan").apply(
             lambda x: [v.strip() for v in str(x).split(";") if v.strip()]
         )        
-        
+
     elif col=="Global":
         # 全局只有一个虚拟类别
         df["_col_list"] = [["Global"]] * len(df)
