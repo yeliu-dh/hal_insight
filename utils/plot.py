@@ -67,13 +67,13 @@ def keywords_trendline(df, options, keywords):
 
 def make_pie_chart(df, col, title, top_n=5):
     #----------------map axe---------------------------
-    if col=="Axe":
-        df=map_axe(df, col)
+    # if col=="Axe":
+    #     df=map_axe(df, col)
 
     #--------------处理multivalues str-----------------
     df=explode_by_col(df, col)
     counts=df[col].value_counts()
-    
+
     # ---------------TOP N---------------------------
     # 如果类别大于top_n, 只保留 top_n，其余归为 "其他"
     if len(counts) > top_n:
@@ -142,8 +142,8 @@ def make_pie_chart(df, col, title, top_n=5):
 
 def make_bar_chart(df, col, title, top_n=10):
     #----------------map axe---------------------------
-    if col=="Axe":
-        df=map_axe(df, col)
+    # if col=="Axe":
+    #     df=map_axe(df, col)
 
     #--------------处理multivalues str-----------------
     df=explode_by_col(df, col)
