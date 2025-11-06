@@ -78,7 +78,6 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
                     "nan":'nan'
                 }
                 title_raw = f"{group_by} {cat} - {axe_map.get(cat, '?')}"
-                # title = wrap_text(title_raw, max_len=35)
                 title = wrap_text(title_raw, max_len=50, html=False)
 
             #画图：
@@ -90,14 +89,13 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
                     stopwords,
                     title=title
                 )
-            #
+            ###
             fig.tight_layout(rect=[0, 0, 1, 0.95])  # 顶部留 5% 给 suptitle
             fig.suptitle(suptitle, fontsize=10, ha="center")
             st.pyplot(fig)
-            #不能输出显示，否则只能输出一个!
-
-
-            return  
+            ###不能输出显示，否则只能输出一个!
+            
+            # return  
 
     else:
         # 分语言 → EN/FR 左右列显示，每个类别单独一行
@@ -119,7 +117,6 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
                     if text:
                         fig = generate_wc(text, max_words, stopwords, title=title)
                         st.pyplot(fig) #*
-                        return 
                     
                     else :
                         st.warning(f"Texte invalide dans la catégorie {cat}-{lang}!")
