@@ -78,7 +78,7 @@ def make_pie_chart(df, col, title, top_n=5):
         axe_map = {
             "1": "Performances et responsabilités",
             "2": "Société de services et services à la société",
-            "3": "Innovations, transformations et résistances organisationnelles et sociétales",
+            "3": "Innovations\u2011 transformations et résistances organisationnelles et sociétales",
             "4": "Ouvrages pédagogiques"
         }
         # 只对非空值进行映射
