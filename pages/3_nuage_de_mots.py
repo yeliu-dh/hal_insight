@@ -102,7 +102,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 
 
-
   # ------------gourpby-------------------
     #radio多选,checkbox单选
     COL_MAP = {
@@ -174,7 +173,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                     f"Le nuage de mots évolutif est calculé à l'aide de méthode de **keyness**, mettant en évidence les mots caractéristiques de chaque période.")
         
         st.markdown("<br>", unsafe_allow_html=True)
-        st.divider()
+        # st.divider()
 
 
 

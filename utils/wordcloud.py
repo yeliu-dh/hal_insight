@@ -82,7 +82,9 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
 
             #画图：
             combined_text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
-            st.write(cat, len(combined_text.split()), combined_text[:200])
+            st.write(f"{cat}: len(en)={len(langs.get('en',''))}, len(fr)={len(langs.get('fr',''))}")
+            st.write(f"Sample text (fr) for {cat}:", langs.get('fr', '')[:300])
+                        
             if combined_text:
                 fig = generate_wc(
                     langs.get("en", "") + " " + langs.get("fr", ""),  # lang 随便传一个
