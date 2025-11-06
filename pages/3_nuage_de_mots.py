@@ -118,8 +118,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     )
     if group_by=="Axe":
         st.info(f"répartion d'axe dans le corpus:\n"
-        f"{df["Axe"].value_counts(dropna=False)}")
-
+        f"{df['Axe'].value_counts(dropna=False)}")
     st.markdown("<br>", unsafe_allow_html=True)
 
 
