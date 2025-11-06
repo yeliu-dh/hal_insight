@@ -76,7 +76,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     default=["keyword_s","abstract_s"],  # 默认选择
     format_func=lambda x: WC_MAP[x]#只改变显示
     )
-    st.write("Les textes sélectionnés sont nettoyés (suppression des espaces, ponctuations et mots grammaticaux courants), mis en minuscules et lemmatisés.")
+    st.write("ps.Les textes sélectionnés sont nettoyés (suppression des espaces, ponctuations et mots grammaticaux courants), mis en minuscules et lemmatisés.")
 
 
     for col in options:
@@ -116,6 +116,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         format_func=lambda x: COL_MAP.get(x, x), 
         horizontal=True
     )
+    if group_by=="Axe":
+        st.info(f"répartion d'axe dans le corpus:\n"
+                f"{df["Axe"].value_counts(dropna=False)}")
     st.markdown("<br>", unsafe_allow_html=True)
 
 
