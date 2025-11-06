@@ -43,7 +43,7 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
     COL_MAP = {
         "Global": "global",
         "Axe": "par axe",
-        "Cl. FNEGE": "par classe FNEGE"#去除
+        # "Cl. FNEGE": "par classe FNEGE"#去除
     }    
     group_by_readable=COL_MAP.get(group_by, group_by)
     # 2.b date
@@ -90,14 +90,18 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
                     stopwords,
                     title=title
                 )
-            # fig.tight_layout(rect=[0, 0, 1, 0.95])  # 顶部留 5% 给 suptitle
-            # fig.suptitle(suptitle, fontsize=10, ha="center")
-            # st.pyplot(fig)
-            return fig 
+            #
+            fig.tight_layout(rect=[0, 0, 1, 0.95])  # 顶部留 5% 给 suptitle
+            fig.suptitle(suptitle, fontsize=10, ha="center")
+            st.pyplot(fig)
+            #不能输出显示，否则只能输出一个!
+
+
+            return  
 
     else:
         # 分语言 → EN/FR 左右列显示，每个类别单独一行
-        suptitle=f"Nuage de mots {group_by_readable} par langue entre {period_y}"
+        suptitle=f"Nuage de mots {group_by_readable} et par langue entre {period_y}"
         st.markdown(
             f"<h3 style='text-align: center;'> Nuage de mots {group_by_readable} par langue entre {period_y}</h3>",
             unsafe_allow_html=True
@@ -114,12 +118,12 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
                     text = langs.get(lang, "").strip()
                     if text:
                         fig = generate_wc(text, max_words, stopwords, title=title)
-                        # st.pyplot(fig)
-                        return fig
+                        st.pyplot(fig) #*
+                        return 
                     
                     else :
                         st.warning(f"Texte invalide dans la catégorie {cat}-{lang}!")
-    # return 
+    #  return 
 
 
 

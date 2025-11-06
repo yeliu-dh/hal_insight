@@ -101,7 +101,6 @@ def assign_time_unit(df, date_col="submittedDate_s"):
 
 
 
-
 def preprocess_text(text, stopwords=None, lang='fr'):
     stopwords_nltk=load_external_json("json_data/stopwords_nltk.json")
     #=>list
