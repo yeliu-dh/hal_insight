@@ -116,9 +116,11 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         format_func=lambda x: COL_MAP.get(x, x), 
         horizontal=True
     )
-    if group_by=="Axe":
-        st.info(f"répartion d'axe dans le corpus:\n"
-        f"{df['Axe'].value_counts(dropna=False)}")
+    if group_by == "Axe":
+        axe_counts = df["Axe"].value_counts(dropna=False)
+        formatted = "\n".join([f"Axe {str(k)} : {v}" for k, v in axe_counts.items()])
+        st.info(f"📊 Répartition d'axe dans le corpus :\n\n{formatted}")
+
     st.markdown("<br>", unsafe_allow_html=True)
 
 
