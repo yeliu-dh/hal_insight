@@ -116,10 +116,11 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         format_func=lambda x: COL_MAP.get(x, x), 
         horizontal=True
     )
-    if group_by == "Axe":
-        axe_counts = df["Axe"].value_counts(dropna=False)
-        formatted = "\n".join([f"Axe {str(k)} : {v}" for k, v in axe_counts.items()])
-        st.info(f"📊 Répartition d'axe dans le corpus :\n\n{formatted}")
+    
+    # if group_by == "Axe":
+    #     axe_counts = df["Axe"].value_counts(dropna=False)
+    #     formatted = "\n".join([f"Axe {str(k)} : {v}" for k, v in axe_counts.items()])
+    #     st.info(f"📊 Répartition d'axe dans le corpus :\n\n{formatted}")
 
     st.markdown("<br>", unsafe_allow_html=True)
 
@@ -213,6 +214,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         generate_button=st.button("Générer")      
 
     if generate_button :
+        #====================================================================================================================
         if wcType=="wcGlobal":
             with st.spinner("Générer le nuage de mots global..."):
                 #group_by已嵌入函数
@@ -220,9 +222,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                     wc=generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words, user_stopwords)                    
                 except Exception as e:
                     st.write(f"ERROR dans le nuage de mots global: {e}")
-
-
-
 
                     
         #====================================================================================================================

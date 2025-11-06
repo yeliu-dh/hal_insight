@@ -185,7 +185,8 @@ def collect_clean_texts_by_col(df_input, options, stopwords, exclude_nan=False, 
         df["_col_list"] = df[col].fillna("nan").apply(
             lambda x: [v.strip() for v in str(x).split(";") if v.strip()]
         )        
-
+        #==explode
+        
     elif col=="Global":
         # 全局只有一个虚拟类别
         df["_col_list"] = [["Global"]] * len(df)
