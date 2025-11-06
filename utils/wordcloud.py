@@ -38,8 +38,6 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
     #   "(axe)1": {"en": "clean text", "fr": "..."},
     #   "(axe)2": {"en": "...", "fr": "..."}
     # }
-    for cat, langs in text_groups.items():
-        st.write(f"{cat}:{langs.keys()}")
 
     #2.a title
     COL_MAP = {
@@ -84,6 +82,7 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
 
             #画图：
             combined_text = (langs.get("en", "") + " " + langs.get("fr", "")).strip()
+            st.write(cat, len(combined_text.split()), combined_text[:200])
             if combined_text:
                 fig = generate_wc(
                     langs.get("en", "") + " " + langs.get("fr", ""),  # lang 随便传一个
