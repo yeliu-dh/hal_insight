@@ -44,10 +44,10 @@ st.title("☁️ Nuage de mots global / évolutif")
 # -------------------------------
 # 1️⃣ 初始化 Session State
 # -------------------------------
-if "uploaded_df" not in st.session_state:
-    st.session_state.uploaded_df = None
-if "started" not in st.session_state:
-    st.session_state.started = False
+# if "uploaded_df" not in st.session_state:
+#     st.session_state.uploaded_df = None
+# if "started" not in st.session_state:
+#     st.session_state.started = False
 
 # -------------------------------
 # 2️⃣ 检查/上传 CSV
@@ -192,9 +192,12 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     if generate_button :
         if granularity=="Toute la période → wc global":
             with st.spinner("Générer le nuage de mots global..."):
-                wc=generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words, user_stopwords)
-                st.pyplot(wc)
-       
+                try :
+                    wc=generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words, user_stopwords)
+                    st.pyplot(wc)
+                except Exception as e:
+                        st.write(f"ERROR dans le nuage de mots global: {e}")
+
         elif generate_button and time_slices is not None:# granlarity → évolutif
             with st.spinner("Générer le nuage de mots évolutif..."):
                 if group_by=="Global":

@@ -13,7 +13,7 @@ from utils.upload import data_uploader, missing_data_warning
 # from utils.wordcloud import explode_by_col# authorsname, 
 from utils.reseau import generate_network
 
-st.set_page_config(page_title="HAL insight", page_icon="🛸",layout="wide")
+# st.set_page_config(page_title="HAL insight", page_icon="🛸",layout="wide")
 st.title("🌐Réseau d'occurences ")
 
 # -------------------------------
