@@ -37,17 +37,17 @@ from utils.wordcloud import generate_keyness_wc
 # stopwords=get_stopwords()
 
 
-st.set_page_config(page_title="HAL insight", page_icon="🛸")
+# st.set_page_config(page_title="HAL insight", page_icon="🛸")
 st.title("☁️ Nuage de mots global / évolutif")
 
 
 # -------------------------------
 # 1️⃣ 初始化 Session State
 # -------------------------------
-# if "uploaded_df" not in st.session_state:
-#     st.session_state.uploaded_df = None
-# if "started" not in st.session_state:
-#     st.session_state.started = False
+if "uploaded_df" not in st.session_state:
+    st.session_state.uploaded_df = None
+if "started" not in st.session_state:
+    st.session_state.started = False
 
 # -------------------------------
 # 2️⃣ 检查/上传 CSV
@@ -205,7 +205,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                         evolutif_wc= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices=time_slices, max_words=max_words, stopwords=user_stopwords, method="llr")
                         st.pyplot(evolutif_wc)
                     except Exception as e:
-                        st.write(e)
+                        st.write(f"ERROR dans le nuage de mots évolutif global : {e}")
 
                 # elif group_by=="Axe" or groupby=="":
                 else:
@@ -227,7 +227,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
                     for col_val in ctg :
                         df_slice=exploded_df[exploded_df[group_by]==col_val]
-
-                        evolutif_wc_by_axe=generate_keyness_wc(df_slice, options, exclude_nan, group_by, time_slices=time_slices, col_val=col_val, max_words=max_words, stopwords=user_stopwords, method="llr")                                
-                        st.pyplot(evolutif_wc_by_axe)
-            
+                        try :
+                            evolutif_wc_by_axe=generate_keyness_wc(df_slice, options, exclude_nan, group_by, time_slices=time_slices, col_val=col_val, max_words=max_words, stopwords=user_stopwords, method="llr")                                
+                            st.pyplot(evolutif_wc_by_axe)
+                        except Exception as e:
+                            st.write(f"ERROR dans le nuage évolutif par axe: {e}")    
