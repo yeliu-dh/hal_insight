@@ -91,7 +91,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     }
 
     wcType = st.radio(
-        "💾 Type de nuage de mots :",
+        "☁️ Type de nuage de mots :",
         ["wcGlobal", "wcEvolutif"], 
         index=0,
         format_func=lambda x: wcType_MAP.get(x, x), 
@@ -181,7 +181,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     #--------------exclure nan--------------
     exclude_nan = st.checkbox("Exclure les lignes sans étiquette d'axe ? ", value=True, key="nan")
     st.divider()
-
 
 
     
