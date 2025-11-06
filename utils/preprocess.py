@@ -13,6 +13,14 @@ from collections import defaultdict
 #my utils:
 from utils.upload import load_external_json
 
+def safe_count(df, col, split=False, unique=True):
+    if col not in df.columns:
+        return None
+    series = df[col].dropna()
+    if split:
+        series = series.str.split(";").explode()
+    return series.nunique() if unique else len(series)
+
 
 def wrap_text(text, max_len=30, html=True):
     """
@@ -161,6 +169,7 @@ def collect_clean_texts_by_col(df_input, options, stopwords, exclude_nan=False, 
         df["_col_list"] = df[col].fillna("nan").apply(
             lambda x: [v.strip() for v in str(x).split(";") if v.strip()]
         )        
+        
     elif col=="Global":
         # 全局只有一个虚拟类别
         df["_col_list"] = [["Global"]] * len(df)

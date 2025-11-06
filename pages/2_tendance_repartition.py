@@ -15,6 +15,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 #my utils:
 from utils.upload import data_uploader
 from utils.upload import missing_data_warning
+from utils.preprocess import safe_count
 
 from utils.plot import keywords_trendline
 from utils.plot import make_bar_chart
@@ -28,7 +29,7 @@ from utils.plot import make_pie_chart
 # 通过控件加入筛选条件，和保存在session中的数据一起重新输入分析部分的code
 
 # -------------------- 页面配置 --------------------
-st.set_page_config(page_title="HAL insight", page_icon="🛸",layout="wide")
+# st.set_page_config(page_title="HAL insight", page_icon="🛸",layout="wide")
 st.title("📊 Tendance & Répartition")
 
 # -------------------------------
@@ -83,21 +84,21 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
         # 小函数：检查列是否存在于df，否就返回 None
         # 且定义是否按照分号切割
-        def safe_count(col, split=False, unique=True):
-            if col not in df.columns:
-                return None
-            series = df[col].dropna()
-            if split:
-                series = series.str.split(";").explode()
-            return series.nunique() if unique else len(series)
+        # def safe_count(col, split=False, unique=True):
+        #     if col not in df.columns:
+        #         return None
+        #     series = df[col].dropna()
+        #     if split:
+        #         series = series.str.split(";").explode()
+        #     return series.nunique() if unique else len(series)
 
         total_articles = len(df)
-        total_authors = safe_count("authFullName_s", split=True)
-        total_journals = safe_count("journalTitle_s")
-        total_domains = safe_count("domain_s", split=True)
-        total_languages = safe_count("language_s")
-        total_labs = safe_count("labStructName_s", split=True)
-        total_countries = safe_count("country_s")
+        total_authors = safe_count(df,"authFullName_s", split=True)
+        total_journals = safe_count(df,"journalTitle_s")
+        total_domains = safe_count(df, "domain_s", split=True)
+        total_languages = safe_count(df,"language_s")
+        total_labs = safe_count(df, "labStructName_s", split=True)
+        total_countries = safe_count(df, "country_s")
 
         # 平均每作者产出
         # avg_per_author = total_articles / total_authors if total_authors and total_authors > 0 else 0
@@ -344,29 +345,3 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 #     st.error(f"Impossible d'exporter le graphique : {e}\nAssurez-vous que 'kaleido' est installé et Chrome/Chromium disponible.")
         
 
-
-        # # -------------------- Top 5 排行 --------------------
-        # # 作者，杂志，会议
-
-        # st.header("🏆 Top 5 排行")
-        # def get_top(series, top=5):
-        #     return series.dropna().str.split(",").explode().str.strip().value_counts().head(top)
-
-        # top_authors = get_top(df["authFullName_s"])
-        # top_domains = get_top(df["domain_s"])
-        # top_journals = get_top(df["journalTitle_s"])
-        # top_conferences = get_top(df["conferenceTitle_s"])
-
-        # col1, col2 = st.columns(2)
-        # with col1:
-        #     st.subheader("Top 5 Authors")
-        #     st.bar_chart(top_authors)
-        #     st.subheader("Top 5 Domains")
-        #     st.bar_chart(top_domains)
-        # with col2:
-        #     st.subheader("Top 5 Journals")
-        #     st.bar_chart(top_journals)
-        #     st.subheader("Top 5 Conferences")
-        #     st.bar_chart(top_conferences)
-
-        

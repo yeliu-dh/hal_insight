@@ -69,11 +69,12 @@ def make_pie_chart(df, col, title, top_n=5):
     #----------------map axe---------------------------
     if col=="Axe":
         df=map_axe(df, col)
+        st.info(f"{df['Axe'].value_counts(dropna=False)}")
 
     #--------------处理multivalues str-----------------
     df=explode_by_col(df, col)
     counts=df[col].value_counts()
-
+    st.info(f"COUNTS :{counts}")
     # ---------------TOP N---------------------------
     # 如果类别大于top_n, 只保留 top_n，其余归为 "其他"
     if len(counts) > top_n:
