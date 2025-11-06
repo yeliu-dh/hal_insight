@@ -168,10 +168,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         value=["management","gestion","marketing", "recherche",'research','study',"social","use","cas","article",'entreprise'],
         maxtags=50
     )
-    # with st.expander("📘 Voir la liste des stopwords existants"):
-    #     stopwords_nltk=load_external_json("json_data/stopwords_nltk.json")
-    #     st.text(stopwords_nltk)
-
+   
     st.markdown("<br>", unsafe_allow_html=True)
 
    
@@ -202,7 +199,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             with st.spinner("Générer le nuage de mots évolutif..."):
                 if group_by=="Global":
                     try:
-                        evolutif_wc= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices=time_slices, max_words=max_words, stopwords=stopwords, method="llr")
+                        evolutif_wc= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices=time_slices, max_words=max_words, stopwords=user_stopwords, method="llr")
                         st.pyplot(evolutif_wc)
                     except Exception as e:
                         st.write(e)
