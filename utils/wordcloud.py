@@ -38,6 +38,8 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
     #   "(axe)1": {"en": "clean text", "fr": "..."},
     #   "(axe)2": {"en": "...", "fr": "..."}
     # }
+    for cat, langs in text_groups.items():
+        st.write(f"{cat}:{langs.keys()}")
 
     #2.a title
     COL_MAP = {
@@ -91,7 +93,7 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
                 )
             ###
             fig.tight_layout(rect=[0, 0, 1, 0.95])  # 顶部留 5% 给 suptitle
-            # fig.suptitle(suptitle, fontsize=10, ha="center")
+            # fig.suptitle(suptitle, fontsize=10, ha="center")#每张图又加上一个大标题XXX
             st.pyplot(fig)
             ###不能输出显示，否则只能输出一个!
             
