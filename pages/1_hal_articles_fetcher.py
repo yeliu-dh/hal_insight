@@ -39,7 +39,7 @@ from utils.pdf2str import extract_text_from_pdf
 # from init_imports import *
 
 
-st.set_page_config(page_title="HAL insight", page_icon="🛸",layout="wide")
+st.set_page_config(page_title="HAL insight", page_icon="🛸",layout='wide')
 #必须是第一行命令
 
 #====================CACHE=========================#

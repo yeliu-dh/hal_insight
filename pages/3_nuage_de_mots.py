@@ -83,6 +83,26 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         missing_data_warning(df, col=col, map=WC_MAP,show_distribution=False)
     st.markdown("<br>", unsafe_allow_html=True)#不容易被 Markdown 渲染压缩掉
 
+ # ------------wcType-------------------
+    #radio多选,checkbox单选
+    wcType_MAP = {
+        "wcGlobal": "global",
+        "wcEvolutif": "évolutif"
+    }
+
+    wcType = st.radio(
+        "💾 Type de nuage de mots :",
+        ["wcGlobal", "wcEvolutif"], 
+        index=0,
+        format_func=lambda x: wcType_MAP.get(x, x), 
+
+        horizontal=True
+    )
+    st.markdown("<br>", unsafe_allow_html=True)
+
+
+
+
   # ------------gourpby-------------------
     #radio多选,checkbox单选
     COL_MAP = {
@@ -101,60 +121,61 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 
 
-    # ----------------时间颗粒----------------
-    if "submittedDate_s" in df.columns:
-        df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
-        latest_date = df["submittedDate_s"].max()
-        latest_ym = latest_date.strftime("%Y-%m") if pd.notnull(latest_date) else "Aucune date valide"
+    if wcType=="wcGlobal":    
+        #---------------可选par langue-------------------
+        wc_par_lang = st.checkbox("Afficher par langue ?", value=False, key="wc_lang")#key用于储存在session state中
+        st.write("(Si vous choisissez le nuage de mots évolutif, il n’est pas séparé par langue.)")
+        missing_data_warning(df, col="language_s", map={"language_s":'langue'}, show_distribution=True)
 
-        earliest_date=df["submittedDate_s"].min()
-        earliest_ym = earliest_date.strftime("%Y-%m") if pd.notnull(latest_date) else "Aucune date valide"
-    
-        #time period in month 
-        if pd.notnull(earliest_date) and pd.notnull(latest_date):
-            period_m = (latest_date.year - earliest_date.year) * 12 + (latest_date.month - earliest_date.month)
-        else:
-            period_m = 0
+    else : #wcType=="wcEvolutif"
+        # ----------------生成时间颗粒----------------
+        if "submittedDate_s" in df.columns:
+            df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
+            latest_date = df["submittedDate_s"].max()
+            latest_ym = latest_date.strftime("%Y-%m") if pd.notnull(latest_date) else "Aucune date valide"
 
-                
-        # # ---- 自动推荐时间粒度并设置 radio 默认选项 ----
-        if period_m <= 12:#一年内，按月度或者季度显示
-            suggestion = "Mensuel ou Trimestriel"
-            default_index = 2
-        elif period_m <= 60:#3/5年内，按年度显示
-            suggestion = "Annuel"
-            default_index = 3
-        else:
-            suggestion = "Tous les 3 ou 5 ans"
-            default_index = 4
-
-        if wc_par_lang :#若按照语言分，则选择全时间段
-            default_index=0
-
-        # ----radio ----
-        granularity = st.radio(
-            "🕒 Granularité temporelle :",
-            ["Toute la période → wc global","Mensuel","Trimestriel", "Annuel", "Tous les 3 ans","Tous les 5 ans"],
-            index=default_index,
-            horizontal=True,
-        )  
-        if granularity!="Toute la période → wc global":
-            time_slices=create_time_slices(df, granularity=granularity)
-  
-        st.info(f"Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).\n\n"
-                f"Granularité recommandée pour le nuage de mots évolutif: **{suggestion}**. \n\n"
-                f"Le nuage de mots évolutif est calculé à l'aide de méthode de **keyness**, mettant en évidence les mots caractéristiques de chaque période.")
+            earliest_date=df["submittedDate_s"].min()
+            earliest_ym = earliest_date.strftime("%Y-%m") if pd.notnull(latest_date) else "Aucune date valide"
         
-      
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.divider()
+            #time period in month 
+            if pd.notnull(earliest_date) and pd.notnull(latest_date):
+                period_m = (latest_date.year - earliest_date.year) * 12 + (latest_date.month - earliest_date.month)
+            else:
+                period_m = 0
+
+                    
+            # # ---- 自动推荐时间粒度并设置 radio 默认选项 ----
+            if period_m <= 12:#一年内，按月度或者季度显示
+                suggestion = "Mensuel ou Trimestriel"
+                default_index = 1
+            elif period_m <= 60:#3/5年内，按年度显示
+                suggestion = "Annuel"
+                default_index = 2
+            elif period_m > 60 :
+                suggestion = "Tous les 3 ou 5 ans"
+                default_index = 3
 
 
+            # else: # 其他默认全局
+            # if wc_par_lang :#若按照语言分，则选择全时间段
+            #     default_index=0
 
-    #---------------langue-------------------
-    wc_par_lang = st.checkbox("Afficher par langue ?", value=False, key="wc_lang")#key用于储存在session state中
-    st.write("(Si vous choisissez le nuage de mots évolutif, il n’est pas séparé par langue.)")
-    missing_data_warning(df, col="language_s", map={"language_s":'langue'}, show_distribution=True)
+            # ----radio ----
+            granularity = st.radio(
+                "🕒 Granularité temporelle :",
+                ["Mensuel","Trimestriel", "Annuel", "Tous les 3 ans","Tous les 5 ans"],
+                index=default_index,
+                horizontal=True,
+            )  
+            time_slices=create_time_slices(df, granularity=granularity)
+    
+            st.info(f"Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).\n\n"
+                    f"Granularité recommandée pour le nuage de mots évolutif: **{suggestion}**. \n\n"
+                    f"Le nuage de mots évolutif est calculé à l'aide de méthode de **keyness**, mettant en évidence les mots caractéristiques de chaque période.")
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.divider()
+
 
 
     #--------------exclure nan--------------
@@ -163,6 +184,58 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 
 
+    
+
+    # # ----------------时间颗粒----------------
+    # if "submittedDate_s" in df.columns:
+    #     df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
+    #     latest_date = df["submittedDate_s"].max()
+    #     latest_ym = latest_date.strftime("%Y-%m") if pd.notnull(latest_date) else "Aucune date valide"
+
+    #     earliest_date=df["submittedDate_s"].min()
+    #     earliest_ym = earliest_date.strftime("%Y-%m") if pd.notnull(latest_date) else "Aucune date valide"
+    
+    #     #time period in month 
+    #     if pd.notnull(earliest_date) and pd.notnull(latest_date):
+    #         period_m = (latest_date.year - earliest_date.year) * 12 + (latest_date.month - earliest_date.month)
+    #     else:
+    #         period_m = 0
+
+                
+    #     # # ---- 自动推荐时间粒度并设置 radio 默认选项 ----
+    #     if period_m <= 12:#一年内，按月度或者季度显示
+    #         suggestion = "Mensuel ou Trimestriel"
+    #         default_index = 2
+    #     elif period_m <= 60:#3/5年内，按年度显示
+    #         suggestion = "Annuel"
+    #         default_index = 3
+    #     elif period_m > 60 :
+    #         suggestion = "Tous les 3 ou 5 ans"
+    #         default_index = 4
+    #     # else: # 其他默认全局
+    #         default_index=0
+
+    #     # ----radio ----
+    #     granularity = st.radio(
+    #         "🕒 Granularité temporelle :",
+    #         ["Toute la période → wc global","Mensuel","Trimestriel", "Annuel", "Tous les 3 ans","Tous les 5 ans"],
+    #         index=default_index,
+    #         horizontal=True,
+    #     )  
+    #     if granularity!="Toute la période → wc global":
+    #         time_slices=create_time_slices(df, granularity=granularity)
+  
+    #     st.info(f"Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).\n\n"
+    #             f"Granularité recommandée pour le nuage de mots évolutif: **{suggestion}**. \n\n"
+    #             f"Le nuage de mots évolutif est calculé à l'aide de méthode de **keyness**, mettant en évidence les mots caractéristiques de chaque période.")
+        
+      
+    # st.markdown("<br>", unsafe_allow_html=True)
+    # st.divider()
+
+
+
+   
     # ----------------- user stopwords ---------------
     user_stopwords = st_tags(
         label="🗷 Ajouter des mots à ignorer",
@@ -173,7 +246,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
    
     st.markdown("<br>", unsafe_allow_html=True)
 
-   
+
     # --------------- max words ------------------
     max_words = st.number_input(
         "⬆️ Nombre de mots maximum affichés:", 
@@ -181,8 +254,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     )
     st.markdown("<br>", unsafe_allow_html=True)
 
-
-    
     
 
     # 按钮生成+储存
@@ -192,18 +263,14 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 
     if generate_button :
-        if granularity=="Toute la période → wc global":
+        if wcType=="wcGlobal":
             with st.spinner("Générer le nuage de mots global..."):
                 try :
-                    wc=generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words, user_stopwords)
-                    
+                    wc=generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words, user_stopwords)                    
                 except Exception as e:
                     st.write(f"ERROR dans le nuage de mots global: {e}")
 
-
-
-
-        elif generate_button and time_slices is not None:# granlarity → évolutif
+        elif generate_button and time_slices is not None:#  wcType=="wcEvolutif"
             with st.spinner("Générer le nuage de mots évolutif..."):
                 if group_by=="Global":
                     try:
@@ -237,3 +304,51 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                             st.pyplot(evolutif_wc_by_axe)
                         except Exception as e:
                             st.write(f"ERROR dans le nuage évolutif [par axe]: {e}")    
+
+
+
+
+    # if generate_button :
+    #     if granularity=="Toute la période → wc global":
+    #         with st.spinner("Générer le nuage de mots global..."):
+    #             try :
+    #                 wc=generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words, user_stopwords)
+                    
+    #             except Exception as e:
+    #                 st.write(f"ERROR dans le nuage de mots global: {e}")
+
+
+    #     elif generate_button and time_slices is not None:# granlarity → évolutif
+    #         with st.spinner("Générer le nuage de mots évolutif..."):
+    #             if group_by=="Global":
+    #                 try:
+    #                     evolutif_wc= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices=time_slices, max_words=max_words, stopwords=user_stopwords, method="llr")
+    #                     st.pyplot(evolutif_wc)
+    #                 except Exception as e:
+    #                     st.write(f"ERROR dans le nuage de mots évolutif [global] : {e}")
+
+    #             # elif group_by=="Axe" or groupby=="":
+    #             else:
+    #                 #-----居中显示所有演变图的大标题------
+    #                 df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
+    #                 start_ym=df["submittedDate_s"].min().strftime("%Y-%m")
+    #                 end_ym=df["submittedDate_s"].max().strftime("%Y-%m")  
+                    
+    #                 st.markdown(
+    #                     f"<h3 style='text-align: center;'>Évolution du nuage de mots ({start_ym} ~ {end_ym})</h3>",
+    #                     unsafe_allow_html=True
+    #                 ) 
+
+    #                 exploded_df=explode_by_col(df, col=group_by)#已fillna
+    #                 if exclude_nan:
+    #                     ctg=sorted([v for v in exploded_df[group_by].unique() if v !="nan"])
+    #                 else :                
+    #                     ctg=sorted(exploded_df[group_by].unique())
+
+    #                 for col_val in ctg :
+    #                     df_slice=exploded_df[exploded_df[group_by]==col_val]
+    #                     try :
+    #                         evolutif_wc_by_axe=generate_keyness_wc(df_slice, options, exclude_nan, group_by, time_slices=time_slices, col_val=col_val, max_words=max_words, stopwords=user_stopwords, method="llr")                                
+    #                         st.pyplot(evolutif_wc_by_axe)
+    #                     except Exception as e:
+    #                         st.write(f"ERROR dans le nuage évolutif [par axe]: {e}")    
