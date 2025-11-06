@@ -95,7 +95,6 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
             st.pyplot(fig)
             ###不能输出显示，否则只能输出一个!
             
-            # return  
 
     else:
         # 分语言 → EN/FR 左右列显示，每个类别单独一行
@@ -120,7 +119,7 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
                     
                     else :
                         st.warning(f"Texte invalide dans la catégorie {cat}-{lang}!")
-    #  return 
+    return 
 
 
 
