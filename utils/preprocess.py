@@ -46,7 +46,23 @@ def wrap_text(text, max_len=30, html=True):
     return ("<br>" if html else "\n").join(lines)
 
 
-def explode_by_col(df, col):
+# def explode_by_col(df, col):
+#     """"
+#     空值填nan，
+#     多值按照，/；分割成list
+#     =>在某一col上explode；
+#     检查notna
+#     """
+#     df = df.copy()
+#     df[col] = df[col].fillna('nan').astype(str).str.split("[,;]") # axe中有nan所以type:objet，先变成str
+#     df = df.explode(col)
+#     df[col] = df[col].str.strip()
+#     return df[df[col].notna() & (df[col] != "")]
+
+
+
+
+def explode_by_col(df, col="Axe"):
     """"
     空值填nan，
     多值按照，/；分割成list
@@ -58,6 +74,7 @@ def explode_by_col(df, col):
     df = df.explode(col)
     df[col] = df[col].str.strip()
     return df[df[col].notna() & (df[col] != "")]
+
 
 
 def assign_time_unit(df, date_col="submittedDate_s"):

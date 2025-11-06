@@ -223,21 +223,6 @@ def compute_keyness(freq_slice, global_freq, method="llr"):
 
 
 
-def explode_by_col(df, col="Axe"):
-    """"
-    空值填nan，
-    多值按照，/；分割成list
-    =>在某一col上explode；
-    检查notna
-
-
-    """
-    df = df.copy()
-    df[col] = df[col].fillna('nan').astype(str).str.split("[,;]") # axe中有nan所以type:objet，先变成str
-    df = df.explode(col)
-    df[col] = df[col].str.strip()
-    return df[df[col].notna() & (df[col] != "")]
-
 
 def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val=None, max_words=100, stopwords=None, method="llr"):
     """
