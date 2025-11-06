@@ -118,7 +118,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     )
     if group_by=="Axe":
         st.info(f"répartion d'axe dans le corpus:\n"
-                f"{df["Axe"].value_counts(dropna=False)}")
+        f"{df["Axe"].value_counts(dropna=False)}")
+
     st.markdown("<br>", unsafe_allow_html=True)
 
 
@@ -262,16 +263,16 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     with cols[1]:   
         generate_button=st.button("Générer")      
 
-
     if generate_button :
         if wcType=="wcGlobal":
             with st.spinner("Générer le nuage de mots global..."):
+                #group_by已嵌入函数
                 try :
                     wc=generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words, user_stopwords)                    
                 except Exception as e:
                     st.write(f"ERROR dans le nuage de mots global: {e}")
 
-        elif generate_button and time_slices is not None:#  wcType=="wcEvolutif"
+        elif generate_button and time_slices is not None:# and wcType=="wcEvolutif"
             with st.spinner("Générer le nuage de mots évolutif..."):
                 if group_by=="Global":
                     try:
@@ -280,7 +281,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                     except Exception as e:
                         st.write(f"ERROR dans le nuage de mots évolutif [global] : {e}")
 
-                # elif group_by=="Axe" or groupby=="":
+                # elif group_by=="Axe" :
                 else:
                     #-----居中显示所有演变图的大标题------
                     df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
