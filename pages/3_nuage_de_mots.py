@@ -194,9 +194,12 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             with st.spinner("Générer le nuage de mots global..."):
                 try :
                     wc=generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words, user_stopwords)
-                    st.pyplot(wc)
+                    
                 except Exception as e:
-                        st.write(f"ERROR dans le nuage de mots global: {e}")
+                    st.write(f"ERROR dans le nuage de mots global: {e}")
+
+
+
 
         elif generate_button and time_slices is not None:# granlarity → évolutif
             with st.spinner("Générer le nuage de mots évolutif..."):
@@ -205,7 +208,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                         evolutif_wc= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices=time_slices, max_words=max_words, stopwords=user_stopwords, method="llr")
                         st.pyplot(evolutif_wc)
                     except Exception as e:
-                        st.write(f"ERROR dans le nuage de mots évolutif global : {e}")
+                        st.write(f"ERROR dans le nuage de mots évolutif [global] : {e}")
 
                 # elif group_by=="Axe" or groupby=="":
                 else:
@@ -231,4 +234,4 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                             evolutif_wc_by_axe=generate_keyness_wc(df_slice, options, exclude_nan, group_by, time_slices=time_slices, col_val=col_val, max_words=max_words, stopwords=user_stopwords, method="llr")                                
                             st.pyplot(evolutif_wc_by_axe)
                         except Exception as e:
-                            st.write(f"ERROR dans le nuage évolutif par axe: {e}")    
+                            st.write(f"ERROR dans le nuage évolutif [par axe]: {e}")    
