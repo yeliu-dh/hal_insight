@@ -57,18 +57,20 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
         period_y=f"{earliest_y}~{latest_y}"#图标题
 
 
-    # wc
+    # wc : 先分语言，再分global/axe
+
     if not wc_par_lang:  # 不分语言 → 合并 EN + FR
         suptitle=f"Nuage de mots {group_by_readable} entre {period_y}"
         st.markdown(
             f"<h3 style='text-align: center;'> {suptitle} </h3>",
             unsafe_allow_html=True
-        )#居中希纳是
+        )#居中显示
 
-        for cat, langs in text_groups.items():             
+        for cat, langs in text_groups.items():#global则只循环一次，axe循环多次，但没有keyness对比             
             #小图标题
             if group_by=="Global":
                 title=" "
+                
             elif group_by=='Axe': # axe
                 axe_map = {
                     "1": "Performances et responsabilités",
@@ -99,8 +101,7 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
             ###不能输出显示，否则只能输出一个!
             
 
-    else:
-        # 分语言 → EN/FR 左右列显示，每个类别单独一行
+    else: # 分语言 → EN/FR 左右列显示，每个类别单独一行
         suptitle=f"Nuage de mots {group_by_readable} et par langue entre {period_y}"
         st.markdown(
             f"<h3 style='text-align: center;'> Nuage de mots {group_by_readable} par langue entre {period_y}</h3>",

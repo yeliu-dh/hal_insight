@@ -129,7 +129,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     if wcType=="wcGlobal":    
         #---------------可选par langue-------------------
         wc_par_lang = st.checkbox("Afficher par langue ?", value=False, key="wc_lang")#key用于储存在session state中
-        st.write("(Si vous choisissez le nuage de mots évolutif, il n’est pas séparé par langue.)")
+        st.write("ps. Si vous choisissez le nuage de mots évolutif, il n’est pas séparé par langue.")
         missing_data_warning(df, col="language_s", map={"language_s":'langue'}, show_distribution=True)
 
     else : #wcType=="wcEvolutif"
@@ -208,6 +208,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     
 
+
+
     # 按钮生成+储存
     cols=st.columns([4,1])
     with cols[1]:   
@@ -217,7 +219,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         #====================================================================================================================
         if wcType=="wcGlobal":
             with st.spinner("Générer le nuage de mots global..."):
-                #group_by已嵌入函数
+                #group_by (par axe)已嵌入函数
                 try :
                     wc=generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words, user_stopwords)                    
                 except Exception as e:
