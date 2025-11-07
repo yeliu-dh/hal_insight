@@ -125,15 +125,21 @@ def assign_time_unit(df, date_col="submittedDate_s"):
 
 
 
-def preprocess_text(text, stopwords=None, lang='fr'):
+def preprocess_text(text, user_stopwords=None, lang='fr'):
     stopwords_nltk=load_external_json("json_data/stopwords_nltk.json")
     #=>list
 
     # stopwords==user_stopwords 
-    if stopwords==None:
-        stopwords=[]
+    if user_stopwords==None:
+        user_stopwords=[]
+
+
+    # --- 🔧关键修复：确保拼接时都是 list ---
+    stopwords = list(stopwords_nltk) + list(user_stopwords)
+    stopwords = set(w.lower() for w in stopwords)
+
     # 转小写+去重
-    stopwords = set(w.lower() for w in (stopwords_nltk + stopwords))
+    # stopwords = set(w.lower() for w in (stopwords_nltk + user_stopwords))
 
     # 处理 None / NaN
     if text is None or str(text).lower().strip() in ['nan', 'none'," "]:

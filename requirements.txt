@@ -26,3 +26,8 @@ simplemma==1.1.2
 networkx==3.4.2
 pyvis==0.3.2
 pymupdf==1.26.5
+hf_xet==1.2.0
+distro==1.9.0 
+jiter==0.11.1 
+openai==2.7.1 
+tiktoken==0.12.0 
