@@ -351,19 +351,19 @@ if df is not None and not df.empty:
             st.success(f"✅ Extraction des textes ({num_text}/{total}) terminée en {end_time-start_time:.2f} secondes !")
 
 
-    # =========update uploaded_df?====================
-    update_df = st.checkbox("Mettre à jour le résultat? ", value=False, key="nan")
-    if update_df==True:
-        st.session_state["uploaded_df"] = df_text
-        st.success("Continuez l'analyse avec le dataset a été mis à jour!")
-    
+   
    
     #================DISPLAY====================
     df_text = st.session_state.get("uploaded_df_text", None)
     if df_text is not None and not df_text.empty and "full_text" in df_text.columns:
         st.dataframe(df_text)
-        try :
-                
+        # =========update uploaded_df?====================
+        update_df = st.checkbox("Mettre à jour le résultat? ", value=False, key="nan")
+        if update_df==True:
+            st.session_state["uploaded_df"] = df_text
+            st.success("Continuez l'analyse avec le dataset a été mis à jour!")
+
+        try :                
             #==========save to local================
             today_str = datetime.now().strftime("%d%m%Y")
             cols1=st.columns(4)
