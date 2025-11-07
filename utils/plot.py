@@ -76,6 +76,7 @@ def make_pie_chart(df, col, title, top_n=5):
     # ---------------- map Axe --------------------------
     if col == "Axe":
         axe_map = {
+            "nan":"nan",
             "1": "Performances et responsabilités",
             "2": "Société de services et services à la société",
             "3": "Innovations; transformations et résistances organisationnelles et sociétales",
@@ -83,8 +84,6 @@ def make_pie_chart(df, col, title, top_n=5):
         }
         # 只对非空值进行映射
         df[col] = df[col].astype(str).str.strip().map(lambda x: axe_map.get(x, x))
-
-
 
     # ---------------TOP N---------------------------
     # 如果类别大于top_n, 只保留 top_n，其余归为 "其他"
