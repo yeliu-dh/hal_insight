@@ -95,7 +95,7 @@ def add_axe(df,axe_name='Axe'):
 #         axe_map = {
 #             "1": "Performances et responsabilités",
 #             "2": "Société de services et services à la société",
-#             "3": "Innovations transformations et résistances organisationnelles et sociétales",
+#             "3": "Innovations; transformations et résistances organisationnelles et sociétales",
 #             "4": "Ouvrages pédagogiques"
 #         }
 

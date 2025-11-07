@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import seaborn as sns
 import plotly.express as px
-from utils.mapping import map_axe
+# from utils.mapping import map_axe
 import streamlit as st
 
 #my utils:
