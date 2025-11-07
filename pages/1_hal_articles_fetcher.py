@@ -240,6 +240,10 @@ if search_button and not invalid_date:
         st.session_state["uploaded_df_source"] = "search"
         
 
+
+
+
+#=================SAVE DF DE RECHERCHE=====================
 df = st.session_state.get("uploaded_df", None)
 if df is not None and not df.empty:
     #-------------show----------------------
@@ -347,7 +351,13 @@ if df is not None and not df.empty:
             st.success(f"✅ Extraction des textes ({num_text}/{total}) terminée en {end_time-start_time:.2f} secondes !")
 
 
-
+    # =========update uploaded_df?====================
+    update_df = st.checkbox("Mettre à jour le résultat? ", value=False, key="nan")
+    if update_df==True:
+        st.session_state["uploaded_df"] = df_text
+        st.success("Continuez l'analyse avec le dataset a été mis à jour!")
+    
+   
     #================DISPLAY====================
     df_text = st.session_state.get("uploaded_df_text", None)
     if df_text is not None and not df_text.empty and "full_text" in df_text.columns:
@@ -393,3 +403,5 @@ if df is not None and not df.empty:
                 )
         except Exception as e:
             st.warning (f"{e}")
+
+
