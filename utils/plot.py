@@ -25,7 +25,7 @@ def keywords_trendline(df, options, keywords):
 
     # 清洗，合并文本
     for opt in options:
-        df[f'{opt}_clean']=df.apply(lambda row: preprocess_text(row[opt], stopwords=None, lang=row["language_s"]) ,axis=1)
+        df[f'{opt}_clean']=df.apply(lambda row: preprocess_text(row[opt], user_stopwords=None, lang=row["language_s"]) ,axis=1)
                                     
     df["text_clean"] = df[options].apply(
         lambda row: " ".join([row[col] for col in options if isinstance(row[col], str)]),
