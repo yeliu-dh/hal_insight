@@ -73,8 +73,6 @@ def auto_completion_by_sim(df, embedding_model):
     df_exploded = df.explode("predicted_axe")
     
     #==========================快速画图=======================
-    
-    st.header("***Comparasion entrte les vrais axes et axes prédits***")
     def quick_pie(df,col):
         counts=df[col].fillna('NaN').value_counts()
         cmap = cm.get_cmap('viridis')
@@ -83,14 +81,28 @@ def auto_completion_by_sim(df, embedding_model):
         fig, ax = plt.subplots(figsize=(6,6))
         ax.pie(counts, labels=counts.index, autopct='%1.1f%%', startangle=90, colors=colors)
         ax.set_title(col)
-        st.pyplot(fig)
+        return fig
+    
+    def show_pies(fig1, fig2):
+        st.header("***Comparasion entrte les vrais axes et axes prédits***")
+        cols=st.columns(2)
+        with cols[0]:
+            st.pyplot(fig1)     
+        with cols[1]:
+            st.pyplot(fig2)
+        return 
+        
+    if "fig1" not in st.session_state and "fig1" not in st.session_state: 
+        fig1=quick_pie(df,col='Axe')
+        fig2=quick_pie(df_exploded, col='predicted_axe')
+        st.session_state.fig1=fig1
+        st.session_state.fig2=fig2
+        show_pies(fig1, fig2)      
 
-    cols=st.columns(2)
-    with cols[0]:
-        quick_pie(df,col='Axe')
-    with cols[1]:
-        quick_pie(df_exploded, col='predicted_axe')
-
+    else :
+        show_pies(st.session_state.fig1, st.session_state.fig2)    
+    
+    ###点击总结摘要按钮之后也可以保留
 
     #=======================step 4: evaluate by metrics================================ 
     
@@ -110,6 +122,8 @@ def auto_completion_by_sim(df, embedding_model):
     y_true = np.array(y_true)
     y_pred = np.array(y_pred)
     
+
+    st.session
     st.markdown("***L'accuracy de la prediction :***\n")
     # 微平均和宏平均的precision/recall/f1
     st.write("Precision (micro):", precision_score(y_true, y_pred, average="micro"))

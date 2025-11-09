@@ -8,6 +8,7 @@ from langdetect import detect
 
 import hdbscan
 import numpy as np
+import time
 
 def simple_sentence_split(text, min_words=5):
     """
@@ -134,9 +135,11 @@ def t5summarize(text, user_prompt, tokenizer, model, max_length=100, min_length=
 
 
 
-translator_en = pipeline("translation", model="Helsinki-NLP/opus-mt-en-fr")
-translator_es = pipeline("translation", model="Helsinki-NLP/opus-mt-es-fr")
-def translate_to_fr(text, translator_en, translator_es):
+# translator_en = pipeline("translation", model="Helsinki-NLP/opus-mt-en-fr")
+# translator_es = pipeline("translation", model="Helsinki-NLP/opus-mt-es-fr")
+
+
+def translate_to_fr(text,translator_en, translator_es):
     def detect_language(text):
         try:
             return detect(text)
@@ -152,11 +155,7 @@ def translate_to_fr(text, translator_en, translator_es):
         return text  # already fr or unknown
     
 
-
-
-
-
-def extract_thema_chunks(df_exploded, embedding_model):
+def extract_thema_chunks(df_exploded, embedding_model,translator_en, translator_es):
     axe_map = {
             "nan":"nan",
             "1": "Performances et responsabilités",
@@ -178,30 +177,86 @@ def extract_thema_chunks(df_exploded, embedding_model):
     axe_groups['chunks']=axe_groups['sentences'].apply(lambda x : cluster_sentences_hdbscan(x, embedding_model))
     axe_groups['chunks'] = axe_groups['chunks'].apply(
         lambda chunk_list: [
-            [translate_to_fr(sent) for sent in chunk]  # 翻译每个句子1
+            [translate_to_fr(sent,translator_en, translator_es) for sent in chunk]  # 翻译每个句子1
             for chunk in chunk_list                    # 遍历每个 chunk
         ]
     )
-
     return axe_groups
 
 
 
-def generate_summaries(axe_groups, tokenizer, model, max_length=100,min_length=20):
-    axe_representative={r['axe']:r['chunks'] for i,r in axe_groups.iterrows()}
+# def generate_summaries(axe_groups, tokenizer, model, translator_en, translator_es, max_length=100,min_length=20):
+#     axe_representative={r['axe']:r['chunks'] for i,r in axe_groups.iterrows()}
 
-    axe_summary = {}
-    for axe_name, chunks in axe_representative.items():
-        #按chunk生成summaries，并拼接
-        summaries=" "
-        for i, chunk in enumerate(chunks):
-            user_prompt="introduire la problématique de l'axe {axe_name}"
-            summary=t5summarize(" ".join(chunk), user_prompt, tokenizer, model, max_length=max_length, min_length=min_length)
+#     axe_summary = {}
+#     for axe_name, chunks in axe_representative.items():
+#         #按chunk生成summaries，并拼接
+#         summaries=" "
+#         for i, chunk in enumerate(chunks):
+#             user_prompt="introduire la problématique de l'axe {axe_name}"
+#             summary=t5summarize(" ".join(chunk), user_prompt, tokenizer, model, max_length=max_length, min_length=min_length)
             
-            # 若有非法语，翻译
-            summary_fr=translate_to_fr(summary)
-            summaries+=f"sous-thème {i+1}:{summary_fr}.\n"
+#             # 若有非法语，翻译
+#             summary_fr=translate_to_fr(summary, translator_en, translator_es)
+#             summaries+=f"sous-thème {i+1}:{summary_fr}.\n"
 
-        st.write(f"🔹 Axe {axe_name} Résumé:\n{summaries}\n")
-        axe_summary[axe_name] = summaries
-    return 
+#         st.write(f"🔹 Axe {axe_name} Résumé:\n{summaries}\n")
+#         axe_summary[axe_name] = summaries
+#     return axe_summary
+
+def generate_summaries(
+        axe_groups,
+        tokenizer,
+        model,
+        translator_en=None,
+        translator_es=None,
+        max_length=100,
+        min_length=20
+    ):
+        """
+        Génère des résumés par axe thématique.
+        
+        Params:
+        - axe_groups: DataFrame avec colonnes ['axe', 'chunks']
+        - tokenizer: tokenizer HuggingFace pour le modèle de summarization
+        - model: modèle HuggingFace pour le summarization
+        - translator_en, translator_es: pipelines de traduction (optionnel)
+        - max_length, min_length: longueur max/min du résumé
+        """
+        
+        axe_summary = {}
+        axe_representative = {r['axe']: r['chunks'] for i, r in axe_groups.iterrows()}
+
+        for axe_name, chunks in axe_representative.items():
+            summaries = ""
+
+            for i, chunk in enumerate(chunks):
+                # Prompt personnalisé
+                user_prompt = f"introduire la problématique de l'axe {axe_name}: "
+
+                # Génération du résumé
+                summary = t5summarize(
+                    " ".join(chunk),
+                    user_prompt,
+                    tokenizer,
+                    model,
+                    max_length=max_length,
+                    min_length=min_length
+                )
+
+                # Traduction si nécessaire
+                if translator_en is not None and translator_es is not None:
+                    summary_fr = translate_to_fr(summary, translator_en, translator_es)
+                else:
+                    summary_fr = summary
+
+                summaries += f"\n -sous-thème {i+1}: {summary_fr}.\n"
+
+            st.write(f"\n🔹**Axe {axe_name}** Résumé:\n")
+            st.write(f"{summaries}\n\n")
+            axe_summary[axe_name] = summaries
+
+        # Stockage dans session_state pour éviter recalcul
+        st.session_state['axe_summary'] = axe_summary
+
+        return axe_summary

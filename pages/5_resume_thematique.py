@@ -35,42 +35,41 @@ from utils.summarization import extract_thema_chunks, generate_summaries
 # from utils.preprocess import explode_by_col
 
 
-
-
 @st.cache_resource  # ✅ 缓存模型
-def load_embedding_model():  
-    return SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
 
-    # return pipeline(
-    #     "summarization",
-    #     model="plguillou/t5-base-fr-sum-cnndm",
-    #     tokenizer="plguillou/t5-base-fr-sum-cnndm",
-    #     use_fast=False
-    # )
-embedding_model =load_embedding_model()
+def load_models():
+    embedding_model=SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")#向量化模型
+    tokenizer=T5Tokenizer.from_pretrained("plguillou/t5-base-fr-sum-cnndm")#分词模型
+    summary_model=T5ForConditionalGeneration.from_pretrained("plguillou/t5-base-fr-sum-cnndm")#摘要模型
+    translator_en = pipeline("translation", model="Helsinki-NLP/opus-mt-en-fr")
+    translator_es = pipeline("translation", model="Helsinki-NLP/opus-mt-es-fr")
+    return embedding_model, tokenizer, summary_model, translator_en, translator_es
 
-
-def load_tokenizer():
-    return  T5Tokenizer.from_pretrained("plguillou/t5-base-fr-sum-cnndm")#分词模型
-tokenizer = load_tokenizer()
+embedding_model, tokenizer, summary_model, translator_en, translator_es=load_models()
 
 
-def load_summary_model():
-    return T5ForConditionalGeneration.from_pretrained("plguillou/t5-base-fr-sum-cnndm")#摘要模型
-summary_model = load_summary_model()
+# def load_embedding_model():  
+#     return SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
+# embedding_model =load_embedding_model()
+
+# def load_tokenizer():
+#     return  T5Tokenizer.from_pretrained("plguillou/t5-base-fr-sum-cnndm")#分词模型
+# tokenizer = load_tokenizer()
+
+# def load_summary_model():
+#     return T5ForConditionalGeneration.from_pretrained("plguillou/t5-base-fr-sum-cnndm")#摘要模型
+# summary_model = load_summary_model()
+
+# def load_translator_en():
+#     return pipeline("translation", model="Helsinki-NLP/opus-mt-en-fr")
+# translator_en=load_translator_en()
+
+# def load_translator_es():
+#     return pipeline("translation", model="Helsinki-NLP/opus-mt-es-fr")
+# translator_es=load_translator_es()
 
 
-
-# #====================CACHE=========================#
-# @st.cache_data 
-# def get_stopwords():   
-#     stopwords_nltk=load_external_json('json_data',"stopwords_nltk")
-#     stopwords_nltk=list(stopwords_nltk.values())
-#     return stopwords_nltk
-# stopwords=get_stopwords()
-# st.set_page_config(page_title="HAL insight", page_icon="🛸")
-st.title("Résumé thématique")
-
+st.title("📃 Résumé thématique")
 
 # -------------------------------
 # 1️⃣ 初始化 Session State
@@ -97,107 +96,113 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     st.subheader("🔢 Auto-completion des axes thématiques")
     
     # 重新计算按钮
-
     cols=st.columns([4,1])
     with cols[1]:
         complete_button = st.button("Auto-compléter")
     if complete_button:
-        st.session_state.recompute = True
+        st.session_state.recompute_completion = True
 
     # 只有点击按钮或第一次进入才执行
-    if st.session_state.get("recompute", True):
+    if st.session_state.get("recompute_completion", True):
         try:
             df_exploded=auto_completion_by_sim(df, embedding_model)
-            # st.success("✅ SUCCES")
+            st.session_state['df_exploded']=df_exploded
         except Exception as e:
-            st.error(f"ERROR: {e}")
+            st.error(f"ERROR in 'auto_completion_by_sim' : {e}")
         
         # 计算完成后关闭标志，下次不自动重新计算
-        st.session_state.recompute = False
+        st.session_state.recompute_completion = False
+
+    #===========save df_exploded===============
+    #记得按照original_axe去重先
+    # df = st.session_state.get("uploaded_df", None)
+    # if df is not None and not df.empty:
+    #     #-------------show----------------------
+    #     st.success(f"✅ {len(df)} articles trouvés!\n\n"
+    #                 f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")    
+    #     st.dataframe(df)
+
+    #     missing_data_warning(df, col='files_s',map={"files_s":"PDF liens"})
+
+    #     #  ----------------SAVE TO LOCAL----------------- 
+    #     #file name 
+    #     today_str = datetime.now().strftime("%d%m%Y")
+    #     cols=st.columns(4)
+    #     with cols[1]:
+    #         # as CSV
+    #         csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
+    #         st.download_button(
+    #             label="Télécharger CSV",
+    #             data=csv_data,
+    #             file_name = f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.csv",
+    #             mime="text/csv"
+    #         )
+
+    #     with cols[3]:
+    #         #as XLSX
+    #         # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
+    #         xlsx_buffer = io.BytesIO()
+    #         with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
+    #             df.to_excel(writer, index=False, sheet_name="Articles")
+    #         xlsx_data = xlsx_buffer.getvalue()
+
+    #         st.download_button(
+    #             label="Télécharger XLSX",
+    #             data=xlsx_data,
+    #             file_name=f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.xlsx",
+    #             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    #         )
+
+    #         # 这是 XLSX 文件的 MIME 类型，告诉浏览器这是一个 Excel 文件，否则st button可能无法识别文件类型 
 
 
 
-    # st.subheader("🔢 Summarisation par axe thématique")
-    # cols=st.columns([4,1])
-    # with cols[1]:
-    #     summary_button = st.button("Résumer")
-    # if summary_button:
-    #     st.session_state.recompute = True
-
-    #     if st.session_state.get("recompute", True) and df_exploded:
-    #         try:
-    #            axe_groups=extract_thema_chunks(df_exploded,embedding_model)
-    #            generate_summaries(axe_groups, tokenizer,summary_model)
-    #         except Exception as e:
-    #             st.error(f"ERROR: {e}")
-            
-    #         # 计算完成后关闭标志，下次不自动重新计算
-    #         st.session_state.recompute = False
 
 
 
-    # st.subheader("🔢 Auto-completion des axes thématiques")
 
-    # # 创建重新计算标志
-    # if "recompute_auto" not in st.session_state:
-    #     st.session_state.recompute_auto = False
 
-    # cols = st.columns([4, 1])
-    # with cols[1]:
-    #     complete_button = st.button("Auto-compléter")
 
-    # # 点击按钮触发重新计算
-    # if complete_button:
-    #     st.session_state.recompute_auto = True
+    st.subheader("📑 Summarisation par axe thématique")
+    cols=st.columns([4,1])
+    with cols[1]:
+        summary_button = st.button("Résumer")
+    if summary_button:
+        st.session_state.recompute_summary = True #==开始开关
 
-    # # 执行 auto_completion_by_sim，只在需要时
-    # if st.session_state.recompute_auto or "df_exploded" not in st.session_state:
-    #     try:
-    #         # 假设 df 已经存在 session_state 或其他变量
-    #         df_exploded = auto_completion_by_sim(st.session_state.uploaded_df, embedding_model)
+        if st.session_state.get("recompute_summary", True) and "df_exploded" in st.session_state :
+            #=========================step1=====================================
+            df_exploded=st.session_state.df_exploded
+            with st.spinner("Extraire les phrases clés sous un axe..."):
+                start_time=time.time()
+                try:
+                    axe_groups=extract_thema_chunks(df_exploded, embedding_model,translator_en, translator_es)
+                    st.session_state['axe_groups']=axe_groups
+                except Exception as e:
+                    st.warning(f"ERROR in 'extract_thema_chunks' :{e}")
+                end_time=time.time()
+                st.write(f"✅​ Extraction finie en {end_time-start_time:.2f} sec.")
+                print(f'axe groups:\n {axe_groups}')           
 
-    #         # 保存到 session_state，方便下次直接使用
-    #         st.session_state.df_exploded = df_exploded
+            #=========================step2=====================================
+            with st.spinner("Résumer les phrases clés ..."):
+                start_time = time.time()
+                try:
+                    axe_summary = generate_summaries(
+                        axe_groups=axe_groups,
+                        tokenizer=tokenizer,
+                        model=summary_model,
+                        translator_en=translator_en,
+                        translator_es=translator_es,
+                        max_length=100,
+                        min_length=20
+                    )
+                except Exception as e:
+                    st.warning(f"ERROR in 'generate_summaries' : {e}")
+                end_time = time.time()
+                st.write(f"✅​ Génération des résumés en {end_time-start_time:.2f} sec.")
 
-    #         # 删除原始 df（可选，释放内存）
-    #         # del st.session_state.uploaded_df
+            # 计算完成后关闭标志，下次不自动重新计算
+            st.session_state.recompute_summary = False
 
-    #     except Exception as e:
-    #         st.error(f"ERROR: {e}")
 
-    #     # 重置标志
-    #     st.session_state.recompute_auto = False
-    # else:
-    #     df_exploded = st.session_state.df_exploded  # 直接复用 session_state
-
-    # # =================== 主题摘要部分 ===================
-    # st.subheader("🔢 Summarisation par axe thématique")
-
-    # if "recompute_summary" not in st.session_state:
-    #     st.session_state.recompute_summary = False
-
-    # cols = st.columns([4, 1])
-    # with cols[1]:
-    #     summary_button = st.button("Résumer")
-
-    # if summary_button:
-    #     st.session_state.recompute_summary = True
-
-    # # 执行摘要，只在需要时
-    # if st.session_state.recompute_summary:
-    #     if "df_exploded" in st.session_state:
-    #         try:
-    #             axe_groups = extract_thema_chunks(st.session_state.df_exploded, embedding_model)
-    #             summaries = generate_summaries(axe_groups, tokenizer, summary_model)
-
-    #             # 保存摘要结果到 session_state
-    #             st.session_state.summaries = summaries
-
-    #             # 如果想节省内存，可以删除中间对象
-    #             # del axe_groups
-
-    #         except Exception as e:
-    #             st.error(f"ERROR: {e}")
-
-    #     # 重置标志
-    #     st.session_state.recompute_summary = False
