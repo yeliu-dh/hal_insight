@@ -10,31 +10,40 @@ from PIL import Image
 import io
 import os
 import sys
+import time
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+
 
 
 #RESUME : 
 from transformers import pipeline
+from sentence_transformers import SentenceTransformer
 
 
 #my utils:
 from utils.upload import data_uploader
-from utils.upload import missing_data_warning
-from utils.preprocess import load_external_json
-from utils.preprocess import preprocess_text
+from utils.auto_completion import auto_completion_by_sim
+# from utils.upload import missing_data_warning
+# from utils.preprocess import load_external_json
+# from utils.preprocess import preprocess_text
+# from utils.preprocess import explode_by_col
 
 
 
 
-# @st.cache_resource  # ✅ 缓存模型
-# def load_model():  
+@st.cache_resource  # ✅ 缓存模型
+def load_embedding_model():  
+    return SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
+
     # return pipeline(
     #     "summarization",
     #     model="plguillou/t5-base-fr-sum-cnndm",
     #     tokenizer="plguillou/t5-base-fr-sum-cnndm",
     #     use_fast=False
     # )
-# summarizer = load_summarizer()
+embedding_model =load_embedding_model()
 
 
 
@@ -74,17 +83,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     
     st.subheader("🔢 auto-completion des axes thématiques")
         
+    with st.spinner("Auto-compléter..."):
+        auto_completion_by_sim(df)
 
-    def safe_get(val):
-        return "" if pd.isna(val) else str(val)
-
-    df["clean_text"] = df.apply(
-        lambda r: preprocess_text(
-            safe_get(r["title_s"]) + " " +
-            safe_get(r["keyword_s"]) + " " +
-            safe_get(r["abstract_s"]),
-            user_stopwords=None,
-            lang=r['language_s']
-        ),
-        axis=1
-    )
