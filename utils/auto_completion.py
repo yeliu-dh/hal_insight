@@ -16,10 +16,10 @@ from utils.plot import make_pie_chart
 
 def auto_completion_by_sim(df, embedding_model):
 
-    st.write("L'auto-completion des axes thématique prend en compte des titres, des mots-clés et des résumés,\n"
+    st.write("NB. L'auto-completion des axes thématique prend en compte des titres, des mots-clés et des résumés,\n"
              "embeddés par le model 'paraphrase-multilingual-MiniLM-L12-v2'.")
     model=embedding_model
-        
+
     #=============================step1：clean text=================================
     def safe_get(val):
         return "" if pd.isna(val) else str(val)
@@ -71,7 +71,7 @@ def auto_completion_by_sim(df, embedding_model):
     missing_data_warning(df, col='original_axe', show_distribution=False)
     df_exploded = df.explode("predicted_axe")
     fig=make_pie_chart(df, col="predicted_axe", title="Répartition des axes prédits", top_n=5)
-    st.plotly(fig)
+    st.pyplot(fig)
 
     # print(df_exploded["predicted_axe"].value_counts(dropna=False))
 
