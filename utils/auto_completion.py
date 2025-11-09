@@ -73,23 +73,26 @@ def auto_completion_by_sim(df, embedding_model):
     # missing_data_warning(df, col='original_axe', show_distribution=False)
     df_exploded = df.explode("predicted_axe")
     
-
     #==========================快速画图=======================
     
     st.write("Comparasion entrte les vrais axes et axes prédits")
+    def quick_pie(df,col):
+        counts=df[col].fillna('NaN').value_counts()
+        cmap = cm.get_cmap('viridis')
+        colors = [cmap(i / len(counts)) for i in range(len(counts))]
+
+        fig, ax = plt.subplots(figsize=(6,6))
+        ax.pie(counts, labels=counts.index, autopct='%1.1f%%', startangle=90, colors=colors)
+        ax.set_title(col)
+        st.pyplot(fig)
+
+
     cols=st.columns(2)
-    for i, col in enumerate(['Axe','predicted_axe']):  
-        with cols[i]:
-            counts=df[col].fillna('NaN').value_counts()
-            cmap = cm.get_cmap('viridis')
-            colors = [cmap(i / len(counts)) for i in range(len(counts))]
+    with cols[0]:
+        quick_pie(df,col='Axe')
+    with cols[1]:
+        quick_pie(df_exploded, col='predicted_axe')
 
-            fig, ax = plt.subplots(figsize=(6,6))
-            ax.pie(counts, labels=counts.index, autopct='%1.1f%%', startangle=90, colors=colors)
-            ax.set_title(col)
-            st.pyplot(fig)
-
-    
 
     #=======================step 4: evaluate by metrics================================ 
     
