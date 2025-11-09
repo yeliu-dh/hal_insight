@@ -79,8 +79,7 @@ def data_uploader(key="uploaded_df"):
         except Exception as e:
             st.error(f"⚠ {e}")
 
-        
-
+    
     # 如果uploaded df存在,无论是用户刚上传，还是通过搜索保存的
     if key in st.session_state and st.session_state[key] is not None:
         source = st.session_state.get(f"{key}_source", "unknown")# 如果source不存在，则显示unk
