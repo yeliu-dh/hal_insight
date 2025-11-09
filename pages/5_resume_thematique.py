@@ -82,10 +82,14 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     df = st.session_state.uploaded_df.copy()
     
 
-    
+
     st.subheader("🔢 auto-completion des axes thématiques")
     
     # 重新计算按钮
+
+    cols=st.columns([4,1])
+    with cols[1]:
+        complete_button = st.button("Auto-compléter")
     if st.button("Auto-compléter"):
         st.session_state.recompute = True
 

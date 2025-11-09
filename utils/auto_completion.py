@@ -71,7 +71,7 @@ def auto_completion_by_sim(df, embedding_model):
     missing_data_warning(df, col='original_axe', show_distribution=False)
     df_exploded = df.explode("predicted_axe")
     fig=make_pie_chart(df, col="predicted_axe", title="Répartition des axes prédits", top_n=5)
-    st.pyplot(fig)
+    # st.pyplot(fig)
 
     # print(df_exploded["predicted_axe"].value_counts(dropna=False))
 
