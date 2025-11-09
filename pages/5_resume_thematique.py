@@ -20,11 +20,15 @@ import numpy as np
 #RESUME : 
 from transformers import pipeline
 from sentence_transformers import SentenceTransformer
+from transformers import T5Tokenizer, T5ForConditionalGeneration
 
 
 #my utils:
 from utils.upload import data_uploader
 from utils.auto_completion import auto_completion_by_sim
+from utils.summarization import extract_thema_chunks, generate_summaries
+
+
 # from utils.upload import missing_data_warning
 # from utils.preprocess import load_external_json
 # from utils.preprocess import preprocess_text
@@ -45,6 +49,15 @@ def load_embedding_model():
     # )
 embedding_model =load_embedding_model()
 
+
+def load_tokenizer():
+    return  T5Tokenizer.from_pretrained("plguillou/t5-base-fr-sum-cnndm")#分词模型
+tokenizer = load_tokenizer()
+
+
+def load_summary_model():
+    return T5ForConditionalGeneration.from_pretrained("plguillou/t5-base-fr-sum-cnndm")#摘要模型
+summary_model = load_summary_model()
 
 
 
@@ -81,26 +94,110 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     st.session_state.started=True
     df = st.session_state.uploaded_df.copy()
     
-    st.subheader("🔢 Auto-completion des axes thématiques")
+    # st.subheader("🔢 Auto-completion des axes thématiques")
     
-    # 重新计算按钮
+    # # 重新计算按钮
 
-    cols=st.columns([4,1])
+    # cols=st.columns([4,1])
+    # with cols[1]:
+    #     complete_button = st.button("Auto-compléter")
+    # if complete_button:
+    #     st.session_state.recompute = True
+
+    # # 只有点击按钮或第一次进入才执行
+    # if st.session_state.get("recompute", True):
+    #     try:
+    #         df_exploded=auto_completion_by_sim(df, embedding_model)
+    #         # st.success("✅ SUCCES")
+    #     except Exception as e:
+    #         st.error(f"ERROR: {e}")
+        
+    #     # 计算完成后关闭标志，下次不自动重新计算
+    #     st.session_state.recompute = False
+
+
+
+    # st.subheader("🔢 Summarisation par axe thématique")
+    # cols=st.columns([4,1])
+    # with cols[1]:
+    #     summary_button = st.button("Résumer")
+    # if summary_button:
+    #     st.session_state.recompute = True
+
+    #     if st.session_state.get("recompute", True) and df_exploded:
+    #         try:
+    #            axe_groups=extract_thema_chunks(df_exploded,embedding_model)
+    #            generate_summaries(axe_groups, tokenizer,summary_model)
+    #         except Exception as e:
+    #             st.error(f"ERROR: {e}")
+            
+    #         # 计算完成后关闭标志，下次不自动重新计算
+    #         st.session_state.recompute = False
+
+
+
+    st.subheader("🔢 Auto-completion des axes thématiques")
+
+    # 创建重新计算标志
+    if "recompute_auto" not in st.session_state:
+        st.session_state.recompute_auto = False
+
+    cols = st.columns([4, 1])
     with cols[1]:
         complete_button = st.button("Auto-compléter")
-    if complete_button:
-        st.session_state.recompute = True
 
-    # 只有点击按钮或第一次进入才执行
-    if st.session_state.get("recompute", True):
+    # 点击按钮触发重新计算
+    if complete_button:
+        st.session_state.recompute_auto = True
+
+    # 执行 auto_completion_by_sim，只在需要时
+    if st.session_state.recompute_auto or "df_exploded" not in st.session_state:
         try:
-            auto_completion_by_sim(df, embedding_model)
-            # st.success("✅ SUCCES")
+            # 假设 df 已经存在 session_state 或其他变量
+            df_exploded = auto_completion_by_sim(st.session_state.uploaded_df, embedding_model)
+
+            # 保存到 session_state，方便下次直接使用
+            st.session_state.df_exploded = df_exploded
+
+            # 删除原始 df（可选，释放内存）
+            # del st.session_state.uploaded_df
+
         except Exception as e:
             st.error(f"ERROR: {e}")
-        
-        # 计算完成后关闭标志，下次不自动重新计算
-        st.session_state.recompute = False
 
+        # 重置标志
+        st.session_state.recompute_auto = False
+    else:
+        df_exploded = st.session_state.df_exploded  # 直接复用 session_state
 
+    # =================== 主题摘要部分 ===================
+    st.subheader("🔢 Summarisation par axe thématique")
 
+    if "recompute_summary" not in st.session_state:
+        st.session_state.recompute_summary = False
+
+    cols = st.columns([4, 1])
+    with cols[1]:
+        summary_button = st.button("Résumer")
+
+    if summary_button:
+        st.session_state.recompute_summary = True
+
+    # 执行摘要，只在需要时
+    if st.session_state.recompute_summary:
+        if "df_exploded" in st.session_state:
+            try:
+                axe_groups = extract_thema_chunks(st.session_state.df_exploded, embedding_model)
+                summaries = generate_summaries(axe_groups, tokenizer, summary_model)
+
+                # 保存摘要结果到 session_state
+                st.session_state.summaries = summaries
+
+                # 如果想节省内存，可以删除中间对象
+                # del axe_groups
+
+            except Exception as e:
+                st.error(f"ERROR: {e}")
+
+        # 重置标志
+        st.session_state.recompute_summary = False

@@ -18,7 +18,6 @@ from utils.preprocess import explode_by_col
 from utils.plot import make_pie_chart
 
 def auto_completion_by_sim(df, embedding_model):
-
     st.write("NB. L'auto-completion des axes thématique prend en compte des titres, des mots-clés et des résumés,\n"
              "embeddés par le model 'paraphrase-multilingual-MiniLM-L12-v2'.")
     model=embedding_model
@@ -75,7 +74,7 @@ def auto_completion_by_sim(df, embedding_model):
     
     #==========================快速画图=======================
     
-    st.write("Comparasion entrte les vrais axes et axes prédits")
+    st.header("***Comparasion entrte les vrais axes et axes prédits***")
     def quick_pie(df,col):
         counts=df[col].fillna('NaN').value_counts()
         cmap = cm.get_cmap('viridis')
@@ -122,7 +121,8 @@ def auto_completion_by_sim(df, embedding_model):
     st.write("F1 (macro):", f1_score(y_true, y_pred, average="macro"))
 
     ## precision==1,说明pred中的结果都在original中（pred都是正确的），但是还有一部分没有预测出来（还有部分标签没被包含!）
-    return 
+    return df_exploded
 
 
 
+    
