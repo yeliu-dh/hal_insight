@@ -77,11 +77,10 @@ def auto_completion_by_sim(df, embedding_model):
     cols=st.columns(2)
     with cols[0]:
         counts=df['Axe'].fillna('NaN').value_counts()
-        plt.figure(figsize=(6,6))
-        counts.plot.pie(autopct='%1.1f%%', startangle=90)
-        plt.ylabel('')  
-        plt.title("Axe prédit")
-        plt.show()
+        fig, ax = plt.subplots(figsize=(6,6))
+        ax.pie(counts, labels=counts.index, autopct='%1.1f%%', startangle=90)
+        ax.set_title("Axe prédit")
+        st.pyplot(fig)
 
     # counts = df_exploded['predicted_axe'].fillna('NaN').value_counts()
     # fig=make_pie_chart(df, col="predicted_axe", title="Répartition des axes prédits", top_n=5)
