@@ -78,7 +78,7 @@ def auto_completion_by_sim(df, embedding_model):
     
     st.write("Comparasion entrte les vrais axes et axes prédits")
     cols=st.columns(2)
-    for i, col in ['Axe','predicted_axe']:  
+    for i, col in enumerate(['Axe','predicted_axe']):  
         with cols[i]:
             counts=df[col].fillna('NaN').value_counts()
             cmap = cm.get_cmap('viridis')
