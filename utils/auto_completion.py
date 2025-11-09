@@ -86,7 +86,6 @@ def auto_completion_by_sim(df, embedding_model):
         ax.set_title(col)
         st.pyplot(fig)
 
-
     cols=st.columns(2)
     with cols[0]:
         quick_pie(df,col='Axe')
@@ -112,7 +111,7 @@ def auto_completion_by_sim(df, embedding_model):
     y_true = np.array(y_true)
     y_pred = np.array(y_pred)
     
-    st.write("L'accuracy de la prediction :\n")
+    st.markdown("***L'accuracy de la prediction :***\n")
     # 微平均和宏平均的precision/recall/f1
     st.write("Precision (micro):", precision_score(y_true, y_pred, average="micro"))
     st.write("Recall (micro):", recall_score(y_true, y_pred, average="micro"))
