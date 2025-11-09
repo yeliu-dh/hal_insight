@@ -46,7 +46,7 @@ def auto_completion_by_sim(df, embedding_model):
     # =====================step3 :prediction by similarity between embeddings=====================
 
     df["original_axe"] = df["Axe"]#保留原值
-    missing_data_warning(df, col='Axe', show_distribution=False)
+    # missing_data_warning(df, col='Axe', show_distribution=False)
 
     df=explode_by_col(df, col="Axe")#fillna('nan')#原axe已经被exploded
     df["Axe"] = df["Axe"].replace("nan", np.nan)
@@ -69,18 +69,18 @@ def auto_completion_by_sim(df, embedding_model):
 
     # print(df.Axe.value_counts(dropna=False),'\n')
     # print(df.predicted_axe.value_counts(dropna=False),'\n')
-
-    missing_data_warning(df, col='original_axe', show_distribution=False)
+    # missing_data_warning(df, col='original_axe', show_distribution=False)
     df_exploded = df.explode("predicted_axe")
     
     st.write("Comparasion entrte les vrais axes et axes prédits")
     cols=st.columns(2)
-    with cols[0]:
-        counts=df['Axe'].fillna('NaN').value_counts()
-        fig, ax = plt.subplots(figsize=(6,6))
-        ax.pie(counts, labels=counts.index, autopct='%1.1f%%', startangle=90)
-        ax.set_title("Axe prédit")
-        st.pyplot(fig)
+    for i, col in ['Axe','predicted_axe']:  
+        with cols[i]:
+            counts=df[col].fillna('NaN').value_counts()
+            fig, ax = plt.subplots(figsize=(6,6))
+            ax.pie(counts, labels=counts.index, autopct='%1.1f%%', startangle=90)
+            ax.set_title(col)
+            st.pyplot(fig)
 
     # counts = df_exploded['predicted_axe'].fillna('NaN').value_counts()
     # fig=make_pie_chart(df, col="predicted_axe", title="Répartition des axes prédits", top_n=5)
