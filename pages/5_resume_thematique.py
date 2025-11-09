@@ -90,7 +90,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     cols=st.columns([4,1])
     with cols[1]:
         complete_button = st.button("Auto-compléter")
-    if st.button("Auto-compléter"):
+    if complete_button:
         st.session_state.recompute = True
 
     # 只有点击按钮或第一次进入才执行
