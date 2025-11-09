@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 import streamlit as st
+import matplotlib.pyplot as plt
+
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.metrics import precision_score, recall_score, f1_score, multilabel_confusion_matrix
@@ -70,11 +72,22 @@ def auto_completion_by_sim(df, embedding_model):
 
     missing_data_warning(df, col='original_axe', show_distribution=False)
     df_exploded = df.explode("predicted_axe")
-    fig=make_pie_chart(df, col="predicted_axe", title="Répartition des axes prédits", top_n=5)
-    st.pyplot(fig)
+    
+    st.write("Comparasion entrte les vrais axes et axes prédits")
+    cols=st.columns(2)
+    with cols[0]:
+        counts=df['Axe'].fillna('NaN').value_counts()
+        plt.figure(figsize=(6,6))
+        counts.plot.pie(autopct='%1.1f%%', startangle=90)
+        plt.ylabel('')  
+        plt.title("Axe prédit")
+        plt.show()
 
+    # counts = df_exploded['predicted_axe'].fillna('NaN').value_counts()
+    # fig=make_pie_chart(df, col="predicted_axe", title="Répartition des axes prédits", top_n=5)
+    # st.pyplot(fig)
     # print(df_exploded["predicted_axe"].value_counts(dropna=False))
-
+    
 
     #=======================step 4: evaluate by metrics================================ 
     
