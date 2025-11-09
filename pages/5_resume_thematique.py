@@ -97,7 +97,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     if st.session_state.get("recompute", True):
         try:
             auto_completion_by_sim(df, embedding_model)
-            st.success("计算完成 ✅")
+            st.success("✅ SUCCES")
         except Exception as e:
             st.error(f"ERROR: {e}")
         

@@ -71,7 +71,7 @@ def auto_completion_by_sim(df, embedding_model):
     missing_data_warning(df, col='original_axe', show_distribution=False)
     df_exploded = df.explode("predicted_axe")
     fig=make_pie_chart(df, col="predicted_axe", title="Répartition des axes prédits", top_n=5)
-    # st.pyplot(fig)
+    st.pyplot(fig)
 
     # print(df_exploded["predicted_axe"].value_counts(dropna=False))
 
@@ -94,15 +94,15 @@ def auto_completion_by_sim(df, embedding_model):
     y_true = np.array(y_true)
     y_pred = np.array(y_pred)
     
-    print("L'accuracy de la prediction :\n")
+    st.write("L'accuracy de la prediction :\n")
     # 微平均和宏平均的precision/recall/f1
-    print("Precision (micro):", precision_score(y_true, y_pred, average="micro"))
-    print("Recall (micro):", recall_score(y_true, y_pred, average="micro"))
-    print("F1 (micro):", f1_score(y_true, y_pred, average="micro"))
+    st.write("Precision (micro):", precision_score(y_true, y_pred, average="micro"))
+    st.write("Recall (micro):", recall_score(y_true, y_pred, average="micro"))
+    st.write("F1 (micro):", f1_score(y_true, y_pred, average="micro"))
 
-    print("\nPrecision (macro):", precision_score(y_true, y_pred, average="macro"))
-    print("Recall (macro):", recall_score(y_true, y_pred, average="macro"))
-    print("F1 (macro):", f1_score(y_true, y_pred, average="macro"))
+    st.write("\nPrecision (macro):", precision_score(y_true, y_pred, average="macro"))
+    st.write("Recall (macro):", recall_score(y_true, y_pred, average="macro"))
+    st.write("F1 (macro):", f1_score(y_true, y_pred, average="macro"))
 
     ## precision==1,说明pred中的结果都在original中（pred都是正确的），但是还有一部分没有预测出来（还有部分标签没被包含!）
     return 
