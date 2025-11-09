@@ -85,7 +85,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         
     with st.spinner("Auto-compléter..."):
         try:
-            auto_completion_by_sim(df)
+            auto_completion_by_sim(df,embedding_model)
         except Exception as e:
             st.write(f'ERROR :{e}')
 
