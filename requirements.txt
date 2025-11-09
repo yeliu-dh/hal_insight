@@ -36,4 +36,4 @@ tqdm==4.67.1
 langdetect==1.0.9
 transformers==4.57.1
 scikit-learn==1.7.2
-entence-transformers==5.1.2
+sentence-transformers==5.1.2
