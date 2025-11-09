@@ -81,12 +81,24 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     st.session_state.started=True
     df = st.session_state.uploaded_df.copy()
     
+
+    
     st.subheader("🔢 auto-completion des axes thématiques")
-        
-    with st.spinner("Auto-compléter..."):
+    
+    # 重新计算按钮
+    if st.button("Auto-compléter"):
+        st.session_state.recompute = True
+
+    # 只有点击按钮或第一次进入才执行
+    if st.session_state.get("recompute", True):
         try:
-            auto_completion_by_sim(df,embedding_model)
+            auto_completion_by_sim(df, embedding_model)
+            st.success("计算完成 ✅")
         except Exception as e:
-            st.write(f'ERROR :{e}')
+            st.error(f"ERROR: {e}")
+        
+        # 计算完成后关闭标志，下次不自动重新计算
+        st.session_state.recompute = False
+
 
 
