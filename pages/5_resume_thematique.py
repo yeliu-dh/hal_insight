@@ -84,5 +84,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     st.subheader("🔢 auto-completion des axes thématiques")
         
     with st.spinner("Auto-compléter..."):
-        auto_completion_by_sim(df)
+        try:
+            auto_completion_by_sim(df)
+        except Exception as e:
+            st.write(f'ERROR :{e}')
+
 
