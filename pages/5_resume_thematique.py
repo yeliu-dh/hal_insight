@@ -36,6 +36,9 @@ from utils.summarization import extract_thema_chunks, generate_summaries
 
 
 @st.cache_resource  # ✅ 缓存模型
+def load_embedding_model():
+    return SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")#向量化模型
+embedding_model=load_embedding_model()
 
 def load_models():
     embedding_model=SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")#向量化模型
@@ -45,28 +48,8 @@ def load_models():
     translator_es = pipeline("translation", model="Helsinki-NLP/opus-mt-es-fr")
     return embedding_model, tokenizer, summary_model, translator_en, translator_es
 
-embedding_model, tokenizer, summary_model, translator_en, translator_es=load_models()
+# embedding_model, tokenizer, summary_model, translator_en, translator_es=load_models()
 
-
-# def load_embedding_model():  
-#     return SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
-# embedding_model =load_embedding_model()
-
-# def load_tokenizer():
-#     return  T5Tokenizer.from_pretrained("plguillou/t5-base-fr-sum-cnndm")#分词模型
-# tokenizer = load_tokenizer()
-
-# def load_summary_model():
-#     return T5ForConditionalGeneration.from_pretrained("plguillou/t5-base-fr-sum-cnndm")#摘要模型
-# summary_model = load_summary_model()
-
-# def load_translator_en():
-#     return pipeline("translation", model="Helsinki-NLP/opus-mt-en-fr")
-# translator_en=load_translator_en()
-
-# def load_translator_es():
-#     return pipeline("translation", model="Helsinki-NLP/opus-mt-es-fr")
-# translator_es=load_translator_es()
 
 
 st.title("📃 Résumé thématique")
