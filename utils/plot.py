@@ -87,8 +87,6 @@ def make_pie_chart(df, col, title, top_n=5):
 
     #-----------------counts--------------------
     counts=df[col].value_counts()
-
-
     
     # ---------------TOP N---------------------------
     # 如果类别大于top_n, 只保留 top_n，其余归为 "其他"

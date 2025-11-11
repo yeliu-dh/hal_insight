@@ -134,7 +134,7 @@ def preprocess_text(text, user_stopwords=None, lang='fr'):
         user_stopwords=[]
 
 
-    # --- 🔧关键修复：确保拼接时都是 list ---
+    # --- 确保拼接时都是 list ---
     stopwords = list(stopwords_nltk) + list(user_stopwords)
     stopwords = set(w.lower() for w in stopwords)
 

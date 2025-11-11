@@ -50,7 +50,7 @@ def auto_completion_by_sim(df, embedding_model):
 
     df=explode_by_col(df, col="Axe")#fillna('nan')#原axe已经被exploded
     df["Axe"] = df["Axe"].replace("nan", np.nan)
-
+    
 
     #计算每一个主题的平均向量：
     axe_means = df[df["Axe"].notna()].groupby("Axe")["embedding"].apply(
@@ -123,7 +123,6 @@ def auto_completion_by_sim(df, embedding_model):
     y_pred = np.array(y_pred)
     
 
-    st.session
     st.markdown("***L'accuracy de la prediction :***\n")
     # 微平均和宏平均的precision/recall/f1
     st.write("Precision (micro):", precision_score(y_true, y_pred, average="micro"))

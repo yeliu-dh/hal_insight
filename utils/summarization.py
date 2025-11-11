@@ -252,7 +252,7 @@ def generate_summaries(
 
                 summaries += f"\n -sous-thème {i+1}: {summary_fr}.\n"
 
-            st.write(f"\n🔹**Axe {axe_name}** Résumé:\n")
+            st.write(f"\n🔹**Axe {axe_name}** :\n")
             st.write(f"{summaries}\n\n")
             axe_summary[axe_name] = summaries
 

@@ -163,46 +163,46 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 
 
-    st.subheader("📑 Summarisation par axe thématique")
-    cols=st.columns([4,1])
-    with cols[1]:
-        summary_button = st.button("Résumer")
-    if summary_button:
-        st.session_state.recompute_summary = True #==开始开关
+    # st.subheader("📑 Summarisation par axe thématique")
+    # cols=st.columns([4,1])
+    # with cols[1]:
+    #     summary_button = st.button("Résumer")
+    # if summary_button:
+    #     st.session_state.recompute_summary = True #==开始开关
 
-        if st.session_state.get("recompute_summary", True) and "df_exploded" in st.session_state :
-            #=========================step1=====================================
-            df_exploded=st.session_state.df_exploded
-            with st.spinner("Extraire les phrases clés sous un axe..."):
-                start_time=time.time()
-                try:
-                    axe_groups=extract_thema_chunks(df_exploded, embedding_model,translator_en, translator_es)
-                    st.session_state['axe_groups']=axe_groups
-                except Exception as e:
-                    st.warning(f"ERROR in 'extract_thema_chunks' :{e}")
-                end_time=time.time()
-                st.write(f"✅​ Extraction finie en {end_time-start_time:.2f} sec.")
-                print(f'axe groups:\n {axe_groups}')           
+    #     if st.session_state.get("recompute_summary", True) and "df_exploded" in st.session_state :
+    #         #=========================step1=====================================
+    #         df_exploded=st.session_state.df_exploded
+    #         with st.spinner("Extraire les phrases clés sous un axe..."):
+    #             start_time=time.time()
+    #             try:
+    #                 axe_groups=extract_thema_chunks(df_exploded, embedding_model,translator_en, translator_es)
+    #                 st.session_state['axe_groups']=axe_groups
+    #             except Exception as e:
+    #                 st.warning(f"ERROR in 'extract_thema_chunks' :{e}")
+    #             end_time=time.time()
+    #             st.write(f"✅​ Extraction finie en {end_time-start_time:.2f} sec.")
+    #             print(f'axe groups:\n {axe_groups}')           
 
-            #=========================step2=====================================
-            with st.spinner("Résumer les phrases clés ..."):
-                start_time = time.time()
-                try:
-                    axe_summary = generate_summaries(
-                        axe_groups=axe_groups,
-                        tokenizer=tokenizer,
-                        model=summary_model,
-                        translator_en=translator_en,
-                        translator_es=translator_es,
-                        max_length=100,
-                        min_length=20
-                    )
-                except Exception as e:
-                    st.warning(f"ERROR in 'generate_summaries' : {e}")
-                end_time = time.time()
-                st.write(f"✅​ Génération des résumés en {end_time-start_time:.2f} sec.")
+    #         #=========================step2=====================================
+    #         with st.spinner("Résumer les phrases clés ..."):
+    #             start_time = time.time()
+    #             try:
+    #                 axe_summary = generate_summaries(
+    #                     axe_groups=axe_groups,
+    #                     tokenizer=tokenizer,
+    #                     model=summary_model,
+    #                     translator_en=translator_en,
+    #                     translator_es=translator_es,
+    #                     max_length=100,
+    #                     min_length=20
+    #                 )
+    #             except Exception as e:
+    #                 st.warning(f"ERROR in 'generate_summaries' : {e}")
+    #             end_time = time.time()
+    #             st.write(f"✅​ Génération des résumés en {end_time-start_time:.2f} sec.")
 
-            # 计算完成后关闭标志，下次不自动重新计算
-            st.session_state.recompute_summary = False
+    #         # 计算完成后关闭标志，下次不自动重新计算
+    #         st.session_state.recompute_summary = False
 
 

@@ -67,7 +67,7 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
         #     #需保证x是str
         #     df["abstract_s"]=df['abstract_s'].apply(lambda x: [k.strip() for k in x.split() if k.strip()])
 
-        df[opt]=df.apply(lambda row: preprocess_text(text=row[opt], stopwords=stopwords, lang=row.get("language_s", "fr")),
+        df[opt]=df.apply(lambda row: preprocess_text(text=row[opt], user_stopwords=stopwords, lang=row.get("language_s", "fr")),
                                     axis=1
         ) #nan只返回""
 
