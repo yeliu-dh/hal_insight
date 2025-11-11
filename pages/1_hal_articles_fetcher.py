@@ -151,6 +151,13 @@ labs = st_tags(
     maxtags=10
 )
 
+
+coll = st_tags(
+    label="Collection",
+    text="Tapez et 'Entrée'",
+    value=["Institut de Recherche en Gestion"],
+    maxtags=10
+)
 # 输出字段
 options_fields = ['halId_s','uri_s',"docType_s", "title_s", "subTitle_s", "authFullName_s","labStructName_s","domain_s", 
                     "publicationDate_s","journalTitle_s","conferenceTitle_s","conferenceStartDate_s","country_s","city_s","audience_s",
