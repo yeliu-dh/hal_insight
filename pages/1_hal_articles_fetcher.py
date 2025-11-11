@@ -155,7 +155,7 @@ labs = st_tags(
 coll = st_tags(
     label="Collection",
     text="Tapez et 'Entrée'",
-    value=["Institut de Recherche en Gestion"],
+    value=[],
     maxtags=10
 )
 # 输出字段
