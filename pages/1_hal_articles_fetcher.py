@@ -18,7 +18,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 # #file 得出当前脚本所在文件夹（pages），join+".."表示回到上一级路径，abs表示绝对化，sys.append则为加入系统路径
 # #=> ../mount/src/hal_insight
 
-
 # ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 # if ROOT_DIR not in sys.path:
 #     sys.path.insert(0, ROOT_DIR)  # 插入到 sys.path 开头，优先查找
@@ -27,17 +26,14 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 # my utils
 from utils.upload import load_external_json
 from utils.HAL_search_api import fetch_hal_articles
-
-from utils.mapping import map_domains
-from utils.mapping import add_axe
-from utils.ranking import add_classement_fnege
+from utils.HAL_search_api import process_df
+from utils.HAL_search_api import save_file_csv_xlsx
 from utils.upload import missing_data_warning
 from utils.pdf2str import extract_text_from_pdf
 
 
 # pages/1_hal_articles_fetcher.py
 # from init_imports import *
-
 
 st.set_page_config(page_title="HAL insight", page_icon="🛸",layout='wide')
 #必须是第一行命令
@@ -50,14 +46,14 @@ def get_mappings():
         "DOMAIN_MAP": load_external_json(f"{mapping_folder}/domain_map.json"),
         "LANG_MAP": load_external_json(f"{mapping_folder}/lang_map.json"),
         "DOC_TYPE_MAP": load_external_json(f"{mapping_folder}/doctype_map.json"),
-        "CLASSEMENT": load_external_json(f"{mapping_folder}/classement_fnege.json"),#/classement.json
+        "FNEGE": load_external_json(f"{mapping_folder}/classement_fnege.json"),#/classement.json
     }
 
 maps = get_mappings()
 DOMAIN_MAP = maps["DOMAIN_MAP"]
 LANG_MAP = maps["LANG_MAP"]
 DOC_TYPE_MAP = maps["DOC_TYPE_MAP"]
-CLASSEMENT=maps['CLASSEMENT']
+FNEGE=maps['FNEGE']
 
 
 st.title("Hal Articles Fetcher")
@@ -112,14 +108,13 @@ col1, col2 = st.columns(2)
 with col1:
     start_year = st.selectbox("Année de début", years, index=years.index(2025))
 with col2:
-    start_month = st.selectbox("Mois de début", months, index=months.index(current_month))
+    start_month = st.selectbox("Mois de début", months, index=months.index(current_month-1))
 
 col3, col4 = st.columns(2)
 with col3:
     end_year = st.selectbox("Année de fin", years, index=years.index(current_year))
 with col4:
     end_month = st.selectbox("Mois de fin", months, index=months.index(current_month))
-
 
 
 
@@ -151,26 +146,41 @@ labs = st_tags(
     maxtags=10
 )
 
-
-coll = st_tags(
-    label="Collection",
+   
+collcode = st_tags(
+    label="Collection par code",
     text="Tapez et 'Entrée'",
-    value=[],
+    value=["UPEC"],
     maxtags=10
 )
+
+
+collname = st_tags(
+    label="Collection par name",
+    text="Tapez et 'Entrée'",
+    value=["Université Paris-Est Créteil Val-de-Marne"],
+    maxtags=10
+)
+
+
+
 # 输出字段
 options_fields = ['halId_s','uri_s',"docType_s", "title_s", "subTitle_s", "authFullName_s","labStructName_s","domain_s", 
                     "publicationDate_s","journalTitle_s","conferenceTitle_s","conferenceStartDate_s","country_s","city_s","audience_s",
                     "language_s", "keyword_s", "abstract_s","urlFulltextEsr_s","files_s",'page_s',"modifiedDate_s","submittedDate_s",
-                     "openAccess_bool",'volume_s','conferenceStartDate_s',"conferenceOrganizer_s","classification_s",
+                     "openAccess_bool",'volume_s','conferenceStartDate_s',"conferenceOrganizer_s","classification_s","collName_s","collCode_s",
+                     "authIdHal_s"
+                     #"authIdHasPrimaryStructure_fs"
                     
                 ]
 
-default_fields=['halId_s','uri_s', "docType_s", "title_s", "subTitle_s", "authFullName_s","labStructName_s","domain_s", 
-                "openAccess_bool",'volume_s',"page_s","classification_s",
+default_fields=['halId_s','uri_s', "docType_s", "title_s", "subTitle_s", "authFullName_s","authIdHal_s","labStructName_s",
+                "collName_s","collCode_s",
+                "domain_s","openAccess_bool",'volume_s',"page_s","classification_s",
                 "submittedDate_s","modifiedDate_s", "publicationDate_s","journalTitle_s","conferenceTitle_s","conferenceOrganizer_s","conferenceStartDate_s",
                 "country_s", "language_s",
-                "keyword_s", "abstract_s","files_s","urlFulltextEsr_s"
+                "keyword_s", "abstract_s","files_s","urlFulltextEsr_s",
+
                 ]
 
 
@@ -188,8 +198,9 @@ max_records = st.selectbox("les premier X articles:", rows_range, index=500)
 st.markdown("<br>", unsafe_allow_html=True)
 
 
+
+
 # ----------------------- RESULT -----------------------
-# with right_col:
 
 # st.subheader("Commencer la recherche")
 st.markdown("<br>", unsafe_allow_html=True)
@@ -222,79 +233,43 @@ if search_button and not invalid_date:
                 st.warning("Aucun résultat trouvé.")
                 st.stop()    
         except Exception as e:
-            st.error(f"⚠️ {e}")
+            st.error(f"⚠️ ERROR in fetch_hal_articles: \n {e}")
             st.stop()#==break
 
 
-    # -----------处理 domain----------------
-    if "domain_s" in df.columns:   
-        df["domain_s"] = df["domain_s"].apply(lambda x : map_domains(x, map=DOMAIN_MAP))
 
-    #----------处理axe----------------------
-    if "classification_s" in df.columns:
-        df=add_axe(df)
+    #================处理domain, axe, fnenge, primarystructure================ 
+    try :
+        df= process_df(df, DOMAIN_MAP, FNEGE)
+    except Exception as e:
+        st.warning (f"ERROR in process_df :\n {e}")   
 
-    #------------- 处理fnege----------------
-    journal_col="journalTitle_s"
-    cl_name = 'Cl. FNEGE'
-    if "journalTitle_s" in df.columns:
-        df= add_classement_fnege(df, journal_col='journalTitle_s', map=CLASSEMENT, cl_name=cl_name)
-
-    #-------------SAVE TO SESSION-----------------
-    # 保存结果到 session_state
     if not df.empty:
+        #----------------------show----------------------
+        st.success(f"✅ {len(df)} articles trouvés!\n\n"
+                    f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")    
+        st.dataframe(df)
+        missing_data_warning(df, col='files_s',map={"files_s":"PDF liens"})
+        st.write()
+
+        #---------------- SAVE TO SESSION----------------
         st.session_state["uploaded_df"] = df  
         st.session_state["uploaded_df_source"] = "search"
         
+        #------------------save to local-------------------
+        try :
+            save_file_csv_xlsx(df,start_year, start_month, end_year, end_month)
+        except Exception as e:
+            st.warning (f"ERROR in save_file_csv_xlsx :\n {e}")   
 
-
-
-
-#=================SAVE DF DE RECHERCHE=====================
-df = st.session_state.get("uploaded_df", None)
-if df is not None and not df.empty:
-    #-------------show----------------------
-    st.success(f"✅ {len(df)} articles trouvés!\n\n"
-                f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")    
-    st.dataframe(df)
-
-    missing_data_warning(df, col='files_s',map={"files_s":"PDF liens"})
-
-    #  ----------------SAVE TO LOCAL----------------- 
-    #file name 
-    today_str = datetime.now().strftime("%d%m%Y")
-    cols=st.columns(4)
-    with cols[1]:
-        # as CSV
-        csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
-        st.download_button(
-            label="Télécharger CSV",
-            data=csv_data,
-            file_name = f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.csv",
-            mime="text/csv"
-        )
-
-    with cols[3]:
-        #as XLSX
-        # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
-        xlsx_buffer = io.BytesIO()
-        with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
-            df.to_excel(writer, index=False, sheet_name="Articles")
-        xlsx_data = xlsx_buffer.getvalue()
-
-        st.download_button(
-            label="Télécharger XLSX",
-            data=xlsx_data,
-            file_name=f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
-
-        # 这是 XLSX 文件的 MIME 类型，告诉浏览器这是一个 Excel 文件，否则st button可能无法识别文件类型 
-
-
+        
+        st.divider()        
 
 
 #============================PDF2STR=======================================    
+
+df = st.session_state.get("uploaded_df", None)
+if df is not None and not df.empty:
     st.markdown("<br>", unsafe_allow_html=True)
     st.divider()
 
@@ -310,7 +285,6 @@ if df is not None and not df.empty:
     if pdf_button:       
         st.session_state['uploaded_df_text']=st.session_state["uploaded_df"]
         df_text=st.session_state['uploaded_df_text'].copy()
-
 
         start_time=time.time()
         with st.spinner("Extraction des textes intégraux en cours..."):
@@ -356,59 +330,23 @@ if df is not None and not df.empty:
 
             num_text=len(df_text[df_text['full_text'].notna()])
             st.success(f"✅ Extraction des textes ({num_text}/{total}) terminée en {end_time-start_time:.2f} secondes !")
-
-
    
-   
+
     #================DISPLAY====================
     df_text = st.session_state.get("uploaded_df_text", None)
     if df_text is not None and not df_text.empty and "full_text" in df_text.columns:
         st.dataframe(df_text)
-        # =========update uploaded_df?====================
+
+        # -------------------update uploaded_df?-------------------
         update_df = st.checkbox("Mettre à jour le dataset ? ", value=False, key="nan")
         if update_df==True:
             st.session_state["uploaded_df"] = df_text
             st.success("Continuez l'analyse avec le dataset mis à jour!")
 
-        try :                
-            #==========save to local================
-            today_str = datetime.now().strftime("%d%m%Y")
-            cols1=st.columns(4)
-            with cols1[1]:
-                # as CSV
-                # csv_data_text = df_text.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
-                
-                #full_text中的很多换行符 (\n)、逗号、引号 " " 等特殊字符，无法正常转义
-                csv_data_text = df_text.to_csv(
-                    index=False,
-                    encoding="utf-8-sig",
-                    sep=",",
-                    quoting=1,         # 强制用引号包裹所有字段
-                    escapechar="\\",   # 当字段中出现引号或分隔符时用反斜杠转义
-                ).encode("utf-8-sig")
-
-                st.download_button(
-                    label="Télécharger CSV",
-                    data=csv_data_text,
-                    file_name = f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art_textes.csv",
-                    mime="text/csv"
-                )
-
-            with cols1[3]:
-                #as XLSX
-                # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
-                xlsx_buffer = io.BytesIO()
-                with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
-                    df_text.to_excel(writer, index=False, sheet_name="Articles")
-                xlsx_data_text = xlsx_buffer.getvalue()
-
-                st.download_button(
-                    label="Télécharger XLSX",
-                    data=xlsx_data_text,
-                    file_name=f"{today_str}-ProductionScientifiqueIRG-{start_month}-{start_year}_{end_month}-{end_year}_{len(df)}art_textes.xlsx",
-                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                )
+        # ======================SAVE===========================
+        try :    
+            save_file_csv_xlsx(df_text,start_year, start_month, end_year, end_month)        
         except Exception as e:
-            st.warning (f"{e}")
+            st.warning (f"ERROR in save_file_csv_xlsx 2: \n {e}")
 
-
+    

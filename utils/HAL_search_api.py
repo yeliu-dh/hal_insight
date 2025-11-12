@@ -1,8 +1,17 @@
 import streamlit as st
 import calendar
+import pandas as pd
+import re
+
+from datetime import datetime
+
+#my utils :
+from utils.upload import missing_data_warning
+
 
 def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_month=None,
-                       doc_types=None, domains=None,keywords=None, languages=None,labs=None, authors=None, text=None,
+                       doc_types=None, domains=None,keywords=None, languages=None,labs=None,
+                       collcode=None, collname=None, authors=None, text=None,
                        fields:list=None, rows=100, max_records=5000):
     """
     grammaire basique de requête:
@@ -107,6 +116,14 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     if labs:
         input = [f'"{t}"' for t in labs]
         fq.append(f'labStructName_s:({" OR ".join(input)})')
+    
+    if collcode:
+        input = [f'"{t}"' for t in labs]
+        fq.append(f'collCode_s:({" OR ".join(input)})')
+    
+    if collname:
+        input = [f'"{t}"' for t in labs]
+        fq.append(f'collName_s:({" OR ".join(input)})')
 
     if domains:
         input = [f'"{t}"' for t in domains]
@@ -231,7 +248,7 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         resp = requests.get(BASE_URL, params=params, timeout=15)
         # print(resp.json())
 
-        resp = requests.get(BASE_URL, params=params, timeout=15)
+        # resp = requests.get(BASE_URL, params=params, timeout=15)
         # st.info(f"[DEBUG] Response status: {resp.status_code} | start={start}")
         
 
@@ -288,3 +305,324 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
 
 
 
+
+
+
+
+
+
+
+
+
+#=======================================DOMAINE=======================================================#
+
+def map_domains(codes_str:str=None, map:dict=None):
+    """
+    搜索结果是代码，对代码进行映射和清洗
+    """
+    if not isinstance(codes_str,str): 
+        return None
+
+    codes = codes_str.split(";")
+    mapped = []
+
+    for code in codes:
+        code_clean = re.sub(r"^\d+\.", "", code.strip())
+        mapped.append(map.get(code_clean, code_clean))
+    
+    return "; ".join(mapped)
+
+
+
+#========================================AXE===========================================================#
+def extract_irg_axes(text):
+    """
+    把 classification_s 字段中的值:
+        IRG_AXE1
+        IRG_axe1
+        IRG_AXE 3
+        IRG_AXE1IRG_AXE3
+        IRG_AXE2 – Sociétés de services et services à la société (A society of services and services to society)
+        Axe_1            
+
+    re.findall(pattern, text)
+    \s* 允许space, *表示0或多个！
+
+    (\d+):
+        \d是数字，+表示模式重复多次，()为捕获组单位，只取出()内的内容
+
+    """
+    if pd.isna(text):
+        return None
+    text=text.strip().lower()
+        
+    # 找出所有 irg_axe后面的数字
+    matches = re.findall(r"axe\s*(\d+)", text)
+    if matches:
+        # 用分号拼接
+        return "; ".join(matches)
+    return None
+
+
+def add_axe(df,axe_name='Axe'):
+    """   
+    整理成字符串数字，列名改为Axe
+    """
+    df["classification_s"] = df["classification_s"].apply(extract_irg_axes)
+    df=df.rename(columns={"classification_s":axe_name})
+    return df
+
+
+
+
+
+
+#===========================================FNEGE===========================================================#
+from typing import Dict, Any #Python 类型注解模块 typing 里的类型提示
+from rapidfuzz import process
+import unicodedata
+import re
+
+# --------------------------
+# 字符串归一化
+# --------------------------
+def normalize(text: str) -> str:
+    if not isinstance(text, str):
+        return ""
+    text = text.lower().strip()
+    text = unicodedata.normalize("NFKD", text)
+    text = "".join(c for c in text if not unicodedata.combining(c))
+    text = re.sub(r"[^\w\s]", "", text)  # 去掉标点
+    return text
+
+
+
+# --------------------------
+# 模糊匹配期刊名
+# --------------------------
+def fuzzy_lookup(journal_name: str, mapping: dict, cutoff: int = 85) -> str:
+    """
+    返回最匹配的期刊排名，如果匹配不到则返回 None
+    """
+    if not journal_name or not mapping:
+        return None
+
+    normalized_mapping_keys = {normalize(k): k for k in mapping.keys()}
+    norm_name = normalize(journal_name)
+
+    # 找最接近的 key
+    best_match = process.extractOne(norm_name, list(normalized_mapping_keys.keys()))
+    if best_match and best_match[1] >= cutoff:
+        original_key = normalized_mapping_keys[best_match[0]]
+        return mapping[original_key]
+    return None
+
+
+def add_classement_fnege(
+    df: pd.DataFrame,
+    journal_col: str = "journalTitle_s",
+    map: Dict[str, Any] = None, ## 表示 mapping 是一个字典，key 是字符串，value 可以是任意类型  
+    cl_name: str = 'Cl. FNEGE',
+    cutoff: int = 85
+) -> pd.DataFrame:
+    
+    col_cl = df[journal_col].apply(lambda x: fuzzy_lookup(x, map, cutoff=cutoff))
+    
+    # 找到 journalTitle_s 的列索引
+    idx = df.columns.get_loc(journal_col)
+
+    # 插入列到 journalTitle_s 后面
+    df.insert(loc=idx+1, column=cl_name, value=col_cl)
+    return df
+
+
+#===========================================PRIMARYSTRUCTURE===========================================================#
+
+import urllib.parse
+import requests
+import time
+import numpy as np
+from tqdm import tqdm
+import os
+import json
+
+# def check_primarystructure_map()
+def save_as_json(data, file_path="../json_data/author_primarystructure_s_map.json"):
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    with open (file_path, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    print(f'data UPDATED in {file_path}!')
+    return 
+
+def read_json(file_path='../json_data/author_primarystructure_s_map.json'):
+    with open (file_path, 'r', encoding="utf-8") as f:
+        data=json.load(f)
+    return data
+
+
+
+def get_author_primarystructure(names: list, author_primarystructure_s_map:dict):
+    """
+    查询作者主要所属机构（Primary Structure），返回一个 dict 映射。
+    使用 tqdm 显示查询进度。
+    """
+    BASE_URL = "https://api.archives-ouvertes.fr/search/"
+    for name in tqdm(names, desc="🔍 查询作者主要机构", ncols=100):
+        if name not in author_primarystructure_s_map.keys():
+            try:
+                params = [
+                    ("fl", "authIdHasPrimaryStructure_fs"),
+                    ("rows", 1),
+                    ("wt", "json"),
+                    ("fq", f"authIdHal_s:{name}")
+                ]
+
+                resp = requests.get(BASE_URL, params=params, timeout=15)
+                resp.raise_for_status()  # 检查HTTP状态码
+                data = resp.json()
+
+
+                #ex.{'response': {'numFound': 79, 'start': 0, 'maxScore': 1.0, 'numFoundExact': True, 'docs': [{'authIdHasPrimaryStructure_fs': ['1271130-1099011_FacetSep_Ziad Malas_JoinSep_1151738_FacetSep_Laboratoire de Gestion et des Transitions Organisationnelles', '1271130-1099011_FacetSep_Ziad Malas_JoinSep_301366_FacetSep_Institut Universitaire de Technologie - Paul Sabatier', "12474-177028_FacetSep_Samuel Guillemot_JoinSep_489734_FacetSep_Laboratoire d'Economie et de Gestion de l'Ouest", '21015-5244_FacetSep_Andréa Gourmelen_JoinSep_117385_FacetSep_Montpellier Research in Management']}]}}
+
+                # Identifiant interne + _FacetSep_ + Nom complet + _JoinSep_ + Identifiant HAL de structure primaire + _FacetSep_ + Nom de la structure primaire
+                #ex. ['3657528-1564101_FacetSep_Adel Horrig_JoinSep_1004418_FacetSep_Institut de Recherche en Gestion']
+                docs = data.get("response", {}).get("docs", [])
+                if not docs:
+                    continue
+
+                record = docs[0]["authIdHasPrimaryStructure_fs"][0]
+                parts = record.split("_")
+                primarystructure_s = parts[-1] if parts else None
+
+                if primarystructure_s:
+                    author_primarystructure_s_map[name] = primarystructure_s
+                else:
+                    # author_primarystructure_s_map[name] = 'no primary structure found'
+                    author_primarystructure_s_map[name] = None
+
+                time.sleep(0.2)  # 限速，防止触发API限制
+
+            except Exception as e:
+                tqdm.write(f"ERROR in {name} matching: {e}")
+                author_primarystructure_s_map[name] = None
+                continue
+
+    return author_primarystructure_s_map
+
+
+def update_author_primarystructure_s(names:list, file_path='../json_data/author_primarystructure_s_map.json'):
+    author_primarystructure_s_map=read_json(file_path)
+    updated_author_primarystructure_s_map=get_author_primarystructure(names, author_primarystructure_s_map)
+    save_as_json(updated_author_primarystructure_s_map, file_path)
+    return updated_author_primarystructure_s_map
+
+
+
+def add_primarystructure(df, authors, author_primarystructure_s_map):
+    primarystructures=df['authIdHal_s'].apply(lambda x: [author_primarystructure_s_map.get(a, np.nan) 
+                                                        for a in x.split(";")] if isinstance(x, str) else np.nan)
+        
+    # 找到 journalTitle_s 的列索引
+    idx = df.columns.get_loc('labStructName_s')
+
+    # 插入列到 journalTitle_s 后面
+    df.insert(loc=idx+1, column='author_primarystructure_s', value=primarystructures)
+    return df
+
+
+
+
+##集合处理：
+def process_df(df, DOMAIN_MAP, FNEGE):
+    start_time=time.time()
+
+    # -----------处理 domain----------------
+    with st.spinner("mapping domaines..."):
+        if "domain_s" in df.columns:   
+            df["domain_s"] = df["domain_s"].apply(lambda x : map_domains(x, map=DOMAIN_MAP))
+    
+    #----------处理axe----------------------
+    with st.spinner("nettoyer les axes..."):
+        if "classification_s" in df.columns:
+            df=add_axe(df)
+
+    #--------- 处理fnege----------------
+    with st.spinner("mapping les classements fnege.."):
+        journal_col="journalTitle_s"
+        cl_name = 'Cl. FNEGE'
+        if "journalTitle_s" in df.columns:
+            df= add_classement_fnege(df, journal_col='journalTitle_s', map=FNEGE, cl_name=cl_name)
+    
+    #----------处理author_primarystructure-----------
+    # st.write(os.getcwd())
+    author_col='authIdHal_s'
+    authors = [
+        n.strip()
+        for _, r in df.iterrows()
+        if isinstance(r[author_col], str)
+        for n in r[author_col].split(';')
+        if n.strip()
+    ]
+    author_primarystructure_s_map=update_author_primarystructure_s(authors,file_path='json_data/author_primarystructure_s_map.json')
+    df= add_primarystructure(df, authors, author_primarystructure_s_map)
+    missing_data_warning(df, col="author_primarystructure_s")
+
+    end_time=time.time()
+    return df
+
+
+
+
+
+
+
+import io
+from datetime import datetime
+
+def save_file_csv_xlsx(df,start_year, start_month, end_year, end_month):
+    
+    # df = st.session_state.get(session_key, None)
+
+    if df is not None and not df.empty:
+    #  ----------------SAVE TO LOCAL----------------- 
+        cols=st.columns(4)
+        #---------------file name------------------- 
+        with cols[0]:
+            today_str = datetime.now().strftime("%Y%m%d")
+            default_file_name=f"{today_str}-ProductionScientifiqueIRG-{start_year}{start_month}-{end_year}{end_month}_{len(df)}art"
+
+            # 用户输入框
+            file_name = st.text_input(
+                "Nom du fichier :",  # 提示文字
+                value=default_file_name,            # 默认值
+            )
+
+        #---------------as CSV------------------- 
+        with cols[2]:
+            csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
+            st.download_button(
+                label="Télécharger CSV",
+                data=csv_data,
+                file_name = file_name+".csv",
+                mime="text/csv"
+            )
+            
+        #---------------as XLSX------------------- 
+        with cols[3]:
+            # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
+            xlsx_buffer = io.BytesIO()
+            with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
+                df.to_excel(writer, index=False, sheet_name="Articles")
+            xlsx_data = xlsx_buffer.getvalue()
+
+            st.download_button(
+                label="Télécharger XLSX",
+                data=xlsx_data,
+                file_name=file_name+".xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+
+            # 这是 XLSX 文件的 MIME 类型，告诉浏览器这是一个 Excel 文件，否则st button可能无法识别文件类型 
+    else : 
+        st.warning(f"df.empty!")
+    return

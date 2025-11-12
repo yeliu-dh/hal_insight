@@ -47,47 +47,6 @@ def save_mapping(mapping: dict, output_file: str = RANKING_FILE):
 
 
 
-# --------------------------
-# 模糊匹配期刊名
-# --------------------------
-def fuzzy_lookup(journal_name: str, mapping: dict, cutoff: int = 85) -> str:
-    """
-    返回最匹配的期刊排名，如果匹配不到则返回 None
-    """
-    if not journal_name or not mapping:
-        return None
-
-    normalized_mapping_keys = {normalize(k): k for k in mapping.keys()}
-    norm_name = normalize(journal_name)
-
-    # 找最接近的 key
-    best_match = process.extractOne(norm_name, list(normalized_mapping_keys.keys()))
-    if best_match and best_match[1] >= cutoff:
-        original_key = normalized_mapping_keys[best_match[0]]
-        return mapping[original_key]
-    return None
-
-
-
-def add_classement_fnege(
-    df: pd.DataFrame,
-    journal_col: str = "journalTitle_s",
-    map: Dict[str, Any] = None, ## 表示 mapping 是一个字典，key 是字符串，value 可以是任意类型  
-    cl_name: str = 'Cl. FNEGE',
-    cutoff: int = 85
-) -> pd.DataFrame:
-    
-    col_cl = df[journal_col].apply(lambda x: fuzzy_lookup(x, map, cutoff=cutoff))
-    
-    # 找到 journalTitle_s 的列索引
-    idx = df.columns.get_loc(journal_col)
-
-    # 插入列到 journalTitle_s 后面
-    df.insert(loc=idx+1, column=cl_name, value=col_cl)
-    return df
-
-
-
 # -----------------------------
 # python hal_insight\utils\ranking.py
 # -----------------------------
