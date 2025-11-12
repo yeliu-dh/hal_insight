@@ -240,7 +240,13 @@ if search_button and not invalid_date:
 
     #================处理domain, axe, fnenge, primarystructure================ 
     try :
+        start_time=time.time()
         df= process_df(df, DOMAIN_MAP, FNEGE)
+        end_time=time.time()
+        
+        st.success(f"Map les doamiens et les classement fnege, les structures primaires et nettoyer les axes: \n"
+                   f"{end_time-start_time:.2f}")
+        
     except Exception as e:
         st.warning (f"ERROR in process_df :\n {e}")   
 
