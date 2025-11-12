@@ -169,7 +169,7 @@ options_fields = ['halId_s','uri_s',"docType_s", "title_s", "subTitle_s", "authF
                     "publicationDate_s","journalTitle_s","conferenceTitle_s","conferenceStartDate_s","country_s","city_s","audience_s",
                     "language_s", "keyword_s", "abstract_s","urlFulltextEsr_s","files_s",'page_s',"modifiedDate_s","submittedDate_s",
                      "openAccess_bool",'volume_s','conferenceStartDate_s',"conferenceOrganizer_s","classification_s","collName_s","collCode_s",
-                     "authIdHal_s"
+                     "authIdHal_s","authLastNameFirstName_s"	
                      #"authIdHasPrimaryStructure_fs"
                     
                 ]
@@ -240,15 +240,11 @@ if search_button and not invalid_date:
 
     #================处理domain, axe, fnenge, primarystructure================ 
     try :
-        start_time=time.time()
         df= process_df(df, DOMAIN_MAP, FNEGE)
-        end_time=time.time()
-        
-        st.success(f"Map les doamiens et les classement fnege, les structures primaires et nettoyer les axes: \n"
-                   f"{end_time-start_time:.2f}")
-        
     except Exception as e:
         st.warning (f"ERROR in process_df :\n {e}")   
+    st.divider()
+    
 
     if not df.empty:
         #----------------------show----------------------

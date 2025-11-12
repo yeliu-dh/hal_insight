@@ -5,6 +5,10 @@ import os
 import json
 from pathlib import Path
 
+#my utils :
+
+# from utils.preprocess import explode_by_col# preprocess用到了这里的load_exetrnal_json, 无法互相循环导入包
+
 
 
 def save_as_json(data, path):
@@ -26,6 +30,19 @@ def load_external_json(file_path):
 
 
 
+def explode_by_col(df, col="Axe"):
+    """"
+    空值填nan，
+    多值按照，/；分割成list
+    =>在某一col上explode；
+    检查notna
+    """
+    df = df.copy()
+    df[col] = df[col].fillna('nan').astype(str).str.split("[,;]") # axe中有nan所以type:objet，先变成str
+    df = df.explode(col)
+    df[col] = df[col].str.strip()
+    return df[df[col].notna() & (df[col] != "")]
+
 def missing_data_warning(df, col=None, map:dict=None, show_distribution=False):
     if col not in df.columns:
         st.warning (f"⚠ {col} n'est pas trouvé dans la base de données !")
@@ -38,19 +55,31 @@ def missing_data_warning(df, col=None, map:dict=None, show_distribution=False):
         # 是否有缺失：
         nb_manquant=df[col].isna().sum()
         if nb_manquant==0:
-            str_manquant=f"{col_readable} sont disponibles dans toutes les lignes.\n\n"
+            str_manquant=f"**{col_readable}** sont disponibles dans toutes les lignes.\n\n"
         else :
-            str_manquant=f"Les {col_readable} sont manquants dans {df[col].isna().sum()} ({df[col].isna().sum()*100/len(df):.2f}%) articles! \n\n"
+            str_manquant=f"Les **{col_readable}** sont manquants dans {df[col].isna().sum()} ({df[col].isna().sum()*100/len(df):.2f}%) articles! \n\n"
+        st.markdown(f"[INFO] {str_manquant}")
 
         # 是否显示分布
         if show_distribution:
+            df=explode_by_col(df, col=col)
             dist = df[col].value_counts(normalize=True)* 100
-            dist_str = ", ".join([f"{k}: {v:.1f}%" for k, v in dist.items()])
-        else :
-            dist_str=" "
-        st.info (str_manquant+dist_str)
+            dist_str = "\n".join([f" - {k}: {v:.1f}%" for k, v in dist.items()])
+        # else :
+        #     dist_str=" "
+   
+        # st.info (f"**Values**: {str_manquant} \n\n"
+        #          f"Distribution : {dist_str}")
+        # st.markdown(f"**Values :** {str_manquant}\n\n**Distribution :**\n{dist_str}")#mkd更好控制分行和格式
+            st.markdown(f"""
+            **Distribution :**  
+            {dist_str}
+            """)
+
 
     return
+
+
 
 def data_uploader(key="uploaded_df"):
     """
