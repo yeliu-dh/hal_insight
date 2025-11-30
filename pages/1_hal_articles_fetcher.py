@@ -40,8 +40,7 @@ st.set_page_config(page_title="HAL insight", page_icon="🛸",layout='wide')
 
 #====================CACHE=========================#
 @st.cache_data 
-def get_mappings():
-    mapping_folder='json_data'
+def get_mappings(mapping_folder='json_data'):
     return {
         "DOMAIN_MAP": load_external_json(f"{mapping_folder}/domain_map.json"),
         "LANG_MAP": load_external_json(f"{mapping_folder}/lang_map.json"),
@@ -84,51 +83,58 @@ doc_types = st.multiselect(
 )
 
 domains = st.multiselect(
-    "Domaine",
+    "**Domaine**",
     options=list(DOMAIN_MAP.keys()),
     format_func=lambda x: DOMAIN_MAP[x],
     default=[]
 )
 
 keywords = st_tags(
-    label="Mots-clés",
+    label="**Mots-clés**",
     text="Tapez et 'Entrée'",
     value=[],
     suggestions=[],
     maxtags=10
 )
 
-st.markdown("Période (selon date du dépôt)")
+st.markdown(f"**Période (selon date du dépôt)**  \n"
+            f"- si vous ne voulez pas définir la date de début, choisisssez '*' dans l'année de début' *ou/et* 'mois de début';  \n"
+            f"- si vous ne voulez pas définir la date de fin, choisisssez 'aujourd'hui' dans 'années de fin' *ou/et* 'mois de fin'.")
 now = datetime.now()
 current_year, current_month = now.year, now.month
-years = [None] + list(range(current_year, 1901, -1))
-months = [None] + list(range(1, 13))
+
+start_years = ["*"] + list(range(current_year, 1901, -1))
+start_months= ["*"] + list(range(1, 13)) 
+end_years = ["aujourh'dui"] + list(range(current_year, 1901, -1))
+end_months = ["aujourd'hui"] + list(range(1, 13))
 
 col1, col2 = st.columns(2)
 with col1:
-    start_year = st.selectbox("Année de début", years, index=years.index(2025))
+    start_year = st.selectbox("Année de début", start_years, index=start_years.index(2025))
 with col2:
-    start_month = st.selectbox("Mois de début", months, index=months.index(current_month-1))
+    start_month = st.selectbox("Mois de début", start_months, index=start_months.index(current_month-1))
 
 col3, col4 = st.columns(2)
 with col3:
-    end_year = st.selectbox("Année de fin", years, index=years.index(current_year))
+    end_year = st.selectbox("Année de fin", end_years, index=end_years.index(current_year))
 with col4:
-    end_month = st.selectbox("Mois de fin", months, index=months.index(current_month))
+    end_month = st.selectbox("Mois de fin", end_months, index=end_months.index("aujourd'hui"))
 
 
 
-# 日期校验
-invalid_date = False
-if start_year and start_month:#not None
-    if (end_year, end_month) < (start_year, start_month):
-        st.error("⚠️ Période invalide : la fin est antérieur au début!")
-        invalid_date = True
+# # 日期校验
+# invalid_date = False
+# if start_year and start_month:#not None
+#     if (end_year, end_month) < (start_year, start_month):
+#         st.error("⚠️ Période invalide : la fin est antérieur au début!")
+#         invalid_date = True
 
-if start_year is None:#无开始年份，选取过往所有文章
-    start_month=None
-if start_year and start_month is None:#没开始月份，默认从1月开始
-    start_month=1
+# if start_year is None:#无开始年份，选取过往所有文章
+#     start_month=None
+# if start_year and start_month is None:#没开始月份，默认从1月开始
+#     start_month=1
+
+
 
 
 # 语言、实验室
@@ -211,7 +217,7 @@ with cols[1]:
 
 # st.divider()
 df = None#初始化
-if search_button and not invalid_date:
+if search_button:# and not invalid_date
     with st.spinner("Chercher..."):
         try:
             df = fetch_hal_articles(
@@ -266,6 +272,16 @@ if search_button and not invalid_date:
 
         
         st.divider()        
+
+
+
+
+
+
+
+
+
+
 
 
 #============================PDF2STR=======================================    

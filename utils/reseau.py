@@ -6,7 +6,6 @@ import matplotlib.patches as mpatches
 # import unidecode
 from collections import Counter, defaultdict
 import pandas as pd
-
 import networkx as nx
 from pyvis.network import Network
 from streamlit.components.v1 import html #在st中显示
@@ -54,7 +53,6 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
 
     # 清洗options列上的值    
  
-
     for opt in options:
         # if opt =="keyword_s":#关键词不清洗？
         #     df['keyword_s'] = df['keyword_s'].fillna('nan').apply(lambda x: [k.strip().lower() for k in x.split(';') if k.strip() and str(x).lower() not in ['nan',"none"]])

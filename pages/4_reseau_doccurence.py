@@ -7,14 +7,20 @@ import matplotlib.patches as mpatches
 
 
 #my utils
-from utils.upload import data_uploader, missing_data_warning
-# from utils.wordcloud import preprocess_text#clean keywords and abstracts
-# from utils.wordcloud import collect_clean_texts_by_col#fr/en
-# from utils.wordcloud import explode_by_col# authorsname, 
+from utils.upload import data_uploader, missing_data_warning, load_external_json
 from utils.reseau import generate_network
 
-# st.set_page_config(page_title="HAL insight", page_icon="🛸",layout="wide")
+st.set_page_config(page_title="HAL insight", page_icon="🛸",layout="wide")
 st.title("🌐Réseau d'occurences ")
+
+
+@st.cache_data 
+def get_mappings(mapping_folder='json_data'):
+    return {
+        "AUTHOR_STRUCTURE": load_external_json(f"{mapping_folder}/author_primarystructure_s_map.json")    }
+
+maps= get_mappings(mapping_folder='json_data')
+author_structure=maps["AUTHOR_STRUCTURE"]
 
 # -------------------------------
 # 1️⃣ 初始化 Session State
@@ -51,7 +57,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     default=["keyword_s","abstract_s"],  # 默认选择
     format_func=lambda x: WC_MAP[x]#只改变显示
     )
-    st.write("Les textes sélectionnés sont nettoyés (suppression des espaces, ponctuations et mots grammaticaux courants), mis en minuscules et lemmatisés.")
+    st.write("**[README]** Les textes sélectionnés sont nettoyés (suppression des espaces, ponctuations et mots grammaticaux courants), mis en minuscules et lemmatisés.")
 
 
     for col in options:

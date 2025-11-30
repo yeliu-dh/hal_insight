@@ -2,8 +2,8 @@ import streamlit as st
 import calendar
 import pandas as pd
 import re
-
 from datetime import datetime
+import calendar
 
 #my utils :
 from utils.upload import missing_data_warning
@@ -141,31 +141,85 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         input = [f'"{t}"' for t in authors]
         fq.append(f'authFullName_s:({" OR ".join(input)})')
 
-    #⭐ 日期范围：submittedDate_s不能继续使用！
-    #如果有起始年月则加入，如果None，不指定
-    if start_year and start_month:
-        start_date = f"{start_year}-{start_month:02d}-01T00:00:00Z"
-    else:
-        start_date = None
 
-    #如果有起结束月则加入，如果无，
-    if end_year and end_month:
-        end_day = calendar.monthrange(end_year, end_month)[1]  # 当月最后一天
-        end_date = f"{end_year:04d}-{end_month:02d}-{end_day:02d}T23:59:59Z"
-    else:
-        raise ValueError("Préciser l'année de fin ou/et le mois de fin!")
+
+    # ----------------#⭐ 日期范围：submittedDate_s不能继续使用！--------------------
+    # #如果有起始年月则加入，如果None，不指定
+    # if start_year and start_month:
+    #     start_date = f"{start_year}-{start_month:02d}-01T00:00:00Z"
+    # else:
+    #     start_date = None
+
+    # #如果有起结束月则加入，如果无，
+    # if end_year and end_month:
+    #     end_day = calendar.monthrange(end_year, end_month)[1]  # 当月最后一天
+    #     end_date = f"{end_year:04d}-{end_month:02d}-{end_day:02d}T23:59:59Z"
+    # else:
+    #     raise ValueError("Préciser l'année de fin ou/et le mois de fin!")
     
-    ##按日期范围查询：
-    if start_date:
-        fq.append(f'submittedDate_tdate:[{start_date} TO {end_date}]')#publicationDate_s,modifiedDate_s
-        # print(f"PERIODE : {start_date} TO {end_date}")
-    else:
-        fq.append(f'submittedDate_tdate:[* TO {end_date}]')  # * 表示不限下限
+    # ##按日期范围查询：
+    # if start_date:
+    #     fq.append(f'submittedDate_tdate:[{start_date} TO {end_date}]')#publicationDate_s,modifiedDate_s
+    #     # print(f"PERIODE : {start_date} TO {end_date}")
+    # else:
+    #     fq.append(f'submittedDate_tdate:[* TO {end_date}]')  # * 表示不限下限
+
+    #-------------------------------------------------------------------------------
+    
+
+    def build_submitted_date_filter(fq, start_year=None, start_month=None,
+                                    end_year=None, end_month=None):
+
+        # --- 强化逻辑：如果 start_year 或 start_month 为 "*"，则都视为无限制 ---
+        if start_year == "*" or start_month == "*":
+            start_year = start_month = "*"
+
+        # --- 强化逻辑：如果 end_year 或 end_month 为 aujourd'hui，则都视为今天 ---
+        if end_year == "aujourd'hui" or end_month == "aujourd'hui":
+            end_year = end_month = "aujourd'hui"
+
+        # --- 日期合法性检查 ---
+        if isinstance(start_year, int) and isinstance(start_month, int) and \
+        isinstance(end_year, int) and isinstance(end_month, int):
+
+            # 比较年月元组（保证稳定）
+            if (end_year, end_month) < (start_year, start_month):
+                st.error("⚠️ Période invalide : la fin est antérieure au début!")
+                return []  # 返回空过滤，避免继续运行
+            
+        # fq = []#不能清空啊！！！！！！
+
+        # --- 构建开始日期 ---
+        if isinstance(start_year, int) and isinstance(start_month, int):
+            start_date = f"{start_year}-{start_month:02d}-01T00:00:00Z"
+        else:
+            start_date = "*"
+
+        # --- 构建结束日期 ---
+        if isinstance(end_year, int) and isinstance(end_month, int):
+            last_day = calendar.monthrange(end_year, end_month)[1]
+            end_date = f"{end_year}-{end_month:02d}-{last_day:02d}T23:59:59Z"
+        elif end_year == "aujourd'hui":
+            today = datetime.utcnow()
+            end_date = today.strftime("%Y-%m-%dT23:59:59Z")
+        else:
+            # 理论上不会进入这里，但作为安全兜底
+            today = datetime.utcnow()
+            end_date = today.strftime("%Y-%m-%dT23:59:59Z")
+
+        # --- 添加 fq 参数（提交日期区间） ---
+        st.write(f"[INFO] Chercher selon submittedDate_s: {start_date} ~ {end_date}")
+        fq.append(f"submittedDate_tdate:[{start_date} TO {end_date}]")
+
+        return fq
+
+    fq=build_submitted_date_filter(fq, start_year, start_month,end_year, end_month)
+
+
 
 
     # 8. 自由文本（全文搜索）
     q = " AND ".join(text) if text else "*:*"
-
 
     #==================URL check==================
     # response = requests.get(url, params=params).json()
@@ -502,7 +556,6 @@ def get_author_primarystructure(names: list, author_primarystructure_s_map:dict=
     使用 tqdm 显示查询进度。
     可能有作者在HAL没有HalId，所以通过fullname查询更加保险？
 
-
     """
     if author_primarystructure_s_map == None:
         author_primarystructure_s_map={}
@@ -600,6 +653,10 @@ def add_primarystructure(df, author_primarystructure_s_map):
 
 ##集合处理：
 def process_df(df, DOMAIN_MAP, FNEGE):
+    """
+    todo：增加methodologie！
+
+    """
     # -----------处理 domain----------------
     if "domain_s" in df.columns:   
         df["domain_s"] = df["domain_s"].apply(lambda x : map_domains(x, map=DOMAIN_MAP))
@@ -617,8 +674,8 @@ def process_df(df, DOMAIN_MAP, FNEGE):
     st.write(f"✔ Classements FNEGE mappés!")
 
     #----------处理author_primarystructure-----------
-    # st.write(os.getcwd())
-    with st.spinner("Chercher la structure primaire de l'auteur selon le nome complet de l'auteur..."):
+    st.write(os.getcwd())
+    with st.spinner("Chercher la structure primaire de l'auteur selon le nom complet de l'auteur..."):
         author_col='authFullName_s'
         names = set([
             n.strip()
@@ -642,6 +699,8 @@ def process_df(df, DOMAIN_MAP, FNEGE):
 
 
 #===========================================DATE DEBUT/FIN DE DEPO？=======================================================#
+
+
 
 #===========================================SAVE=======================================================#
 
