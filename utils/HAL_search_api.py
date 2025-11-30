@@ -482,9 +482,9 @@ def get_author_primarystructure(names: list, author_primarystructure_s_map:dict=
                     ("wt", "json")
                 ]
                 # #检查生成的url：
-                query_string = urllib.parse.urlencode(params, doseq=True)
-                full_url = BASE_URL + "?" + query_string
-                # print(f'QUERY URL : {full_url} \n')
+                # query_string = urllib.parse.urlencode(params, doseq=True)
+                # full_url = BASE_URL + "?" + query_string
+                # # print(f'QUERY URL : {full_url} \n')
 
                 resp = requests.get(BASE_URL, params=params, timeout=15)
                 resp.raise_for_status()  # 检查HTTP状态码
