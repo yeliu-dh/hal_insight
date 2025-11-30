@@ -57,13 +57,21 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     default=["keyword_s","abstract_s"],  # 默认选择
     format_func=lambda x: WC_MAP[x]#只改变显示
     )
-    st.write("**[README]** Les textes sélectionnés sont nettoyés (suppression des espaces, ponctuations et mots grammaticaux courants), mis en minuscules et lemmatisés.")
-
+    st.write("**[README]** Les textes sélectionnés sont nettoyés :  \n"
+        "- suppression des espaces superflus et de la ponctuation,  \n"
+        "- suppression des mots grammaticaux courants et de ceux que vous avez ajoutés,  \n"
+        "- mise en minuscules,  \n"
+        "- lemmatisation.")
 
     for col in options:
         missing_data_warning(df, col=col, map=WC_MAP,show_distribution=False)
     st.markdown("<br>", unsafe_allow_html=True)#不容易被 Markdown 渲染压缩掉
 
+
+    # # --------------- only_irg_authors ------------------
+    # only_irg_authors = st.checkbox("Afficher que les auteurs d'IRG ? ", value=False, key="only_irg_authors")
+    # st.markdown("<br>", unsafe_allow_html=True)
+    
     # ----------------- user stopwords ---------------
     user_stopwords = st_tags(
         label="🗷 Ajouter des mots à ignorer",
@@ -91,7 +99,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         st.info('💡​ Les résumés inclus, la fréquence minimale >= 10 recommendée.')
                 # f'Les textes intégraux inclus, la fréquence minimale >= 50 recommendée.')
 
-
     st.markdown("<br>", unsafe_allow_html=True)
     
 
@@ -109,12 +116,15 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     if button:    
         with st.spinner("Générer..."):
-            st.info("Déplacez les mots avec le souri pour une visualisation plus claire.\n\n" \
-                    "la taille des textes représente leur fréquence dans le texte, la largeur de ligne représente leur fréquence avec")
-            
+            st.write(f"[TIPS] Déplacez les mots avec le souri pour une visualisation plus claire.  \n"
+                    f"- la taille des textes représente leur fréquence dans le texte,  \n"
+                    f"- la largeur de ligne représente leur fréquence."
+            )
+
             st.markdown(
                 f"<h3 style='text-align: center;'>Réseau d'occurence auteurs-mots clés</h3>",
                 unsafe_allow_html=True
             ) #居中显示大标题
-            generate_network(df, options, author_structure=author_structure, n=n, stopwords=user_stopwords, min_freq=min_freq)
+            generate_network(df, options=options, stopwords=user_stopwords, author_structure=author_structure, n=n, min_freq=min_freq)
+            # generate_network(df, options, author_structure=author_structure, n=n, stopwords=user_stopwords, min_freq=min_freq)
 

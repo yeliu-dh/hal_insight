@@ -23,7 +23,11 @@ def generate_network(df, options, stopwords, author_structure, n=10, min_freq=2)
     - 'authFullName_s': 字符串，如 'Annick Vignes; Julien Lefournier; Antoine Rieu'
     - 'keyword_s': 字符串，如 'Adjustment strategy; New form of employment'
 
+    MAPPING DICT : author_structure :
+    {authFullName_s:'id_authorprimarystructure'}
+
     """
+
     #=======================================1️⃣ texte==========================================
     COL_MAP={
             "authFullName_s":'authors',
@@ -32,15 +36,29 @@ def generate_network(df, options, stopwords, author_structure, n=10, min_freq=2)
              }
     
     # 把col中的值变成list
-    ## authors 列填nan，按；拆成list，要求authors不为“nan”
+    ## authors列填nan，按；拆成list，要求authors不为“nan”
     def clean_authors(x):
         if isinstance(x, str) and x.strip().lower() not in ['nan', 'none', '']:
             return [a.strip() for a in x.split(';') if a.strip()]
         return []  # 返回空 list
     df['authFullName_s'] = df['authFullName_s'].apply(clean_authors)
+    
+    
+    # ##only_irg_authors?筛选df
+    # IRG_IDS = {"1004418", "57129"}
+
+    # if only_irg_authors:
+    #     df = df[df["authFullName_s"].apply(
+    #         lambda author_list: any(
+    #             author_structure.get(a, None).split('_')[0] in IRG_IDS
+    #             for a in author_list
+    #         )
+    #     )]
 
 
     # ⭐ 筛选options任何一列非空行：
+    # st.write(f"len df AVANT filtrage {len(df)}")
+
     df = df[
     df[options].apply(
             lambda row: any(
@@ -50,9 +68,9 @@ def generate_network(df, options, stopwords, author_structure, n=10, min_freq=2)
             axis=1
         )
     ]
+    # st.write(f"len df APRES filtrage {len(df)}")
 
     # 清洗options列上的值    
- 
     for opt in options:
         # if opt =="keyword_s":#关键词不清洗？
         #     df['keyword_s'] = df['keyword_s'].fillna('nan').apply(lambda x: [k.strip().lower() for k in x.split(';') if k.strip() and str(x).lower() not in ['nan',"none"]])
@@ -206,7 +224,6 @@ def generate_network(df, options, stopwords, author_structure, n=10, min_freq=2)
         return min_size + (freq - min_freq_val) * (max_size - min_size) / (max_freq_val - min_freq_val)
     
     ## ------------------ 设置作者和关键词节点样式 ------------------
-    
     # all_authors = {a for authors in df['authFullName_s'] for a in authors}
 
     # for node in net.nodes:
@@ -285,7 +302,6 @@ def generate_network(df, options, stopwords, author_structure, n=10, min_freq=2)
             # st.warning(f"Edge {src}<->{dst} : weight not found")
         # st.write(src, dst, w)
 
-        
         edge['width'] = scale_size(w, min_w, max_w, min_size=2, max_size=20)
         edge['color'] = 'lightgray'
         edge['title'] = f"Cooccurrence : {int(w)}"
@@ -296,9 +312,39 @@ def generate_network(df, options, stopwords, author_structure, n=10, min_freq=2)
     net.force_atlas_2based()  # 力导向布局
     net.show_buttons(filter_=['physics'])  # 显示物理参数控制
 
-    # Streamlit 显示
-    html_code=net.generate_html()
+
+    # # Streamlit 显示
+    # html_code=net.generate_html()
+    # html(html_code, height=700)
+
+    # 生成原图 HTML
+    html_code = net.generate_html()
+    # 你的图例 HTML（绝对定位）
+    legend_html = """
+    <div style="
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255,255,255,0.9);
+        padding: 10px 14px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+        z-index: 9999;
+    ">
+    <span style="color:red;">■</span> Auteurs IRG (1004418, 57129)<br>
+    <span style="color:royalblue;">■</span> Autres auteurs<br>
+    <span style="color:black;">■</span> Mots-clés<br>
+    <span style="color:gray;">■</span> Arêtes
+    </div>
+    """
+
+    # 将图例注入 <body> 里面
+    html_code = html_code.replace("<body>", "<body>" + legend_html)
+
+    # Streamlit 展示（高度可以调整）
     html(html_code, height=700)
+
 
     #===================下载===================
     html_path = "reseau_auteurs_mots.html"
