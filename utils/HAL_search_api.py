@@ -674,7 +674,7 @@ def process_df(df, DOMAIN_MAP, FNEGE):
     st.write(f"✔ Classements FNEGE mappés!")
 
     #----------处理author_primarystructure-----------
-    st.write(os.getcwd())
+    # st.write(os.getcwd())
     with st.spinner("Chercher la structure primaire de l'auteur selon le nom complet de l'auteur..."):
         author_col='authFullName_s'
         names = set([
@@ -709,7 +709,11 @@ import io
 from datetime import datetime
 
 def save_file_csv_xlsx(df,start_year, start_month, end_year, end_month):
-    
+    if end_year=="aujourd'hui" or end_month=="aujourd'hui":
+        now = datetime.now()
+        current_year, current_month = now.year, now.month
+        end_year, end_month=current_year, current_month
+
     # df = st.session_state.get(session_key, None)
 
     if df is not None and not df.empty:

@@ -17,7 +17,7 @@ from utils.preprocess import preprocess_text
 
 
 
-def generate_network(df, options, stopwords, n=10, min_freq=2):
+def generate_network(df, options, stopwords, author_structure, n=10, min_freq=2):
     """
     df 必须包含两列：
     - 'authFullName_s': 字符串，如 'Annick Vignes; Julien Lefournier; Antoine Rieu'
@@ -205,22 +205,67 @@ def generate_network(df, options, stopwords, n=10, min_freq=2):
             return (min_size + max_size) / 2
         return min_size + (freq - min_freq_val) * (max_size - min_size) / (max_freq_val - min_freq_val)
     
-    # ------------------ 设置节点样式 ------------------
+    ## ------------------ 设置作者和关键词节点样式 ------------------
+    
+    # all_authors = {a for authors in df['authFullName_s'] for a in authors}
+
+    # for node in net.nodes:
+    #     node_id = node['id']
+    #     freq = node_freq.get(node_id, 1)
+    #     scaled = scale_size(freq, min_freq_val, max_freq_val) 
+
+    #     if node_id in all_authors:
+    #         node['shape'] = 'text'
+    #         node['font'] = {'size': scaled, 'color': 'black'}
+    #         node['title'] = f"Auteur : {node_id},Connexions : {freq}"
+    #     else:
+    #         node['shape'] = 'text'
+    #         node['font'] = {'size': scaled, 'color': 'royalblue'}
+    #         node['title'] = f"Mot-clé : {node_id}, Connexions : {freq}"
+    
+    
+    # -------------- 参数设置 --------------
+    IRG_IDS = {"1004418", "57129"}   # IRG 的两个 ID
+
+    # -------------- 取出所有作者 --------------
     all_authors = {a for authors in df['authFullName_s'] for a in authors}
 
+    # -------------- 设置节点样式 --------------
     for node in net.nodes:
-        node_id = node['id']
+        node_id = node["id"]
         freq = node_freq.get(node_id, 1)
-        scaled = scale_size(freq, min_freq_val, max_freq_val) 
+        scaled = scale_size(freq, min_freq_val, max_freq_val)
 
-        if node_id in all_authors:
-            node['shape'] = 'text'
-            node['font'] = {'size': scaled, 'color': 'black'}
-            node['title'] = f"Auteur : {node_id},Connexions : {freq}"
+        # =============================
+        # CASE 1: 关键词节点（不是作者）
+        # =============================
+        if node_id not in all_authors:
+            node["shape"] = "text"
+            node["font"] = {"size": scaled, "color": "black"}
+            node["title"] = f"Mot-clé : {node_id}<br>Connexions : {freq}"
+            continue
+
+        # =============================
+        # CASE 2: 作者节点（需要根据机构染色）
+        # =============================
+        struct_raw = author_structure.get(node_id, "")
+
+        # 提取结构 ID（以 "_" 前部分为 ID）
+        struct_id = struct_raw.split("_")[0] if "_" in struct_raw else ""
+
+        # ———— 根据结构 ID 判断颜色 ————
+        if struct_id in IRG_IDS:
+            color = "red"          # IRG 作者
         else:
-            node['shape'] = 'text'
-            node['font'] = {'size': scaled, 'color': 'royalblue'}
-            node['title'] = f"Mot-clé : {node_id}, Connexions : {freq}"
+            color = "royalblue"    # 其他机构作者
+
+        node["shape"] = "text"
+        node["font"] = {"size": scaled, "color": color}
+        node["title"] = (
+            f"Auteur : {node_id}<br>"
+            f"Institution : {struct_raw}<br>"
+            f"Connexions : {freq}"
+        )
 
 
     # ------------------ 设置边样式 ------------------
