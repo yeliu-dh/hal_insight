@@ -107,6 +107,7 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     # # else:
     # #     fq.append(f'submittedDate_s:[* TO {end_date}]')  # * 表示不限下限
 
+
     # -------------构建搜索条件v2 11/10/25--------------------
     fq = []
     if doc_types:
@@ -140,19 +141,21 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         input = [f'"{t}"' for t in authors]
         fq.append(f'authFullName_s:({" OR ".join(input)})')
 
-    # 日期范围：submittedDate_s不能继续使用！
+    #⭐ 日期范围：submittedDate_s不能继续使用！
+    #如果有起始年月则加入，如果None，不指定
     if start_year and start_month:
         start_date = f"{start_year}-{start_month:02d}-01T00:00:00Z"
     else:
         start_date = None
 
+    #如果有起结束月则加入，如果无，
     if end_year and end_month:
         end_day = calendar.monthrange(end_year, end_month)[1]  # 当月最后一天
         end_date = f"{end_year:04d}-{end_month:02d}-{end_day:02d}T23:59:59Z"
     else:
         raise ValueError("Préciser l'année de fin ou/et le mois de fin!")
-
     
+    ##按日期范围查询：
     if start_date:
         fq.append(f'submittedDate_tdate:[{start_date} TO {end_date}]')#publicationDate_s,modifiedDate_s
         # print(f"PERIODE : {start_date} TO {end_date}")
@@ -334,6 +337,15 @@ def map_domains(codes_str:str=None, map:dict=None):
 
 
 
+
+
+
+
+
+
+
+
+
 #========================================AXE===========================================================#
 def extract_irg_axes(text):
     """
@@ -371,6 +383,14 @@ def add_axe(df,axe_name='Axe'):
     df["classification_s"] = df["classification_s"].apply(extract_irg_axes)
     df=df.rename(columns={"classification_s":axe_name})
     return df
+
+
+
+
+
+
+
+
 
 
 
@@ -436,6 +456,18 @@ def add_classement_fnege(
     return df
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 #===========================================PRIMARYSTRUCTURE===========================================================#
 
 import urllib.parse
@@ -451,9 +483,11 @@ def save_as_json(data, file_path="../json_data/author_primarystructure_s_map.jso
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
     with open (file_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
-    st.markdown(f'[SAVE] Les données sauvegardées / mises à jour :{file_path}!')
+    st.markdown(f'[SAVE] Les données sauvegardées / mises à jour :\n{file_path}!')
     # &nbsp; == a no breaking space
     return 
+
+
 
 def read_json(file_path='../json_data/author_primarystructure_s_map.json'):
     with open (file_path, 'r', encoding="utf-8") as f:
@@ -466,6 +500,9 @@ def get_author_primarystructure(names: list, author_primarystructure_s_map:dict=
     """
     查询作者主要所属机构（Primary Structure），返回一个 dict 映射。
     使用 tqdm 显示查询进度。
+    可能有作者在HAL没有HalId，所以通过fullname查询更加保险？
+
+
     """
     if author_primarystructure_s_map == None:
         author_primarystructure_s_map={}
@@ -603,6 +640,10 @@ def process_df(df, DOMAIN_MAP, FNEGE):
 
 
 
+
+#===========================================DATE DEBUT/FIN DE DEPO？=======================================================#
+
+#===========================================SAVE=======================================================#
 
 
 import io
