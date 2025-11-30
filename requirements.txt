@@ -39,3 +39,6 @@ scikit-learn==1.7.2
 torch>=2.1.0
 sentence-transformers==5.1.2
 hdbscan==0.8.40
+camelot-py==1.0.9
+pypdf==3.17.4
+pdfplumber==0.11.8
