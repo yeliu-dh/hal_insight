@@ -205,8 +205,9 @@ rows_range = list(range(0, 5001))
 max_records = st.selectbox("les premier X articles:", rows_range, index=500)
 
 cutoff_range= list(range(50, 101)) 
-cutoff = st.selectbox("cutoff",cutoff_range , index=cutoff_range.index(80))
-st.write(f"Cutoff (80 par défaut): seuil de similarité pour matcher le titre du journal dans le résultat d'HAL et le classement FNEGE.")
+cutoff = st.selectbox("**Cutoff** pour matcher le classement FNEGE",cutoff_range , index=cutoff_range.index(80))
+st.write(f"Cutoff (80 par défaut):  \n"
+         f"seuil de similarité pour matcher le titre du journal dans le résultat d'HAL et le classement FNEGE.")
 st.markdown("<br>", unsafe_allow_html=True)
 
 

@@ -57,7 +57,7 @@ def missing_data_warning(df, col=None, map:dict=None, show_distribution=False):
         if nb_manquant==0:
             str_manquant=f"**{col_readable}** sont disponibles dans toutes les lignes.\n\n"
         else :
-            str_manquant=f"Les **{col_readable}** sont manquants dans {df[col].isna().sum()} ({df[col].isna().sum()*100/len(df):.2f}%) articles! \n\n"
+            str_manquant=f"**{col_readable}** sont manquants dans {df[col].isna().sum()} ({df[col].isna().sum()*100/len(df):.2f}%) articles! \n\n"
         st.markdown(f"[INFO] {str_manquant}")
 
         # 是否显示分布
