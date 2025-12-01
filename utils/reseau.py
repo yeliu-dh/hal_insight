@@ -332,13 +332,15 @@ def generate_network(df, options, stopwords, author_structure, n=10, min_freq=2)
         font-size: 14px;
         z-index: 9999;
     ">
-    <span style="color:red;">■</span> Auteurs IRG (1004418, 57129)<br>
+    <span style="color:red;">■</span> Auteurs IRG <br>
     <span style="color:royalblue;">■</span> Autres auteurs<br>
     <span style="color:black;">■</span> Mots-clés<br>
     <span style="color:gray;">■</span> Arêtes
     </div>
     """
+    ## auteurs irg  (1004418, 57129)
 
+    
     # 将图例注入 <body> 里面
     html_code = html_code.replace("<body>", "<body>" + legend_html)
 

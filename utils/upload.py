@@ -64,18 +64,15 @@ def missing_data_warning(df, col=None, map:dict=None, show_distribution=False):
         if show_distribution:
             df=explode_by_col(df, col=col)
             dist = df[col].value_counts(normalize=True)* 100
-            dist_str = "\n".join([f" - {k}: {v:.1f}%" for k, v in dist.items()])
+            dist_str = "; ".join([f"{k}: {v:.1f}%" for k, v in dist.items()])
+            st.write(f"{dist_str}")
+
         # else :
         #     dist_str=" "
    
         # st.info (f"**Values**: {str_manquant} \n\n"
         #          f"Distribution : {dist_str}")
         # st.markdown(f"**Values :** {str_manquant}\n\n**Distribution :**\n{dist_str}")#mkd更好控制分行和格式
-            st.markdown(f"""
-            **Distribution :**  
-            {dist_str}
-            """)
-
 
     return
 

@@ -40,19 +40,22 @@ st.set_page_config(page_title="HAL insight", page_icon="🛸",layout='wide')
 
 #====================CACHE=========================#
 @st.cache_data 
-def get_mappings(mapping_folder='json_data'):
+def get_mappings_json(mapping_folder='external_data'):
     return {
         "DOMAIN_MAP": load_external_json(f"{mapping_folder}/domain_map.json"),
         "LANG_MAP": load_external_json(f"{mapping_folder}/lang_map.json"),
         "DOC_TYPE_MAP": load_external_json(f"{mapping_folder}/doctype_map.json"),
-        "FNEGE": load_external_json(f"{mapping_folder}/classement_fnege.json"),#/classement.json
     }
-
-maps = get_mappings()
+maps = get_mappings_json()
 DOMAIN_MAP = maps["DOMAIN_MAP"]
 LANG_MAP = maps["LANG_MAP"]
 DOC_TYPE_MAP = maps["DOC_TYPE_MAP"]
-FNEGE=maps['FNEGE']
+
+
+def get_mappings_csv(mapping_folder='external_data'):
+    data=pd.read_csv(f"{mapping_folder}/fnege_final_clean.csv")
+    return data
+FNEGE_MAP=get_mappings_csv()
 
 
 st.title("Hal Articles Fetcher")
@@ -201,6 +204,9 @@ fields = st.multiselect(
 rows_range = list(range(0, 5001))
 max_records = st.selectbox("les premier X articles:", rows_range, index=500)
 
+cutoff_range= list(range(50, 101)) 
+cutoff = st.selectbox("cutoff",cutoff_range , index=cutoff_range.index(80))
+st.write(f"Cutoff (80 par défaut): seuil de similarité pour matcher le titre du journal dans le résultat d'HAL et le classement FNEGE.")
 st.markdown("<br>", unsafe_allow_html=True)
 
 
@@ -246,7 +252,7 @@ if search_button:# and not invalid_date
 
     #================处理domain, axe, fnenge, primarystructure================ 
     try :
-        df= process_df(df, DOMAIN_MAP, FNEGE)
+        df= process_df(df, DOMAIN_MAP, FNEGE_MAP, cutoff)
     except Exception as e:
         st.warning (f"ERROR in process_df :\n {e}")   
     st.divider()
@@ -257,7 +263,6 @@ if search_button:# and not invalid_date
         st.success(f"✅ {len(df)} articles trouvés!\n\n"
                     f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")    
         st.dataframe(df)
-        missing_data_warning(df, col='files_s',map={"files_s":"PDF liens"})
         st.write()
 
         #---------------- SAVE TO SESSION----------------
@@ -292,9 +297,12 @@ if df is not None and not df.empty:
     st.divider()
 
     st.subheader("📄 Extraire le texte intégral")
+    missing_data_warning(df, col='files_s',map={"files_s":"PDF liens"})
+
     st.write("Attention : tous les URLs ne permettent pas forcément d'extraire le texte intégral. "
             "Certaines URLs peuvent être invalides ou ne pas pointer vers un PDF."
             )
+
                 
     cols=st.columns([4,1])
     with cols[1]:

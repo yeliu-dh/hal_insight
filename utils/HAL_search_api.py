@@ -396,10 +396,6 @@ def map_domains(codes_str:str=None, map:dict=None):
 
 
 
-
-
-
-
 #========================================AXE===========================================================#
 def extract_irg_axes(text):
     """
@@ -430,7 +426,7 @@ def extract_irg_axes(text):
     return None
 
 
-def add_axe(df,axe_name='Axe'):
+def clean_axe_from_classification(df,axe_name='Axe'):
     """   
     整理成字符串数字，列名改为Axe
     """
@@ -456,6 +452,16 @@ from typing import Dict, Any #Python 类型注解模块 typing 里的类型提�
 from rapidfuzz import process
 import unicodedata
 import re
+from typing import Dict, Any
+
+
+# def clean_ponc(s):  
+#     s=s.strip().lower()
+#     clean_s=re.sub(r"[^\w\s]","", s)
+#     # \w\s → 匹配所有字母、数字、下划线、空白的字符（即标点符号）。
+#     # ^ 表示取反
+#     return clean_s
+
 
 # --------------------------
 # 字符串归一化
@@ -467,15 +473,27 @@ def normalize(text: str) -> str:
     text = unicodedata.normalize("NFKD", text)
     text = "".join(c for c in text if not unicodedata.combining(c))
     text = re.sub(r"[^\w\s]", "", text)  # 去掉标点
+
     return text
+
+
+def normalize_journal(name: str) -> str:
+    """清洗 journal 名称，方便 fuzzy 匹配"""
+    if not name:
+        return ""
+    name = str(name).lower().strip()
+    name = re.sub(r"[^\w\s]", "", name)  # 去掉标点
+    name = re.sub(r"\s+", " ", name)     # 合并多余空格
+    return name
 
 
 
 # --------------------------
 # 模糊匹配期刊名
 # --------------------------
-def fuzzy_lookup(journal_name: str, mapping: dict, cutoff: int = 85) -> str:
+def fuzzy_lookup(journal_name: str, mapping: dict, cutoff: int = 70) -> str:
     """
+    清洗检索结果csv中的journal_name("journalTitle_s")
     返回最匹配的期刊排名，如果匹配不到则返回 None
     """
     if not journal_name or not mapping:
@@ -492,31 +510,153 @@ def fuzzy_lookup(journal_name: str, mapping: dict, cutoff: int = 85) -> str:
     return None
 
 
+
+# def nearest_fnege_year(pub_year_str):
+#     if pd.isna(pub_year_str):
+#         return None
+#     # 找小于等于 pub_year 的最近年份
+    
+#     fnege_years = [2011, 2013, 2016, 2019, 2022]
+#     pub_year=int(pub_year_str[:4])
+#     candidates = [y for y in fnege_years if y <= pub_year]
+#     if not candidates:
+#         return fnege_years[0]  # 如果年份早于最早的 FNEGE，则用最早年份
+#     return max(candidates)
+
+
+
+def nearest_fnege_year(pub_year_raw):
+    FNEGE_YEARS = [2011, 2013, 2016, 2019, 2022]
+
+    # 处理缺失
+    if pd.isna(pub_year_raw):
+        return None
+
+    # 处理 datetime / Timestamp
+    if isinstance(pub_year_raw, (pd.Timestamp, datetime)):
+        pub_year = getattr(pub_year_raw, "year", None)
+    else:
+        s = str(pub_year_raw).strip()
+        # 从字符串中提取第一个四位年份
+        m = re.search(r'(\d{4})', s)
+        if not m:
+            return None
+        pub_year = int(m.group(1))
+
+    # 找最近且小于等于 pub_year 的 fnege 年份
+    candidates = [y for y in FNEGE_YEARS if y <= pub_year]
+    return max(candidates) if candidates else FNEGE_YEARS[0]
+
+
 def add_classement_fnege(
     df: pd.DataFrame,
+    fnege_df: pd.DataFrame,
     journal_col: str = "journalTitle_s",
-    map: Dict[str, Any] = None, ## 表示 mapping 是一个字典，key 是字符串，value 可以是任意类型  
-    cl_name: str = 'Cl. FNEGE',
-    cutoff: int = 85
+    year_col: str = "publicationDate_s",
+    cl_name: str = 'cl_fnege',
+    cutoff: int = 80
 ) -> pd.DataFrame:
+    """
+    给搜索结果 DataFrame 增加 FNEGE 排名列
     
-    col_cl = df[journal_col].apply(lambda x: fuzzy_lookup(x, map, cutoff=cutoff))
-    
-    # 找到 journalTitle_s 的列索引
-    idx = df.columns.get_loc(journal_col)
+    - df: 搜索结果 DataFrame
+    - fnege_df: 清洗后的 FNEGE 数据，列名如 rang_2011, rang_2013 ...
+    - journal_col: 搜索结果中的期刊名称列
+    - year_col: 搜索结果中的发表日期列
+    - cl_name: 新增列名
+    - cutoff: fuzzy 匹配阈值
+    """
 
-    # 插入列到 journalTitle_s 后面
-    df.insert(loc=idx+1, column=cl_name, value=col_cl)
+    # 构建 fuzzy lookup mapping: key = 再次清洗后的 journal, value = 原始整行字典
+    fnege_mapping = {normalize_journal(r['journal']): r.to_dict() for _, r in fnege_df.iterrows()}
+
+    #pub_yer:
+    df['fnege_year'] = df[year_col].apply(nearest_fnege_year)
+
+    #cl_fnege
+    classement_list = []
+    for _, row in df.iterrows():
+        #不为nan且strip后不为空：
+        if pd.notna(row[journal_col] and str(row[journal_col]).strip()):
+            fnege_year=row['fnege_year']
+
+            # fuzzy lookup寻找对应的 journal名
+            journal_name = row.get(journal_col, "")
+            matched_row = fuzzy_lookup(journal_name, fnege_mapping, cutoff=cutoff)
+
+            # 再在这一行上寻找 对应年份的排名
+            rang_value = None
+            if matched_row and fnege_year:
+                rang_col = f"rang_{fnege_year}"
+                rang_value = matched_row.get(rang_col, None)
+        else:
+            # print('no journal title')
+            rang_value=None
+
+        classement_list.append(rang_value)
+
+    # 插入新列
+    idx = df.columns.get_loc(journal_col)
+    df.insert(loc=idx + 1, column=cl_name, value=classement_list)
+
     return df
 
 
 
+# def add_classement_fnege(
+#     df: pd.DataFrame,
+#     fnege_df: pd.DataFrame,
+#     journal_col: str = "journalTitle_s",
+#     year_col: str = "publicationDate_s",
+#     cl_name: str = 'cl_fnege',
+#     cutoff: int = 85
+#     ) -> pd.DataFrame:
+
+#     # 先把 fnege_df 的 journal 做 normalize，用于 fuzzy 匹配
+#     fnege_mapping = {}
+#     for _, row in fnege_df.iterrows():
+#         fnege_mapping[row['journal']] = row.to_dict()  # key: 原始 journal 名, value: 整行字典
+    
+#     classement_list = []
+#     for _, row in df.iterrows():
+#         pub_year = str(row[year_col])[:4]  # 取年份
+#         journal_name = row[journal_col]
+        
+#         # fuzzy lookup 找最接近的 fnege journal
+#         matched_row = fuzzy_lookup(journal_name, fnege_mapping, cutoff=cutoff)
+        
+#         if matched_row:
+#             # matched_row 是 fnege_mapping 中的字典
+#             # 动态取年份对应的排名
+#             rang_col = f"rang_{pub_year}"
+#             rang_value = matched_row.get(rang_col, None)
+#             classement_list.append(rang_value)
+#         else:
+#             classement_list.append(None)
+    
+#     # 插入新列到 journal_col 后
+#     idx = df.columns.get_loc(journal_col)
+#     df.insert(loc=idx+1, column=cl_name, value=classement_list)
+    
+#     return df
 
 
+# def add_classement_fnege(
+#     df: pd.DataFrame,
+#     journal_col: str = "journalTitle_s",
+#     fnege_df: Dict[str, Any] = None, ## 表示 mapping 是一个字典，key 是字符串，value 可以是任意类型  
+#     cl_name: str = 'cl_fnege',
+#     cutoff: int = 85
+# ) -> pd.DataFrame:
+    
+#     col_cl = df[journal_col].apply(lambda x: fuzzy_lookup(x, fnege_df, cutoff=cutoff))
+    
+#     # 找到 journalTitle_s 的列索引
+#     idx = df.columns.get_loc(journal_col)
 
-
-
-
+#     # 插入列到 journalTitle_s 后面
+#     df.insert(loc=idx+1, column=cl_name, value=col_cl)
+#     return df
 
 
 
@@ -537,7 +677,7 @@ def save_as_json(data, file_path="../json_data/author_primarystructure_s_map.jso
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
     with open (file_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
-    st.markdown(f'[SAVE] Les données sauvegardées / mises à jour :\n{file_path}!')
+    # st.markdown(f'[SAVE] Les données sauvegardées / mises à jour :\n{file_path}!')
     # &nbsp; == a no breaking space
     return 
 
@@ -652,7 +792,7 @@ def add_primarystructure(df, author_primarystructure_s_map):
 
 
 ##集合处理：
-def process_df(df, DOMAIN_MAP, FNEGE):
+def process_df(df, DOMAIN_MAP, FNEGE_MAP, cutoff):
     """
     todo：增加methodologie！
 
@@ -664,14 +804,37 @@ def process_df(df, DOMAIN_MAP, FNEGE):
 
     #----------处理axe----------------------
     if "classification_s" in df.columns:
-        df=add_axe(df)
+        df=clean_axe_from_classification(df)
     st.write(f"✔ Axes nettoyés!")
 
-
     #--------- 处理fnege----------------
-    if "journalTitle_s" in df.columns:
-        df= add_classement_fnege(df, journal_col='journalTitle_s', map=FNEGE, cl_name='Cl.FNEGE')
-    st.write(f"✔ Classements FNEGE mappés!")
+    # if "journalTitle_s" in df.columns:
+    #     df= add_classement_fnege(df, journal_col='journalTitle_s', fnege_df=FNEGE_MAP, cl_name='Cl.FNEGE')
+    # st.write(f"✔ Classements FNEGE mappés!")
+
+
+    if "journalTitle_s" in df.columns and "publicationDate_s" in df.columns :
+        # df=add_classement_fnege(
+        #     df=df,
+        #     fnege_df=FNEGE_MAP,
+        #     journal_col= "journalTitle_s",
+        #     year_col = "publicationDate_s",
+        #     cl_name = 'cl_fnege',
+        #     cutoff = 85
+        # )
+        
+        df=add_classement_fnege(
+            df,fnege_df=FNEGE_MAP,
+            journal_col = "journalTitle_s",
+            year_col= "publicationDate_s",
+            cl_name = 'cl_fnege',
+            cutoff = cutoff
+        ) 
+        missing_data_warning(df, col='fnege_year')
+        missing_data_warning(df, col='cl_fnege')
+
+    st.write(f"✔ Classements FNEGE de la date de publication mappés!")
+
 
     #----------处理author_primarystructure-----------
     # st.write(os.getcwd())
@@ -684,13 +847,14 @@ def process_df(df, DOMAIN_MAP, FNEGE):
             for n in r[author_col].split(';')
             if n.strip()
         ])
-        author_primarystructure_s_map=update_author_primarystructure_s(names, file_path='json_data/author_primarystructure_s_map.json')
+        author_primarystructure_s_map=update_author_primarystructure_s(names, file_path='external_data/author_primarystructure_s_map.json')
             
         df= add_primarystructure(df, author_primarystructure_s_map)#map
         st.write(f"✔ Structures primaires mappées!")
-
         missing_data_warning(df, col="author_primarystructure_s", show_distribution=False)#check
-        
+
+
+
     return df
 
 
@@ -725,8 +889,9 @@ def save_file_csv_xlsx(df,start_year, start_month, end_year, end_month):
             default_file_name=f"{today_str}-ProductionScientifiqueIRG-{start_year}{start_month}-{end_year}{end_month}_{len(df)}art"
 
             # 用户输入框
+            #\n format par défaut: today--ProductionScientifiqueIRG-start_date-end_date-nb_articles:
             file_name = st.text_input(
-                "Nom du fichier :",  # 提示文字
+                f"Nom du fichier :",  # 提示文字
                 value=default_file_name,            # 默认值
             )
 

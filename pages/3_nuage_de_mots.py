@@ -37,7 +37,7 @@ from utils.wordcloud import generate_keyness_wc
 # stopwords=get_stopwords()
 
 
-# st.set_page_config(page_title="HAL insight", page_icon="🛸")
+st.set_page_config(page_title="HAL insight", page_icon="🛸")
 st.title("☁️ Nuage de mots global / évolutif")
 
 
@@ -76,7 +76,12 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     default=["keyword_s","abstract_s"],  # 默认选择
     format_func=lambda x: WC_MAP[x]#只改变显示
     )
-    st.write("ps.Les textes sélectionnés sont nettoyés (suppression des espaces, ponctuations et mots grammaticaux courants), mis en minuscules et lemmatisés.")
+    # st.write("ps.Les textes sélectionnés sont nettoyés (suppression des espaces, ponctuations et mots grammaticaux courants), mis en minuscules et lemmatisés.")
+    st.write("[README] Les textes sélectionnés sont nettoyés :  \n"
+            "- suppression des espaces superflus et de la ponctuation,  \n"
+            "- suppression des mots grammaticaux courants et de ceux que vous avez ajoutés,  \n"
+            "- mise en minuscules,  \n"
+            "- lemmatisation.")
 
 
     for col in options:
@@ -91,13 +96,14 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     }
 
     wcType = st.radio(
-        "☁️ Type de nuage de mots :",
+        "☁️ Type de nuage de mots:",
         ["wcGlobal", "wcEvolutif"], 
         index=0,
         format_func=lambda x: wcType_MAP.get(x, x), 
 
         horizontal=True
     )
+    st.write(f"Le nuage de mots évolutif est calculé à l'aide de méthode de **keyness**, mettant en évidence les mots dont la fréquence se distingue significativement d’une période à l’autre.")
     st.markdown("<br>", unsafe_allow_html=True)
 
 
@@ -129,7 +135,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     if wcType=="wcGlobal":    
         #---------------可选par langue-------------------
         wc_par_lang = st.checkbox("Afficher par langue ?", value=False, key="wc_lang")#key用于储存在session state中
-        st.write("ps. Si vous choisissez le nuage de mots évolutif, il n’est pas séparé par langue.")
+        st.write("Si vous choisissez le nuage de mots évolutif, il n’est pas séparé par langue.")
         missing_data_warning(df, col="language_s", map={"language_s":'langue'}, show_distribution=True)
 
     else : #wcType=="wcEvolutif"
@@ -174,9 +180,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             )  
             time_slices=create_time_slices(df, granularity=granularity)
     
-            st.info(f"Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).\n\n"
-                    f"Granularité recommandée pour le nuage de mots évolutif: **{suggestion}**. \n\n"
-                    f"Le nuage de mots évolutif est calculé à l'aide de méthode de **keyness**, mettant en évidence les mots caractéristiques de chaque période.")
+            st.info(f"Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).  \n"
+                    f"Granularité recommandée pour le nuage de mots évolutif: **{suggestion}**.  \n"
+                    )
         
         st.markdown("<br>", unsafe_allow_html=True)
         # st.divider()
@@ -184,6 +190,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 
     #--------------exclure nan--------------
+    st.markdown("<br>", unsafe_allow_html=True)
     exclude_nan = st.checkbox("Exclure les lignes sans étiquette d'axe ? ", value=True, key="nan")
     st.divider()
 

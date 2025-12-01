@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import json
 import matplotlib
-
+import re
 import textwrap
 import simplemma
 import re    
@@ -108,7 +108,11 @@ def assign_time_unit(df, date_col="submittedDate_s"):
     return df
 
 
-
+def clean_ponc(s):
+    clean_s=re.sub(r"[^\w\s]","", s)
+    # \w\s → 匹配所有字母、数字、下划线、空白的字符（即标点符号）。
+    # ^ 表示取反
+    return clean_s
 def preprocess_text(text, user_stopwords=None, lang='fr'):
     stopwords_nltk=load_external_json("json_data/stopwords_nltk.json")
     #=>list
