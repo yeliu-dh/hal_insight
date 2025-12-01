@@ -22,15 +22,15 @@ from utils.upload import data_uploader
 from utils.auto_completion import auto_completion_by_sim
 
 
-@st.cache_resource  # ✅ 缓存模型
-def load_embedding_model():
-    return SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")#向量化模型
-embedding_model=load_embedding_model()
+# @st.cache_resource  # ✅ 缓存模型
+# def load_embedding_model(model_name):
+#     return SentenceTransformer(model_name)#向量化模型
 
+# model_name="paraphrase-multilingual-MiniLM-L12-v2"
+# embedding_model=load_embedding_model(model_name)
 
 st.set_page_config(page_title="HAL insight", page_icon="🛸",layout="wide")
 st.title("📃 Auto-completion des axes")
-
 
 
 # -------------------------------
@@ -50,13 +50,25 @@ st.markdown("<br>", unsafe_allow_html=True)
 st.divider() 
 
 
+
 if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None:
     # 若df存在则视为开始
     st.session_state.started=True
     df = st.session_state.uploaded_df.copy()
-    
+
+    model_name = st_tags(
+        label="Model name",
+        text="Tapez et 'Entrée'",
+        value=["paraphrase-multilingual-MiniLM-L12-v2"],
+        maxtags=1
+    )
+    # model_name="paraphrase-multilingual-MiniLM-L12-v2"
+
     st.subheader("🔢 Auto-completion des axes thématiques")
+    st.write(f" [README] L'auto-completion des axes thématique prend en compte des titres, des mots-clés et des résumés,  \n"
+             f"embeddés par le model {model_name}")
     
+
     # 重新计算按钮
     cols=st.columns([4,1])
     with cols[1]:
@@ -67,7 +79,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     # 只有点击按钮或第一次进入才执行
     if st.session_state.get("recompute_completion", True):
         try:
-            df_exploded=auto_completion_by_sim(df, embedding_model)
+            df_exploded=auto_completion_by_sim(df, model_name)
             st.session_state['df_exploded']=df_exploded
         except Exception as e:
             st.error(f"ERROR in 'auto_completion_by_sim' : {e}")

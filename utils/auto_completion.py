@@ -17,11 +17,9 @@ from utils.preprocess import preprocess_text
 from utils.preprocess import explode_by_col
 from utils.plot import make_pie_chart
 
-def auto_completion_by_sim(df, embedding_model):
-    st.write("NB. L'auto-completion des axes thématique prend en compte des titres, des mots-clés et des résumés,\n"
-             "embeddés par le model 'paraphrase-multilingual-MiniLM-L12-v2'.")
-    model=embedding_model
-
+def auto_completion_by_sim(df, model_name="paraphrase-multilingual-MiniLM-L12-v2"):
+    
+    # model=embedding_model
     #=============================step1：clean text=================================
     def safe_get(val):
         return "" if pd.isna(val) else str(val)
@@ -39,7 +37,7 @@ def auto_completion_by_sim(df, embedding_model):
      
     #=============================step2:embedding==================================
     # with st.spinner("Embedding..."):
-    model = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
+    model = SentenceTransformer(model_name)
     df["embedding"] = df["clean_text"].apply(lambda x: model.encode(x))
 
 
