@@ -201,13 +201,15 @@ fields = st.multiselect(
     default=default_fields
 )
 
-rows_range = list(range(0, 5001))
-max_records = st.selectbox("les premier X articles:", rows_range, index=500)
-
 cutoff_range= list(range(50, 101)) 
 cutoff = st.selectbox("**Cutoff** pour matcher le classement FNEGE",cutoff_range , index=cutoff_range.index(80))
-st.write(f"Cutoff (80 par défaut):  \n"
+st.write(f"Cutoff (80 par défaut) :  \n"
          f"seuil de similarité pour matcher le titre du journal dans le résultat d'HAL et le classement FNEGE.")
+st.markdown("<br>", unsafe_allow_html=True)
+
+
+rows_range = list(range(0, 5001))
+max_records = st.selectbox("les premier X articles (valeur maximale:5000):", rows_range, index=500)
 st.markdown("<br>", unsafe_allow_html=True)
 
 
@@ -254,30 +256,59 @@ if search_button:# and not invalid_date
     #================处理domain, axe, fnenge, primarystructure================ 
     try :
         df= process_df(df, DOMAIN_MAP, FNEGE_MAP, cutoff)
+        # desired_order=[]
+        st.success(f"✅ {len(df)} articles trouvés!\n\n"
+                    f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")    
+        
+        #----------------SAVE TO SESSION----------------
+        st.session_state["uploaded_df"] = df  
+        st.session_state["uploaded_df_source"] = "search"
+    
     except Exception as e:
         st.warning (f"ERROR in process_df :\n {e}")   
+        st.divider()
+    
+    
+df = st.session_state.get("uploaded_df", None)
+if df is not None and not df.empty:
+    #----------------------show----------------------
+    st.dataframe(df)
+    st.divider()
+    #----------------------quick check-----------
+    
+    st.write(f"**Aperçu rapide des données:**")
+    cols= df.columns.tolist()
+    col_en_question = st.selectbox("colonne en question", cols, index=cols.index("cl_fnege"))
+    show_distribution= st.checkbox("Afficher la répartition des valeurs ?", value=False, key="col_distribution")#key用于储存在session state中
+    missing_data_warning(df, col=col_en_question, show_distribution=True)
+
     st.divider()
     
 
-    if not df.empty:
-        #----------------------show----------------------
-        st.success(f"✅ {len(df)} articles trouvés!\n\n"
-                    f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")    
-        st.dataframe(df)
-        st.write()
+    #------------------save to local-------------------
+    try :
+        save_file_csv_xlsx(df,start_year, start_month, end_year, end_month)
+    except Exception as e:
+        st.warning (f"ERROR in save_file_csv_xlsx :\n {e}")   
 
-        #---------------- SAVE TO SESSION----------------
-        st.session_state["uploaded_df"] = df  
-        st.session_state["uploaded_df_source"] = "search"
-        
-        #------------------save to local-------------------
-        try :
-            save_file_csv_xlsx(df,start_year, start_month, end_year, end_month)
-        except Exception as e:
-            st.warning (f"ERROR in save_file_csv_xlsx :\n {e}")   
+    st.divider()   
 
+
+    
+
+    # if not df.empty:
+    #     #----------------------show----------------------
+    #     st.success(f"✅ {len(df)} articles trouvés!\n\n"
+    #                 f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")    
+    #     st.dataframe(df)
+    #     st.write()
+
+
+    #     #---------------- SAVE TO SESSION----------------
+    #     st.session_state["uploaded_df"] = df  
+    #     st.session_state["uploaded_df_source"] = "search"
         
-        st.divider()        
+             
 
 
 

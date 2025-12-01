@@ -55,16 +55,16 @@ def missing_data_warning(df, col=None, map:dict=None, show_distribution=False):
         # 是否有缺失：
         nb_manquant=df[col].isna().sum()
         if nb_manquant==0:
-            str_manquant=f"**{col_readable}** sont disponibles dans toutes les lignes.\n\n"
+            str_manquant=f"**{col_readable}** sont disponibles dans toutes les {len(df)} lignes.\n\n"
         else :
-            str_manquant=f"**{col_readable}** sont manquants dans {df[col].isna().sum()} ({df[col].isna().sum()*100/len(df):.2f}%) articles! \n\n"
+            str_manquant=f"**{col_readable}** sont manquants dans {df[col].isna().sum()} ({df[col].isna().sum()*100/len(df):.2f}%) / {len(df)} articles! \n\n"
         st.markdown(f"[INFO] {str_manquant}")
 
         # 是否显示分布
         if show_distribution:
             df=explode_by_col(df, col=col)
             dist = df[col].value_counts(normalize=True)* 100
-            dist_str = "; ".join([f"{k}: {v:.1f}%" for k, v in dist.items()])
+            dist_str = " ; ".join([f"{k} : {v:.1f}%" for k, v in dist.items()])
             st.write(f"{dist_str}")
 
         # else :

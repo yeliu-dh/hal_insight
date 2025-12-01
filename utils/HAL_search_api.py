@@ -806,6 +806,8 @@ def process_df(df, DOMAIN_MAP, FNEGE_MAP, cutoff):
     if "classification_s" in df.columns:
         df=clean_axe_from_classification(df)
     st.write(f"✔ Axes nettoyés!")
+    missing_data_warning(df, col='Axe', show_distribution=True)
+
 
     #--------- 处理fnege----------------
     # if "journalTitle_s" in df.columns:
@@ -831,9 +833,9 @@ def process_df(df, DOMAIN_MAP, FNEGE_MAP, cutoff):
             cutoff = cutoff
         ) 
         # missing_data_warning(df, col='fnege_year')
-        missing_data_warning(df, col='cl_fnege')
-
-    st.write(f"✔ Classements FNEGE de la date de publication mappés!")
+        st.write(f"✔ Classements FNEGE de la date de publication mappés!")
+        missing_data_warning(df, col="journalTitle_s", show_distribution=False)
+        missing_data_warning(df, col='cl_fnege', show_distribution=True)
 
 
     #----------处理author_primarystructure-----------
