@@ -56,6 +56,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     st.session_state.started=True
     df = st.session_state.uploaded_df.copy()
 
+
+    # --------------- embedding_model ------------------
     model_name = st_tags(
         label="Model name",
         text="Tapez et 'Entrée'",
@@ -63,6 +65,16 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         maxtags=1
     )
     # model_name="paraphrase-multilingual-MiniLM-L12-v2"
+
+        
+    # --------------- threshold sim pour axe ------------------
+
+    threshold = st.number_input(
+            "⬆️ Threshold de similarité pour matcher un axe:", 
+            min_value=0, max_value=1, value=0.4, step=0.05, key="threshold_sim"
+        )
+    st.markdown("<br>", unsafe_allow_html=True)
+    
 
     st.subheader("🔢 Auto-completion des axes thématiques")
     st.write(f" [README] L'auto-completion des axes thématique prend en compte des titres, des mots-clés et des résumés,  \n"
@@ -79,7 +91,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     # 只有点击按钮或第一次进入才执行
     if st.session_state.get("recompute_completion", True):
         try:
-            df_exploded=auto_completion_by_sim(df, model_name)
+            df_exploded=auto_completion_by_sim(df, model_name, threshold=threshold)
             st.session_state['df_exploded']=df_exploded
         except Exception as e:
             st.error(f"ERROR in 'auto_completion_by_sim' : {e}")

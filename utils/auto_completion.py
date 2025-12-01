@@ -17,9 +17,8 @@ from utils.preprocess import preprocess_text
 from utils.preprocess import explode_by_col
 from utils.plot import make_pie_chart
 
-def auto_completion_by_sim(df, model_name="paraphrase-multilingual-MiniLM-L12-v2"):
+def auto_completion_by_sim(df, model_name, threshold=0.4):
     
-    # model=embedding_model
     #=============================step1：clean text=================================
     def safe_get(val):
         return "" if pd.isna(val) else str(val)
@@ -55,50 +54,54 @@ def auto_completion_by_sim(df, model_name="paraphrase-multilingual-MiniLM-L12-v2
         lambda emb: np.mean(list(emb), axis=0)
     )
 
-    def predict_axes_for_row(row, threshold=0.4):
-        if pd.isna(row["Axe"]):
+    def predict_axes_for_row(row, threshold):
+        if pd.isna(row["Axe"]):#若无axe
             sims = {axe: cosine_similarity([row["embedding"]], [axe_means[axe]])[0][0] for axe in axe_means.index}
             # 返回匹配的 Axe
             return [axe for axe, score in sims.items() if score >= threshold]
         else:
             return [row["Axe"]]
 
-    df["predicted_axe"] = df.apply(lambda row: predict_axes_for_row(row, threshold=0.45), axis=1)
+    df["predicted_axe"] = df.apply(lambda row: predict_axes_for_row(row, threshold), axis=1)
 
     # print(df.Axe.value_counts(dropna=False),'\n')
     # print(df.predicted_axe.value_counts(dropna=False),'\n')
     # missing_data_warning(df, col='original_axe', show_distribution=False)
+    #一篇可能有多个axes超过了 threshold
     df_exploded = df.explode("predicted_axe")
     
-    #==========================快速画图=======================
-    def quick_pie(df,col):
-        counts=df[col].fillna('NaN').value_counts()
-        cmap = cm.get_cmap('viridis')
-        colors = [cmap(i / len(counts)) for i in range(len(counts))]
+    display(df_exploded[["halId_s","docType_s","authFullName_s","title_s","keyword_s","abstract_s","clean_text","original_axe","predicted_axe"]])
 
-        fig, ax = plt.subplots(figsize=(6,6))
-        ax.pie(counts, labels=counts.index, autopct='%1.1f%%', startangle=90, colors=colors)
-        ax.set_title(col)
-        return fig
+
+    # #==========================快速画图=======================
+    # def quick_pie(df,col):
+    #     counts=df[col].fillna('NaN').value_counts()
+    #     cmap = cm.get_cmap('viridis')
+    #     colors = [cmap(i / len(counts)) for i in range(len(counts))]
+
+    #     fig, ax = plt.subplots(figsize=(6,6))
+    #     ax.pie(counts, labels=counts.index, autopct='%1.1f%%', startangle=90, colors=colors)
+    #     ax.set_title(col)
+    #     return fig
     
-    def show_pies(fig1, fig2):
-        st.header("***Comparasion entrte les vrais axes et axes prédits***")
-        cols=st.columns(2)
-        with cols[0]:
-            st.pyplot(fig1)     
-        with cols[1]:
-            st.pyplot(fig2)
-        return 
+    # def show_pies(fig1, fig2):
+    #     st.header("***Comparasion entrte les vrais axes et axes prédits***")
+    #     cols=st.columns(2)
+    #     with cols[0]:
+    #         st.pyplot(fig1)     
+    #     with cols[1]:
+    #         st.pyplot(fig2)
+    #     return 
         
-    if "fig1" not in st.session_state and "fig1" not in st.session_state: 
-        fig1=quick_pie(df,col='Axe')
-        fig2=quick_pie(df_exploded, col='predicted_axe')
-        st.session_state.fig1=fig1
-        st.session_state.fig2=fig2
-        show_pies(fig1, fig2)      
+    # if "fig1" not in st.session_state and "fig1" not in st.session_state: 
+    #     fig1=quick_pie(df,col='Axe')
+    #     fig2=quick_pie(df_exploded, col='predicted_axe')
+    #     st.session_state.fig1=fig1
+    #     st.session_state.fig2=fig2
+    #     show_pies(fig1, fig2)      
 
-    else :
-        show_pies(st.session_state.fig1, st.session_state.fig2)    
+    # else :
+    #     show_pies(st.session_state.fig1, st.session_state.fig2)    
     
     ###点击总结摘要按钮之后也可以保留
 
