@@ -114,7 +114,7 @@ def clean_ponc(s):
     # ^ 表示取反
     return clean_s
 def preprocess_text(text, user_stopwords=None, lang='fr'):
-    stopwords_nltk=load_external_json("json_data/stopwords_nltk.json")
+    stopwords_nltk=load_external_json("external_data/stopwords_nltk.json")
     #=>list
 
     # stopwords==user_stopwords 

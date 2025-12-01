@@ -29,7 +29,7 @@ from utils.plot import make_pie_chart
 # 通过控件加入筛选条件，和保存在session中的数据一起重新输入分析部分的code
 
 # -------------------- 页面配置 --------------------
-# st.set_page_config(page_title="HAL insight", page_icon="🛸",layout="wide")
+st.set_page_config(page_title="HAL insight", page_icon="🛸",layout="wide")
 st.title("📊 Tendance & Répartition")
 
 # -------------------------------
@@ -291,7 +291,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             "domain_s": "Répartition par domaine scientifique",
             "Axe":"Répartition par axe thématique ",
             "journalTitle_s":"Répartition par journal",
-            'Cl. FNEGE':"Répartition par classement du journal"
+            'cl_fnege':"Répartition par classement du journal"
             # "language_s": "Répartition par langue",
             # "country_s": "Répartition par pays"
         }.items():      

@@ -830,7 +830,7 @@ def process_df(df, DOMAIN_MAP, FNEGE_MAP, cutoff):
             cl_name = 'cl_fnege',
             cutoff = cutoff
         ) 
-        missing_data_warning(df, col='fnege_year')
+        # missing_data_warning(df, col='fnege_year')
         missing_data_warning(df, col='cl_fnege')
 
     st.write(f"✔ Classements FNEGE de la date de publication mappés!")
