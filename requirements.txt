@@ -43,3 +43,5 @@ hdbscan==0.8.40
 camelot-py==1.0.9
 pypdf==3.17.4
 pdfplumber==0.11.8
+xgboost==3.1.2
+imbalanced-learn==0.14.0

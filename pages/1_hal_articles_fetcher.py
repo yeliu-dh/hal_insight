@@ -280,7 +280,7 @@ if df is not None and not df.empty:
     cols= df.columns.tolist()
     col_en_question = st.selectbox("colonne en question", cols, index=cols.index("cl_fnege"))
     show_distribution= st.checkbox("Afficher la répartition des valeurs ?", value=False, key="col_distribution")#key用于储存在session state中
-    missing_data_warning(df, col=col_en_question, show_distribution=True)
+    missing_data_warning(df, col=col_en_question, show_distribution=show_distribution)
 
     st.divider()
     
