@@ -57,11 +57,11 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     default=["keyword_s","abstract_s"],  # 默认选择
     format_func=lambda x: WC_MAP[x]#只改变显示
     )
-    # st.write("**[README]** Les textes sélectionnés sont nettoyés :  \n"
-    #     "- suppression des espaces superflus et de la ponctuation,  \n"
-    #     "- suppression des mots grammaticaux courants et de ceux que vous avez ajoutés,  \n"
-    #     "- mise en minuscules,  \n"
-    #     "- lemmatisation.")
+    st.write("**[README]** Les textes sélectionnés sont nettoyés :  \n"
+        "- suppression des espaces superflus et de la ponctuation,  \n"
+        "- suppression des mots grammaticaux courants et de ceux que vous avez ajoutés,  \n"
+        "- mise en minuscules,  \n"
+        "- lemmatisation.")
 
     for col in options:
         missing_data_warning(df, col=col, map=WC_MAP,show_distribution=False)
