@@ -63,7 +63,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         text="Tapez et 'Entrée'",
         value=["paraphrase-multilingual-MiniLM-L12-v2"],
         maxtags=1
-    )N
+    )
     # model_name="paraphrase-multilingual-MiniLM-L12-v2"
 
         

@@ -39,9 +39,12 @@ from utils.plot import make_pie_chart
 
 
 def split_axe(df):
+    # fillna
+    df['Axe']=df['Axe'].fillna("nan")
+    df_clean=df.copy()
     #dropna
-    df_clean = df[(df["Axe"].notna())&(df['Axe']!='nan')].copy()#去掉nan
-    print(f"len df notna : {len(df)} => {len(df_clean)}")
+    # df_clean = df[(df["Axe"].notna())&(df['Axe']!='nan')].copy()#去掉nan
+    # print(f"len df notna : {len(df)} => {len(df_clean)}")
     # print(df_clean['Axe'].value_counts())
 
     axe_map = {
@@ -100,18 +103,84 @@ def group_text(df, cols, new_col='col_text'):
 
 
 
-def emb_text(df, model, col_text, col_emb, pq_path):
+# def emb_text(df, model=None, batch_size=32, col_text=None, col_emb=None, pq_path=None):
+#     # print("fillna(' ')")
 
-    start_time=time.time()
-    texts = df[col_text].astype(str).tolist()
+#     df[col_text] = df[col_text].fillna("")
 
-    emb = model.encode(texts, batch_size=32, show_progress_bar=True, normalize_embeddings=True)
-    df[col_emb] = list(emb)
+#     if model==None:
+#         from sentence_transformers import SentenceTransformer
+#         model = SentenceTransformer("BAAI/bge-m3")
 
-    df.to_parquet(pq_path, index=False)
-    end_time=time.time()
-    print(f"[SAVE] emd saved to {pq_path} : {end_time-start_time:.2f} sec!")
+#     start_time=time.time()
+#     texts = df[col_text].astype(str).tolist()
+
+#     emb = model.encode(texts, batch_size=batch_size, show_progress_bar=True, normalize_embeddings=True)
+#     print(f"emb shape :{emb.shape}")
+#     #显式指定batch_size=batch_size，不然batchsize在第二位传入可能会被认为是prompt_name!
+#     df[col_emb] = list(emb)
+
+#     df.to_parquet(pq_path, index=False)
+#     end_time=time.time()
+    
+#     print(f"[SAVE] emd saved to {pq_path} : {end_time-start_time:.2f} sec!")
+#     return df
+
+
+def emb_text(df, model=None, batch_size=32, col_text=None, col_emb=None, pq_path=None):
+    import numpy as np
+    import time
+
+    # 初始化模型（如果没有传入）
+    if model is None:
+        from sentence_transformers import SentenceTransformer
+        model = SentenceTransformer("BAAI/bge-m3")
+
+    # 获取 embedding 维度（BGE-m3 = 1024）
+    emb_dim = model.get_sentence_embedding_dimension()
+
+    # Fill NaN
+    df[col_text] = df[col_text].fillna("")
+
+    # 分离空文本和非空文本
+    mask_empty = df[col_text].str.strip() == ""
+    mask_nonempty = ~mask_empty
+
+    texts_nonempty = df.loc[mask_nonempty, col_text].astype(str).tolist()
+
+    # Encode 只有非空文本
+    print(f"Encoding {len(texts_nonempty)} non-empty texts...")
+    start_time = time.time()
+    emb_nonempty = model.encode(
+        texts_nonempty,
+        batch_size=batch_size,
+        normalize_embeddings=True,
+        show_progress_bar=True
+    )
+    end_time = time.time()
+
+    print(f"[ENCODE] done. Shape = {emb_nonempty.shape}. Time: {end_time-start_time:.2f} sec")
+
+    # 创建最终 embedding 列
+    emb_all = np.zeros((len(df), emb_dim), dtype=np.float32)
+
+    # 对非空文本填入真实 embedding
+    emb_all[mask_nonempty.values] = emb_nonempty
+
+    # 对空文本保持 zero vector（默认）
+    #[0,0,0,...,0]（更好的指示 "无信息"）
+
+    df[col_emb] = list(emb_all)
+
+    # 保存 parquet
+    if pq_path is not None:
+        df.to_parquet(pq_path, index=False)
+        print(f"[SAVE] embeddings saved to {pq_path}")
+
     return df
+
+
+
 
 
 
@@ -148,12 +217,6 @@ def get_best_n_clusters(df, col_emb='embedding', max_k=5):
     print(f"{len(df)} texts => best_n_clusters :{best_n_clusters}")
     
     return best_n_clusters
-
-
-
-
-
-
 
 
 
@@ -199,13 +262,52 @@ def kmeans_2Dpca(df,best_n_clusters, col_emb="embedding"):
 
 
 
+def oversampling(X_train, y_train):
+    from collections import Counter
+
+    # 计算每个类的样本数量
+    class_counts = y_train.sum(axis=0)
+    print(f"[INFO] y_train before oversampling:{class_counts}")
+    max_count = class_counts.max()# → 取最多样本的类别作为目标数量。
+    # 动态确定每类需要增加多少:每个类别需要复制多少次才能接近最大数量。
+    # multipliers = np.ceil(max_count / (class_counts + 1e-5)).astype(int)
+    
+    
+    # 避免复制太多：
+    target_count = int(max_count * 0.6)
+    multipliers = np.ceil(target_count / (class_counts + 1e-5)).astype(int)
+    
+    max_mult = 5  # 每个少数类最多增加 5 倍
+    multipliers = np.minimum(multipliers, max_mult)
+
+
+    oversampled_rows = []
+    for c, mult in enumerate(multipliers):
+        if mult <= 1:
+            continue
+        mask = y_train[:, c] == 1
+        rows_to_duplicate = X_train[mask]
+        labels_to_duplicate = y_train[mask]
+        
+        # 复制 N 次
+        for _ in range(mult-1):
+            oversampled_rows.append((rows_to_duplicate, labels_to_duplicate))
+
+    # 拼接到训练集
+    for X_dup, y_dup in oversampled_rows:
+        X_train = np.vstack([X_train, X_dup])
+        y_train = np.vstack([y_train, y_dup])
+    
+    new_counts = y_train.sum(axis=0)
+    print("After oversampling:", new_counts)
+
+    return X_train, y_train
 
 
 
 
 
-
-def mlp_multilabels(X_train,X_val,y_train, y_val, batch_size=32,dropout=0.5,n_epochs = 30, model_path="../model/best_mlp.pt"):
+def mlp_multilabels(X_train,X_val,y_train, y_val, batch_size=32,dropout=0.5,n_epochs = 30, patience=5, to_oversampling=True, model_path="../model/best_mlp.pt"):
     import pandas as pd
     import numpy as np
     import torch
@@ -227,6 +329,9 @@ def mlp_multilabels(X_train,X_val,y_train, y_val, batch_size=32,dropout=0.5,n_ep
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
     device = "cuda" if torch.cuda.is_available() else "cpu"
+    # 
+    if to_oversampling==True:
+        X_train, y_train=oversampling(X_train, y_train)
 
     # #优化1：weight for BCE loss
     # # y_train 是二值矩阵 [N,4]
@@ -258,8 +363,7 @@ def mlp_multilabels(X_train,X_val,y_train, y_val, batch_size=32,dropout=0.5,n_ep
     # train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 
 
-    ## 给少类别重采样：oversampling
-    from torch.utils.data import DataLoader, WeightedRandomSampler
+    # 动态更新 sample_weights
     class_counts = y_train.sum(axis=0)
     # # OPT0: 每个样本的 weight = 1 / class count
     # class_weights = 1.0 / class_counts
@@ -277,8 +381,12 @@ def mlp_multilabels(X_train,X_val,y_train, y_val, batch_size=32,dropout=0.5,n_ep
     # OPT2 :epsilon+clip
     epsilon = 1e-2
     class_weights = 1.0 / (class_counts + epsilon)
-    sample_weights = (y_train * class_weights).sum(axis=1) 
-    sample_weights = np.clip(sample_weights, 0.001, 5.0)
+    # sample_weights = (y_train * class_weights).sum(axis=1) 
+    sample_weights = (y_train * class_weights).max(axis=1) # 每条样本只取 最高的少数类权重，不会被多数类稀释
+    sample_weights = np.clip(sample_weights, 0.001, 10.0)
+    ## clip : 5=> 10
+    #sample_weights是每一条的权重，但大多被压缩到了0.001!    
+    print("min:", sample_weights.min(), "max:", sample_weights.max(), "mean:", sample_weights.mean())
 
     #将w加入sampler
     sampler = WeightedRandomSampler(
@@ -287,6 +395,10 @@ def mlp_multilabels(X_train,X_val,y_train, y_val, batch_size=32,dropout=0.5,n_ep
         replacement=True
     )
     train_loader = DataLoader(train_dataset, batch_size=batch_size, sampler=sampler)
+
+
+    # 给少类别重采样：oversampling
+
 
     # for batch_X, batch_y in train_loader:
     #     print(batch_X.shape, batch_y.shape)  # 应该是 [32, 1024], [32, 4]
@@ -313,6 +425,25 @@ def mlp_multilabels(X_train,X_val,y_train, y_val, batch_size=32,dropout=0.5,n_ep
 
         def forward(self, x):
             return self.net(x)# logits
+
+    #更适合3072维输入
+    # class MultiLabelMLP(torch.nn.Module):
+    #     def __init__(self, input_dim, dropout=0.5):
+    #         super().__init__()
+    #         self.net = torch.nn.Sequential(
+    #             torch.nn.Linear(input_dim, 1024),
+    #             torch.nn.ReLU(),
+    #             torch.nn.Dropout(dropout),
+
+    #             torch.nn.Linear(1024, 512),
+    #             torch.nn.ReLU(),
+    #             torch.nn.Dropout(dropout),
+
+    #             torch.nn.Linear(512, 4)
+    #         )
+
+    #     def forward(self, x):
+    #         return self.net(x)
 
 
     # -------------------------------
@@ -348,11 +479,12 @@ def mlp_multilabels(X_train,X_val,y_train, y_val, batch_size=32,dropout=0.5,n_ep
     criterion = FocalLoss(alpha=0.5, gamma=2)
 
 
-    #优化四:
+
     # -------- early stopping ----------
-    best_f1 = 0
-    patience = 3
-    stops = 0
+    # best_f1 = 0
+    best_f1_overall = 0.0  # 初始 F1 设为 0，保证任何有效的 F1 都会更新
+    best_t_overall = None  # 初始化为空列表或 None
+    stops = 0              # 用于 early stopping
 
     for epoch in range(n_epochs):
         # ---------------- train ----------------
@@ -389,59 +521,96 @@ def mlp_multilabels(X_train,X_val,y_train, y_val, batch_size=32,dropout=0.5,n_ep
         val_loss /= len(val_loader.dataset)
         all_probs = np.vstack(all_probs)        # ← 这里是验证集所有概率
         all_labels = np.vstack(all_labels)      # ← 这里是验证集所有真实标签
-        
+    
+
         # ----- Per-class threshold tuning -----
+        #得到最好的阈值
         best_t_per_class = []
-        for c in range(all_labels.shape[1]):
-            best_f1, best_t = 0, 0.5
-            for t in np.arange(0.05, 0.80, 0.01):
-                preds_t = (all_probs[:, c] >= t).astype(int)
-                # f1 = f1_score(all_labels[:, c], preds_t)
-                # f1_score 对只有 0 或 1 的类可能报 warning，可加 zero_division=0
-                f1 = f1_score(all_labels[:, c], preds_t, zero_division=0)
+        for c in range(all_labels.shape[1]):  # 遍历每个类别
+            best_f1, best_t = 0, 0.5          # 初始化当前类别在这个 epoch 下的最佳 F1 和阈值
+            for t in np.arange(0.05, 0.80, 0.01):  # 遍历可能的阈值
+                preds_t = (all_probs[:, c] >= t).astype(int)  # 用 t 对概率进行二值化
+                f1 = f1_score(all_labels[:, c], preds_t, zero_division=0)  # 计算 F1
+                if f1 > best_f1:  # 如果当前阈值 F1 更好
+                    best_f1, best_t = f1, t  # 更新当前类别最佳阈值
+            best_t_per_class.append(best_t)  # 保存这个 epoch 下当前类别的最佳阈值
 
-                if f1 > best_f1:
-                    best_f1, best_t = f1, t
-            best_t_per_class.append(best_t)
-        #在每一轮打印的 best_t_per_class 只是用来观察当前 epoch 模型在不同阈值下的表现趋势，它 并没有被实际用于训练或梯度计算。
-        #在prediction才会用到！
+        # => best_t_per_class 是 当前 epoch 中每个类别的最佳阈值集合。
+
+
+        # 在每一轮打印的 best_t_per_class 只是用来观察当前 epoch 模型在不同阈值下的表现趋势，它 并没有被实际用于训练或梯度计算。
+        # 在prediction才会用到！
         # print("Best thresholds per class:", best_t_per_class)
-
-
         # 默认阈值 0.4；后续会改成 best_t_per_class
         # preds_bin = (all_probs >= 0.4).astype(int)
         # f1_macro = f1_score(all_labels, preds_bin, average='macro')
+        
+        #计算这一轮的F1
         preds_bin = np.zeros_like(all_probs)
         for c, t in enumerate(best_t_per_class):
             preds_bin[:, c] = (all_probs[:, c] >= t).astype(int)
         f1_macro = f1_score(all_labels, preds_bin, average='macro')
-
         print(f"Epoch {epoch+1}/{n_epochs} | Train Loss: {train_loss:.4f} | Val Loss: {val_loss:.4f} | F1_macro: {f1_macro:.4f}\n")
-
-
-        # 默认阈值 0.4；后续再进行 per-class tuning
-        # preds_bin = (all_probs >= 0.4).astype(int)
-        # f1_micro = f1_score(all_labels, preds_bin, average='macro')
-        # print(f"Epoch {epoch+1}/{n_epochs} | Train Loss: {train_loss:.4f} | Val Loss: {val_loss:.4f} | F1_micro: {f1_micro:.4f}")
-
+    
+        
         # -------- early stopping ----------
-        if f1_macro > best_f1:
-            best_f1 = f1_macro
+        # 对f1进行平滑，避免多类别F1的波动导致过于早停。方法：对近几轮的F1取平均值与best_f1比较
+        f1_history = []  # 存储每轮 F1
+        k = 3            # 平滑窗口大小
+        # 每个 epoch 计算 F1
+        f1_history.append(f1_macro)
+
+        # 计算滑动平均
+        if len(f1_history) >= k:
+            f1_smooth = np.mean(f1_history[-k:])
+        else:
+            f1_smooth = f1_macro
+
+        # 用平滑后的 F1 判断 early stopping
+        if f1_smooth > best_f1_overall:
+            best_f1_overall = f1_smooth
             stops = 0
-            torch.save(model.state_dict(), model_path)
+            best_t_overall = best_t_per_class.copy()
+
+            torch.save({
+                'model_state_dict': model.state_dict(),
+                'best_t_overall': best_t_overall
+            }, model_path)
         else:
             stops += 1
             if stops >= patience:
                 print("Early stopping triggered.")
                 break
-    return model, best_t_per_class
+        
+        # if f1_macro > best_f1_overall:#如果当前F1最好,则保存模型和best_t_per_class作为 best_t_overall
+        #     best_f1_overall = f1_macro
+        #     stops = 0
+
+        #     best_t_overall = best_t_per_class.copy()
+        #     torch.save({
+        #         'model_state_dict': model.state_dict(),
+        #         'best_t_overall': best_t_overall
+        #     }, model_path)
+
+        #     # torch.save(model.state_dict(), model_path)
+        #     # print(f"[SAVE] MLP model saved to {model_path}!!")
+        # else:
+        #     stops += 1
+        #     if stops >= patience:
+        #         print("Early stopping triggered.")
+        #         break
+
+    print(f"[SAVE] Model et best_t_overall saved to {model_path}!!")
+
+    return model, best_t_overall
 
 
 
-
-
-
-
+        # if f1_macro > best_f1:
+        #     best_f1 = f1_macro
+        #     stops = 0
+        #     torch.save(model.state_dict(), model_path)
+        #     print(f"[SAVE] MLP model saved to {model_path}!!")
 
 
 
@@ -498,9 +667,6 @@ def evaluate_model(preds_val, y_val):
     # per-class report
     print("\nPer-class classification report:")
     print(classification_report(y_val, preds_val, target_names=['axe1','axe2','axe3','axe4']))
-
-
-
 
     # ConfusionMatrixDisplay
     n_classes = y_val.shape[1]
