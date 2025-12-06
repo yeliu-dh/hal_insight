@@ -1,13 +1,16 @@
+# basic:
 import pandas as pd
 import numpy as np
 import streamlit as st
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-import time
+import time, os, sys, importlib
 
+# clustering :
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.metrics import precision_score, recall_score, f1_score, multilabel_confusion_matrix
+from sklearn.metrics import classification_report, precision_recall_curve, confusion_matrix
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 from kneed import KneeLocator
@@ -19,16 +22,22 @@ from sklearn.metrics import silhouette_score
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 
-
-
+# model:
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader, WeightedRandomSampler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
 import random
-import os, sys
-
+from sklearn.linear_model import LogisticRegression
+from sklearn.calibration import CalibratedClassifierCV
+from lightgbm import LGBMClassifier
+from sklearn.preprocessing import StandardScaler
+from imblearn.over_sampling import SMOTE
+from imblearn.under_sampling import RandomUnderSampler
+import lightgbm as lgb
+import joblib
+from sklearn.calibration import calibration_curve
 
 # my utils
 from utils.upload import missing_data_warning
@@ -36,152 +45,6 @@ from utils.preprocess import load_external_json
 from utils.preprocess import preprocess_text
 from utils.preprocess import explode_by_col
 from utils.plot import make_pie_chart
-
-
-def split_axe(df):
-    # fillna
-    df['Axe']=df['Axe'].fillna("nan")
-    df_clean=df.copy()
-    #dropna
-    # df_clean = df[(df["Axe"].notna())&(df['Axe']!='nan')].copy()#去掉nan
-    # print(f"len df notna : {len(df)} => {len(df_clean)}")
-    # print(df_clean['Axe'].value_counts())
-
-    axe_map = {
-        "1": 0,
-        "2": 1,
-        "3": 2,
-        "4": 3
-    }
-
-    def parse_axes(axe_str):
-        # 确保是字符串
-        if pd.isna(axe_str):
-            return [0,0,0,0]
-        # 拆分并 strip
-        labels = str(axe_str).split(";")
-        labels = [s.strip() for s in labels]
-        
-        # 创建 one-hot
-        vec = [0,0,0,0]
-        for lbl in labels:
-            if lbl in axe_map:
-                vec[axe_map[lbl]] = 1
-        return vec
-
-    df_clean["axes_vec"] = df_clean["Axe"].apply(parse_axes)
-    df_clean[['axe1','axe2','axe3','axe4']] = pd.DataFrame(df_clean['axes_vec'].tolist(), index=df_clean.index)
-    # df_clean.head()
-
-    # df_clean['original_axe']=df_clean['Axe']
-    # df_clean=df_clean.explode("Axe")
-    # print(f"df exploded : {len(df_clean)}\n"
-    #       f"{df_clean['Axe'].value_counts()}")
-
-    return df_clean
-
-
-def group_text(df, cols, new_col='col_text'):
-    """
-    将指定的列拼接成一个新的文本列。
-
-    参数:
-    df: pd.DataFrame
-    cols: list, 需要拼接的列名
-    new_col: str, 新生成列的名称
-
-    返回:
-    df: 添加了新列的 DataFrame
-    """
-    def safe_get(val):
-        return "" if pd.isna(val) else str(val)
-
-    df[new_col] = df[cols].apply(lambda row: " ".join(safe_get(row[col]) for col in cols), axis=1)
-    
-    print(f"ALL text NA counts: {df[new_col].isna().value_counts(dropna=False)}\n")
-    return df
-
-
-
-# def emb_text(df, model=None, batch_size=32, col_text=None, col_emb=None, pq_path=None):
-#     # print("fillna(' ')")
-
-#     df[col_text] = df[col_text].fillna("")
-
-#     if model==None:
-#         from sentence_transformers import SentenceTransformer
-#         model = SentenceTransformer("BAAI/bge-m3")
-
-#     start_time=time.time()
-#     texts = df[col_text].astype(str).tolist()
-
-#     emb = model.encode(texts, batch_size=batch_size, show_progress_bar=True, normalize_embeddings=True)
-#     print(f"emb shape :{emb.shape}")
-#     #显式指定batch_size=batch_size，不然batchsize在第二位传入可能会被认为是prompt_name!
-#     df[col_emb] = list(emb)
-
-#     df.to_parquet(pq_path, index=False)
-#     end_time=time.time()
-    
-#     print(f"[SAVE] emd saved to {pq_path} : {end_time-start_time:.2f} sec!")
-#     return df
-
-
-def emb_text(df, model=None, batch_size=32, col_text=None, col_emb=None, pq_path=None):
-    import numpy as np
-    import time
-
-    # 初始化模型（如果没有传入）
-    if model is None:
-        from sentence_transformers import SentenceTransformer
-        model = SentenceTransformer("BAAI/bge-m3")
-
-    # 获取 embedding 维度（BGE-m3 = 1024）
-    emb_dim = model.get_sentence_embedding_dimension()
-
-    # Fill NaN
-    df[col_text] = df[col_text].fillna("")
-
-    # 分离空文本和非空文本
-    mask_empty = df[col_text].str.strip() == ""
-    mask_nonempty = ~mask_empty
-
-    texts_nonempty = df.loc[mask_nonempty, col_text].astype(str).tolist()
-
-    # Encode 只有非空文本
-    print(f"Encoding {len(texts_nonempty)} non-empty texts...")
-    start_time = time.time()
-    emb_nonempty = model.encode(
-        texts_nonempty,
-        batch_size=batch_size,
-        normalize_embeddings=True,
-        show_progress_bar=True
-    )
-    end_time = time.time()
-
-    print(f"[ENCODE] done. Shape = {emb_nonempty.shape}. Time: {end_time-start_time:.2f} sec")
-
-    # 创建最终 embedding 列
-    emb_all = np.zeros((len(df), emb_dim), dtype=np.float32)
-
-    # 对非空文本填入真实 embedding
-    emb_all[mask_nonempty.values] = emb_nonempty
-
-    # 对空文本保持 zero vector（默认）
-    #[0,0,0,...,0]（更好的指示 "无信息"）
-
-    df[col_emb] = list(emb_all)
-
-    # 保存 parquet
-    if pq_path is not None:
-        df.to_parquet(pq_path, index=False)
-        print(f"[SAVE] embeddings saved to {pq_path}")
-
-    return df
-
-
-
-
 
 
 
@@ -260,6 +123,181 @@ def kmeans_2Dpca(df,best_n_clusters, col_emb="embedding"):
     return 
 
 
+def split_axe(df):
+    # fillna
+    df['Axe']=df['Axe'].fillna("nan")
+    df_clean=df.copy()
+    #dropna
+    # df_clean = df[(df["Axe"].notna())&(df['Axe']!='nan')].copy()#去掉nan
+    # print(f"len df notna : {len(df)} => {len(df_clean)}")
+    # print(df_clean['Axe'].value_counts())
+
+    axe_map = {
+        "1": 0,
+        "2": 1,
+        "3": 2,
+        "4": 3
+    }
+
+    def parse_axes(axe_str):
+        # 确保是字符串
+        if pd.isna(axe_str):
+            return [0,0,0,0]
+        # 拆分并 strip
+        labels = str(axe_str).split(";")
+        labels = [s.strip() for s in labels]
+        
+        # 创建 one-hot
+        vec = [0,0,0,0]
+        for lbl in labels:
+            if lbl in axe_map:
+                vec[axe_map[lbl]] = 1
+        return vec
+
+    df_clean["axes_vec"] = df_clean["Axe"].apply(parse_axes)
+    df_clean[['axe1','axe2','axe3','axe4']] = pd.DataFrame(df_clean['axes_vec'].tolist(), index=df_clean.index)
+    # df_clean.head()
+    # df_clean['original_axe']=df_clean['Axe']
+    # df_clean=df_clean.explode("Axe")
+    # print(f"df exploded : {len(df_clean)}\n"
+    #       f"{df_clean['Axe'].value_counts()}")
+
+    return df_clean
+
+
+# def group_text(df, cols, new_col='col_text'):
+#     """
+#     将指定的列拼接成一个新的文本列。
+
+#     参数:
+#     df: pd.DataFrame
+#     cols: list, 需要拼接的列名
+#     new_col: str, 新生成列的名称
+
+#     返回:
+#     df: 添加了新列的 DataFrame
+#     """
+#     def safe_get(val):
+#         return "" if pd.isna(val) else str(val)
+
+#     df[new_col] = df[cols].apply(lambda row: " ".join(safe_get(row[col]) for col in cols), axis=1)
+    
+#     print(f"ALL text NA counts: {df[new_col].isna().value_counts(dropna=False)}\n")
+#     return df
+
+
+def emb_text(df, model=None, batch_size=32, col_text=None, col_emb=None, pq_path=None):
+    import numpy as np
+    import time
+
+    # 初始化模型（如果没有传入）
+    if model is None:
+        from sentence_transformers import SentenceTransformer
+        model = SentenceTransformer("BAAI/bge-m3")
+
+    # 获取 embedding 维度（BGE-m3 = 1024）
+    emb_dim = model.get_sentence_embedding_dimension()
+
+    # Fill NaN
+    df[col_text] = df[col_text].fillna("")
+
+    # 分离空文本和非空文本
+    mask_empty = df[col_text].str.strip() == ""
+    mask_nonempty = ~mask_empty
+
+    texts_nonempty = df.loc[mask_nonempty, col_text].astype(str).tolist()
+
+    # Encode 只有非空文本
+    print(f"- Encoding {len(texts_nonempty)} non-empty texts in column '{col_text}'...")
+    start_time = time.time()
+    emb_nonempty = model.encode(
+        texts_nonempty,
+        batch_size=batch_size,
+        normalize_embeddings=True,
+        show_progress_bar=True
+    )
+    end_time = time.time()
+
+    # print(f"[ENCODE] done. Shape = {emb_nonempty.shape}. Time: {end_time-start_time:.2f} sec")
+
+    # 创建最终 embedding 列
+    emb_all = np.zeros((len(df), emb_dim), dtype=np.float32)
+
+    # 对非空文本填入真实 embedding
+    emb_all[mask_nonempty.values] = emb_nonempty
+
+    # 对空文本保持 zero vector（默认）
+    #[0,0,0,...,0]（更好的指示 "无信息"）
+
+    df[col_emb] = list(emb_all)
+
+    # 保存 parquet
+    if pq_path is not None:
+        df.to_parquet(pq_path, index=False)
+    print(f"[SAVE] Embeddings of df_noaxe saved to {pq_path}!")
+
+    return df
+
+
+
+def to_df_long (df,cols=['emb_title_s','emb_keyword_s','emb_abstract_s'], 
+                pq_long_path="../external_data/df_noaxe_3emb_long.parquet"):
+    # 拆成三行后，每行的数据比完整文本弱（因为只看标题、或关键词、或摘要），
+    # 模型可能会更偏向预测常见类别。
+    rows = []
+    for idx, row in df.iterrows():
+        labels = row[['axe1','axe2','axe3','axe4']].values.astype(np.float32)
+        for col in cols:
+            rows.append({
+                "text_emb": row[col],
+                'halId_s':row['halId_s'],
+                "source": col.split('_')[1],
+                "axe1": labels[0],
+                "axe2": labels[1],
+                "axe3": labels[2],
+                "axe4": labels[3]
+            })
+
+        # rows.append({
+        #     "text_emb": row["emb_keyword_s"],
+        #     "source": "keyword",
+        #     "axe1": labels[0],
+        #     "axe2": labels[1],
+        #     "axe3": labels[2],
+        #     "axe4": labels[3]
+        # })
+
+        # rows.append({
+        #     "text_emb": row["emb_abstract_s"],
+        #     "source": "abstract",
+        #     "axe1": labels[0],
+        #     "axe2": labels[1],
+        #     "axe3": labels[2],
+        #     "axe4": labels[3]
+        # })
+
+    df_long = pd.DataFrame(rows)
+    
+    #去掉无文本的行
+    def is_zero_vector(vec):
+        return np.allclose(vec, 0.0)
+    df_long = df_long[~df_long["text_emb"].apply(is_zero_vector)].reset_index(drop=True)
+        
+
+    ## source作为额外信号
+    source_map = {"title":0, "keyword":1, "abstract":2}
+    df_long["source_id"] = df_long["source"].map(source_map)
+    # one-hot
+    df_long["source_vec"] = df_long["source_id"].apply(lambda x: np.eye(3)[x])
+
+    df_long.to_parquet(pq_long_path)
+    print(f"[SAVE] df_long saved to {pq_long_path}!")
+
+    return df_long
+
+
+
+
 
 
 def oversampling(X_train, y_train):
@@ -318,7 +356,6 @@ def mlp_multilabels(X_train,X_val,y_train, y_val, batch_size=32,dropout=0.5,n_ep
     import random
     import os, sys
 
-    os.makedirs(os.path.dirname(model_path), exist_ok=True)
     
     #固定种子
     seed = 42
@@ -572,6 +609,7 @@ def mlp_multilabels(X_train,X_val,y_train, y_val, batch_size=32,dropout=0.5,n_ep
             stops = 0
             best_t_overall = best_t_per_class.copy()
 
+            os.makedirs(os.path.dirname(model_path), exist_ok=True)
             torch.save({
                 'model_state_dict': model.state_dict(),
                 'best_t_overall': best_t_overall
@@ -581,36 +619,10 @@ def mlp_multilabels(X_train,X_val,y_train, y_val, batch_size=32,dropout=0.5,n_ep
             if stops >= patience:
                 print("Early stopping triggered.")
                 break
-        
-        # if f1_macro > best_f1_overall:#如果当前F1最好,则保存模型和best_t_per_class作为 best_t_overall
-        #     best_f1_overall = f1_macro
-        #     stops = 0
-
-        #     best_t_overall = best_t_per_class.copy()
-        #     torch.save({
-        #         'model_state_dict': model.state_dict(),
-        #         'best_t_overall': best_t_overall
-        #     }, model_path)
-
-        #     # torch.save(model.state_dict(), model_path)
-        #     # print(f"[SAVE] MLP model saved to {model_path}!!")
-        # else:
-        #     stops += 1
-        #     if stops >= patience:
-        #         print("Early stopping triggered.")
-        #         break
 
     print(f"[SAVE] Model et best_t_overall saved to {model_path}!!")
 
     return model, best_t_overall
-
-
-
-        # if f1_macro > best_f1:
-        #     best_f1 = f1_macro
-        #     stops = 0
-        #     torch.save(model.state_dict(), model_path)
-        #     print(f"[SAVE] MLP model saved to {model_path}!!")
 
 
 
@@ -637,6 +649,8 @@ def predict_by_model(text_embeddings, model, threshold=0.4):
         preds = (probs >= threshold[None, :]).astype(int)
     
     return preds, probs
+
+
 
 def evaluate_model(preds_val, y_val):
     import numpy as np
@@ -683,6 +697,255 @@ def evaluate_model(preds_val, y_val):
     plt.tight_layout()
     plt.show()
     return 
+
+
+
+
+
+
+
+
+
+def load_predict_eval(df,
+                    mlp_model_path="../model/best_mlp_3emb_2.pt",
+                    lr_model_path="../model/best_lr_3emb.pt",
+                    lgb_model_path="../model/best_lgb_3emb.txt",
+                    t_lr=0.25,t_lgb=0.9, f1_lr=0.44, f1_lgb=0.35, t_ens=0.52):
+    
+    #=========================load==================================
+    ## data
+    X = np.concatenate([df["text_emb"].tolist(), df["source_vec"].tolist()], axis=1)
+    print(f"input X shape:{X.shape}")
+    ## mlp
+    class MultiLabelMLP(torch.nn.Module):
+            def __init__(self, input_dim, hidden=512, dropout=0.5):
+                super().__init__()
+                self.net = torch.nn.Sequential(
+                    torch.nn.Linear(input_dim, hidden),
+                    torch.nn.ReLU(),
+                    torch.nn.Dropout(dropout),
+
+                    torch.nn.Linear(hidden, hidden//2),
+                    torch.nn.ReLU(),
+                    torch.nn.Dropout(dropout),
+
+                    torch.nn.Linear(hidden//2, 4)
+                )
+
+            def forward(self, x):
+                return self.net(x)# logits
+
+    # mlp_model_path="../model/best_mlp_3emb_2.pt"
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    mlp_model = MultiLabelMLP(input_dim=1027, hidden=512, dropout=0.5)
+    checkpoint = torch.load(mlp_model_path, map_location=device, weights_only=False)  # 默认 weights_only=True
+    mlp_model.load_state_dict(checkpoint['model_state_dict'])
+    best_t_overall = checkpoint['best_t_overall']
+    mlp_model.eval()
+
+    ## lr
+    # lr_model_path="../model/best_lr_3emb.pt"
+    lr_model = joblib.load(lr_model_path)
+    t_lr=0.25
+
+    ## lgb
+    # lgb_model_path="../model/best_lgb_3emb.txt"
+    lgb_model = lgb.Booster(model_file=lgb_model_path)
+    
+    # PARAMETRES 
+    # t_lr, t_lgb=0.25,0.9
+    # f1_lr, f1_lgb=0.44, 0.35 
+
+    print(f"Les prédictions sont faites en utilisant le seuil qui a donné le meilleur F1"
+          f"lors de l’évaluation sur l’ensemble de validation pour chaque modèle.\n"
+          f"threshold lr: {t_lr}; f1 lr :{f1_lr}\n"
+          f"threshold lgb: {t_lgb}; f1 lgb :{f1_lgb}\n")
+      
+
+    #===========================pred==============================
+    # mlp
+    pred_mlp, probs_mlp = predict_by_model(X, mlp_model, threshold=best_t_overall)
+    
+    # LR+lgb
+    scaler = StandardScaler()
+    X_s = scaler.fit_transform(X)
+
+    probs_lr = lr_model.predict_proba(X_s)[:,1]
+    probs_lgb = lgb_model.predict(X)
+    # probs_lgb = lgb_model.predict_proba(X)[:,1]
+
+
+    # above t
+    lr_pred = (probs_lr >= t_lr).astype(int)#单独一个模型的预测结果
+    lgb_pred = (probs_lgb >= t_lgb).astype(int)
+
+
+    # ------------------------合并LR+LGB -----------------------------
+    #按照F1权重合并零个models的probs，通过该prob_ens得出t_ens再得出标签
+    w_lr = f1_lr / (f1_lr + f1_lgb + 1e-12)# w=weight
+    w_lgb = f1_lgb / (f1_lr + f1_lgb + 1e-12)
+
+    proba_ens = w_lr * probs_lr + w_lgb * probs_lgb
+    # t_ens = best_thresh_by_pr(y_val_axe4, proba_ensemble)# t_ens=threshold of ensemble
+    pred_ens = (proba_ens >= t_ens).astype(int)
+  
+    #------------------------修正MLP axe4--------------------------------
+    # 最终组合（主 MLP 预测前3类 + LR 预测 axe4）
+    pred_final = np.zeros_like(pred_mlp)   # shape (N, 4)
+    pred_final[:, :3] =pred_mlp[:, :3] 
+    pred_final[:, 3] = pred_ens  # LR 预测 axe4
+
+    # ----------------------返回df_long---------------------------------
+    df["pred_axe1"] = pred_final[:,0]
+    df["pred_axe2"] = pred_final[:,1]
+    df["pred_axe3"] = pred_final[:,2]
+    df["pred_axe4"] = pred_final[:,3]
+
+    
+    return df
+
+
+
+
+def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifiqueIRG-__-202512_2734art.csv",
+                            df_all_outpath="data_axe/20251201-ProductionScientifiqueIRG-__-202512_2734art_predaxe.csv",
+                            pq_path='../external_data/df_noaxe_3emb.parquet',
+                            test_n_sample=10):
+    #------------------------------------------read&filtrate-----------------------------------------------
+    print(f"\n[ETAPE1] Lire le csv, sélectionner les lignes qui n'ont pas d'axes => df_noaxe\n")
+    df_all=pd.read_csv(df_all_path)
+    df_all['Axe'].value_counts(dropna=False)
+    df_noaxe=df_all[(df_all['Axe'].isna())|(df_all['Axe']=="nan")]
+    df_hasaxe=df_all[~df_all['halId_s'].isin(df_noaxe['halId_s'])]
+    print(f"[INFO] Répartition des axes: \n{df_all.Axe.value_counts(dropna=False)}\n\n"
+    f"- len df_all: {len(df_all)}\n"
+    f"- len df_noaxe: {len(df_noaxe)}\n"
+    f"- len df_hasaxe:{len(df_hasaxe)}"
+    )
+    #------------------------------------------splitaxe-----------------------------------------------
+    print(f"\n[ETAPE2] split axe en 4 colonnes'axe1, axe2, axe3, axe4' et en une colonnes 'axes_vec'sous forme de [1,0,0,0]")
+    if test_n_sample!=None:
+        df_noaxe=split_axe(df_noaxe[:test_n_sample])
+    else :
+        df_noaxe=split_axe(df_noaxe)
+
+    #------------------------------------------embeddings-----------------------------------------------
+    embedding_model_name="BAAI/bge-m3"
+    print(f"\n[ETAPE3] Embedder les titres, les mots, les résumés par le modèle '{embedding_model_name}'...\n")
+
+    if os.path.exists(pq_path):
+        print(f"[INFO] embeddings existe déjà! Passez à l'étape suivante!")
+    else :
+        print(f"Veuillez vous patienter pendant l'embeddings.")
+
+        from sentence_transformers import SentenceTransformer
+        embedding_model = SentenceTransformer(embedding_model_name)
+
+        for col_text in ['title_s','keyword_s','abstract_s']:
+            df= emb_text(df=df_noaxe, model=embedding_model, batch_size=32, col_text=col_text, col_emb=f"emb_{col_text}", 
+                        pq_path=pq_path)
+
+    #-----------------------------------df_long----------------------------------------------------
+    print(f"\n[ETAPE4] Transformer df_noaxe en df_noaxe_long...")
+    df_noaxe=pd.read_parquet(pq_path)
+    df_noaxe_long=to_df_long(df_noaxe,cols=['emb_title_s','emb_keyword_s','emb_abstract_s'])
+    # print(f"len df_noaxe_long : {len(df_noaxe_long)}\n")
+    # display(f"df_noaxe_long : \n {df_noaxe_long.head()}")
+
+
+    #-----------------------------------------------pred----------------------------------------------
+    print(f"\n[ETAPE5] Predire les axes:\n"
+          f"Pour les quatre axes, les prédictions sont faites avec le modèle MLP,\n"
+          f"tandis que pour l’axe 4, les résultats du LR et du LGB sont combinés en pondérant selon le F1 et le seuil optimal pour ajuster la prédiction.\n"
+          f"Pour chaque ligne, les titres, mots-clés et résumés non vides sont prédits séparément, puis les axes sont fusionnés et dédupliqués pour améliorer la stabilité.\n")
+    
+    df_long_predicted=load_predict_eval(df=df_noaxe_long,
+                    mlp_model_path="../model/best_mlp_3emb_2.pt",
+                    lr_model_path="../model/best_lr_3emb.pt",
+                    lgb_model_path="../model/best_lgb_3emb.txt",
+                    t_lr=0.25,t_lgb=0.9, f1_lr=0.44, f1_lgb=0.35, t_ens=0.52)
+    print(f"df_long_predicted : \n")
+    display(df_long_predicted.head())
+
+
+
+    # -----------------------------------renvoie et save la pred---------------------------------------------
+    print(f"\n[ETAPE6] Organiser les predictions et renvoie au df original...\n")
+
+    axe_cols = ["pred_axe1", "pred_axe2", "pred_axe3", "pred_axe4"]
+    # 按照id聚合：
+    df_hal = df_long_predicted.groupby("halId_s")[axe_cols].max().reset_index()
+
+    def axes_to_str(row):
+        axes = []
+        for i, col in enumerate(axe_cols, start=1):
+            if row[col] == 1:# pred_axeK 的值是0/1
+                axes.append(str(i))
+
+        return "; ".join(set(axes))     # 例如 "1; 2; 4"
+    df_hal["pred_axes_str"] = df_hal.apply(axes_to_str, axis=1)
+    # display(f"df_hal: \n{df_hal}\n")
+
+
+    # 检查df_noaxe中在prediction之后是否还有没有axe的行:
+    df_no_predaxe=df_hal[df_hal[axe_cols].sum(axis=1)==0]
+    if len(df_no_predaxe)>0:
+        print(f"[INFO] {len(df_no_predaxe)} lignes qui n'ont pas de prédictions: \n")
+        # display(df_no_predaxe[['halId_s','title_s','keyword_s','abstract_s','Axe']],"\n")
+        display(df_all[df_all['halId_s'].isin(df_no_predaxe['halId_s'].tolist())][['halId_s','title_s','keyword_s','abstract_s','Axe']].head())
+
+    else :
+        print(f"[INFO] Au moins une prédiction pour chaque ligne non-axée!")
+
+    # mapping_DICT {id:"axe;axe"}
+    hal_axes_dict = dict(zip(df_hal["halId_s"], df_hal["pred_axes_str"]))
+
+    # insert:
+    if "predicted_Axe" in df_all.columns:
+        df_all.drop(columns='predicted_Axe', inplace=True)
+    idx = df_all.columns.get_loc("Axe")
+    df_all.insert(idx + 1, "predicted_Axe", df_all["halId_s"].map(hal_axes_dict))
+
+
+    # show: in df_noaxe
+    df_noaxe_pred=df_all[(df_all['Axe'].isna())|(df_all['Axe']=="nan")]
+    print(f"Répartiton des axes prédits sur {len(df_noaxe_pred)} lignes:\n"
+          f"{df_noaxe_pred.predicted_Axe.value_counts(dropna=False)}\n")    
+
+
+    def merge_axes(row):
+        axes = set()
+        if pd.notna(row['Axe']):
+            axes.update(s.strip() for s in row['Axe'].split(';') if s.strip())
+        if pd.notna(row['predicted_Axe']):
+            axes.update(s.strip() for s in row['predicted_Axe'].split(';') if s.strip())
+        if not axes:
+            return np.nan
+        return "; ".join(sorted(axes, key=int))
+
+    df_all['final_axe'] = df_all.apply(merge_axes, axis=1)
+
+
+    print(f"Répartiton des axes prédits sur toutes les {len(df_all)} lignes:\n"
+          f"{df_all.final_axe.value_counts(dropna=False)}\n")
+    
+    # display(df_all[['halId_s','title_s','keyword_s','abstract_s',"Axe",'predicted_Axe']].head())
+
+    # save
+    os.makedirs(os.path.dirname(df_all_path), exist_ok=True)
+    df_all.to_csv(df_all_path, index=False)
+    print(f"[SAVE] df with predicted axis saved to {df_all_path}!!\n")
+
+    return #df_all
+
+
+
+
+
+
+
+
+
 
 
 
