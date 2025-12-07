@@ -20,7 +20,7 @@ from sentence_transformers import SentenceTransformer
 #my utils:
 from utils.upload import data_uploader
 # from utils.auto_completion import auto_completion_by_sim
-
+from utils.auto_completion import apply_auto_completion_axes
 
 # @st.cache_resource  # ✅ 缓存模型
 # def load_embedding_model(model_name):
@@ -61,6 +61,15 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     st.subheader("🔢 Classifier")
     st.markdown("<br>", unsafe_allow_html=True)
 
+    apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifiqueIRG-__-202512_2734art.csv",
+                            df_all_outpath="data_axe/20251201-ProductionScientifiqueIRG-__-202512_2734art_predaxe.csv",
+                            df_all_emb_path="../external_data/df_all_3emb.parquet",
+                            noaxe_pq_path='../external_data/df_noaxe_3emb.parquet',
+                            mlp_model_path="../model/best_mlp_3emb_2.pt",
+                            lr_model_path="../model/best_lr_3emb.pt",
+                            lgb_model_path="../model/best_lgb_3emb.txt",
+                            )
+    
     
 
 

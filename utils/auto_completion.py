@@ -221,9 +221,25 @@ def split_axe(df):
 #     return df
 
 
+
+def filtrate_df_to_emb(df_noaxe, 
+                       df_all_emb_path="../external_data/df_all_3emb.parquet",
+                    ):
+    import pandas as pd
+    df_all=pd.read_parquet(df_all_emb_path)
+    df_to_emb=df_noaxe[~df_noaxe['halId_s'].isin(df_all['halId_s'].tolist())]
+    df_embedded=df_all[df_all['halId_s'].isin(df_noaxe['halId_s'].tolist())]
+    print(f"[INFO]{len(df_embedded)} articles already embedded! \n" 
+          f"{len(df_to_emb)} articles go to embeddings. \n")
+
+    return df_to_emb, df_embedded
+ 
+
+
+
 def emb_text(df, model=None, batch_size=32, col_text=None, col_emb=None, pq_path=None):
     import numpy as np
-    import time
+    import time    
 
     # 初始化模型（如果没有传入）
     if model is None:
@@ -269,9 +285,12 @@ def emb_text(df, model=None, batch_size=32, col_text=None, col_emb=None, pq_path
     # 保存 parquet
     if pq_path is not None:
         df.to_parquet(pq_path, index=False)
-    print(f"[SAVE] Embeddings of df_noaxe saved to {pq_path}!")
+        print(f"[SAVE] Embeddings of texts saved to {pq_path}!")
 
     return df
+
+
+
 
 
 
@@ -846,11 +865,11 @@ def load_predict(df,
 
 def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifiqueIRG-__-202512_2734art.csv",
                             df_all_outpath="data_axe/20251201-ProductionScientifiqueIRG-__-202512_2734art_predaxe.csv",
+                            df_all_emb_path="../external_data/df_all_3emb.parquet",
                             noaxe_pq_path='../external_data/df_noaxe_3emb.parquet',
                             mlp_model_path="../model/best_mlp_3emb_2.pt",
                             lr_model_path="../model/best_lr_3emb.pt",
                             lgb_model_path="../model/best_lgb_3emb.txt",
-                            # test_n_sample=10
                             ):
 
     #------------------------------------------read&filtrate-----------------------------------------------
@@ -868,28 +887,42 @@ def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifique
     print(f"\n[ETAPE2] split axe en 4 colonnes'axe1, axe2, axe3, axe4' et en une colonnes 'axes_vec'sous forme de [1,0,0,0]")
     df_noaxe=split_axe(df_noaxe)
 
+
     #------------------------------------------embeddings-----------------------------------------------
     embedding_model_name="BAAI/bge-m3"
-    print(f"\n[ETAPE3] Embedder les titres, les mots, les résumés des lignes non-axées par le modèle '{embedding_model_name}'...\n")
+    print(f"\n[ETAPE3] Embedder les titres, les mots, les résumés des {len(df_noaxe)} lignes non-axées par le modèle '{embedding_model_name}'...\n")
 
     if os.path.exists(noaxe_pq_path):
         print(f"[INFO] embeddings existe déjà! Passez à l'étape suivante!")
     else :
         print(f"Veuillez vous patienter pendant l'embeddings.")
         print(f"[INFO] Loading the embeddings model {embedding_model_name}...")
+
         from sentence_transformers import SentenceTransformer
-
         embedding_model = SentenceTransformer(embedding_model_name)
-
+        
+        
+        # filtrate df_to_emb, df_embedded:
+        df_to_emb, df_embedded=filtrate_df_to_emb(df_noaxe, df_all_emb_path)
+        
+        # emb df_to_emb:
         for col_text in ['title_s','keyword_s','abstract_s']:
-            df= emb_text(df=df_noaxe, model=embedding_model, batch_size=32, col_text=col_text, col_emb=f"emb_{col_text}", 
-                        pq_path=noaxe_pq_path)
+            df_to_emb= emb_text(df=df_to_emb, model=None, batch_size=32, col_text=col_text, col_emb=f"emb_{col_text}", 
+                            pq_path=None)
+        # concat & save :
+        df_noaxe_embedded=pd.concat([df_to_emb, df_embedded], axis=0)
+        os.makedirs(os.path.dirname(noaxe_pq_path), exist_ok=True)
+        df_noaxe_embedded.to_parquet(noaxe_pq_path, index=False)
+
+        # for col_text in ['title_s','keyword_s','abstract_s']:
+        #     df_noaxe_embedded= emb_text(df=df_noaxe, model=embedding_model, batch_size=32, col_text=col_text, col_emb=f"emb_{col_text}", 
+        #                 pq_path=noaxe_pq_path)
 
     #-----------------------------------df_long----------------------------------------------------
     print(f"\n[ETAPE4] Transformer df_noaxe en df_noaxe_long...")
-    df_noaxe=pd.read_parquet(noaxe_pq_path)
+    df_noaxe_embedded=pd.read_parquet(noaxe_pq_path)
     noaxe_pq_long_path=noaxe_pq_path.replace('.parquet','_long.parquet')
-    df_noaxe_long=to_df_long(df_noaxe,cols=['emb_title_s','emb_keyword_s','emb_abstract_s'],
+    df_noaxe_long=to_df_long(df_noaxe_embedded,cols=['emb_title_s','emb_keyword_s','emb_abstract_s'],
                              pq_long_path=noaxe_pq_long_path)
     
     # print(f"len df_noaxe_long : {len(df_noaxe_long)}\n")
@@ -906,8 +939,8 @@ def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifique
                     lr_model_path=lr_model_path,
                     lgb_model_path=lgb_model_path,
                     t_lr=0.25,t_lgb=0.9, f1_lr=0.44, f1_lgb=0.35, t_ens=0.52)
-    # print(f"df_long_predicted : \n")
-    # display(df_long_predicted.head())
+    # print(f"df_noaxe with predicted_axe:\n")
+    # display(df_long_predicted.head(),"\n")
 
     # -----------------------------------renvoie et save la pred---------------------------------------------
     print(f"\n[ETAPE6] Organiser les predictions et renvoie au df original...\n")
@@ -937,19 +970,22 @@ def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifique
     else :
         print(f"[INFO] Au moins une prédiction pour chaque ligne non-axée!")
 
+    
     # mapping_DICT {id:"axe;axe"}
     hal_axes_dict = dict(zip(df_hal["halId_s"], df_hal["pred_axes_str"]))
 
-    # insert:
+    # merge to df_all (insert):
     if "predicted_Axe" in df_all.columns:
         df_all.drop(columns='predicted_Axe', inplace=True)
     idx = df_all.columns.get_loc("Axe")
     df_all.insert(idx + 1, "predicted_Axe", df_all["halId_s"].map(hal_axes_dict))
 
     # show: in df_noaxe
+    # 重新筛选出df_noaxe with predicted_axe，因为之前的df_noaxe已经被split > long > long pred> groupby > dict
     df_noaxe_pred=df_all[(df_all['Axe'].isna())|(df_all['Axe']=="nan")]
-    print(f"Répartiton des axes prédits sur {len(df_noaxe_pred)} lignes:\n"
+    print(f"[INFO] Répartiton des axes prédits sur {len(df_noaxe_pred)} lignes:\n"
           f"{df_noaxe_pred.predicted_Axe.value_counts(dropna=False)}\n")    
+    display(df_noaxe_pred[['halId_s','title_s','keyword_s','abstract_s','Axe',"predicted_Axe"]].head())
 
 
     def merge_axes(row):
@@ -980,8 +1016,109 @@ def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifique
 
 
 
+def apply_auto_completion_axes_st(
+        df_all_path="data/20251201-ProductionScientifiqueIRG-__-202512_2734art.csv",
+        df_all_outpath="data_axe/20251201-ProductionScientifiqueIRG-__-202512_2734art_predaxe.csv",
+        df_all_emb_path="../external_data/df_all_3emb.parquet",
+        noaxe_pq_path='../external_data/df_noaxe_3emb.parquet',
+        mlp_model_path="../model/best_mlp_3emb_2.pt",
+        lr_model_path="../model/best_lr_3emb.pt",
+        lgb_model_path="../model/best_lgb_3emb.txt",
+    ):
+
+    import os
+    import pandas as pd
+    import numpy as np
+    import streamlit as st
+
+    #------------------------------------------read&filtrate-----------------------------------------------
+    st.write(f"**[ETAPE1] Lire le CSV et sélectionner les lignes sans axes**")
+    df_all = pd.read_csv(df_all_path)
+    df_noaxe = df_all[(df_all['Axe'].isna())|(df_all['Axe']=="nan")]
+    df_hasaxe = df_all[~df_all['halId_s'].isin(df_noaxe['halId_s'])]
+
+    st.write(f"[INFO] Répartition des axes: \n{df_all.Axe.value_counts(dropna=False)}")
+    st.write(f"- len df_all: {len(df_all)}")
+    st.write(f"- len df_noaxe: {len(df_noaxe)}")
+    st.write(f"- len df_hasaxe: {len(df_hasaxe)}")
+
+    #------------------------------------------splitaxe-----------------------------------------------
+    st.write(f"**[ETAPE2] Split axe en 4 colonnes 'axe1-4' et 'axes_vec'**")
+    df_noaxe = split_axe(df_noaxe)
+    st.dataframe(df_noaxe.head())
+
+    #------------------------------------------embeddings-----------------------------------------------
+    st.write(f"**[ETAPE3] Embeddings des titres, mots-clés et résumés**")
+    if os.path.exists(noaxe_pq_path):
+        st.write(f"[INFO] Embeddings déjà existants")
+    else:
+        from sentence_transformers import SentenceTransformer
+        embedding_model = SentenceTransformer("BAAI/bge-m3")
+        
+        # Embedding logic:
+        # filtrate df_to_emb, df_embedded:
+        df_to_emb, df_embedded=filtrate_df_to_emb(df_noaxe, df_all_emb_path)
+        
+        # emb df_to_emb:
+        for col_text in ['title_s','keyword_s','abstract_s']:
+            df_to_emb= emb_text(df=df_to_emb, model=None, batch_size=32, col_text=col_text, col_emb=f"emb_{col_text}", 
+                            pq_path=None)
+            ## [IMPO] 处理完一列要把新的df_to_emb输入，接着处理下一列，所以要io的变量名一致
+
+        # concat & save :
+        df_noaxe_embedded=pd.concat([df_to_emb, df_embedded], axis=0)
+        os.makedirs(os.path.dirname(noaxe_pq_path), exist_ok=True)
+        df_noaxe_embedded.to_parquet(noaxe_pq_path, index=False)
 
 
+    #------------------------------------------long df-----------------------------------------------
+    st.write(f"**[ETAPE4] Transformer df_noaxe en df_noaxe_long**")
+    df_noaxe_embedded = pd.read_parquet(noaxe_pq_path)
+    noaxe_pq_long_path = noaxe_pq_path.replace('.parquet','_long.parquet')
+    df_noaxe_long = to_df_long(df_noaxe_embedded, cols=['emb_title_s','emb_keyword_s','emb_abstract_s'],
+                               pq_long_path=noaxe_pq_long_path)
+
+    #------------------------------------------prediction-----------------------------------------------
+    st.write(f"**[ETAPE5] Prédire les axes avec les modèles MLP/LR/LGB**")
+    df_long_predicted = load_predict(df=df_noaxe_long,
+                                     mlp_model_path=mlp_model_path,
+                                     lr_model_path=lr_model_path,
+                                     lgb_model_path=lgb_model_path,
+                                     t_lr=0.25, t_lgb=0.9, f1_lr=0.44, f1_lgb=0.35, t_ens=0.52)
+
+    #------------------------------------------merge predictions----------------------------------------
+    st.write(f"**[ETAPE6] Fusionner les prédictions avec le df original**")
+    axe_cols = ["pred_axe1", "pred_axe2", "pred_axe3", "pred_axe4"]
+    df_hal = df_long_predicted.groupby("halId_s")[axe_cols].max().reset_index()
+
+    # Génération de predicted_Axe
+    hal_axes_dict = dict(zip(df_hal["halId_s"], df_hal.apply(lambda row: "; ".join([str(i+1) for i, col in enumerate(axe_cols) if row[col]==1]), axis=1)))
+    if "predicted_Axe" in df_all.columns:
+        df_all.drop(columns='predicted_Axe', inplace=True)
+    idx = df_all.columns.get_loc("Axe")
+    df_all.insert(idx + 1, "predicted_Axe", df_all["halId_s"].map(hal_axes_dict))
+
+    # final_axe
+    def merge_axes(row):
+        axes = set()
+        if pd.notna(row['Axe']):
+            axes.update(s.strip() for s in row['Axe'].split(';') if s.strip())
+        if pd.notna(row['predicted_Axe']):
+            axes.update(s.strip() for s in row['predicted_Axe'].split(';') if s.strip())
+        if not axes:
+            return np.nan
+        return "; ".join(sorted(axes, key=int))
+
+    df_all['final_axe'] = df_all.apply(merge_axes, axis=1)
+
+    st.write(f"Répartition des axes après fusion: ")
+    st.dataframe(df_all[['halId_s','title_s','Axe','predicted_Axe','final_axe']].head())
+
+    os.makedirs(os.path.dirname(df_all_outpath), exist_ok=True)
+    df_all.to_csv(df_all_outpath, index=False)
+    st.write(f"[SAVE] df avec axes prédits sauvegardé: {df_all_outpath}")
+
+    return df_all
 
 
 
