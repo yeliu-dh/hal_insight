@@ -15,11 +15,11 @@ st.title("🌐Réseau d'occurences ")
 
 
 @st.cache_data 
-def get_mappings(mapping_folder='json_data'):
+def get_mappings(mapping_folder='external_data'):
     return {
         "AUTHOR_STRUCTURE": load_external_json(f"{mapping_folder}/author_primarystructure_s_map.json")    }
 
-maps= get_mappings(mapping_folder='json_data')
+maps= get_mappings(mapping_folder='external_data')
 author_structure=maps["AUTHOR_STRUCTURE"]
 
 # -------------------------------

@@ -667,7 +667,7 @@ import os
 import json
 
 # def check_primarystructure_map()
-def save_as_json(data, file_path="../json_data/author_primarystructure_s_map.json"):
+def save_as_json(data, file_path="../external_data/author_primarystructure_s_map.json"):
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
     with open (file_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
@@ -677,7 +677,7 @@ def save_as_json(data, file_path="../json_data/author_primarystructure_s_map.jso
 
 
 
-def read_json(file_path='../json_data/author_primarystructure_s_map.json'):
+def read_json(file_path='../external_data/author_primarystructure_s_map.json'):
     with open (file_path, 'r', encoding="utf-8") as f:
         data=json.load(f)
     return data
@@ -753,7 +753,7 @@ def get_author_primarystructure(names: list, author_primarystructure_s_map:dict=
 
 
 
-def update_author_primarystructure_s(names:list, file_path='../json_data/author_primarystructure_s_map.json'):
+def update_author_primarystructure_s(names:list, file_path='../external_data/author_primarystructure_s_map.json'):
     #读取已存在的author_primarystructure_s_map，如果authFullName_s不存在则搜索，然后更新至map
     try :
         if os.path.exists(file_path):
