@@ -179,8 +179,6 @@ def split_axe(df):
 
 
 
-
-
 def emb_text(df, model=None, batch_size=32, col_text=None, col_emb=None, pq_path=None):
     import numpy as np
     import time    
