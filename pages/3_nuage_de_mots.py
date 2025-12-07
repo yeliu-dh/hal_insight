@@ -206,7 +206,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     st.markdown("<br>", unsafe_allow_html=True)
 
 
-n    max_words = st.number_input(
+    max_words = st.number_input(
         "⬆️ Nombre de mots maximum affichés:", 
         min_value=1, max_value=1000, value=50, step=1, key="max_words"
     )
