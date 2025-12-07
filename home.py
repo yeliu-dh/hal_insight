@@ -1,8 +1,5 @@
 import streamlit as st
-import sqlite3
 from datetime import datetime
-from utils.feedback import init_db, append_feedback, get_updates
-import gspread
 
 #标签页：
 st.set_page_config(page_title="HAL Insight",page_icon="🛸")

@@ -276,7 +276,7 @@ if df is not None and not df.empty:
     st.divider()
     #----------------------quick check-----------
     
-    st.write(f"**Aperçu rapide des données:**")
+    st.write(f"**🔎Aperçu rapide des données:**")
     cols= df.columns.tolist()
     col_en_question = st.selectbox("colonne en question", cols, index=cols.index("cl_fnege"))
     show_distribution= st.checkbox("Afficher la répartition des valeurs ?", value=False, key="col_distribution")#key用于储存在session state中
