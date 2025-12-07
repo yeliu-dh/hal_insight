@@ -104,8 +104,8 @@ def data_uploader(key="uploaded_df"):
             st.session_state[f"{key}_source"] = "upload"
         except Exception as e:
             st.error(f"⚠ {e}")
-
-    # filename=uploaded_file.name.split('.')[0]
+    if uploaded_file is not None:
+        st.session_state[f"{key}_filename"] = uploaded_file.name
 
 
     

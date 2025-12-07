@@ -20,7 +20,7 @@ from sentence_transformers import SentenceTransformer
 #my utils:
 from utils.upload import data_uploader
 from utils.auto_completion import apply_auto_completion_axes_st
-from utils.HAL_search_api import save_file_csv_xlsx
+from utils.HAL_search_api import save_file_csv_xlsx_by_filename
 
 
 
@@ -59,29 +59,31 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     st.subheader("🔢 Classifier")
     st.markdown("<br>", unsafe_allow_html=True)
-
+    
     df_all_pred=apply_auto_completion_axes_st(df,
                             df_all_emb_path="external_data/df_all_3emb.parquet",
-                            mlp_model_path="../model/best_mlp_3emb_2.pt",
-                            lr_model_path="../model/best_lr_3emb.pt",
-                            lgb_model_path="../model/best_lgb_3emb.txt",
+                            mlp_model_path="model/best_mlp_3emb_2.pt",
+                            lr_model_path="model/best_lr_3emb.pt",
+                            lgb_model_path="model/best_lgb_3emb.txt",
                             )
-    
-
-    
+     
     #------------------save to local-------------------
-    try :
-        save_file_csv_xlsx(df_all_pred,start_year, start_month, end_year, end_month)
-    except Exception as e:
-        st.warning (f"ERROR in save_file_csv_xlsx :\n {e}")   
+    if df_all_pred in st.session_state:
+        df_all_pred=st.session_state['df_all_pred']
+        # show
+        st.dataframe(df_all_pred[['halId_s','title_s',"keyword_s",'abstract_s','Axe','predicted_Axe','final_axe']])
 
-    st.divider()   
+        try :
+            filename=st.session_state['uploaded_df_filename']+"_final_axe"
+            save_file_csv_xlsx_by_filename(df_all_pred, filename)
+        except Exception as e:
+            st.warning (f"ERROR in save_file_csv_xlsx :\n {e}")   
+        st.divider()   
 
+st.subheader("📒 README")
 
 
     # df_all_outpath="data_axe/20251201-ProductionScientifiqueIRG-__-202512_2734art_predaxe.csv",
-
-
 
     # # --------------- embedding_model ------------------
     # model_name = st_tags(

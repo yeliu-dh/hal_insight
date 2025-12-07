@@ -796,11 +796,8 @@ def plot_confusion_matrices(y_true, y_pred):
 
 
 
-def load_predict(df,
-                    mlp_model_path="../model/best_mlp_3emb_2.pt",
-                    lr_model_path="../model/best_lr_3emb.pt",
-                    lgb_model_path="../model/best_lgb_3emb.txt",
-                    t_lr=0.25,t_lgb=0.9, f1_lr=0.44, f1_lgb=0.35, t_ens=0.52):
+def load_predict(df,mlp_model_path,lr_model_path,lgb_model_path,
+                t_lr=0.25,t_lgb=0.9, f1_lr=0.44, f1_lgb=0.35, t_ens=0.52):
     
     #=========================load==================================
     ## data
@@ -825,7 +822,6 @@ def load_predict(df,
             def forward(self, x):
                 return self.net(x)# logits
 
-    # mlp_model_path="../model/best_mlp_3emb_2.pt"
     device = "cuda" if torch.cuda.is_available() else "cpu"
     mlp_model = MultiLabelMLP(input_dim=1027, hidden=512, dropout=0.5)
     checkpoint = torch.load(mlp_model_path, map_location=device, weights_only=False)  # 默认 weights_only=True
@@ -834,12 +830,10 @@ def load_predict(df,
     mlp_model.eval()
 
     ## lr
-    # lr_model_path="../model/best_lr_3emb.pt"
     lr_model = joblib.load(lr_model_path)
     t_lr=0.25
 
     ## lgb
-    # lgb_model_path="../model/best_lgb_3emb.txt"
     lgb_model = lgb.Booster(model_file=lgb_model_path)
     
     # PARAMETRES 
@@ -973,7 +967,7 @@ def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifique
           f"Pour les quatre axes, les prédictions sont faites avec le modèle MLP,\n"
           f"tandis que pour l’axe 4, les résultats du LR et du LGB sont combinés en pondérant selon le F1 et le seuil optimal pour ajuster la prédiction.\n"
           f"Pour chaque ligne, les titres, mots-clés et résumés non vides sont prédits séparément, puis les axes sont fusionnés et dédupliqués pour améliorer la stabilité.\n")
-    
+
     df_long_predicted=load_predict(df=df_noaxe_long,
                     mlp_model_path=mlp_model_path,
                     lr_model_path=lr_model_path,
@@ -1058,20 +1052,17 @@ def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifique
 
 def apply_auto_completion_axes_st(
         df_all, # df_all_path="data/20251201-ProductionScientifiqueIRG-__-202512_2734art.csv",
-        # df_all_outpath="data_axe/20251201-ProductionScientifiqueIRG-__-202512_2734art_predaxe.csv",
         df_all_emb_path="external_data/df_all_3emb.parquet",
-        # st.session_state.df_noaxe
-        # noaxe_pq_path='../external_data/df_noaxe_3emb.parquet',
         mlp_model_path="model/best_mlp_3emb_2.pt",
         lr_model_path="model/best_lr_3emb.pt",
         lgb_model_path="model/best_lgb_3emb.txt",
     ):
-
     import os
     import pandas as pd
     import numpy as np
     import streamlit as st
     st.session_state.df_all=df_all.copy()
+    # st.write(os.getcwd())# D:\Work\IRG\hal_insight
 
     #------------------------------------------read&filtrate-----------------------------------------------
     st.write(f"**[ETAPE1] Lire le CSV et sélectionner les lignes sans axes**")
@@ -1099,7 +1090,6 @@ def apply_auto_completion_axes_st(
         st.write(f"[INFO] Embeddings déjà existants")
 
     else:
-
         from sentence_transformers import SentenceTransformer
         embedding_model = SentenceTransformer("BAAI/bge-m3")
         
@@ -1156,25 +1146,29 @@ def apply_auto_completion_axes_st(
     def merge_axes(row):
         axes = set()
         if pd.notna(row['Axe']):
-            axes.update(s.strip() for s in row['Axe'].split(';') if s.strip())
+            axes.update(s.strip() for s in str(row['Axe']).split(';') if s.strip())
         if pd.notna(row['predicted_Axe']):
-            axes.update(s.strip() for s in row['predicted_Axe'].split(';') if s.strip())
+            axes.update(s.strip() for s in str(row['predicted_Axe']).split(';') if s.strip())
         if not axes:
             return np.nan
-        return "; ".join(sorted(axes, key=int))
+        #float变成int，再排序
+        axes_sorted = sorted([str(int(float(a))) for a in axes])
+        return "; ".join(axes_sorted)
+
+        # return "; ".join(sorted(axes, key=int))
 
     df_all['final_axe'] = df_all.apply(merge_axes, axis=1)
 
     st.write(f"Répartition des axes après fusion: ")
-    st.dataframe(df_all[['halId_s','title_s','Axe','predicted_Axe','final_axe']].head())
+    st.dataframe(df_all[['halId_s','title_s',"keyword_s",'abstract_s','Axe','predicted_Axe','final_axe']])
+
+    st.session_state['df_all_pred']=df_all
 
     # os.makedirs(os.path.dirname(df_all_outpath), exist_ok=True)
     # df_all.to_csv(df_all_outpath, index=False)
     # st.write(f"[SAVE] df avec axes prédits sauvegardé: {df_all_outpath}")
-
+    
     return df_all
-
-
 
 
 
