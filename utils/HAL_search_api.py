@@ -426,7 +426,7 @@ def extract_irg_axes(text):
     return None
 
 
-def clean_axe_from_classification(df,axe_name='Axe'):
+def clean_axe_from_classification(df,axe_name='axe'):
     """   
     整理成字符串数字，列名改为axe
     """
@@ -800,7 +800,7 @@ def process_df(df, DOMAIN_MAP, FNEGE_MAP, cutoff):
     if "classification_s" in df.columns:
         df=clean_axe_from_classification(df)
     st.write(f"✔ Axes nettoyés!")
-    missing_data_warning(df, col='Axe', show_distribution=True)
+    missing_data_warning(df, col='axe', show_distribution=True)
 
 
     #--------- 处理fnege----------------

@@ -19,7 +19,7 @@ from sentence_transformers import SentenceTransformer
 
 #my utils:
 from utils.upload import data_uploader
-from utils.auto_completion import apply_auto_completion_axes_st
+from utils.auto_completion import apply_auto_completion_axes_st, evaluate_auto_completion_axes
 from utils.HAL_search_api import save_file_csv_xlsx_by_filename
 
 
@@ -56,18 +56,19 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     # 若df存在则视为开始
     st.session_state.started=True
     df = st.session_state.uploaded_df.copy()
-    df.rename(columns={"Axe":'axe'}, inplace=True)
     
     st.subheader("🔢 Classifier")
     st.markdown("<br>", unsafe_allow_html=True)
+    df_all_pred=apply_auto_completion_axes_st(
+        df, # df_all_path="data/20251201-ProductionScientifiqueIRG-__-202512_2734art.csv",
+        df_all_emb_path="external_data/df_all_3emb.parquet",
+        mlp_model_path="model/best_mlp_3emb_2.pt",
+        lr_model_path="model/best_lr_3emb.pt",
+        lgb_model_path="model/best_lgb_3emb.txt",
+        t_lr=0.25, t_lgb=0.95, f1_lr=0.44, f1_lgb=0.35, t_ens=0.52
+        
+    )
     
-    df_all_pred=apply_auto_completion_axes_st(df,
-                            df_all_emb_path="external_data/df_all_3emb.parquet",
-                            mlp_model_path="model/best_mlp_3emb_2.pt",
-                            lr_model_path="model/best_lr_3emb.pt",
-                            lgb_model_path="model/best_lgb_3emb.txt",
-                            )
-     
     #------------------save to local-------------------
     if "df_all_pred" in st.session_state:
         df_all_pred=st.session_state['df_all_pred']
@@ -78,6 +79,17 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             st.warning (f"ERROR in save_file_csv_xlsx :\n {e}")   
         st.divider()   
 
+
+    st.subheader("🔢 Evaluation du model")
+    evaluate_auto_completion_axes(
+        df,
+        df_all_emb_path="external_data/df_all_3emb.parquet",
+        mlp_model_path="model/best_mlp_3emb_2.pt",
+        lr_model_path="model/best_lr_3emb.pt",
+        lgb_model_path="model/best_lgb_3emb.txt",
+        t_lr=0.25, t_lgb=0.95, f1_lr=0.44, f1_lgb=0.35, t_ens=0.52)
+
+    st.divider()
 
 
 st.subheader("📒 README")
