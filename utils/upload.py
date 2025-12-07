@@ -100,13 +100,16 @@ def data_uploader(key="uploaded_df"):
                 df = pd.read_csv(uploaded_file, encoding="utf-8")
             else:
                 df = pd.read_excel(uploaded_file)
+            
+            if 'Axe' in df.columns:
+                df.rename(columns={"Axe":'axe'}, inplace=True)
+
             st.session_state[key] = df
             st.session_state[f"{key}_source"] = "upload"
         except Exception as e:
             st.error(f"⚠ {e}")
     if uploaded_file is not None:
         st.session_state[f"{key}_filename"] = uploaded_file.name
-
 
     
     # 如果uploaded df存在,无论是用户刚上传，还是通过搜索保存的

@@ -56,7 +56,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     # 若df存在则视为开始
     st.session_state.started=True
     df = st.session_state.uploaded_df.copy()
-
+    df.rename(columns={"Axe":'axe'}, inplace=True)
+    
     st.subheader("🔢 Classifier")
     st.markdown("<br>", unsafe_allow_html=True)
     

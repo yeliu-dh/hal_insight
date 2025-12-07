@@ -426,9 +426,9 @@ def extract_irg_axes(text):
     return None
 
 
-def clean_axe_from_classification(df,axe_name='axe'):
+def clean_axe_from_classification(df,axe_name='Axe'):
     """   
-    整理成字符串数字，列名改为Axe
+    整理成字符串数字，列名改为axe
     """
     df["classification_s"] = df["classification_s"].apply(extract_irg_axes)
     df=df.rename(columns={"classification_s":axe_name})
