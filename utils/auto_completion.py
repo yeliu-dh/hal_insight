@@ -123,46 +123,81 @@ def kmeans_2Dpca(df,best_n_clusters, col_emb="embedding"):
     return 
 
 
-def split_axe(df):
-    # fillna
-    df['Axe']=df['Axe'].fillna("nan")
-    df_clean=df.copy()
-    #dropna
-    # df_clean = df[(df["Axe"].notna())&(df['Axe']!='nan')].copy()#去掉nan
-    # print(f"len df notna : {len(df)} => {len(df_clean)}")
-    # print(df_clean['Axe'].value_counts())
+# def split_axe(df):
+#     # fillna
+#     df['Axe']=df['Axe'].fillna("nan")
+    
+#     df_clean=df.copy()
+#     #dropna
+#     # df_clean = df[(df["Axe"].notna())&(df['Axe']!='nan')].copy()#去掉nan
+#     # print(f"len df notna : {len(df)} => {len(df_clean)}")
+#     # print(df_clean['Axe'].value_counts())
 
-    axe_map = {
-        "1": 0,
-        "2": 1,
-        "3": 2,
-        "4": 3
-    }
+#     axe_map = {
+#         "1": 0,
+#         "2": 1,
+#         "3": 2,
+#         "4": 3
+#     }# map axe to axe_vec index 
+
+#     def parse_axes(axe_str):
+#         # 确保是字符串
+#         if pd.isna(axe_str):
+#             return [0,0,0,0]
+#         # 拆分并 strip
+#         labels = str(axe_str).split(";")
+#         labels = [s.strip() for s in labels]
+        
+#         # 创建 one-hot
+#         vec = [0,0,0,0]
+#         for lbl in labels:
+#             if lbl in axe_map:
+#                 vec[axe_map[lbl]] = 1
+#         return vec
+
+#     df_clean["axes_vec"] = df_clean["Axe"].apply(parse_axes)
+#     df_clean[['axe1','axe2','axe3','axe4']] = pd.DataFrame(df_clean['axes_vec'].tolist(), index=df_clean.index)
+    
+#     return df_clean
+
+def split_axe(df):
+    # 复制原始 df
+    df_clean = df.copy()
+
+    # map axe 字符到索引
+    axe_map = {"1": 0, "2": 1, "3": 2, "4": 3}
 
     def parse_axes(axe_str):
-        # 确保是字符串
-        if pd.isna(axe_str):
-            return [0,0,0,0]
+        # 如果是 nan 或 "nan"，返回全 0
+        if pd.isna(axe_str) or str(axe_str).lower() == "nan":
+            return [0, 0, 0, 0]
         # 拆分并 strip
-        labels = str(axe_str).split(";")
-        labels = [s.strip() for s in labels]
-        
-        # 创建 one-hot
-        vec = [0,0,0,0]
+        labels = [s.strip() for s in str(axe_str).split(";")]
+        vec = [0, 0, 0, 0]
         for lbl in labels:
             if lbl in axe_map:
                 vec[axe_map[lbl]] = 1
         return vec
 
-    df_clean["axes_vec"] = df_clean["Axe"].apply(parse_axes)
-    df_clean[['axe1','axe2','axe3','axe4']] = pd.DataFrame(df_clean['axes_vec'].tolist(), index=df_clean.index)
-    # df_clean.head()
+    # 生成 axes_vec
+    df_clean['axes_vec'] = df_clean['Axe'].apply(parse_axes)
+
+    # 拆成 4 列
+    df_clean[['axe1', 'axe2', 'axe3', 'axe4']] = pd.DataFrame(
+        df_clean['axes_vec'].tolist(), index=df_clean.index
+    )
+
+    return df_clean
+
+
+
+
+# df_clean.head()
     # df_clean['original_axe']=df_clean['Axe']
     # df_clean=df_clean.explode("Axe")
     # print(f"df exploded : {len(df_clean)}\n"
     #       f"{df_clean['Axe'].value_counts()}")
 
-    return df_clean
 
 
 # def group_text(df, cols, new_col='col_text'):
@@ -345,7 +380,9 @@ def oversampling(X_train, y_train):
 
 
 
-def mlp_multilabels(X_train,X_val,y_train, y_val, batch_size=32,dropout=0.5,n_epochs = 30, patience=5, to_oversampling=True, model_path="../model/best_mlp.pt"):
+def mlp_multilabels(X_train,X_val,y_train, y_val, 
+                    batch_size=32,dropout=0.5,n_epochs = 40, patience=5, 
+                    to_oversampling=True, model_path="../model/test_mlp.pt"):
     import pandas as pd
     import numpy as np
     import torch
@@ -357,7 +394,7 @@ def mlp_multilabels(X_train,X_val,y_train, y_val, batch_size=32,dropout=0.5,n_ep
     import os, sys
 
     
-    #固定种子
+    # fixed seed 固定种子
     seed = 42
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
@@ -383,7 +420,7 @@ def mlp_multilabels(X_train,X_val,y_train, y_val, batch_size=32,dropout=0.5,n_ep
     # -------------------------------
     class MultiLabelDataset(Dataset):
         def __init__(self, X, y):
-            #保证类型为 float32
+            # make sure float32
             self.X = torch.from_numpy(X).float()
             self.y = torch.from_numpy(y).float()
             print("Dataset X shape:", self.X.shape, "y shape:", self.y.shape)  # 加这个检查
@@ -400,30 +437,19 @@ def mlp_multilabels(X_train,X_val,y_train, y_val, batch_size=32,dropout=0.5,n_ep
     # train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 
 
-    # 动态更新 sample_weights
-    class_counts = y_train.sum(axis=0)
-    # # OPT0: 每个样本的 weight = 1 / class count
-    # class_weights = 1.0 / class_counts
-    # sample_weights = (y_train * class_weights).sum(axis=1)
-    
-    #小类别很少，但不想限制最大值 → 用 epsilon 平滑。
+    # ----------------dynamic sample_weights-----------------------    
+    # 小类别很少，但不想限制最大值 → 用 epsilon 平滑。
     # 不想让类别权重超过某个上限 → 用 np.clip
-    ## OPT1 
-    # class_weights = 1.0 / class_counts
-    # # 限制 class_weights 范围，避免过大
-    # class_weights = np.clip(class_weights, a_min=None, a_max=5.0)  
-    # sample_weights = (y_train * class_weights).sum(axis=1)
-    # sample_weights = np.clip(sample_weights, a_min=0.1, a_max=5.0)
-    
-    # OPT2 :epsilon+clip
+    class_counts = y_train.sum(axis=0)
     epsilon = 1e-2
     class_weights = 1.0 / (class_counts + epsilon)
     # sample_weights = (y_train * class_weights).sum(axis=1) 
     sample_weights = (y_train * class_weights).max(axis=1) # 每条样本只取 最高的少数类权重，不会被多数类稀释
     sample_weights = np.clip(sample_weights, 0.001, 10.0)
+    
     ## clip : 5=> 10
     #sample_weights是每一条的权重，但大多被压缩到了0.001!    
-    print("min:", sample_weights.min(), "max:", sample_weights.max(), "mean:", sample_weights.mean())
+    # print("min:", sample_weights.min(), "max:", sample_weights.max(), "mean:", sample_weights.mean())
 
     #将w加入sampler
     sampler = WeightedRandomSampler(
@@ -434,14 +460,8 @@ def mlp_multilabels(X_train,X_val,y_train, y_val, batch_size=32,dropout=0.5,n_ep
     train_loader = DataLoader(train_dataset, batch_size=batch_size, sampler=sampler)
 
 
-    # 给少类别重采样：oversampling
-
-
-    # for batch_X, batch_y in train_loader:
-    #     print(batch_X.shape, batch_y.shape)  # 应该是 [32, 1024], [32, 4]
-
     # -------------------------------
-    # 3️⃣ 定义 MLP 模型
+    # 3️⃣ Define MLP model:MultiLabelMLP
     # -------------------------------
 
     # 优化二：更强 MLP + dropout（避免过拟合）
@@ -463,7 +483,7 @@ def mlp_multilabels(X_train,X_val,y_train, y_val, batch_size=32,dropout=0.5,n_ep
         def forward(self, x):
             return self.net(x)# logits
 
-    #更适合3072维输入
+    # model for input (n, 3072)
     # class MultiLabelMLP(torch.nn.Module):
     #     def __init__(self, input_dim, dropout=0.5):
     #         super().__init__()
@@ -478,28 +498,27 @@ def mlp_multilabels(X_train,X_val,y_train, y_val, batch_size=32,dropout=0.5,n_ep
 
     #             torch.nn.Linear(512, 4)
     #         )
-
     #     def forward(self, x):
     #         return self.net(x)
 
 
     # -------------------------------
-    # 4️⃣ 初始化模型、优化器、loss
+    # 4️⃣ initialize model, optimiser and loss
     # -------------------------------
     # device = "cuda" if torch.cuda.is_available() else "cpu"
     model = MultiLabelMLP(input_dim=X_train.shape[1]).to(device)
 
-    #优化三：weight decay
+    # 优化三：weight decay
     # optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-4)
 
     # criterion = nn.BCEWithLogitsLoss()  # 多标签分类
     # criterion = torch.nn.BCEWithLogitsLoss(pos_weight=pos_weight)
 
-    #优化七 ：让模型不要极端预测 0/1：
+    # 优化七 ：让模型不要极端预测 0/1：
     # criterion = nn.BCEWithLogitsLoss(pos_weight=pos_weight, reduction="mean", label_smoothing=0.1)
 
-    # #优化五:
+    # 优化五:
     class FocalLoss(nn.Module):
         def __init__(self, alpha=0.25, gamma=2):
             super().__init__()
@@ -516,8 +535,7 @@ def mlp_multilabels(X_train,X_val,y_train, y_val, batch_size=32,dropout=0.5,n_ep
     criterion = FocalLoss(alpha=0.5, gamma=2)
 
 
-
-    # -------- early stopping ----------
+    # --------add early stopping ----------
     # best_f1 = 0
     best_f1_overall = 0.0  # 初始 F1 设为 0，保证任何有效的 F1 都会更新
     best_t_overall = None  # 初始化为空列表或 None
@@ -590,7 +608,7 @@ def mlp_multilabels(X_train,X_val,y_train, y_val, batch_size=32,dropout=0.5,n_ep
         print(f"Epoch {epoch+1}/{n_epochs} | Train Loss: {train_loss:.4f} | Val Loss: {val_loss:.4f} | F1_macro: {f1_macro:.4f}\n")
     
         
-        # -------- early stopping ----------
+        # --------smooth early stopping ----------
         # 对f1进行平滑，避免多类别F1的波动导致过于早停。方法：对近几轮的F1取平均值与best_f1比较
         f1_history = []  # 存储每轮 F1
         k = 3            # 平滑窗口大小
@@ -619,14 +637,13 @@ def mlp_multilabels(X_train,X_val,y_train, y_val, batch_size=32,dropout=0.5,n_ep
             if stops >= patience:
                 print("Early stopping triggered.")
                 break
-
     print(f"[SAVE] Model et best_t_overall saved to {model_path}!!")
 
     return model, best_t_overall
 
 
 
-def predict_by_model(text_embeddings, model, threshold=0.4):
+def predict_by_mlp(text_embeddings, model, threshold=0.4):
     """
     text_embeddings: numpy array [N, dim]
     threshold: float or list/np.array of length num_classes
@@ -652,7 +669,7 @@ def predict_by_model(text_embeddings, model, threshold=0.4):
 
 
 
-def evaluate_model(preds_val, y_val):
+def evaluate_model(y_true, y_pred):
     import numpy as np
     from sklearn.metrics import (
         f1_score, precision_score, recall_score,
@@ -661,15 +678,16 @@ def evaluate_model(preds_val, y_val):
         ConfusionMatrixDisplay
         )
     import matplotlib.pyplot as plt
-    
-    # overall metrics
-    f1_micro = f1_score(y_val, preds_val, average='micro')
-    f1_macro = f1_score(y_val, preds_val, average='macro')
-    precision_micro = precision_score(y_val, preds_val, average='micro')
-    recall_micro = recall_score(y_val, preds_val, average='micro')
+    import matplotlib
+    matplotlib.use("module://matplotlib_inline.backend_inline")
 
-    hamming = hamming_loss(y_val, preds_val)
-    subset_acc = accuracy_score(y_val, preds_val)  # exact match
+    # overall metrics
+    f1_micro = f1_score(y_true, y_pred, average='micro', zero_division=0)
+    f1_macro = f1_score(y_true, y_pred, average='macro', zero_division=0)
+    precision_micro = precision_score(y_true, y_pred, average='micro', zero_division=0)
+    recall_micro = recall_score(y_true, y_pred, average='micro', zero_division=0)
+    hamming = hamming_loss(y_true, y_pred)
+    subset_acc = accuracy_score(y_true, y_pred)  # exact match
 
     print("Micro  F1: ", f1_micro)
     print("Macro  F1: ", f1_macro)
@@ -680,16 +698,15 @@ def evaluate_model(preds_val, y_val):
 
     # per-class report
     print("\nPer-class classification report:")
-    print(classification_report(y_val, preds_val, target_names=['axe1','axe2','axe3','axe4']))
+    print(classification_report(y_true, y_pred, target_names=['axe1','axe2','axe3','axe4']))
 
     # ConfusionMatrixDisplay
-    n_classes = y_val.shape[1]
+    n_classes = y_true.shape[1]
     class_names = ['axe1','axe2','axe3','axe4']
-
     fig, axes = plt.subplots(1, n_classes, figsize=(4*n_classes, 4))  # 1 行 4 列
 
     for c in range(n_classes):
-        cm = confusion_matrix(y_val[:, c], preds_val[:, c])
+        cm = confusion_matrix(y_true[:, c], y_pred[:, c])
         disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=[0,1])
         disp.plot(ax=axes[c], cmap='Blues', colorbar=False)  # 指定当前轴
         axes[c].set_title(class_names[c])
@@ -699,14 +716,34 @@ def evaluate_model(preds_val, y_val):
     return 
 
 
+def plot_confusion_matrices(y_true, y_pred):
+    import matplotlib.pyplot as plt
+    from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+
+    n_classes = y_true.shape[1]
+    class_names = ['axe1', 'axe2', 'axe3', 'axe4']
+
+    fig, axes = plt.subplots(1, n_classes, figsize=(4*n_classes, 4))
+
+    # 如果只有 1 个 class，axes 不是 list，所以强制转成 list
+    if n_classes == 1:
+        axes = [axes]
+
+    for c in range(n_classes):
+        cm = confusion_matrix(y_true[:, c], y_pred[:, c])
+        disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=[0,1])
+        disp.plot(ax=axes[c], cmap="Blues", colorbar=False)
+        axes[c].set_title(class_names[c])
+        axes[c].grid(False)  # 让图更干净
+
+    plt.tight_layout()
+    # plt.show()
 
 
 
 
 
-
-
-def load_predict_eval(df,
+def load_predict(df,
                     mlp_model_path="../model/best_mlp_3emb_2.pt",
                     lr_model_path="../model/best_lr_3emb.pt",
                     lgb_model_path="../model/best_lgb_3emb.txt",
@@ -764,7 +801,7 @@ def load_predict_eval(df,
 
     #===========================pred==============================
     # mlp
-    pred_mlp, probs_mlp = predict_by_model(X, mlp_model, threshold=best_t_overall)
+    pred_mlp, probs_mlp = predict_by_mlp(X, mlp_model, threshold=best_t_overall)
     
     # LR+lgb
     scaler = StandardScaler()
@@ -809,8 +846,13 @@ def load_predict_eval(df,
 
 def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifiqueIRG-__-202512_2734art.csv",
                             df_all_outpath="data_axe/20251201-ProductionScientifiqueIRG-__-202512_2734art_predaxe.csv",
-                            pq_path='../external_data/df_noaxe_3emb.parquet',
-                            test_n_sample=10):
+                            noaxe_pq_path='../external_data/df_noaxe_3emb.parquet',
+                            mlp_model_path="../model/best_mlp_3emb_2.pt",
+                            lr_model_path="../model/best_lr_3emb.pt",
+                            lgb_model_path="../model/best_lgb_3emb.txt",
+                            # test_n_sample=10
+                            ):
+
     #------------------------------------------read&filtrate-----------------------------------------------
     print(f"\n[ETAPE1] Lire le csv, sélectionner les lignes qui n'ont pas d'axes => df_noaxe\n")
     df_all=pd.read_csv(df_all_path)
@@ -824,34 +866,34 @@ def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifique
     )
     #------------------------------------------splitaxe-----------------------------------------------
     print(f"\n[ETAPE2] split axe en 4 colonnes'axe1, axe2, axe3, axe4' et en une colonnes 'axes_vec'sous forme de [1,0,0,0]")
-    if test_n_sample!=None:
-        df_noaxe=split_axe(df_noaxe[:test_n_sample])
-    else :
-        df_noaxe=split_axe(df_noaxe)
+    df_noaxe=split_axe(df_noaxe)
 
     #------------------------------------------embeddings-----------------------------------------------
     embedding_model_name="BAAI/bge-m3"
-    print(f"\n[ETAPE3] Embedder les titres, les mots, les résumés par le modèle '{embedding_model_name}'...\n")
+    print(f"\n[ETAPE3] Embedder les titres, les mots, les résumés des lignes non-axées par le modèle '{embedding_model_name}'...\n")
 
-    if os.path.exists(pq_path):
+    if os.path.exists(noaxe_pq_path):
         print(f"[INFO] embeddings existe déjà! Passez à l'étape suivante!")
     else :
         print(f"Veuillez vous patienter pendant l'embeddings.")
-
+        print(f"[INFO] Loading the embeddings model {embedding_model_name}...")
         from sentence_transformers import SentenceTransformer
+
         embedding_model = SentenceTransformer(embedding_model_name)
 
         for col_text in ['title_s','keyword_s','abstract_s']:
             df= emb_text(df=df_noaxe, model=embedding_model, batch_size=32, col_text=col_text, col_emb=f"emb_{col_text}", 
-                        pq_path=pq_path)
+                        pq_path=noaxe_pq_path)
 
     #-----------------------------------df_long----------------------------------------------------
     print(f"\n[ETAPE4] Transformer df_noaxe en df_noaxe_long...")
-    df_noaxe=pd.read_parquet(pq_path)
-    df_noaxe_long=to_df_long(df_noaxe,cols=['emb_title_s','emb_keyword_s','emb_abstract_s'])
+    df_noaxe=pd.read_parquet(noaxe_pq_path)
+    noaxe_pq_long_path=noaxe_pq_path.replace('.parquet','_long.parquet')
+    df_noaxe_long=to_df_long(df_noaxe,cols=['emb_title_s','emb_keyword_s','emb_abstract_s'],
+                             pq_long_path=noaxe_pq_long_path)
+    
     # print(f"len df_noaxe_long : {len(df_noaxe_long)}\n")
     # display(f"df_noaxe_long : \n {df_noaxe_long.head()}")
-
 
     #-----------------------------------------------pred----------------------------------------------
     print(f"\n[ETAPE5] Predire les axes:\n"
@@ -859,15 +901,13 @@ def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifique
           f"tandis que pour l’axe 4, les résultats du LR et du LGB sont combinés en pondérant selon le F1 et le seuil optimal pour ajuster la prédiction.\n"
           f"Pour chaque ligne, les titres, mots-clés et résumés non vides sont prédits séparément, puis les axes sont fusionnés et dédupliqués pour améliorer la stabilité.\n")
     
-    df_long_predicted=load_predict_eval(df=df_noaxe_long,
-                    mlp_model_path="../model/best_mlp_3emb_2.pt",
-                    lr_model_path="../model/best_lr_3emb.pt",
-                    lgb_model_path="../model/best_lgb_3emb.txt",
+    df_long_predicted=load_predict(df=df_noaxe_long,
+                    mlp_model_path=mlp_model_path,
+                    lr_model_path=lr_model_path,
+                    lgb_model_path=lgb_model_path,
                     t_lr=0.25,t_lgb=0.9, f1_lr=0.44, f1_lgb=0.35, t_ens=0.52)
-    print(f"df_long_predicted : \n")
-    display(df_long_predicted.head())
-
-
+    # print(f"df_long_predicted : \n")
+    # display(df_long_predicted.head())
 
     # -----------------------------------renvoie et save la pred---------------------------------------------
     print(f"\n[ETAPE6] Organiser les predictions et renvoie au df original...\n")
@@ -892,7 +932,7 @@ def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifique
     if len(df_no_predaxe)>0:
         print(f"[INFO] {len(df_no_predaxe)} lignes qui n'ont pas de prédictions: \n")
         # display(df_no_predaxe[['halId_s','title_s','keyword_s','abstract_s','Axe']],"\n")
-        display(df_all[df_all['halId_s'].isin(df_no_predaxe['halId_s'].tolist())][['halId_s','title_s','keyword_s','abstract_s','Axe']].head())
+        display(df_all[df_all['halId_s'].isin(df_no_predaxe['halId_s'].tolist())][['halId_s','title_s','keyword_s','abstract_s','Axe',"predicted_Axe"]].head())
 
     else :
         print(f"[INFO] Au moins une prédiction pour chaque ligne non-axée!")
@@ -905,7 +945,6 @@ def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifique
         df_all.drop(columns='predicted_Axe', inplace=True)
     idx = df_all.columns.get_loc("Axe")
     df_all.insert(idx + 1, "predicted_Axe", df_all["halId_s"].map(hal_axes_dict))
-
 
     # show: in df_noaxe
     df_noaxe_pred=df_all[(df_all['Axe'].isna())|(df_all['Axe']=="nan")]
@@ -929,14 +968,14 @@ def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifique
     print(f"Répartiton des axes prédits sur toutes les {len(df_all)} lignes:\n"
           f"{df_all.final_axe.value_counts(dropna=False)}\n")
     
-    # display(df_all[['halId_s','title_s','keyword_s','abstract_s',"Axe",'predicted_Axe']].head())
+    display(df_all[['halId_s','title_s','keyword_s','abstract_s',"Axe",'predicted_Axe',"final_axe"]].head())
 
-    # save
-    os.makedirs(os.path.dirname(df_all_path), exist_ok=True)
-    df_all.to_csv(df_all_path, index=False)
-    print(f"[SAVE] df with predicted axis saved to {df_all_path}!!\n")
+    # save to outpath!!!
+    os.makedirs(os.path.dirname(df_all_outpath), exist_ok=True)
+    df_all.to_csv(df_all_outpath, index=False)
+    print(f"[SAVE] df with predicted axis saved to {df_all_outpath}!!\n")
 
-    return #df_all
+    return df_all
 
 
 
