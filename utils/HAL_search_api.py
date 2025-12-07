@@ -426,7 +426,7 @@ def extract_irg_axes(text):
     return None
 
 
-def clean_axe_from_classification(df,axe_name='Axe'):
+def clean_axe_from_classification(df,axe_name='axe'):
     """   
     整理成字符串数字，列名改为Axe
     """

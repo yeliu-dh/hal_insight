@@ -123,80 +123,50 @@ def kmeans_2Dpca(df,best_n_clusters, col_emb="embedding"):
     return 
 
 
-# def split_axe(df):
-#     # fillna
-#     df['Axe']=df['Axe'].fillna("nan")
-    
-#     df_clean=df.copy()
-#     #dropna
-#     # df_clean = df[(df["Axe"].notna())&(df['Axe']!='nan')].copy()#去掉nan
-#     # print(f"len df notna : {len(df)} => {len(df_clean)}")
-#     # print(df_clean['Axe'].value_counts())
 
-#     axe_map = {
-#         "1": 0,
-#         "2": 1,
-#         "3": 2,
-#         "4": 3
-#     }# map axe to axe_vec index 
+def parse_axes(axe_str):
+    # map axe 字符到索引
+    axe_map = {"1": 0, "2": 1, "3": 2, "4": 3}
 
-#     def parse_axes(axe_str):
-#         # 确保是字符串
-#         if pd.isna(axe_str):
-#             return [0,0,0,0]
-#         # 拆分并 strip
-#         labels = str(axe_str).split(";")
-#         labels = [s.strip() for s in labels]
-        
-#         # 创建 one-hot
-#         vec = [0,0,0,0]
-#         for lbl in labels:
-#             if lbl in axe_map:
-#                 vec[axe_map[lbl]] = 1
-#         return vec
+    # 如果是 nan 或 "nan"，返回全 0
+    if pd.isna(axe_str) or str(axe_str).lower() == "nan":
+        return [0, 0, 0, 0]
+    # 拆分并 strip
+    labels = [s.strip() for s in str(axe_str).split(";")]
+    vec = [0, 0, 0, 0]
+    for lbl in labels:
+        if lbl in axe_map:
+            vec[axe_map[lbl]] = 1
+    return vec
 
-#     df_clean["axes_vec"] = df_clean["Axe"].apply(parse_axes)
-#     df_clean[['axe1','axe2','axe3','axe4']] = pd.DataFrame(df_clean['axes_vec'].tolist(), index=df_clean.index)
-    
+
+# def split_axe(df, axe_col='axe'):
+#     # 复制原始 df
+#     df_clean = df.copy()
+
+#     # 生成 axes_vec
+#     df_clean['{axe_col}s_vec'] = df_clean[axe_col].apply(parse_axes)
+
+#     # 拆成 4 列
+#     df_clean[[f'{axe_col}1', f'{axe_col}2', f'{axe_col}3', f'{axe_col}4']] = pd.DataFrame(
+#         df_clean[f'{axe_col}s_vec'].tolist(), index=df_clean.index
+#     )
+
 #     return df_clean
+
 
 def split_axe(df):
     # 复制原始 df
     df_clean = df.copy()
 
-    # map axe 字符到索引
-    axe_map = {"1": 0, "2": 1, "3": 2, "4": 3}
-
-    def parse_axes(axe_str):
-        # 如果是 nan 或 "nan"，返回全 0
-        if pd.isna(axe_str) or str(axe_str).lower() == "nan":
-            return [0, 0, 0, 0]
-        # 拆分并 strip
-        labels = [s.strip() for s in str(axe_str).split(";")]
-        vec = [0, 0, 0, 0]
-        for lbl in labels:
-            if lbl in axe_map:
-                vec[axe_map[lbl]] = 1
-        return vec
-
     # 生成 axes_vec
-    df_clean['axes_vec'] = df_clean['Axe'].apply(parse_axes)
+    df_clean['axes_vec'] = df_clean["axe"].apply(parse_axes)
 
     # 拆成 4 列
-    df_clean[['axe1', 'axe2', 'axe3', 'axe4']] = pd.DataFrame(
-        df_clean['axes_vec'].tolist(), index=df_clean.index
+    df_clean[["axe1",'axe2', 'axe3', 'axe4']] = pd.DataFrame(
+        df_clean[f'axes_vec'].tolist(), index=df_clean.index
     )
-
     return df_clean
-
-
-
-
-# df_clean.head()
-    # df_clean['original_axe']=df_clean['Axe']
-    # df_clean=df_clean.explode("Axe")
-    # print(f"df exploded : {len(df_clean)}\n"
-    #       f"{df_clean['Axe'].value_counts()}")
 
 
 
@@ -222,18 +192,6 @@ def split_axe(df):
 
 
 
-def filtrate_df_to_emb(df_noaxe, 
-                       df_all_emb_path="../external_data/df_all_3emb.parquet",
-                    ):
-    import pandas as pd
-    df_all=pd.read_parquet(df_all_emb_path)
-    df_to_emb=df_noaxe[~df_noaxe['halId_s'].isin(df_all['halId_s'].tolist())]
-    df_embedded=df_all[df_all['halId_s'].isin(df_noaxe['halId_s'].tolist())]
-    print(f"[INFO]{len(df_embedded)} articles already embedded! \n" 
-          f"{len(df_to_emb)} articles go to embeddings. \n")
-
-    return df_to_emb, df_embedded
- 
 
 
 
@@ -321,8 +279,40 @@ def emb_text(df, model=None, batch_size=32, col_text=None, col_emb=None, pq_path
     return df
 
 
+def filtrate_df_to_emb(df, 
+                       df_all_emb_path="../external_data/df_all_3emb.parquet",
+                    ):
+    import pandas as pd
+    df_all=pd.read_parquet(df_all_emb_path)
+    df_to_emb=df[~df['halId_s'].isin(df_all['halId_s'].tolist())]
+    df_embedded=df_all[df_all['halId_s'].isin(df['halId_s'].tolist())]
+    print(f"[INFO]{len(df_embedded)} articles already embedded! \n" 
+          f"{len(df_to_emb)} articles go to embeddings. \n")
+
+    return df_to_emb, df_embedded
+ 
 
 
+# filtrate+emb: main
+def check_before_emb_text(df,embedding_model,  batch_size=32,
+                          df_all_emb_path="external_data/df_all_3emb.parquet",
+                          ):
+    
+    #按照halid筛选是否被embedded，没有则再三列上都emb一遍
+
+    # 1) filtrate df_to_emb, df_embedded:
+    df_to_emb, df_embedded=filtrate_df_to_emb(df, df_all_emb_path)
+    
+    # 2)emb df_to_emb:
+    for col_text in ['title_s','keyword_s','abstract_s']:
+        df_to_emb= emb_text(df=df_to_emb, model=embedding_model, batch_size=batch_size, col_text=col_text, col_emb=f"emb_{col_text}", 
+                        pq_path=None)
+        ## [IMPO] 处理完一列要把新的df_to_emb输入，接着处理下一列，所以要io的变量名一致
+
+    # 3) concat 
+    df_embedded=pd.concat([df_to_emb, df_embedded], axis=0)
+    
+    return df_embedded
 
 
 def to_df_long (df,cols=['emb_title_s','emb_keyword_s','emb_abstract_s'], 
@@ -721,7 +711,6 @@ def predict_by_mlp(text_embeddings, model, threshold=0.4):
     return preds, probs
 
 
-
 def evaluate_model(y_true, y_pred):
     import numpy as np
     from sklearn.metrics import (
@@ -767,31 +756,6 @@ def evaluate_model(y_true, y_pred):
     plt.tight_layout()
     plt.show()
     return 
-
-
-def plot_confusion_matrices(y_true, y_pred):
-    import matplotlib.pyplot as plt
-    from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
-
-    n_classes = y_true.shape[1]
-    class_names = ['axe1', 'axe2', 'axe3', 'axe4']
-
-    fig, axes = plt.subplots(1, n_classes, figsize=(4*n_classes, 4))
-
-    # 如果只有 1 个 class，axes 不是 list，所以强制转成 list
-    if n_classes == 1:
-        axes = [axes]
-
-    for c in range(n_classes):
-        cm = confusion_matrix(y_true[:, c], y_pred[:, c])
-        disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=[0,1])
-        disp.plot(ax=axes[c], cmap="Blues", colorbar=False)
-        axes[c].set_title(class_names[c])
-        axes[c].grid(False)  # 让图更干净
-
-    plt.tight_layout()
-    # plt.show()
-
 
 
 
@@ -890,6 +854,59 @@ def load_predict(df,mlp_model_path,lr_model_path,lgb_model_path,
 
 
 
+def gather_predicted_axes(df_long_predicted, 
+                       df_all,
+                       groupby_col='halId_s'):
+    
+    axe_cols = ["pred_axe1", "pred_axe2", "pred_axe3", "pred_axe4"]
+    # 按照id聚合：
+    df_hal = df_long_predicted.groupby(groupby_col)[axe_cols].max().reset_index()
+
+    def axes_to_str(row):
+        axes = []
+        for i, col in enumerate(axe_cols, start=1):
+            if row[col] == 1:# pred_axeK 的值是0/1
+                axes.append(str(i))
+
+        return "; ".join(set(axes))     # 例如 "1; 2; 4"
+    df_hal["pred_axes_str"] = df_hal.apply(axes_to_str, axis=1)
+    
+    # mapping_DICT {id:"axe;axe"}
+    hal_axes_dict = dict(zip(df_hal["halId_s"], df_hal["pred_axes_str"]))
+    
+    # str merged back to df_all (insert):  predicted_Axe : '1; 2; 3' 
+    if "predicted_axe" in df_all.columns:
+        df_all.drop(columns='predicted_axe', inplace=True)
+    idx = df_all.columns.get_loc("axe")
+    df_all.insert(idx + 1, "predicted_axe", df_all["halId_s"].map(hal_axes_dict))
+
+    
+    # [CHECK] 检查df_long_predicted中在prediction之后是否还有没有axe的行:
+    df_no_predaxe=df_hal[df_hal[axe_cols].sum(axis=1)==0]
+    if len(df_no_predaxe)>0:
+        print(f"[INFO] {len(df_no_predaxe)} lignes qui n'ont pas de prédictions: \n")
+        display(df_all[df_all['halId_s'].isin(df_no_predaxe['halId_s'].tolist())][['halId_s','title_s','keyword_s','abstract_s','axe',"predicted_axe"]].head())
+    else :
+        print(f"[INFO] Au moins une prédiction pour chaque ligne non-axée!")
+
+    
+    return df_all
+
+
+def merge_axes(row):
+    # axe+predicted_axe=final_axe
+    axes = set()
+    if pd.notna(row['axe']):
+        axes.update(s.strip() for s in str(row['axe']).split(';') if s.strip())
+    if pd.notna(row['predicted_axe']):
+        axes.update(s.strip() for s in str(row['predicted_axe']).split(';') if s.strip())
+    if not axes:
+        return np.nan
+    #float变成int，再排序
+    axes_sorted = sorted([str(int(float(a))) for a in axes])
+    return "; ".join(axes_sorted)
+
+
 
 def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifiqueIRG-__-202512_2734art.csv",
                             df_all_outpath="data_axe/20251201-ProductionScientifiqueIRG-__-202512_2734art_predaxe.csv",
@@ -903,10 +920,11 @@ def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifique
     #------------------------------------------read&filtrate-----------------------------------------------
     print(f"\n[ETAPE1] Lire le csv, sélectionner les lignes qui n'ont pas d'axes => df_noaxe\n")
     df_all=pd.read_csv(df_all_path)
-    df_all['Axe'].value_counts(dropna=False)
-    df_noaxe=df_all[(df_all['Axe'].isna())|(df_all['Axe']=="nan")]
+    print(df_all.columns)
+    df_all['axe'].value_counts(dropna=False)
+    df_noaxe=df_all[(df_all['axe'].isna())|(df_all['axe']=="nan")]
     df_hasaxe=df_all[~df_all['halId_s'].isin(df_noaxe['halId_s'])]
-    print(f"[INFO] Répartition des axes: \n{df_all.Axe.value_counts(dropna=False)}\n\n"
+    print(f"[INFO] Répartition des axes: \n{df_all['axe'].value_counts(dropna=False)}\n\n"
     f"- len df_all: {len(df_all)}\n"
     f"- len df_noaxe: {len(df_noaxe)}\n"
     f"- len df_hasaxe:{len(df_hasaxe)}"
@@ -978,10 +996,81 @@ def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifique
 
     # -----------------------------------renvoie et save la pred---------------------------------------------
     print(f"\n[ETAPE6] Organiser les predictions et renvoie au df original...\n")
+    df_all=gather_predicted_axes(df_long_predicted, df_all, groupby_col='halId_s')
 
+
+    # axe_cols = ["pred_axe1", "pred_axe2", "pred_axe3", "pred_axe4"]
+    # # 按照id聚合：
+    # df_hal = df_long_predicted.groupby("halId_s")[axe_cols].max().reset_index()
+
+    # def axes_to_str(row):
+    #     axes = []
+    #     for i, col in enumerate(axe_cols, start=1):
+    #         if row[col] == 1:# pred_axeK 的值是0/1
+    #             axes.append(str(i))
+
+    #     return "; ".join(set(axes))     # 例如 "1; 2; 4"
+    # df_hal["pred_axes_str"] = df_hal.apply(axes_to_str, axis=1)
+    # # display(f"df_hal: \n{df_hal}\n")
+
+    # # mapping_DICT {id:"axe;axe"}
+    # hal_axes_dict = dict(zip(df_hal["halId_s"], df_hal["pred_axes_str"]))
+
+    # # 检查df_noaxe中在prediction之后是否还有没有axe的行:
+    # df_no_predaxe=df_hal[df_hal[axe_cols].sum(axis=1)==0]
+    # if len(df_no_predaxe)>0:
+    #     print(f"[INFO] {len(df_no_predaxe)} lignes qui n'ont pas de prédictions: \n")
+    #     # display(df_no_predaxe[['halId_s','title_s','keyword_s','abstract_s','Axe']],"\n")
+    #     display(df_all[df_all['halId_s'].isin(df_no_predaxe['halId_s'].tolist())][['halId_s','title_s','keyword_s','abstract_s','Axe',"predicted_Axe"]].head())
+
+    # else :
+    #     print(f"[INFO] Au moins une prédiction pour chaque ligne non-axée!")
+    
+    # # merge to df_all (insert):
+    # if "predicted_Axe" in df_all.columns:
+    #     df_all.drop(columns='predicted_Axe', inplace=True)
+    # idx = df_all.columns.get_loc("Axe")
+    # df_all.insert(idx + 1, "predicted_Axe", df_all["halId_s"].map(hal_axes_dict))
+
+    
+    # [SHOW] in df_noaxe
+    # 重新筛选出df_noaxe with predicted_axe，因为之前的df_noaxe已经被split > long > long pred> groupby > dict
+    df_noaxe_pred=df_all[(df_all['axe'].isna())|(df_all['axe']=="nan")]
+    print(f"[INFO] Répartiton des axes prédits sur {len(df_noaxe_pred)} lignes:\n"
+          f"{df_noaxe_pred.predicted_axe.value_counts(dropna=False)}\n")    
+    display(df_noaxe_pred[['halId_s','title_s','keyword_s','abstract_s','axe',"predicted_axe"]].head())
+
+
+
+    # create final axe
+    df_all['final_axe'] = df_all.apply(merge_axes, axis=1)
+    # show
+    print(f"Répartiton des axes prédits sur toutes les {len(df_all)} lignes:\n"
+          f"{df_all.final_axe.value_counts(dropna=False)}\n")
+    
+    display(df_all[['halId_s','title_s','keyword_s','abstract_s',"axe",'predicted_axe',"final_axe"]].head())
+
+    # save to outpath!!!
+    os.makedirs(os.path.dirname(df_all_outpath), exist_ok=True)
+    df_all.to_csv(df_all_outpath, index=False)
+    print(f"[SAVE] df with predicted axis saved to {df_all_outpath}!!\n")
+
+    return df_all
+
+
+
+
+
+
+#===============================ST VERSION===========================================
+
+def gather_predicted_axes_st(df_long_predicted, 
+                       df_all,
+                       groupby_col='halId_s'):
+    
     axe_cols = ["pred_axe1", "pred_axe2", "pred_axe3", "pred_axe4"]
     # 按照id聚合：
-    df_hal = df_long_predicted.groupby("halId_s")[axe_cols].max().reset_index()
+    df_hal = df_long_predicted.groupby(groupby_col)[axe_cols].max().reset_index()
 
     def axes_to_str(row):
         axes = []
@@ -991,61 +1080,103 @@ def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifique
 
         return "; ".join(set(axes))     # 例如 "1; 2; 4"
     df_hal["pred_axes_str"] = df_hal.apply(axes_to_str, axis=1)
-    # display(f"df_hal: \n{df_hal}\n")
-
-
-    # 检查df_noaxe中在prediction之后是否还有没有axe的行:
-    df_no_predaxe=df_hal[df_hal[axe_cols].sum(axis=1)==0]
-    if len(df_no_predaxe)>0:
-        print(f"[INFO] {len(df_no_predaxe)} lignes qui n'ont pas de prédictions: \n")
-        # display(df_no_predaxe[['halId_s','title_s','keyword_s','abstract_s','Axe']],"\n")
-        display(df_all[df_all['halId_s'].isin(df_no_predaxe['halId_s'].tolist())][['halId_s','title_s','keyword_s','abstract_s','Axe',"predicted_Axe"]].head())
-
-    else :
-        print(f"[INFO] Au moins une prédiction pour chaque ligne non-axée!")
-
     
     # mapping_DICT {id:"axe;axe"}
     hal_axes_dict = dict(zip(df_hal["halId_s"], df_hal["pred_axes_str"]))
-
-    # merge to df_all (insert):
-    if "predicted_Axe" in df_all.columns:
-        df_all.drop(columns='predicted_Axe', inplace=True)
-    idx = df_all.columns.get_loc("Axe")
-    df_all.insert(idx + 1, "predicted_Axe", df_all["halId_s"].map(hal_axes_dict))
-
-    # show: in df_noaxe
-    # 重新筛选出df_noaxe with predicted_axe，因为之前的df_noaxe已经被split > long > long pred> groupby > dict
-    df_noaxe_pred=df_all[(df_all['Axe'].isna())|(df_all['Axe']=="nan")]
-    print(f"[INFO] Répartiton des axes prédits sur {len(df_noaxe_pred)} lignes:\n"
-          f"{df_noaxe_pred.predicted_Axe.value_counts(dropna=False)}\n")    
-    display(df_noaxe_pred[['halId_s','title_s','keyword_s','abstract_s','Axe',"predicted_Axe"]].head())
-
-
-    def merge_axes(row):
-        axes = set()
-        if pd.notna(row['Axe']):
-            axes.update(s.strip() for s in row['Axe'].split(';') if s.strip())
-        if pd.notna(row['predicted_Axe']):
-            axes.update(s.strip() for s in row['predicted_Axe'].split(';') if s.strip())
-        if not axes:
-            return np.nan
-        return "; ".join(sorted(axes, key=int))
-
-    df_all['final_axe'] = df_all.apply(merge_axes, axis=1)
-
-
-    print(f"Répartiton des axes prédits sur toutes les {len(df_all)} lignes:\n"
-          f"{df_all.final_axe.value_counts(dropna=False)}\n")
     
-    display(df_all[['halId_s','title_s','keyword_s','abstract_s',"Axe",'predicted_Axe',"final_axe"]].head())
+    # str merged back to df_all (insert):  predicted_axe : '1; 2; 3' 
+    if "predicted_axe" in df_all.columns:
+        df_all.drop(columns='predicted_axe', inplace=True)
+    idx = df_all.columns.get_loc("axe")
+    df_all.insert(idx + 1, "predicted_axe", df_all["halId_s"].map(hal_axes_dict))
 
-    # save to outpath!!!
-    os.makedirs(os.path.dirname(df_all_outpath), exist_ok=True)
-    df_all.to_csv(df_all_outpath, index=False)
-    print(f"[SAVE] df with predicted axis saved to {df_all_outpath}!!\n")
+    
+    # [CHECK] 检查df_long_predicted中在prediction之后是否还有没有axe的行:
+    df_no_predaxe=df_hal[df_hal[axe_cols].sum(axis=1)==0]
+    if len(df_no_predaxe)>0:
+        st.write(f"[INFO] {len(df_no_predaxe)} lignes qui n'ont pas de prédictions: \n")
+        st.dataframe(df_all[df_all['halId_s'].isin(df_no_predaxe['halId_s'].tolist())][['halId_s','title_s','keyword_s','abstract_s','axe',"predicted_axe"]].head())
+    else :
+        st.write(f"[INFO] Au moins une prédiction pour chaque ligne non-axée!")
 
+    
     return df_all
+
+
+
+
+def evaluate_auto_completion_axes(
+        df_all,
+        df_all_emb_path="external_data/df_all_3emb.parquet",
+        mlp_model_path="model/best_mlp_3emb_2.pt",
+        lr_model_path="model/best_lr_3emb.pt",
+        lgb_model_path="model/best_lgb_3emb.txt",
+    ):
+    import os
+    import pandas as pd
+    import numpy as np
+    
+    #------------------------------------------read&filtrate-----------------------------------------------
+    df_noaxe = df_all[(df_all['axe'].isna())|(df_all['axe']=="nan")]
+    df_hasaxe = df_all[~df_all['halId_s'].isin(df_noaxe['halId_s'])]
+    
+    #------------------------------------------splitaxe-----------------------------------------------
+    df_hasaxe = split_axe(df_hasaxe)
+    
+    #------------------------------------------embeddings-----------------------------------------------
+    from sentence_transformers import SentenceTransformer
+    embedding_model = SentenceTransformer("BAAI/bge-m3")
+    # 
+    df_hasaxe_embedded=check_before_emb_text(df=df_hasaxe, embedding_model=embedding_model, 
+                                               batch_size=32, df_all_emb_path=df_all_emb_path)    
+    # st.session_state['df_hasaxe_embedded']=df_hasaxe_embedded
+
+    #-----------------------------------------df_long----------------------------------------------------
+    df_hasaxe_long = to_df_long(df_hasaxe_embedded, cols=['emb_title_s','emb_keyword_s','emb_abstract_s'],
+                                pq_long_path=None)
+    # st.session_state['df_hasaxe_long']=df_hasaxe_long
+
+
+    #----------------------------------------prediction-----------------------------------------------
+    df_long_predicted = load_predict(df=df_hasaxe_long,
+                                        mlp_model_path=mlp_model_path,
+                                        lr_model_path=lr_model_path,
+                                        lgb_model_path=lgb_model_path,
+                                        t_lr=0.25, t_lgb=0.9, f1_lr=0.44, f1_lgb=0.35, t_ens=0.52)
+    
+
+    # --------------------------------------merge back---------------------------------------------
+    df_hasaxe_pred=gather_predicted_axes_st(df_long_predicted, df_all=df_hasaxe, groupby_col='halId_s')
+    # split but not long 
+
+    # [INFO] def parse_axes(axe_str):
+        # # map axe 字符到索引
+        # axe_map = {"1": 0, "2": 1, "3": 2, "4": 3}
+
+        # # 如果是 nan 或 "nan"，返回全 0
+        # if pd.isna(axe_str) or str(axe_str).lower() == "nan":
+        #     return [0, 0, 0, 0]
+        # # 拆分并 strip
+        # labels = [s.strip() for s in str(axe_str).split(";")]
+        # vec = [0, 0, 0, 0]
+        # for lbl in labels:
+        #     if lbl in axe_map:
+        #         vec[axe_map[lbl]] = 1
+        # return vec
+
+    df_hasaxe_pred['predicted_axes_vec'] = df_hasaxe_pred["predicted_axe"].apply(parse_axes)
+    y_true = df_hasaxe_pred['axes_vec'].values.astype(np.float32)
+    y_pred= df_hasaxe_pred['predicted_axes_vec'].values.astype(np.float32)
+
+    evaluate_model(y_true=y_true, y_pred=y_pred)
+
+    return 
+
+
+
+
+
+
 
 
 
@@ -1067,10 +1198,10 @@ def apply_auto_completion_axes_st(
     #------------------------------------------read&filtrate-----------------------------------------------
     st.write(f"**[ETAPE1] Lire le CSV et sélectionner les lignes sans axes**")
     # df_all = pd.read_csv(df_all_path)
-    df_noaxe = df_all[(df_all['Axe'].isna())|(df_all['Axe']=="nan")]
+    df_noaxe = df_all[(df_all['axe'].isna())|(df_all['axe']=="nan")]
     df_hasaxe = df_all[~df_all['halId_s'].isin(df_noaxe['halId_s'])]
 
-    st.write(f"[INFO] Répartition des axes: \n{df_all.Axe.value_counts(dropna=False)}")
+    st.write(f"[INFO] Répartition des axes: \n{df_all.axe.value_counts(dropna=False)}")
     st.write(f"- len df_all: {len(df_all)}")
     st.write(f"- len df_noaxe: {len(df_noaxe)}")
     st.write(f"- len df_hasaxe: {len(df_hasaxe)}")
@@ -1079,46 +1210,29 @@ def apply_auto_completion_axes_st(
     st.write(f"**[ETAPE2] Split axe en 4 colonnes 'axe1-4' et 'axes_vec'**")
     df_noaxe = split_axe(df_noaxe)
     st.session_state.df_noaxe=df_noaxe
-    # st.dataframe(df_noaxe.head())
 
     #------------------------------------------embeddings-----------------------------------------------
     st.write(f"**[ETAPE3] Embeddings des titres, mots-clés et résumés**")
-    # if os.path.exists(noaxe_pq_path):
-    #     st.write(f"[INFO] Embeddings déjà existants")
-
+   
     if 'df_noaxe_embedded' in st.session_state:
         st.write(f"[INFO] Embeddings déjà existants")
 
     else:
+        st.write(f"[LOAD] Loading embeddings model 'BAAI/bge-m3'...")
         from sentence_transformers import SentenceTransformer
         embedding_model = SentenceTransformer("BAAI/bge-m3")
         
-        # Embedding logic:
-        # filtrate df_to_emb, df_embedded:
-        df_to_emb, df_embedded=filtrate_df_to_emb(df_noaxe, df_all_emb_path)
-        
-        # emb df_to_emb:
-        for col_text in ['title_s','keyword_s','abstract_s']:
-            df_to_emb= emb_text(df=df_to_emb, model=embedding_model, batch_size=32, col_text=col_text, col_emb=f"emb_{col_text}", 
-                            pq_path=None)
-            ## [IMPO] 处理完一列要把新的df_to_emb输入，接着处理下一列，所以要io的变量名一致
-
-        # concat & save :
-        df_noaxe_embedded=pd.concat([df_to_emb, df_embedded], axis=0)
-        # os.makedirs(os.path.dirname(noaxe_pq_path), exist_ok=True)
-        # df_noaxe_embedded.to_parquet(noaxe_pq_path, index=False)
+        st.write(f"[INFO] Finding articles that dont have embeddings...")
+        df_noaxe_embedded=check_before_emb_text(df=df_noaxe, embedding_model=embedding_model, 
+                                               batch_size=32, df_all_emb_path=df_all_emb_path)
         st.session_state['df_noaxe_embedded']=df_noaxe_embedded
 
     #------------------------------------------long df-----------------------------------------------
     st.write(f"**[ETAPE4] Transformer df_noaxe en df_noaxe_long**")
-    # df_noaxe_embedded = pd.read_parquet(noaxe_pq_path)
-    # noaxe_pq_long_path = noaxe_pq_path.replace('.parquet','_long.parquet')
-    
     if 'df_noaxe_embedded' in st.session_state:
         df_noaxe_embedded=st.session_state['df_noaxe_embedded']
         df_noaxe_long = to_df_long(df_noaxe_embedded, cols=['emb_title_s','emb_keyword_s','emb_abstract_s'],
                                 pq_long_path=None)
-        # st.session_state['df_noaxe_long']=df_noaxe_long    
        
     #------------------------------------------prediction-----------------------------------------------
     st.write(f"**[ETAPE5] Prédire les axes avec les modèles MLP/LR/LGB**")
@@ -1130,37 +1244,23 @@ def apply_auto_completion_axes_st(
 
     #------------------------------------------merge predictions----------------------------------------
     st.write(f"**[ETAPE6] Fusionner les prédictions avec le df original**")
-    axe_cols = ["pred_axe1", "pred_axe2", "pred_axe3", "pred_axe4"]
-    df_hal = df_long_predicted.groupby("halId_s")[axe_cols].max().reset_index()
-
     df_all=st.session_state.df_all
+    df_all=gather_predicted_axes_st(df_long_predicted, df_all, groupby_col='halId_s')
 
-    # Génération de predicted_Axe
-    hal_axes_dict = dict(zip(df_hal["halId_s"], df_hal.apply(lambda row: "; ".join([str(i+1) for i, col in enumerate(axe_cols) if row[col]==1]), axis=1)))
-    if "predicted_Axe" in df_all.columns:
-        df_all.drop(columns='predicted_Axe', inplace=True)
-    idx = df_all.columns.get_loc("Axe")
-    df_all.insert(idx + 1, "predicted_Axe", df_all["halId_s"].map(hal_axes_dict))
+    # axe_cols = ["pred_axe1", "pred_axe2", "pred_axe3", "pred_axe4"]
+    # df_hal = df_long_predicted.groupby("halId_s")[axe_cols].max().reset_index()
+    # # Génération de predicted_Axe
+    # hal_axes_dict = dict(zip(df_hal["halId_s"], df_hal.apply(lambda row: "; ".join([str(i+1) for i, col in enumerate(axe_cols) if row[col]==1]), axis=1)))
+    # if "predicted_Axe" in df_all.columns:
+    #     df_all.drop(columns='predicted_Axe', inplace=True)
+    # idx = df_all.columns.get_loc("Axe")
+    # df_all.insert(idx + 1, "predicted_Axe", df_all["halId_s"].map(hal_axes_dict))
 
-    # final_axe
-    def merge_axes(row):
-        axes = set()
-        if pd.notna(row['Axe']):
-            axes.update(s.strip() for s in str(row['Axe']).split(';') if s.strip())
-        if pd.notna(row['predicted_Axe']):
-            axes.update(s.strip() for s in str(row['predicted_Axe']).split(';') if s.strip())
-        if not axes:
-            return np.nan
-        #float变成int，再排序
-        axes_sorted = sorted([str(int(float(a))) for a in axes])
-        return "; ".join(axes_sorted)
-
-        # return "; ".join(sorted(axes, key=int))
-
+    #final axe:
     df_all['final_axe'] = df_all.apply(merge_axes, axis=1)
 
-    st.write(f"Répartition des axes après fusion: ")
-    st.dataframe(df_all[['halId_s','title_s',"keyword_s",'abstract_s','Axe','predicted_Axe','final_axe']])
+    st.write(f"[INFO] Répartition des axes après fusion: ")
+    st.dataframe(df_all[['halId_s','title_s',"keyword_s",'abstract_s','axe','predicted_axe','final_axe']])
     st.session_state['df_all_pred']=df_all
     
 
@@ -1169,6 +1269,14 @@ def apply_auto_completion_axes_st(
     # st.write(f"[SAVE] df avec axes prédits sauvegardé: {df_all_outpath}")
     
     return df_all
+
+
+
+
+
+
+
+
 
 
 
@@ -1207,29 +1315,29 @@ def auto_completion_by_sim(df, model_name, threshold=0.4):
 
     # =====================step3 :prediction by similarity between embeddings=====================
 
-    df["original_axe"] = df["Axe"]#保留原值
+    df["original_axe"] = df["axe"]#保留原值
     # missing_data_warning(df, col='Axe', show_distribution=False)
 
-    df=explode_by_col(df, col="Axe")#fillna('nan')#原axe已经被exploded
-    df["Axe"] = df["Axe"].replace("nan", np.nan)
+    df=explode_by_col(df, col="axe")#fillna('nan')#原axe已经被exploded
+    df["axe"] = df["axe"].replace("nan", np.nan)
     
 
     #计算每一个主题的平均向量：
-    axe_means = df[df["Axe"].notna()].groupby("Axe")["embedding"].apply(
+    axe_means = df[df["axe"].notna()].groupby("axe")["embedding"].apply(
         lambda emb: np.mean(list(emb), axis=0)
     )
 
     def predict_axes_for_row(row, threshold):
-        if pd.isna(row["Axe"]):#若无axe
+        if pd.isna(row["axe"]):#若无axe
             sims = {axe: cosine_similarity([row["embedding"]], [axe_means[axe]])[0][0] for axe in axe_means.index}
-            # 返回匹配的 Axe
+            # 返回匹配的axe
             return [axe for axe, score in sims.items() if score >= threshold]
         else:
-            return [row["Axe"]]
+            return [row["axe"]]
 
     df["predicted_axe"] = df.apply(lambda row: predict_axes_for_row(row, threshold), axis=1)
 
-    # print(df.Axe.value_counts(dropna=False),'\n')
+    # print(df.axe.value_counts(dropna=False),'\n')
     # print(df.predicted_axe.value_counts(dropna=False),'\n')
     # missing_data_warning(df, col='original_axe', show_distribution=False)
     #一篇可能有多个axes超过了 threshold
@@ -1272,10 +1380,10 @@ def auto_completion_by_sim(df, model_name, threshold=0.4):
 
     #=======================step 4: evaluate by metrics================================ 
     
-    df_valid = df[df["Axe"].notna()].drop_duplicates(subset='halId_s')
+    df_valid = df[df["axe"].notna()].drop_duplicates(subset='halId_s')
 
     # 所有可能的Axe标签
-    unique_labels = sorted(df_valid["Axe"].dropna().unique().tolist())
+    unique_labels = sorted(df_valid["axe"].dropna().unique().tolist())
     #['1', '2', '3']
 
     # 转为多标签二进制格式
