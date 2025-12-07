@@ -929,50 +929,41 @@ def save_file_csv_xlsx_by_filename(df, filename):
     import streamlit as st
     
     if df is not None and not df.empty:
-        csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
-        st.download_button("Télécharger CSV", data=csv_data, file_name=filename+".csv", mime="text/csv")
+    #  ----------------SAVE TO LOCAL----------------- 
+        cols=st.columns(4)
+        #---------------file name------------------- 
+        with cols[0]:
+            file_name = st.text_input(
+                f"Nom du fichier :",  # 提示文字
+                value=filename,            # 默认值
+            )
+        #---------------as CSV------------------- 
+        with cols[2]:
+            csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
+            st.download_button(
+                label="Télécharger CSV",
+                data=csv_data,
+                file_name = file_name+".csv",
+                mime="text/csv"
+            )
 
-        xlsx_buffer = io.BytesIO()
-        with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
-            df.to_excel(writer, index=False, sheet_name="Articles")
-        xlsx_data = xlsx_buffer.getvalue()
-        st.download_button("Télécharger XLSX", data=xlsx_data, file_name=filename+".xlsx",
-                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        #---------------as XLSX------------------- 
+        with cols[3]:
+            # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
+            xlsx_buffer = io.BytesIO()
+            with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
+                df.to_excel(writer, index=False, sheet_name="Articles")
+            xlsx_data = xlsx_buffer.getvalue()
 
-    # #  ----------------SAVE TO LOCAL----------------- 
-    #     cols=st.columns(4)
-    #     #---------------file name------------------- 
-    #     with cols[0]:
-    #         file_name = st.text_input(
-    #             f"Nom du fichier :",  # 提示文字
-    #             value=uploded_filename+"_finalaxe",            # 默认值
-    #         )
-    #     #---------------as CSV------------------- 
-    #     with cols[2]:
-    #         csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
-    #         st.download_button(
-    #             label="Télécharger CSV",
-    #             data=csv_data,
-    #             file_name = file_name+".csv",
-    #             mime="text/csv"
-    #         )
-            
-    #     #---------------as XLSX------------------- 
-    #     with cols[3]:
-    #         # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
-    #         xlsx_buffer = io.BytesIO()
-    #         with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
-    #             df.to_excel(writer, index=False, sheet_name="Articles")
-    #         xlsx_data = xlsx_buffer.getvalue()
+            st.download_button(
+                label="Télécharger XLSX",
+                data=xlsx_data,
+                file_name=file_name+".xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
 
-    #         st.download_button(
-    #             label="Télécharger XLSX",
-    #             data=xlsx_data,
-    #             file_name=file_name+".xlsx",
-    #             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    #         )
-
-    #         # 这是 XLSX 文件的 MIME 类型，告诉浏览器这是一个 Excel 文件，否则st button可能无法识别文件类型 
+            # 这是 XLSX 文件的 MIME 类型，告诉浏览器这是一个 Excel 文件，否则st button可能无法识别文件类型 
     else : 
         st.warning(f"df.empty!")
     return
+

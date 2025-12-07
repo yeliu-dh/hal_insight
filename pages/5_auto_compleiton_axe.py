@@ -68,17 +68,16 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                             )
      
     #------------------save to local-------------------
-    if df_all_pred in st.session_state:
+    if "df_all_pred" in st.session_state:
         df_all_pred=st.session_state['df_all_pred']
-        # show
-        st.dataframe(df_all_pred[['halId_s','title_s',"keyword_s",'abstract_s','Axe','predicted_Axe','final_axe']])
-
         try :
-            filename=st.session_state['uploaded_df_filename']+"_final_axe"
+            filename=st.session_state['uploaded_df_filename'].split('.')[0]+"_final_axe"
             save_file_csv_xlsx_by_filename(df_all_pred, filename)
         except Exception as e:
             st.warning (f"ERROR in save_file_csv_xlsx :\n {e}")   
         st.divider()   
+
+
 
 st.subheader("📒 README")
 

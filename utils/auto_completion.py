@@ -1161,14 +1161,16 @@ def apply_auto_completion_axes_st(
 
     st.write(f"Répartition des axes après fusion: ")
     st.dataframe(df_all[['halId_s','title_s',"keyword_s",'abstract_s','Axe','predicted_Axe','final_axe']])
-
     st.session_state['df_all_pred']=df_all
+    
 
     # os.makedirs(os.path.dirname(df_all_outpath), exist_ok=True)
     # df_all.to_csv(df_all_outpath, index=False)
     # st.write(f"[SAVE] df avec axes prédits sauvegardé: {df_all_outpath}")
     
     return df_all
+
+
 
 
 
