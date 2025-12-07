@@ -32,8 +32,9 @@ st.divider() #分割线
 # init_db()
 
 # # --- 留言板 ---
-# st.subheader("📬 Feedbacks")
-# st.markdown("Merci de m'écrire ici ou par email (ye.liu@chartes.psl.eu)")
+st.subheader("📬 Feedbacks")
+st.markdown("Merci de m'écrire par email pour tout problème : ye.liu@chartes.psl.eu")
+
 # page = st.selectbox("App en question", ["articles fetcher", "tendance & répartition", "wordcloud global", "wordcloud évolutif", "Autres pages"])
 # problem = st.text_area("Votre feedback:")
 
