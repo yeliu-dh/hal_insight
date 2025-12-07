@@ -110,10 +110,15 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
   # ------------gourpby-------------------
     #radio多选,checkbox单选
+    # COL_MAP = {
+    #     "Global": "global",
+    #     "Axe": "par axe",
+    #     "Cl. FNEGE": "par classe FNEGE"
+    # }
     COL_MAP = {
         "Global": "global",
-        "Axe": "par axe",
-        "Cl. FNEGE": "par classe FNEGE"
+        "axe": "par axe",
+        "cl_fnege": "par classe FNEGE"
     }
     group_by = st.radio(
         "💾 Groupe des textes :",
