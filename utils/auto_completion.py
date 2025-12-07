@@ -295,7 +295,9 @@ def emb_text(df, model=None, batch_size=32, col_text=None, col_emb=None, pq_path
 
 
 def to_df_long (df,cols=['emb_title_s','emb_keyword_s','emb_abstract_s'], 
-                pq_long_path="../external_data/df_noaxe_3emb_long.parquet"):
+                pq_long_path=None
+                # "../external_data/df_noaxe_3emb_long.parquet"
+                ):
     # 拆成三行后，每行的数据比完整文本弱（因为只看标题、或关键词、或摘要），
     # 模型可能会更偏向预测常见类别。
     rows = []
@@ -344,8 +346,9 @@ def to_df_long (df,cols=['emb_title_s','emb_keyword_s','emb_abstract_s'],
     # one-hot
     df_long["source_vec"] = df_long["source_id"].apply(lambda x: np.eye(3)[x])
 
-    df_long.to_parquet(pq_long_path)
-    print(f"[SAVE] df_long saved to {pq_long_path}!")
+    if pq_long_path!= None :
+        df_long.to_parquet(pq_long_path)
+        print(f"[SAVE] df_long saved to {pq_long_path}!")
 
     return df_long
 
@@ -1017,10 +1020,11 @@ def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifique
 
 
 def apply_auto_completion_axes_st(
-        df_all_path="data/20251201-ProductionScientifiqueIRG-__-202512_2734art.csv",
-        df_all_outpath="data_axe/20251201-ProductionScientifiqueIRG-__-202512_2734art_predaxe.csv",
+        df_all, # df_all_path="data/20251201-ProductionScientifiqueIRG-__-202512_2734art.csv",
+        # df_all_outpath="data_axe/20251201-ProductionScientifiqueIRG-__-202512_2734art_predaxe.csv",
         df_all_emb_path="../external_data/df_all_3emb.parquet",
-        noaxe_pq_path='../external_data/df_noaxe_3emb.parquet',
+        # st.session_state.df_noaxe
+        # noaxe_pq_path='../external_data/df_noaxe_3emb.parquet',
         mlp_model_path="../model/best_mlp_3emb_2.pt",
         lr_model_path="../model/best_lr_3emb.pt",
         lgb_model_path="../model/best_lgb_3emb.txt",
@@ -1033,7 +1037,7 @@ def apply_auto_completion_axes_st(
 
     #------------------------------------------read&filtrate-----------------------------------------------
     st.write(f"**[ETAPE1] Lire le CSV et sélectionner les lignes sans axes**")
-    df_all = pd.read_csv(df_all_path)
+    # df_all = pd.read_csv(df_all_path)
     df_noaxe = df_all[(df_all['Axe'].isna())|(df_all['Axe']=="nan")]
     df_hasaxe = df_all[~df_all['halId_s'].isin(df_noaxe['halId_s'])]
 
@@ -1045,13 +1049,19 @@ def apply_auto_completion_axes_st(
     #------------------------------------------splitaxe-----------------------------------------------
     st.write(f"**[ETAPE2] Split axe en 4 colonnes 'axe1-4' et 'axes_vec'**")
     df_noaxe = split_axe(df_noaxe)
-    st.dataframe(df_noaxe.head())
+    st.session_state.df_noaxe=df_noaxe
+    # st.dataframe(df_noaxe.head())
 
     #------------------------------------------embeddings-----------------------------------------------
     st.write(f"**[ETAPE3] Embeddings des titres, mots-clés et résumés**")
-    if os.path.exists(noaxe_pq_path):
+    # if os.path.exists(noaxe_pq_path):
+    #     st.write(f"[INFO] Embeddings déjà existants")
+
+    if 'df_noaxe_embedded' in st.session_state:
         st.write(f"[INFO] Embeddings déjà existants")
+
     else:
+
         from sentence_transformers import SentenceTransformer
         embedding_model = SentenceTransformer("BAAI/bge-m3")
         
@@ -1061,23 +1071,26 @@ def apply_auto_completion_axes_st(
         
         # emb df_to_emb:
         for col_text in ['title_s','keyword_s','abstract_s']:
-            df_to_emb= emb_text(df=df_to_emb, model=None, batch_size=32, col_text=col_text, col_emb=f"emb_{col_text}", 
+            df_to_emb= emb_text(df=df_to_emb, model=embedding_model, batch_size=32, col_text=col_text, col_emb=f"emb_{col_text}", 
                             pq_path=None)
             ## [IMPO] 处理完一列要把新的df_to_emb输入，接着处理下一列，所以要io的变量名一致
 
         # concat & save :
         df_noaxe_embedded=pd.concat([df_to_emb, df_embedded], axis=0)
-        os.makedirs(os.path.dirname(noaxe_pq_path), exist_ok=True)
-        df_noaxe_embedded.to_parquet(noaxe_pq_path, index=False)
-
+        # os.makedirs(os.path.dirname(noaxe_pq_path), exist_ok=True)
+        # df_noaxe_embedded.to_parquet(noaxe_pq_path, index=False)
+        st.session_state['df_noaxe_embedded']=df_noaxe_embedded
 
     #------------------------------------------long df-----------------------------------------------
     st.write(f"**[ETAPE4] Transformer df_noaxe en df_noaxe_long**")
-    df_noaxe_embedded = pd.read_parquet(noaxe_pq_path)
-    noaxe_pq_long_path = noaxe_pq_path.replace('.parquet','_long.parquet')
-    df_noaxe_long = to_df_long(df_noaxe_embedded, cols=['emb_title_s','emb_keyword_s','emb_abstract_s'],
-                               pq_long_path=noaxe_pq_long_path)
-
+    # df_noaxe_embedded = pd.read_parquet(noaxe_pq_path)
+    # noaxe_pq_long_path = noaxe_pq_path.replace('.parquet','_long.parquet')
+    
+    if st.session_state['df_noaxe_embedded']:
+        df_noaxe_long = to_df_long(df_noaxe_embedded, cols=['emb_title_s','emb_keyword_s','emb_abstract_s'],
+                                pq_long_path=None)
+        # st.session_state['df_noaxe_long']=df_noaxe_long    
+       
     #------------------------------------------prediction-----------------------------------------------
     st.write(f"**[ETAPE5] Prédire les axes avec les modèles MLP/LR/LGB**")
     df_long_predicted = load_predict(df=df_noaxe_long,
@@ -1114,9 +1127,9 @@ def apply_auto_completion_axes_st(
     st.write(f"Répartition des axes après fusion: ")
     st.dataframe(df_all[['halId_s','title_s','Axe','predicted_Axe','final_axe']].head())
 
-    os.makedirs(os.path.dirname(df_all_outpath), exist_ok=True)
-    df_all.to_csv(df_all_outpath, index=False)
-    st.write(f"[SAVE] df avec axes prédits sauvegardé: {df_all_outpath}")
+    # os.makedirs(os.path.dirname(df_all_outpath), exist_ok=True)
+    # df_all.to_csv(df_all_outpath, index=False)
+    # st.write(f"[SAVE] df avec axes prédits sauvegardé: {df_all_outpath}")
 
     return df_all
 
