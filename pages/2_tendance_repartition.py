@@ -289,7 +289,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         for col, title in {
             "docType_s": "Répartition par type de document",
             "domain_s": "Répartition par domaine scientifique",
-            "Axe":"Répartition par axe thématique ",
+            "axe":"Répartition par axe thématique ",
             "journalTitle_s":"Répartition par journal",
             'cl_fnege':"Répartition par classement du journal"
             # "language_s": "Répartition par langue",
