@@ -15,12 +15,12 @@ from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 from kneed import KneeLocator
 
-import umap
-import hdbscan
-from sklearn.cluster import KMeans
-from sklearn.metrics import silhouette_score
-from sklearn.decomposition import PCA
-import matplotlib.pyplot as plt
+# import umap
+# import hdbscan
+# from sklearn.cluster import KMeans
+# from sklearn.metrics import silhouette_score
+# from sklearn.decomposition import PCA
+# import matplotlib.pyplot as plt
 
 # model:
 import torch
