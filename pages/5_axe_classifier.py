@@ -19,9 +19,10 @@ from sentence_transformers import SentenceTransformer
 
 #my utils:
 from utils.upload import data_uploader
-from utils.auto_completion import apply_auto_completion_axes_st, evaluate_auto_completion_axes
-from utils.HAL_search_api import save_file_csv_xlsx_by_filename
+from utils.axe_classification_st import evaluate_model_st, evaluate_auto_classification_axes
 
+# from utils.auto_completion_st import apply_auto_completion_axes_st, evaluate_auto_completion_axes
+from utils.HAL_search_api import save_file_csv_xlsx_by_filename
 
 
 # @st.cache_resource  # ✅ 缓存模型
@@ -92,7 +93,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 
     st.subheader("🔢 Evaluation du model")
-    evaluate_auto_completion_axes(
+    evaluate_auto_classification_axes(
         df,
         df_all_emb_path="external_data/df_all_3emb.parquet",
         mlp_model_path="model/best_mlp_3emb_2.pt",
