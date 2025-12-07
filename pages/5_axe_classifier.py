@@ -51,6 +51,16 @@ st.markdown("<br>", unsafe_allow_html=True)
 st.divider() 
 
 
+st.subheader("📒 README")
+
+
+
+
+st.divider()
+
+
+
+
 
 if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None:
     # 若df存在则视为开始
@@ -73,6 +83,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     if "df_all_pred" in st.session_state:
         df_all_pred=st.session_state['df_all_pred']
         try :
+            
             filename=st.session_state['uploaded_df_filename'].split('.')[0]+"_final_axe"
             save_file_csv_xlsx_by_filename(df_all_pred, filename)
         except Exception as e:
@@ -91,8 +102,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     st.divider()
 
-
-st.subheader("📒 README")
 
 
     # df_all_outpath="data_axe/20251201-ProductionScientifiqueIRG-__-202512_2734art_predaxe.csv",

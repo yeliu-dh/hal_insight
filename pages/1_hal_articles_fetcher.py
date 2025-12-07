@@ -202,9 +202,9 @@ fields = st.multiselect(
 )
 
 cutoff_range= list(range(50, 101)) 
-cutoff = st.selectbox("**Cutoff** pour matcher le classement FNEGE",cutoff_range , index=cutoff_range.index(80))
-st.write(f"Cutoff (80 par défaut) :  \n"
-         f"seuil de similarité pour matcher le titre du journal dans le résultat d'HAL et le classement FNEGE.")
+cutoff = st.selectbox("**Cutoff**",cutoff_range , index=cutoff_range.index(80))
+# st.write(f"Cutoff:"
+        #  f"seuil de similarité pour matcher le titre du journal dans le résultat d'HAL et le classement FNEGE.")
 st.markdown("<br>", unsafe_allow_html=True)
 
 
@@ -213,6 +213,18 @@ max_records = st.selectbox("les premier X articles (valeur maximale:5000):", row
 st.markdown("<br>", unsafe_allow_html=True)
 
 
+
+st.subheader("📒 README")
+st.markdown(f"**Classement FNEGE => cl_fnege**:  \n"
+            f"Pour chaque article, nous identifions automatiquement le classement FNEGE de son *journalTitle_s* correspondant à son année de *publicationDate_s*, en comparant le nom de la revue avec les listes FNEGE.  \n"
+            f"Le nom de la revue est associé par recherche floue (seuil *cutoff* = 0.8, ajustable ci-dessus).")
+
+st.markdown(
+    f"**Structure primaire de l'auteur => author_primarystructure_s**:  \n"
+    f"Pour chaque article, nous identifions automatiquement l’institution principale de chaque auteur en utilisant la colonne *authFullName_s* pour retrouver les structures via *authIdHasPrimaryStructure_fs*.  \n"
+    f"Les IDs *1004418* et *57129* correspondent à l’IRG.  \n"
+    # f"Les différentes institutions d’un même article sont concaténées avec un point-virgule ';'."
+)
 
 
 # ----------------------- RESULT -----------------------

@@ -81,8 +81,6 @@ def get_best_n_clusters(df, col_emb='embedding', max_k=5):
     
     return best_n_clusters
 
-
-
 def kmeans_2Dpca(df,best_n_clusters, col_emb="embedding"):
     #------------------KMeans---------------------------
     X = np.vstack(df[col_emb].values)
@@ -121,23 +119,6 @@ def kmeans_2Dpca(df,best_n_clusters, col_emb="embedding"):
     plt.show()
 
     return 
-
-
-
-# def parse_axes(axe_str):
-#     # map axe 字符到索引
-#     axe_map = {"1": 0, "2": 1, "3": 2, "4": 3}
-
-#     # 如果是 nan 或 "nan"，返回全 0
-#     if pd.isna(axe_str) or str(axe_str).lower() == "nan":
-#         return [0, 0, 0, 0]
-#     # 拆分并 strip
-#     labels = [s.strip() for s in str(axe_str).split(";")]
-#     vec = [0, 0, 0, 0]
-#     for lbl in labels:
-#         if lbl in axe_map:
-#             vec[axe_map[lbl]] = 1
-#     return vec
 
 def parse_axes(axe_str):
     # map axe 字符到索引
