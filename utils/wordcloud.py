@@ -42,7 +42,7 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
     #2.a title
     COL_MAP = {
         "Global": "global",
-        "Axe": "par axe",
+        "axe": "par axe",
         # "Cl. FNEGE": "par classe FNEGE"#去除
     }    
     group_by_readable=COL_MAP.get(group_by, group_by)
@@ -58,7 +58,6 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
 
 
     # wc : 先分语言，再分global/axe
-
     if not wc_par_lang:  # 不分语言 → 合并 EN + FR
         suptitle=f"Nuage de mots {group_by_readable} entre {period_y}"
         st.markdown(
@@ -71,7 +70,7 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
             if group_by=="Global":
                 title=" "
                 
-            elif group_by=='Axe': # axe
+            elif group_by=='axe': # axe
                 axe_map = {
                     "1": "Performances et responsabilités",
                     "2": "Société de services et services à la société",
@@ -330,7 +329,7 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
 
     # elif group_by=="Axe" and col_val!=None :
     elif col_val!=None:
-        if group_by=="Axe":
+        if group_by=="axe":
             axe_map = {
                     "1": "Performances et responsabilités",
                     "2": "Société de services et services à la société",

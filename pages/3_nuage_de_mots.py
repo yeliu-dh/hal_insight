@@ -77,7 +77,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     format_func=lambda x: WC_MAP[x]#只改变显示
     )
     # st.write("ps.Les textes sélectionnés sont nettoyés (suppression des espaces, ponctuations et mots grammaticaux courants), mis en minuscules et lemmatisés.")
-    st.write("[README] Les textes sélectionnés sont nettoyés :  \n"
+    st.write(f"**[README] Les textes sélectionnés sont nettoyés** :  \n"
             "- suppression des espaces superflus et de la ponctuation,  \n"
             "- suppression des mots grammaticaux courants et de ceux que vous avez ajoutés,  \n"
             "- mise en minuscules,  \n"
@@ -143,7 +143,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         st.write("Si vous choisissez le nuage de mots évolutif, il n’est pas séparé par langue.")
         missing_data_warning(df, col="language_s", map={"language_s":'langue'}, show_distribution=True)
 
-    else : #wcType=="wcEvolutif"
+    else : #==wcType=="wcEvolutif"
         # ----------------生成时间颗粒----------------
         if "submittedDate_s" in df.columns:
             df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
