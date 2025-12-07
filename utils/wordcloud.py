@@ -11,7 +11,7 @@ from collections import defaultdict
 
 #my utils:
 from utils.preprocess import wrap_text, collect_clean_texts_by_col
-from utils.upload import load_external_json
+from utils.upload import load_external_json, read_json
  
 def generate_wc(text, max_words, stopwords, title="Nuage de mots"):
     wc = WordCloud(
@@ -289,7 +289,10 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
 
 
         # --- 局部词频 ---
-        stopwords_nltk=load_external_json("external_data/stopwords_nltk.json")
+
+        # stopwords_nltk=load_external_json("external_data/stopwords_nltk.json")
+        stopwords_nltk=read_json("external_data/stopwords_nltk.json")
+
         
         if text:
             freq_slice = pd.Series(text.split()).value_counts()

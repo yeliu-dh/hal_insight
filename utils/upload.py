@@ -9,7 +9,11 @@ from pathlib import Path
 
 # from utils.preprocess import explode_by_col# preprocess用到了这里的load_exetrnal_json, 无法互相循环导入包
 
-
+def read_json(json_path):
+    with open(json_path, "r", encoding="utf-8") as f:
+        return json.load(f)
+    
+ 
 
 def save_as_json(data, path):
     with open (path, "w", encoding='utf-8') as f:
@@ -24,9 +28,10 @@ def load_external_json(file_path):
     file_path = BASE_DIR / file_path
     # st.write(file_path)
     if not file_path.exists():
-        raise FileNotFoundError("NO FILE FOUND!")
+        raise FileNotFoundError("utils.upload : load_external_json : NO FILE FOUND!")
     with open(file_path, "r", encoding="utf-8") as f:
         return json.load(f)
+
 
 
 

@@ -33,7 +33,6 @@ from utils.wordcloud import generate_keyness_wc
 #     stopwords_nltk=load_external_json('external_data',"stopwords_nltk")
 #     stopwords_nltk=list(stopwords_nltk.values())
 #     return stopwords_nltk
-
 # stopwords=get_stopwords()
 
 
@@ -103,7 +102,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
         horizontal=True
     )
-    st.write(f"Le nuage de mots évolutif est calculé à l'aide de méthode de **keyness**, mettant en évidence les mots dont la fréquence se distingue significativement d’une période à l’autre.")
+    st.write(f"- Le nuage de mots évolutif est calculé à l'aide de méthode de **keyness**, mettant en évidence les mots dont la fréquence se distingue significativement d’une période à l’autre.")
     st.markdown("<br>", unsafe_allow_html=True)
 
 
