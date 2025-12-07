@@ -289,7 +289,7 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
 
 
         # --- 局部词频 ---
-        stopwords_nltk=load_external_json("json_data/stopwords_nltk.json")
+        stopwords_nltk=load_external_json("external_data/stopwords_nltk.json")
         
         if text:
             freq_slice = pd.Series(text.split()).value_counts()

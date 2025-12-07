@@ -30,7 +30,7 @@ from utils.wordcloud import generate_keyness_wc
 # #====================CACHE=========================#
 # @st.cache_data 
 # def get_stopwords():   
-#     stopwords_nltk=load_external_json('json_data',"stopwords_nltk")
+#     stopwords_nltk=load_external_json('external_data',"stopwords_nltk")
 #     stopwords_nltk=list(stopwords_nltk.values())
 #     return stopwords_nltk
 
