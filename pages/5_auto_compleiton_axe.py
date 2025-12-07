@@ -19,8 +19,10 @@ from sentence_transformers import SentenceTransformer
 
 #my utils:
 from utils.upload import data_uploader
-# from utils.auto_completion import auto_completion_by_sim
 from utils.auto_completion import apply_auto_completion_axes_st
+from utils.HAL_search_api import save_file_csv_xlsx
+
+
 
 # @st.cache_resource  # ✅ 缓存模型
 # def load_embedding_model(model_name):
@@ -31,7 +33,6 @@ from utils.auto_completion import apply_auto_completion_axes_st
 
 st.set_page_config(page_title="HAL insight", page_icon="🛸",layout="wide")
 st.title("📃 Auto-completion des axes")
-
 
 # -------------------------------
 # 1️⃣ 初始化 Session State
@@ -60,8 +61,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     st.markdown("<br>", unsafe_allow_html=True)
 
     df_all_pred=apply_auto_completion_axes_st(df,
-                            df_all_emb_path="../external_data/df_all_3emb.parquet",
-                            noaxe_pq_path='../external_data/df_noaxe_3emb.parquet',
+                            df_all_emb_path="external_data/df_all_3emb.parquet",
                             mlp_model_path="../model/best_mlp_3emb_2.pt",
                             lr_model_path="../model/best_lr_3emb.pt",
                             lgb_model_path="../model/best_lgb_3emb.txt",
@@ -71,7 +71,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     
     #------------------save to local-------------------
     try :
-        save_file_csv_xlsx(df,start_year, start_month, end_year, end_month)
+        save_file_csv_xlsx(df_all_pred,start_year, start_month, end_year, end_month)
     except Exception as e:
         st.warning (f"ERROR in save_file_csv_xlsx :\n {e}")   
 

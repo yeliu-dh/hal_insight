@@ -105,6 +105,9 @@ def data_uploader(key="uploaded_df"):
         except Exception as e:
             st.error(f"⚠ {e}")
 
+    # filename=uploaded_file.name.split('.')[0]
+
+
     
     # 如果uploaded df存在,无论是用户刚上传，还是通过搜索保存的
     if key in st.session_state and st.session_state[key] is not None:
@@ -117,7 +120,7 @@ def data_uploader(key="uploaded_df"):
         }.get(source, "source")
 
         st.success(f" Data importé | Source :{source_label} | {len(st.session_state[key])} lignes au total.")
-        st.dataframe(st.session_state[key].head())
+        st.dataframe(st.session_state[key])
     else:
         st.info("Aucun fichier importé. Veuillez chercher des articles ou charger un CSV.")
 

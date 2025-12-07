@@ -254,32 +254,63 @@ def emb_text(df, model=None, batch_size=32, col_text=None, col_emb=None, pq_path
 
     # 分离空文本和非空文本
     mask_empty = df[col_text].str.strip() == ""
-    mask_nonempty = ~mask_empty
+    mask_nonempty = ~mask_empty # mask_nonempty.values 是一个长度等于 len(df) 的布尔数组
+    # print(f"len(df) = {len(df)}")
+    # print(f"mask_nonempty.sum() = {mask_nonempty.sum()}")
+    # print(f"emb_nonempty.shape = {emb_nonempty.shape}")
 
     texts_nonempty = df.loc[mask_nonempty, col_text].astype(str).tolist()
 
+
+    # V1:Encode 只有非空文本
+    # print(f"- Encoding {len(texts_nonempty)} non-empty texts in column '{col_text}'...")
+    # emb_nonempty = model.encode(
+    #     texts_nonempty,
+    #     batch_size=batch_size,
+    #     normalize_embeddings=True,
+    #     show_progress_bar=True
+    # )
+
+    # # print(f"[ENCODE] done. Shape = {emb_nonempty.shape}. Time: {end_time-start_time:.2f} sec")
+
+    # # 创建最终 embedding 列
+    # emb_all = np.zeros((len(df), emb_dim), dtype=np.float32)
+
+    # # 对非空文本填入真实 embedding
+    # emb_all[mask_nonempty.values] = emb_nonempty
+
+    # V2
     # Encode 只有非空文本
-    print(f"- Encoding {len(texts_nonempty)} non-empty texts in column '{col_text}'...")
-    start_time = time.time()
     emb_nonempty = model.encode(
         texts_nonempty,
         batch_size=batch_size,
         normalize_embeddings=True,
         show_progress_bar=True
     )
-    end_time = time.time()
 
-    # print(f"[ENCODE] done. Shape = {emb_nonempty.shape}. Time: {end_time-start_time:.2f} sec")
+    # 转成 numpy
+    emb_nonempty = np.array(emb_nonempty)
+
+    # 强制 reshape 成二维 (n_texts, emb_dim)
+    if emb_nonempty.ndim == 1:
+        emb_nonempty = emb_nonempty.reshape(1, -1)
+
+    # 检查列数
+    emb_dim = model.get_sentence_embedding_dimension()
+    if emb_nonempty.shape[1] != emb_dim:
+        # 如果返回了 shape (1,0)，补齐为 zeros
+        emb_nonempty = np.zeros((emb_nonempty.shape[0], emb_dim), dtype=np.float32)
+
 
     # 创建最终 embedding 列
     emb_all = np.zeros((len(df), emb_dim), dtype=np.float32)
-
-    # 对非空文本填入真实 embedding
     emb_all[mask_nonempty.values] = emb_nonempty
+
+
 
     # 对空文本保持 zero vector（默认）
     #[0,0,0,...,0]（更好的指示 "无信息"）
-
+    # add col
     df[col_emb] = list(emb_all)
 
     # 保存 parquet
@@ -896,6 +927,12 @@ def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifique
     print(f"\n[ETAPE3] Embedder les titres, les mots, les résumés des {len(df_noaxe)} lignes non-axées par le modèle '{embedding_model_name}'...\n")
 
     if os.path.exists(noaxe_pq_path):
+        # df_noaxe_embedded=pd.read_parquet(noaxe_pq_path)
+        # all_embbded=[0 for halid in df_noaxe['halId_s'].tolist() if halid in df_noaxe_embedded['halId_s'].tolist() else 1]
+        # if all_embbded.sum()!=0:
+            # to emb
+        # else :
+
         print(f"[INFO] embeddings existe déjà! Passez à l'étape suivante!")
     else :
         print(f"Veuillez vous patienter pendant l'embeddings.")
@@ -1022,18 +1059,19 @@ def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifique
 def apply_auto_completion_axes_st(
         df_all, # df_all_path="data/20251201-ProductionScientifiqueIRG-__-202512_2734art.csv",
         # df_all_outpath="data_axe/20251201-ProductionScientifiqueIRG-__-202512_2734art_predaxe.csv",
-        df_all_emb_path="../external_data/df_all_3emb.parquet",
+        df_all_emb_path="external_data/df_all_3emb.parquet",
         # st.session_state.df_noaxe
         # noaxe_pq_path='../external_data/df_noaxe_3emb.parquet',
-        mlp_model_path="../model/best_mlp_3emb_2.pt",
-        lr_model_path="../model/best_lr_3emb.pt",
-        lgb_model_path="../model/best_lgb_3emb.txt",
+        mlp_model_path="model/best_mlp_3emb_2.pt",
+        lr_model_path="model/best_lr_3emb.pt",
+        lgb_model_path="model/best_lgb_3emb.txt",
     ):
 
     import os
     import pandas as pd
     import numpy as np
     import streamlit as st
+    st.session_state.df_all=df_all.copy()
 
     #------------------------------------------read&filtrate-----------------------------------------------
     st.write(f"**[ETAPE1] Lire le CSV et sélectionner les lignes sans axes**")
@@ -1086,7 +1124,8 @@ def apply_auto_completion_axes_st(
     # df_noaxe_embedded = pd.read_parquet(noaxe_pq_path)
     # noaxe_pq_long_path = noaxe_pq_path.replace('.parquet','_long.parquet')
     
-    if st.session_state['df_noaxe_embedded']:
+    if 'df_noaxe_embedded' in st.session_state:
+        df_noaxe_embedded=st.session_state['df_noaxe_embedded']
         df_noaxe_long = to_df_long(df_noaxe_embedded, cols=['emb_title_s','emb_keyword_s','emb_abstract_s'],
                                 pq_long_path=None)
         # st.session_state['df_noaxe_long']=df_noaxe_long    
@@ -1103,6 +1142,8 @@ def apply_auto_completion_axes_st(
     st.write(f"**[ETAPE6] Fusionner les prédictions avec le df original**")
     axe_cols = ["pred_axe1", "pred_axe2", "pred_axe3", "pred_axe4"]
     df_hal = df_long_predicted.groupby("halId_s")[axe_cols].max().reset_index()
+
+    df_all=st.session_state.df_all
 
     # Génération de predicted_Axe
     hal_axes_dict = dict(zip(df_hal["halId_s"], df_hal.apply(lambda row: "; ".join([str(i+1) for i, col in enumerate(axe_cols) if row[col]==1]), axis=1)))

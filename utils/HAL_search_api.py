@@ -441,12 +441,6 @@ def clean_axe_from_classification(df,axe_name='Axe'):
 
 
 
-
-
-
-
-
-
 #===========================================FNEGE===========================================================#
 from typing import Dict, Any #Python 类型注解模块 typing 里的类型提示
 from rapidfuzz import process
@@ -871,10 +865,9 @@ def process_df(df, DOMAIN_MAP, FNEGE_MAP, cutoff):
 #===========================================SAVE=======================================================#
 
 
-import io
-from datetime import datetime
-
 def save_file_csv_xlsx(df,start_year, start_month, end_year, end_month):
+    import io
+    from datetime import datetime   
     if end_year=="aujourd'hui" or end_month=="aujourd'hui":
         now = datetime.now()
         current_year, current_month = now.year, now.month
