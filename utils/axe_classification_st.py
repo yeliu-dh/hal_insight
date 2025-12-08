@@ -90,7 +90,7 @@ def gather_predicted_axes_st(df_long_predicted,
     return df_all
 
  
-def apply_auto_completion_axes_st(
+def apply_auto_classification_axes_st(
         df_all, # df_all_path="data/20251201-ProductionScientifiqueIRG-__-202512_2734art.csv",
         df_all_emb_path="external_data/df_all_3emb.parquet",
         mlp_model_path="model/best_mlp_3emb_2.pt",
@@ -146,7 +146,7 @@ def apply_auto_completion_axes_st(
                                 pq_long_path=None)
        
     #------------------------------------------prediction-----------------------------------------------
-    st.write(f"**[ETAPE5] Prédire les axes avec les modèles MLP/LR/LGB**")
+    st.write(f"**[ETAPE5] Prédire les axes avec les modèles MLP+LR+LGB**")
     df_long_predicted = load_predict(df=df_noaxe_long,
                                      mlp_model_path=mlp_model_path,
                                      lr_model_path=lr_model_path,
