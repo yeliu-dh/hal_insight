@@ -215,7 +215,7 @@ def evaluate_model_st(y_true, y_pred):
     
 
 
-def evaluate_auto_classification_axes(
+def evaluate_auto_classification_axes_st(
         df_all,
         df_all_emb_path="external_data/df_all_3emb.parquet",
         mlp_model_path="model/best_mlp_3emb_2.pt",

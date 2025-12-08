@@ -52,6 +52,7 @@ st.divider()
 
 
 st.subheader("📒 README")
+st.markdown("👉Consulter [Entraînement des modèles (notebook)](https://github.com/yeliu-dh/hal_insight/blob/main/notebooks/test_multiaxe_3emb.ipynb)")
 
 
 
