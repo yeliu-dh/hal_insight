@@ -124,6 +124,13 @@ def kmeans_2Dpca(df,best_n_clusters, col_emb="embedding"):
 
     return 
 
+
+
+
+
+
+
+
 def parse_axes(axe_str):
     # map axe 字符到索引
     axe_map = {"1": 0, "2": 1, "3": 2, "4": 3}
