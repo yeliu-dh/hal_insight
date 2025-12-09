@@ -772,9 +772,9 @@ def update_author_primarystructure_s(names:list, file_path='../external_data/aut
 def add_primarystructure(df, author_primarystructure_s_map):
     #读取map中author对应的id_structure str
     # 把author_primarystructure添加到lab后的一列，命名为author_primarystructure_s
-
     # primarystructures=df['authFullName_s'].apply(lambda x: ";".join([author_primarystructure_s_map.get(a, np.nan) 
     #                                                     for a in x.split(";")]) if isinstance(x, str) else np.nan)
+    
     primarystructures=df['authFullName_s'].apply(lambda x: ";".join([str(author_primarystructure_s_map.get(a.strip(), "mapping_error"))
                                                     for a in x.split(";") if a.strip()]
                                                 ) if isinstance(x, str) else "fullname_not_strs")
@@ -844,7 +844,6 @@ def process_df(df, DOMAIN_MAP, FNEGE_MAP, cutoff):
             if n.strip()
         ])
         author_primarystructure_s_map=update_author_primarystructure_s(names, file_path='external_data/author_primarystructure_s_map.json')
-            
         df= add_primarystructure(df, author_primarystructure_s_map)#map
         st.write(f"✔ Structures primaires mappées!")
         missing_data_warning(df, col="author_primarystructure_s", show_distribution=False)#check
