@@ -596,61 +596,111 @@ def add_classement_fnege(
     return df
 
 
-
-# def add_classement_fnege(
+# def add_classement_fnege_v2(
 #     df: pd.DataFrame,
 #     fnege_df: pd.DataFrame,
 #     journal_col: str = "journalTitle_s",
 #     year_col: str = "publicationDate_s",
 #     cl_name: str = 'cl_fnege',
-#     cutoff: int = 85
-#     ) -> pd.DataFrame:
-
-#     # 先把 fnege_df 的 journal 做 normalize，用于 fuzzy 匹配
-#     fnege_mapping = {}
-#     for _, row in fnege_df.iterrows():
-#         fnege_mapping[row['journal']] = row.to_dict()  # key: 原始 journal 名, value: 整行字典
-    
-#     classement_list = []
-#     for _, row in df.iterrows():
-#         pub_year = str(row[year_col])[:4]  # 取年份
-#         journal_name = row[journal_col]
-        
-#         # fuzzy lookup 找最接近的 fnege journal
-#         matched_row = fuzzy_lookup(journal_name, fnege_mapping, cutoff=cutoff)
-        
-#         if matched_row:
-#             # matched_row 是 fnege_mapping 中的字典
-#             # 动态取年份对应的排名
-#             rang_col = f"rang_{pub_year}"
-#             rang_value = matched_row.get(rang_col, None)
-#             classement_list.append(rang_value)
-#         else:
-#             classement_list.append(None)
-    
-#     # 插入新列到 journal_col 后
-#     idx = df.columns.get_loc(journal_col)
-#     df.insert(loc=idx+1, column=cl_name, value=classement_list)
-    
-#     return df
-
-
-# def add_classement_fnege(
-#     df: pd.DataFrame,
-#     journal_col: str = "journalTitle_s",
-#     fnege_df: Dict[str, Any] = None, ## 表示 mapping 是一个字典，key 是字符串，value 可以是任意类型  
-#     cl_name: str = 'cl_fnege',
-#     cutoff: int = 85
+#     cutoff: int = 90
 # ) -> pd.DataFrame:
-    
-#     col_cl = df[journal_col].apply(lambda x: fuzzy_lookup(x, fnege_df, cutoff=cutoff))
-    
-#     # 找到 journalTitle_s 的列索引
-#     idx = df.columns.get_loc(journal_col)
 
-#     # 插入列到 journalTitle_s 后面
-#     df.insert(loc=idx+1, column=cl_name, value=col_cl)
+#     # 构建 lookup mapping
+#     fnege_mapping = {normalize_journal(r['journal']): r.to_dict() for _, r in fnege_df.iterrows()}
+
+#     df['fnege_year'] = df[year_col].apply(nearest_fnege_year)
+
+#     classement_list = []
+
+#     for _, row in df.iterrows():
+#         journal_val = row.get(journal_col, "")
+#         fnege_year = row['fnege_year']
+#         rang_value = None
+
+#         if pd.notna(journal_val) and str(journal_val).strip():
+#             norm_journal = normalize_journal(journal_val)
+
+#             # 1️⃣ 精确匹配
+#             matched_row = fnege_mapping.get(norm_journal, None)
+
+#             # 2️⃣ 如果精确匹配失败，再模糊匹配
+#             uncertain = False
+#             if not matched_row:
+#                 matched_row = fuzzy_lookup(journal_val, fnege_mapping, cutoff=cutoff)
+#                 uncertain = matched_row is not None#若模糊搜索有结果，uncertain变为true
+
+#             # 3️⃣ 获取年份对应的排名
+#             if matched_row and fnege_year:
+#                 rang_col = f"rang_{fnege_year}"
+#                 rang_value = matched_row.get(rang_col, None)
+#                 if uncertain and rang_value is not None:
+#                     rang_value = f"{rang_value}_uncertain"#若模糊搜索有结果但是没有这一年的排名会出现nan_uncertain
+#                     if rang_value=='nan_uncertain':
+#                         rang_value=None
+                        
+#         classement_list.append(rang_value)
+
+#     # 插入新列
+#     idx = df.columns.get_loc(journal_col)
+#     df.insert(loc=idx + 1, column=cl_name, value=classement_list)
+
 #     return df
+def fuzzy_lookup_with_name(query, mapping, cutoff=80):
+    from fuzzywuzzy import process
+    choices = list(mapping.keys())
+    best_match, score = process.extractOne(query, choices)
+    if score >= cutoff:
+        return mapping[best_match], best_match
+    return None, None
+
+def add_classement_fnege_v2(
+    df: pd.DataFrame,
+    fnege_df: pd.DataFrame,
+    journal_col: str = "journalTitle_s",
+    year_col: str = "publicationDate_s",
+    cl_name: str = 'cl_fnege',
+    cutoff: int = 80
+) -> pd.DataFrame:
+
+    # 构建 lookup mapping
+    fnege_mapping = {normalize_journal(r['journal']): r.to_dict() for _, r in fnege_df.iterrows()}
+
+    df['fnege_year'] = df[year_col].apply(nearest_fnege_year)
+    classement_list = []
+
+    for _, row in df.iterrows():
+        journal_val = row.get(journal_col, "")
+        fnege_year = row['fnege_year']
+        rang_value = None
+
+        if pd.notna(journal_val) and str(journal_val).strip():
+            norm_journal = normalize_journal(journal_val)
+
+            # 1️⃣ 精确匹配
+            matched_row = fnege_mapping.get(norm_journal, None)
+
+            if matched_row and fnege_year:
+                rang_col = f"rang_{fnege_year}"
+                rang_value = matched_row.get(rang_col, None)#int
+
+            # 2️⃣ 模糊匹配（只有精确匹配失败才尝试）
+            if not matched_row and fnege_year:
+                fuzzy_row, fuzzy_name = fuzzy_lookup_with_name(journal_val, fnege_mapping, cutoff=cutoff)
+                if fuzzy_row:
+                    rang_col = f"rang_{fnege_year}"
+                    rang_val = fuzzy_row.get(rang_col, None)
+                    if rang_val is not None:# 
+                        rang_value = f"{rang_val}_uncertain_{fuzzy_name}"
+                    else :#模糊搜索有名字匹配，但还是没有对应的rang
+                        rang_value=None
+                        
+        classement_list.append(rang_value)
+
+    # 插入新列
+    idx = df.columns.get_loc(journal_col)
+    df.insert(loc=idx + 1, column=cl_name, value=classement_list)
+
+    return df
 
 
 
@@ -819,7 +869,9 @@ def process_df(df, DOMAIN_MAP, FNEGE_MAP, cutoff):
         #     cutoff = 85
         # )
         
-        df=add_classement_fnege(
+        
+        #先精确，再模糊
+        df=add_classement_fnege_v2(
             df,fnege_df=FNEGE_MAP,
             journal_col = "journalTitle_s",
             year_col= "publicationDate_s",

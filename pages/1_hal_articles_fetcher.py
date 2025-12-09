@@ -202,7 +202,7 @@ fields = st.multiselect(
 )
 
 cutoff_range= list(range(50, 101)) 
-cutoff = st.selectbox("**Cutoff**",cutoff_range , index=cutoff_range.index(90))
+cutoff = st.selectbox("**Cutoff%**",cutoff_range , index=cutoff_range.index(90))
 st.markdown("<br>", unsafe_allow_html=True)
 
 
@@ -212,11 +212,21 @@ st.markdown("<br>", unsafe_allow_html=True)
 
 
 
+# st.subheader("📒 README")
+# st.markdown(f"**Classement FNEGE => cl_fnege**:  \n"
+#             f"Pour chaque article, nous identifions automatiquement le classement FNEGE de son *journalTitle_s* correspondant à son année de *publicationDate_s*, en comparant le nom de la revue avec les listes FNEGE.  \n"
+#             f"Le nom de la revue est associé par recherche floue (seuil *cutoff* = 0.9, ajustable ci-dessus).  \n"
+#             f"👉Consulter [le classement FNEGE(2011-2022)](https://github.com/yeliu-dh/hal_insight/blob/main/external_data/fnege_final_clean.csv)")
+
 st.subheader("📒 README")
-st.markdown(f"**Classement FNEGE => cl_fnege**:  \n"
-            f"Pour chaque article, nous identifions automatiquement le classement FNEGE de son *journalTitle_s* correspondant à son année de *publicationDate_s*, en comparant le nom de la revue avec les listes FNEGE.  \n"
-            f"Le nom de la revue est associé par recherche floue (seuil *cutoff* = 0.9, ajustable ci-dessus).  \n"
-            f"👉Consulter [le classement FNEGE(2011-2022)](https://github.com/yeliu-dh/hal_insight/blob/main/external_data/fnege_final_clean.csv)")
+st.markdown(
+    "**Classement FNEGE → cl_fnege**  \n"
+    "Pour chaque article, nous déterminons automatiquement le classement FNEGE du *journalTitle_s* correspondant à son année de *publicationDate_s*.  \n"
+    "Le nom de la revue est comparé aux listes FNEGE pour trouver le classement :  \n"
+    "- Si le nom correspond exactement, on utilise ce classement (même s'il est manquant).  \n"
+    "- Si le nom exact n'est pas trouvé, une recherche floue est utilisée (seuil *cutoff* = 0.9, ajustable). Les résultats trouvés par recherche floue sont indiqués avec `_uncertain_nomRevue`.  \n"
+    "👉 Consulter [le classement FNEGE (2011-2022)](https://github.com/yeliu-dh/hal_insight/blob/main/external_data/fnege_final_clean.csv)"
+)
 
 st.markdown(
     f"**Structure primaire de l'auteur => author_primarystructure_s**:  \n"
