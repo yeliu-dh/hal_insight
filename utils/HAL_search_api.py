@@ -845,10 +845,9 @@ def process_df(df, DOMAIN_MAP, FNEGE_MAP, cutoff):
         ])
         author_primarystructure_s_map=update_author_primarystructure_s(names, file_path='external_data/author_primarystructure_s_map.json')
         df= add_primarystructure(df, author_primarystructure_s_map)#map
+        st.dataframe(df.head())
         st.write(f"✔ Structures primaires mappées!")
         missing_data_warning(df, col="author_primarystructure_s", show_distribution=False)#check
-
-
 
     return df
 

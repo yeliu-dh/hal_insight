@@ -294,7 +294,6 @@ if df is not None and not df.empty:
     missing_data_warning(df, col=col_en_question, show_distribution=show_distribution)
 
     st.divider()
-    
 
     #------------------save to local-------------------
     try :
