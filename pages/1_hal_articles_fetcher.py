@@ -215,7 +215,7 @@ st.markdown("<br>", unsafe_allow_html=True)
 st.subheader("📒 README")
 st.markdown(f"**Classement FNEGE => cl_fnege**:  \n"
             f"Pour chaque article, nous identifions automatiquement le classement FNEGE de son *journalTitle_s* correspondant à son année de *publicationDate_s*, en comparant le nom de la revue avec les listes FNEGE.  \n"
-            f"Le nom de la revue est associé par recherche floue (seuil *cutoff* = 0.9, ajustable ci-dessus)."
+            f"Le nom de la revue est associé par recherche floue (seuil *cutoff* = 0.9, ajustable ci-dessus).\n"
             f"👉Consulter [le classement FNEGE(2011-2022)](https://github.com/yeliu-dh/hal_insight/blob/main/external_data/fnege_final_clean.csv)")
 
 st.markdown(
