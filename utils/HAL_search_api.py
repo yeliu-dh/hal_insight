@@ -780,7 +780,7 @@ def add_primarystructure(df, author_primarystructure_s_map):
                                                 ) if isinstance(x, str) else "fullname_not_strs")
         
     idx = df.columns.get_loc('labStructName_s')
-    df.insert(loc=idx+1, column='，', value=primarystructures)
+    df.insert(loc=idx+1, column='author_primarystructure_s', value=primarystructures)
     return df
 
 
