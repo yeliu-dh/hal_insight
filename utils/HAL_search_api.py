@@ -688,8 +688,8 @@ def add_classement_fnege_v2(
                 fuzzy_row, fuzzy_name = fuzzy_lookup_with_name(journal_val, fnege_mapping, cutoff=cutoff)
                 if fuzzy_row:
                     rang_col = f"rang_{fnege_year}"
-                    rang_val = fuzzy_row.get(rang_col, None)
-                    if rang_val is not None:# 
+                    rang_val = fuzzy_row.get(rang_col, None)# np.nan是float类型!=None
+                    if pd.notna(rang_val):# 
                         rang_value = f"{rang_val}_uncertain_{fuzzy_name}"
                     else :#模糊搜索有名字匹配，但还是没有对应的rang
                         rang_value=None
