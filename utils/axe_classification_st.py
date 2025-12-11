@@ -281,7 +281,7 @@ def evaluate_auto_classification_axes_st(
 
     df_hasaxe_pred['predicted_axes_vec'] = df_hasaxe_pred["predicted_axe"].apply(parse_axes)
     st.write(f"Df de {len(df_hasaxe_pred)} lignes avec des axes prédits \n")
-    st.dataframe(df_hasaxe_pred.head())
+    st.dataframe(df_hasaxe_pred[['halId_s','title_s','keyword_s','abstract_s','axe',"predicted_axe"]].head())
 
     # np.stack!!!
     y_true = np.stack(df_hasaxe_pred['axes_vec'].values).astype(np.float32)

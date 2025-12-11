@@ -154,7 +154,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         st.divider()   
 
 
-    st.subheader("🔢 Evaluation du model")
+    st.subheader("📦Evaluation du model")
     evaluate_auto_classification_axes_st(
         df,
         df_all_emb_path="external_data/df_all_3emb.parquet",
