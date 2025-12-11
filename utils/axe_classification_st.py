@@ -112,10 +112,11 @@ def apply_auto_classification_axes_st(
     df_noaxe = df_all[(df_all['axe'].isna())|(df_all['axe']=="nan")]
     df_hasaxe = df_all[~df_all['halId_s'].isin(df_noaxe['halId_s'])]
 
-    st.write(f"[INFO] Répartition des axes: \n{df_all.axe.value_counts(dropna=False)}")
     st.write(f"- len df_all: {len(df_all)}")
     st.write(f"- len df_noaxe: {len(df_noaxe)}")
     st.write(f"- len df_hasaxe: {len(df_hasaxe)}")
+    st.text(f"[INFO] Répartition: {df_all.axe.value_counts(dropna=False)}\n")
+    
 
     #------------------------------------------splitaxe-----------------------------------------------
     st.write(f"**[ETAPE2] Split axe en 4 colonnes 'axe1-4' et 'axes_vec'**")
@@ -126,6 +127,7 @@ def apply_auto_classification_axes_st(
     st.write(f"**[ETAPE3] Embeddings des titres, mots-clés et résumés**")
    
     if 'df_noaxe_embedded' in st.session_state:
+    
         st.write(f"[INFO] Embeddings déjà existants")
 
     else:
@@ -191,8 +193,8 @@ def evaluate_model_st(y_true, y_pred):
     st.write(f"- Macro  F1: {f1_macro:.4f}")
     st.write(f"- Micro Precision : {precision_micro:.4f}")
     st.write(f"- Micro Recall    : {recall_micro:.4f}")
-    st.write(f"- Hamming Loss    : {hamming:.4f}")
-    st.write(f"- Subset Accuracy : {subset_acc:.4f}\n")
+    # st.write(f"- Hamming Loss    : {hamming:.4f}")
+    # st.write(f"- Subset Accuracy : {subset_acc:.4f}\n")
 
     # ------------------ Per-class report ------------------
     st.write("- Per-class classification report:")
@@ -229,7 +231,7 @@ def evaluate_auto_classification_axes_st(
     #------------------------------------------read&filtrate-----------------------------------------------
     df_noaxe = df_all[(df_all['axe'].isna())|(df_all['axe']=="nan")]
     df_hasaxe = df_all[~df_all['halId_s'].isin(df_noaxe['halId_s'])]
-    st.write(f"[INFO] L'évaluation se fait sur {len(df_hasaxe)} lignes.")
+    st.write(f"[INFO] L'évaluation se fait sur {len(df_hasaxe)} lignes avec axes.")
     #------------------------------------------splitaxe-----------------------------------------------
     df_hasaxe = split_axe(df_hasaxe)
     # st.write(f'df_has_axe split: {len(df_hasaxe)} lignes')

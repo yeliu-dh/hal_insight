@@ -52,6 +52,16 @@ st.divider()
 
 
 st.subheader("📒 README")
+st.markdown("""
+| Code | Nom de l'axe |
+| --- | --- |
+| IRG_AXE1 | Performances et responsabilités |
+| IRG_AXE2 | Société de services et services à la société |
+| IRG_AXE3 | Innovations, transformations et résistances organisationnelles et sociétales |
+| IRG_AXE4 | Ouvrages pédagogiques |
+""")
+
+
 st.markdown("👉Consulter [Entraînement des modèles (notebook)](https://github.com/yeliu-dh/hal_insight/blob/main/notebooks/test_multiaxe_3emb.ipynb)")
 
 
