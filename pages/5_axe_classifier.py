@@ -64,6 +64,12 @@ st.markdown("""
 
 
 
+# with open("md\clf_training.md", "r", encoding="utf-8") as f:
+#     md_text = f.read()
+# st.markdown(md_text, unsafe_allow_html=True)
+
+
+
 st.markdown("**Statistiques de l'entraînement**")
 st.markdown("👉Consulter [Entraînement des modèles (notebook)](https://github.com/yeliu-dh/hal_insight/blob/main/notebooks/test_multiaxe_3emb.ipynb)")
 st.markdown(f"- Tous les **2734 articles** de type art, ouv, cov et comm d'IRG jusqu'au Dec.2025  \n"
@@ -71,24 +77,25 @@ st.markdown(f"- Tous les **2734 articles** de type art, ouv, cov et comm d'IRG j
             f"- Entrainer un MLP (Multi-Layer Perceptron) avec **5139** embeddings d'un text, un vecteur de multi-label et un label de la source du text \n"
             f"- Méthodes d'amélioration : **pondération et échantillongae des classes**, Adam optimizer, focal loss, early stopping  \n"
             f"=> enregistrer le meuilleur f1 et le seuil correspondant, utilisé après pour la prédiction  \n\n")
-st.markdown(f"""
-| Metric | Value |
-| --- | --- |
-| Micro F1 | 0.7793896948474237 |
-| Macro F1 | 0.6336343553851139 |
-| Micro Precision | 0.8030927835051547 |
-| Micro Recall | 0.7570456754130224 |
+# st.markdown(f"""
+# | Metric | Value |
+# | --- | --- |
+# | Micro F1 | 0.7793896948474237 |
+# | Macro F1 | 0.6336343553851139 |
+# | Micro Precision | 0.8030927835051547 |
+# | Micro Recall | 0.7570456754130224 |
+# """)
+# st.write("Per-class Classification Report")
+# st.write("""
+# | Class | Precision | Recall | F1-score | Support |
+# | --- | --- | --- | --- | --- |
+# | axe1 | 0.76 | 0.78 | 0.77 | 299 |
+# | axe2 | 0.58 | 0.77 | 0.66 | 86 |
+# | axe3 | 0.89 | 0.77 | 0.83 | 615 |
+# | axe4 | 0.32 | 0.24 | 0.27 | 29 |
+#             """)
 
-""")
-st.write("Per-class Classification Report")
-st.write("""
-| Class | Precision | Recall | F1-score | Support |
-| --- | --- | --- | --- | --- |
-| axe1 | 0.76 | 0.78 | 0.77 | 299 |
-| axe2 | 0.58 | 0.77 | 0.66 | 86 |
-| axe3 | 0.89 | 0.77 | 0.83 | 615 |
-| axe4 | 0.32 | 0.24 | 0.27 | 29 |
-            """)
+
 st.markdown(f"**PB** :l'axe 4 est très sous-présent, déséquilibre entre les classe biaise le modèle. \n"
             f"**Solution** : entraîne d'autres modèles linéaires qui se concentrent sur la classification de l'axe 4:  'Logistic Regression' et 'LightGBM', et remplacer la prédiction de MLP sur l'axe par celle de LR et LGB.  \n"
             f"**Resultat final** :   \n")

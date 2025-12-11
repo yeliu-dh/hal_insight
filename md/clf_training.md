@@ -1,5 +1,4 @@
 # Statistiques de l'entraînement
-
 👉Consulter [Entraînement des modèles (notebook)](httpsgithub.comyeliu-dhhal_insightblobmainnotebookstest_multiaxe_3emb.ipynb)
 
 - Tous les 2734 articles de type art, ouv, cov et comm d'IRG jusqu'au Dec.2025

@@ -126,8 +126,8 @@ def apply_auto_classification_axes_st(
     #------------------------------------------embeddings-----------------------------------------------
     st.write(f"**[ETAPE3] Embeddings des titres, mots-clés et résumés**")
    
-    if 'df_noaxe_embedded' in st.session_state:
-    
+    if 'df_noaxe_embedded' in st.session_state and st.session_state.df_noaxe_embedded['halId_s'].tolist()==df_noaxe['halId_s'].to_list():
+        #确保是同一个df！
         st.write(f"[INFO] Embeddings déjà existants")
 
     else:
