@@ -63,9 +63,9 @@ st.markdown("""
 """)
 
 
-st.markdown("👉Consulter [Entraînement des modèles (notebook)](https://github.com/yeliu-dh/hal_insight/blob/main/notebooks/test_multiaxe_3emb.ipynb)")
 
 st.markdown("**Statistiques de l'entraînement**")
+st.markdown("👉Consulter [Entraînement des modèles (notebook)](https://github.com/yeliu-dh/hal_insight/blob/main/notebooks/test_multiaxe_3emb.ipynb)")
 st.markdown(f"- Tous les **2734 articles** de type art, ouv, cov et comm d'IRG jusqu'au Dec.2025  \n"
             f"- Parmi eux, **le titre, les mots-clés, le résumé** de 2117 articles sont séparement embeddés par le modèle **'BAAI/bge-m3'** (environ 30 mins).  \n"
             f"- Entrainer un MLP (Multi-Layer Perceptron) avec **5139** embeddings d'un text, un vecteur de multi-label et un label de la source du text \n"
