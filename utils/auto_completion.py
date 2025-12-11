@@ -85,6 +85,9 @@ def get_best_n_clusters(df, col_emb='embedding', max_k=5):
     
     return best_n_clusters
 
+
+
+
 def kmeans_2Dpca(df,best_n_clusters, col_emb="embedding"):
     #------------------KMeans---------------------------
     X = np.vstack(df[col_emb].values)
@@ -456,7 +459,7 @@ def mlp_multilabels(X_train,X_val,y_train, y_val,
             # make sure float32
             self.X = torch.from_numpy(X).float()
             self.y = torch.from_numpy(y).float()
-            print("Dataset X shape:", self.X.shape, "y shape:", self.y.shape)  # 加这个检查
+            print("X shape:", self.X.shape, "y shape:", self.y.shape)  # 加这个检查
 
         def __len__(self):
             return len(self.X)
@@ -719,15 +722,15 @@ def evaluate_model(y_true, y_pred):
     f1_macro = f1_score(y_true, y_pred, average='macro', zero_division=0)
     precision_micro = precision_score(y_true, y_pred, average='micro', zero_division=0)
     recall_micro = recall_score(y_true, y_pred, average='micro', zero_division=0)
-    hamming = hamming_loss(y_true, y_pred)
-    subset_acc = accuracy_score(y_true, y_pred)  # exact match
+    # hamming = hamming_loss(y_true, y_pred)
+    # subset_acc = accuracy_score(y_true, y_pred)  # exact match
 
     print("Micro  F1: ", f1_micro)
     print("Macro  F1: ", f1_macro)
     print("Micro Precision:", precision_micro)
     print("Micro Recall:", recall_micro)
-    print("Hamming loss:", hamming)
-    print("Subset exact match:", subset_acc)
+    # print("Hamming loss:", hamming)
+    # print("Subset exact match:", subset_acc)
 
     # per-class report
     print("\nPer-class classification report:")

@@ -186,8 +186,8 @@ def evaluate_model_st(y_true, y_pred):
     f1_macro = f1_score(y_true, y_pred, average='macro', zero_division=0)
     precision_micro = precision_score(y_true, y_pred, average='micro', zero_division=0)
     recall_micro = recall_score(y_true, y_pred, average='micro', zero_division=0)
-    hamming = hamming_loss(y_true, y_pred)
-    subset_acc = accuracy_score(y_true, y_pred)
+    # hamming = hamming_loss(y_true, y_pred)
+    # subset_acc = accuracy_score(y_true, y_pred)
 
     st.write(f"- Micro  F1: {f1_micro:.4f}")
     st.write(f"- Macro  F1: {f1_macro:.4f}")

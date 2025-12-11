@@ -15,6 +15,7 @@ import time
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
+from PIL import Image
 
 
 #my utils:
@@ -64,8 +65,35 @@ st.markdown("""
 
 st.markdown("👉Consulter [Entraînement des modèles (notebook)](https://github.com/yeliu-dh/hal_insight/blob/main/notebooks/test_multiaxe_3emb.ipynb)")
 
+st.markdown("**Statistiques de l'entraînement**")
+st.markdown(f"- Tous les **2734 articles** de type art, ouv, cov et comm d'IRG jusqu'au Dec.2025  \n"
+            f"- Parmi eux, **le titre, les mots-clés, le résumé** de 2117 articles sont séparement embeddés par le modèle **'BAAI/bge-m3'** (environ 30 mins).  \n"
+            f"- Entrainer un MLP (Multi-Layer Perceptron) avec **5139** embeddings d'un text, un vecteur de multi-label et un label de la source du text \n"
+            f"- Méthodes d'amélioration : **pondération et échantillongae des classes**, Adam optimizer, focal loss, early stopping  \n"
+            f"=> enregistrer le meuilleur f1 et le seuil correspondant, utilisé après pour la prédiction  \n\n"
+            
+            f"**PB** :l'axe 4 est très sous-présent, déséquilibre entre les classe biaise le modèle.  \n"
+            f"**Solution** : entraîne d'autres modèles linéaires qui se concentrent sur la classification de l'axe 4:  'Logistic Regression' et 'LightGBM', et remplacer la prédiction de MLP sur l'axe par celle de LR et LGB.  \n"
+            f"**Resultat final** :  \n")
 
+st.markdown("""| Metric | Value |
+| --- | --- |
+| Micro F1 | 0.7879093198992443 |
+| Macro F1 | 0.700142039539857 |
+| Micro Precision | 0.7704433497536946 |
+| Micro Recall | 0.8061855670103093 |
+""")
 
+st.markdown("""| Class | Precision | Recall | F1-score | Support |
+| --- | --- | --- | --- | --- |
+| axe1 | 0.78 | 0.76 | 0.77 | 304 |
+| axe2 | 0.77 | 0.58 | 0.66 | 113 |
+| axe3 | 0.77 | 0.89 | 0.83 | 531 |
+| axe4 | 0.67 | 0.45 | 0.54 | 22 |
+""")
+
+matrix_image = Image.open("external_data\clf_classification_matrix.png")
+st.image(matrix_image, caption="matrice de confusion du classifieur")
 
 
 st.divider()
