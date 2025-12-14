@@ -60,6 +60,14 @@ def get_info_from_pdf_tables (pdf_path, ):
     return 
 
 
+
+
+
+
+
+
+
+
 #------------------------------------with clean fnege of each year------------------------------
 
 def clean_issn(issn):
