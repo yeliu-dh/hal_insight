@@ -8,18 +8,19 @@ st.set_page_config(page_title="HAL Insight",page_icon="🛸")
 st.title("🏠 Accueil | HAL Insight")
 
 st.markdown("""
-Bienvenu-e sur le tableau de bord HAL Insight !
+Bienvenu·e·s sur le tableau de bord HAL Insight !
 
 🔎 Ici vous pouvez :
-- Récupérer les articles sur HAL
+- Récupérer les articles sur HAL avec multiples paramètres
             
 - Générer des plots :
     * Aperçu global des publications scientifiques
-    * Répartitions par pays, langue, domaine,etc.
-    * Tendances temporelles
-    * Nuage des mots clés
-    * Réseaux de cooccurrence
-            
+    * Répartitions par pays, langue, domaine, etc.
+    * Tendances temporelles des mots 
+    * Nuage des mots clés: Global, évolutif, par axe, par langue...
+    * Réseaux de cooccurrence des auteurs et des mots, en colorant les auteurs par leur structure primaire
+    * Prédiction automatique des axes thématiques
+    
 en consultant la barre latéral! 
 """)
 st.divider() #分割线
@@ -30,7 +31,7 @@ st.divider() #分割线
 
 # # --- 留言板 ---
 st.subheader("📬 Feedbacks")
-st.markdown("Merci de m'écrire par email pour tout problème : ye.liu@chartes.psl.eu")
+st.markdown("Merci de m'écrire par email pour tout problème: ye.liu@chartes.psl.eu")
 
 # page = st.selectbox("App en question", ["articles fetcher", "tendance & répartition", "wordcloud global", "wordcloud évolutif", "Autres pages"])
 # problem = st.text_area("Votre feedback:")

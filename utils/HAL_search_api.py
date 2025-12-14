@@ -602,7 +602,7 @@ def add_classement_fnege_v3(
     FNEGE_MAP: pd.DataFrame,
     journal_col: str = "journalTitle_s",
     year_col: str = "publicationDate_s",
-    FNEGE_COL_NAME: str = 'cl_fnege',
+    fnege_col_name: str = 'cl_fnege',
     cutoff: int = 90, 
     active_fuzzylookup=False
 ) -> pd.DataFrame:
@@ -611,7 +611,8 @@ def add_classement_fnege_v3(
     fnege_mapping = {r['journal_hal']: r.to_dict() for _, r in FNEGE_MAP.iterrows()}
 
     # 获取年份
-    DF['fnege_year'] = DF[year_col].apply(nearest_fnege_year)
+    DF["fnege_year"]= DF[year_col].apply(nearest_fnege_year)
+    
     classement_list = []
 
 
@@ -638,7 +639,7 @@ def add_classement_fnege_v3(
                     rang_val = fuzzy_row.get(rang_col, None) # np.nan是float类型!=None
                     
                     if pd.notna(rang_val): # 
-                        rang_value = f"{rang_val}_fuzzy_journal_name_{fuzzy_name}"
+                        rang_value = f"{rang_val}_nom-journal-uncertain_{fuzzy_name}"
                     else :# 模糊搜索有名字匹配，但还是没有对应的rang
                         rang_value=None
                         
@@ -646,7 +647,7 @@ def add_classement_fnege_v3(
     
     # ADD
     idx = DF.columns.get_loc(journal_col)
-    DF.insert(loc=idx + 1, column=FNEGE_COL_NAME, value=classement_list)
+    DF.insert(loc=idx + 1, column=fnege_col_name, value=classement_list)
 
     return DF
 
@@ -846,12 +847,12 @@ def filter_by_publicationdate(df_input, start_year, start_month, end_year, end_m
             df = df[df[date_col] <= end_date]
             
     elif filter_pubdate_by=="année":
-        df["year"] = pd.to_numeric(df[date_col].str[:4], errors="coerce")
+        df["pub_year"] = pd.to_numeric(df[date_col].str[:4], errors="coerce")
         if start_year is not None:
-            df = df[df["year"] >= int(start_year)]
+            df = df[df["pub_year"] >= int(start_year)]
 
         if end_year is not None:
-            df = df[df["year"] <= int(end_year)]
+            df = df[df["pub_year"] <= int(end_year)]
     # else: filter==None, return directely?
     
     
@@ -896,7 +897,7 @@ def process_df(df, DOMAIN_MAP,
             FNEGE_MAP=FNEGE_MAP,
             journal_col = "journalTitle_s",
             year_col = "publicationDate_s",
-            FNEGE_COL_NAME='cl_fnege',
+            fnege_col_name='cl_fnege',
             cutoff= cutoff, 
             active_fuzzylookup=active_fuzzylookup
         )

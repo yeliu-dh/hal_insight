@@ -17,14 +17,23 @@ CRITICAL	程序无法继续
 
 """
 
-def setup_logging(save_log=True, log_file="run.log"):
+def setup_logging(save_log=True, log_file="run.log", mode="w"):
     handlers = [logging.StreamHandler()]
     if save_log:
         Path(log_file).parent.mkdir(parents=True, exist_ok=True)
-        handlers.append(logging.FileHandler(log_file))
+        handlers.append(logging.FileHandler(log_file, mode=mode))
     
+    # logging.basicConfig(
+    #     level=logging.INFO,#只写入INFO以上级别的信息
+    #     # format="%(asctime)s | %(levelname)s | %(message)s",
+    #     format="%(asctime)s |  %(message)s",
+    #     datefmt="%H:%M:",
+    #     handlers=handlers
+    # )
     logging.basicConfig(
-        level=logging.INFO,#只写入INFO类
-        format="%(asctime)s | %(levelname)s | %(message)s",
-        handlers=handlers
-    )
+    level=logging.INFO,
+    format="%(asctime)s | %(message)s",
+    datefmt="%H:%M",
+    handlers=handlers,
+    force=True
+    )   

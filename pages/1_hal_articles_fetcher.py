@@ -224,11 +224,15 @@ st.markdown(
     "**Classement FNEGE → cl_fnege**  \n"
     "Pour chaque article, nous déterminons automatiquement le classement FNEGE du *journalTitle_s* correspondant à son année de *publicationDate_s*.  \n"
     "Le nom de la revue est comparé aux listes FNEGE pour trouver le classement :  \n"
-    "- Si le nom correspond exactement, on utilise ce classement.  \n"
-    "- Si le nom exact n'est pas trouvé, une recherche floue est utilisée (seuil *cutoff* = 0.9, ajustable). Les résultats trouvés par recherche floue sont indiqués avec `_uncertain_nomRevue`.  \n"
+    "- la recherche flou désactivée (par défault):  \n"
+    " Le classement sera attribué à l'article que son nom du journal correspond exactement celui sur la col 'journal_hal'.  \n"
+    "- la recherche flou sactivée:  \n"
+    "Le seuil de match (cutoff) est ajustable. Les résultats trouvés par recherche floue sont indiqués avec `rang_nom-journal-uncertain_nomRevue`.  \n"
     "- Si le range n'est pas disponible, on note NaN, que ce soit en recherche exacte ou floue.  \n"
-    "👉 Consulter [le classement FNEGE (2011-2022)](https://github.com/yeliu-dh/hal_insight/blob/main/external_data/fnege_final_clean.csv)"
+    "👉 Consulter [le classement FNEGE (2011-2022)](https://github.com/yeliu-dh/hal_insight/blob/main/external_data/fnege_final_hal.csv)"
 )
+
+st.markdown("<br>", unsafe_allow_html=True)
 
 st.markdown(
     f"**Structure primaire de l'auteur => author_primarystructure_s**:  \n"
