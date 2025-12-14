@@ -330,7 +330,8 @@ def to_df_long (df,cols=['emb_title_s','emb_keyword_s','emb_abstract_s'],
                 "axe1": labels[0],
                 "axe2": labels[1],
                 "axe3": labels[2],
-                "axe4": labels[3]
+                "axe4": labels[3], 
+                
             })
 
         # rows.append({

@@ -28,16 +28,17 @@ from utils.HAL_search_api import save_file_csv_xlsx_by_filename
 # @st.cache_resource  # ✅ 缓存模型
 # def load_embedding_model(model_name):
 #     return SentenceTransformer(model_name)#向量化模型
-
 # model_name="paraphrase-multilingual-MiniLM-L12-v2"
 # embedding_model=load_embedding_model(model_name)
 
 st.set_page_config(page_title="HAL insight", page_icon="🛸",layout="wide")
-st.title("📃 Auto-completion des axes")
+st.title("📃 Auto-classification des axes")
+
 
 # -------------------------------
 # 1️⃣ 初始化 Session State
 # -------------------------------
+
 if "uploaded_df" not in st.session_state:
     st.session_state.uploaded_df = None
 if "started" not in st.session_state:
@@ -69,14 +70,14 @@ st.markdown("""
 # st.markdown(md_text, unsafe_allow_html=True)
 
 
-
 st.markdown("**Statistiques de l'entraînement**")
 st.markdown("👉Consulter [Entraînement des modèles (notebook)](https://github.com/yeliu-dh/hal_insight/blob/main/notebooks/test_multiaxe_3emb.ipynb)")
 st.markdown(f"- Tous les **2734 articles** de type art, ouv, cov et comm d'IRG jusqu'au Dec.2025  \n"
             f"- Parmi eux, **le titre, les mots-clés, le résumé** de 2117 articles sont séparement embeddés par le modèle **'BAAI/bge-m3'** (environ 30 mins).  \n"
             f"- Entrainer un MLP (Multi-Layer Perceptron) avec **5139** embeddings d'un text, un vecteur de multi-label et un label de la source du text \n"
             f"- Méthodes d'amélioration : **pondération et échantillongae des classes**, Adam optimizer, focal loss, early stopping  \n"
-            f"=> enregistrer le meuilleur f1 et le seuil correspondant, utilisé après pour la prédiction  \n\n")
+            f"=> enregistrer le meuilleur f1 et le seuil correspondant, utilisé après pour la prédiction  \n\n"
+            f"   t_lr=0.25, t_lgb=0.95, t_ens=0.52  \n\n")
 # st.markdown(f"""
 # | Metric | Value |
 # | --- | --- |
@@ -96,9 +97,9 @@ st.markdown(f"- Tous les **2734 articles** de type art, ouv, cov et comm d'IRG j
 #             """)
 
 
-st.markdown(f"**PB** :l'axe 4 est très sous-présent, déséquilibre entre les classe biaise le modèle. \n"
+st.markdown(f"**PB** :l'axe 4 est très sous-présent, déséquilibre entre les classe biaise le modèle.  \n"
             f"**Solution** : entraîne d'autres modèles linéaires qui se concentrent sur la classification de l'axe 4:  'Logistic Regression' et 'LightGBM', et remplacer la prédiction de MLP sur l'axe par celle de LR et LGB.  \n"
-            f"**Resultat final** :   \n")
+            f"**Resultat final** :   \n\n")
 
 st.markdown("""| Metric | Value |
 | --- | --- |
@@ -115,7 +116,6 @@ st.markdown("""| Class | Precision | Recall | F1-score | Support |
 | axe3 | 0.77 | 0.89 | 0.83 | 531 |
 | axe4 | 0.67 | 0.45 | 0.54 | 22 |
 """)
-
 matrix_image = Image.open("external_data\clf_classification_matrix.png")
 st.image(matrix_image, caption="matrice de confusion du classifieur")
 

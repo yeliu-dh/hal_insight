@@ -11,6 +11,7 @@ import sys
 import os
 import math
 import time
+import logging
 
 
 # # 把项目根目录 (/mount/src/hal_insight) 加入 Python 路径
@@ -18,12 +19,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 # #file 得出当前脚本所在文件夹（pages），join+".."表示回到上一级路径，abs表示绝对化，sys.append则为加入系统路径
 # #=> ../mount/src/hal_insight
 
-# ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-# if ROOT_DIR not in sys.path:
-#     sys.path.insert(0, ROOT_DIR)  # 插入到 sys.path 开头，优先查找
-
 
 # my utils
+from utils.log import setup_logging 
 from utils.upload import load_external_json
 from utils.HAL_search_api import fetch_hal_articles
 from utils.HAL_search_api import process_df
@@ -31,12 +29,10 @@ from utils.HAL_search_api import save_file_csv_xlsx
 from utils.upload import missing_data_warning
 from utils.pdf2str import extract_text_from_pdf
 
-
-# pages/1_hal_articles_fetcher.py
-# from init_imports import *
-
 st.set_page_config(page_title="HAL insight", page_icon="🛸",layout='wide')
 #必须是第一行命令
+setup_logging(save_log=True, log_file="../sandbox/run.log")
+ 
 
 #====================CACHE=========================#
 @st.cache_data 
@@ -46,20 +42,21 @@ def get_mappings_json(mapping_folder='external_data'):
         "LANG_MAP": load_external_json(f"{mapping_folder}/lang_map.json"),
         "DOC_TYPE_MAP": load_external_json(f"{mapping_folder}/doctype_map.json"),
     }
+    
+    
 maps = get_mappings_json()
 DOMAIN_MAP = maps["DOMAIN_MAP"]
 LANG_MAP = maps["LANG_MAP"]
 DOC_TYPE_MAP = maps["DOC_TYPE_MAP"]
 
-
+## fnege 
 def get_mappings_csv(mapping_folder='external_data'):
-    data=pd.read_csv(f"{mapping_folder}/fnege_final_clean.csv")
+    data=pd.read_csv(f"{mapping_folder}/fnege_final_hal.csv")
     return data
 FNEGE_MAP=get_mappings_csv()
 
 
 st.title("Hal Articles Fetcher")
-
 
 # 左右布局：左侧显示结果，右侧显示检索栏
 # left_col, right_col = st.columns([2, 1])  # 左:右 = 3:1
@@ -100,6 +97,8 @@ keywords = st_tags(
     maxtags=10
 )
 
+
+st.markdown("<br>", unsafe_allow_html=True)
 st.markdown(f"**Période (selon date du dépôt)**  \n"
             f"- si vous ne voulez pas définir la date de début, choisisssez '*' dans l'année de début' *ou/et* 'mois de début';  \n"
             f"- si vous ne voulez pas définir la date de fin, choisisssez 'aujourd'hui' dans 'années de fin' *ou/et* 'mois de fin'.")
@@ -123,6 +122,15 @@ with col3:
 with col4:
     end_month = st.selectbox("Mois de fin", end_months, index=end_months.index("aujourd'hui"))
 
+filter_pubdate_by = st.radio(
+    "Filtrer les résultats par date de publication :",
+    ["année", "année et mois","None"],
+    horizontal=True, 
+    help="HAL filtre les dates de publication par 'année'de période."
+)
+
+
+
 
 
 # # 日期校验
@@ -139,6 +147,7 @@ with col4:
 
 
 
+st.markdown("<br>", unsafe_allow_html=True)
 
 # 语言、实验室
 languages = st.multiselect(
@@ -155,68 +164,60 @@ labs = st_tags(
     maxtags=10
 )
 
-   
-collcode = st_tags(
-    label="Collection par code",
-    text="Tapez et 'Entrée'",
-    value=["UPEC"],
-    maxtags=10
-)
+# collcode = st_tags(
+#     label="Collection par code",
+#     text="Tapez et 'Entrée'",
+#     value=["UPEC"],
+#     maxtags=10
+# )
+
+# collname = st_tags(
+#     label="Collection par name",
+#     text="Tapez et 'Entrée'",
+#     value=["Université Paris-Est Créteil Val-de-Marne"],
+#     maxtags=10
+# )
 
 
-collname = st_tags(
-    label="Collection par name",
-    text="Tapez et 'Entrée'",
-    value=["Université Paris-Est Créteil Val-de-Marne"],
-    maxtags=10
-)
-
-
-
-# 输出字段
+# 可选输出字段
 options_fields = ['halId_s','uri_s',"docType_s", "title_s", "subTitle_s", "authFullName_s","labStructName_s","domain_s", 
                     "publicationDate_s","journalTitle_s","conferenceTitle_s","conferenceStartDate_s","country_s","city_s","audience_s",
                     "language_s", "keyword_s", "abstract_s","urlFulltextEsr_s","files_s",'page_s',"modifiedDate_s","submittedDate_s",
                      "openAccess_bool",'volume_s','conferenceStartDate_s',"conferenceOrganizer_s","classification_s","collName_s","collCode_s",
                      "authIdHal_s","authLastNameFirstName_s"	
-                     #"authIdHasPrimaryStructure_fs"
-                    
-                ]
-
+                     #"authIdHasPrimaryStructure_fs"                    
+]
+# 默认输出字段
 default_fields=['halId_s','uri_s', "docType_s", "title_s", "subTitle_s", "authFullName_s","authIdHal_s","labStructName_s",
-                "collName_s","collCode_s",
                 "domain_s","openAccess_bool",'volume_s',"page_s","classification_s",
                 "submittedDate_s","modifiedDate_s", "publicationDate_s","journalTitle_s","conferenceTitle_s","conferenceOrganizer_s","conferenceStartDate_s",
                 "country_s", "language_s",
                 "keyword_s", "abstract_s","files_s","urlFulltextEsr_s",
-
-                ]
+]
 
 
 #⭐ check champs :https://api.archives-ouvertes.fr/docs/search/?schema=fields#fields
-
 fields = st.multiselect(
     "Info à exporter",
     options=options_fields,
     default=default_fields
 )
 
+
 cutoff_range= list(range(50, 101)) 
-cutoff = st.selectbox("**Cutoff%**",cutoff_range , index=cutoff_range.index(90))
+cutoff = st.selectbox("**Cutoff%**",cutoff_range , index=cutoff_range.index(95))
+active_fuzzylookup = st.checkbox("Active la recherche floue?", value=False, key="active_fuzzylookup")#key用于储存在session state中
+
 st.markdown("<br>", unsafe_allow_html=True)
+
+
 
 
 rows_range = list(range(0, 5001))
 max_records = st.selectbox("les premier X articles (valeur maximale:5000):", rows_range, index=500)
 st.markdown("<br>", unsafe_allow_html=True)
+st.divider()
 
-
-
-# st.subheader("📒 README")
-# st.markdown(f"**Classement FNEGE => cl_fnege**:  \n"
-#             f"Pour chaque article, nous identifions automatiquement le classement FNEGE de son *journalTitle_s* correspondant à son année de *publicationDate_s*, en comparant le nom de la revue avec les listes FNEGE.  \n"
-#             f"Le nom de la revue est associé par recherche floue (seuil *cutoff* = 0.9, ajustable ci-dessus).  \n"
-#             f"👉Consulter [le classement FNEGE(2011-2022)](https://github.com/yeliu-dh/hal_insight/blob/main/external_data/fnege_final_clean.csv)")
 
 st.subheader("📒 README")
 st.markdown(
@@ -225,7 +226,7 @@ st.markdown(
     "Le nom de la revue est comparé aux listes FNEGE pour trouver le classement :  \n"
     "- Si le nom correspond exactement, on utilise ce classement.  \n"
     "- Si le nom exact n'est pas trouvé, une recherche floue est utilisée (seuil *cutoff* = 0.9, ajustable). Les résultats trouvés par recherche floue sont indiqués avec `_uncertain_nomRevue`.  \n"
-    f"- Si le range n'est pas disponible, on note NaN, que ce soit en recherche exacte ou floue.  \n"
+    "- Si le range n'est pas disponible, on note NaN, que ce soit en recherche exacte ou floue.  \n"
     "👉 Consulter [le classement FNEGE (2011-2022)](https://github.com/yeliu-dh/hal_insight/blob/main/external_data/fnege_final_clean.csv)"
 )
 
@@ -233,22 +234,22 @@ st.markdown(
     f"**Structure primaire de l'auteur => author_primarystructure_s**:  \n"
     f"Pour chaque article, nous identifions automatiquement l’institution principale de chaque auteur en utilisant la colonne *authFullName_s* pour retrouver les structures via *authIdHasPrimaryStructure_fs*.  \n"
     f"Les IDs *1004418* et *57129* correspondent à l’IRG.  \n"
+    "👉 Consulter [la structure primarire des auteurs](https://github.com/yeliu-dh/hal_insight/blob/main/external_data/author_primarystructure_s_map.json)"
     # f"Les différentes institutions d’un même article sont concaténées avec un point-virgule ';'."
 )
 
+st.markdown("<br>", unsafe_allow_html=True)
 
 # ----------------------- RESULT -----------------------
-
-# st.subheader("Commencer la recherche")
-st.markdown("<br>", unsafe_allow_html=True)
 
 cols=st.columns([4,1])
 with cols[1]:
     search_button = st.button("⚡ Chercher")
-
-# st.divider()
+    
 df = None#初始化
 if search_button:# and not invalid_date
+    st.divider()
+    st.markdown("### 📑LOG ###")    
     with st.spinner("Chercher..."):
         try:
             df = fetch_hal_articles(
@@ -274,10 +275,12 @@ if search_button:# and not invalid_date
             st.stop()#==break
 
 
-
     #================处理domain, axe, fnenge, primarystructure================ 
     try :
-        df= process_df(df, DOMAIN_MAP, FNEGE_MAP, cutoff)
+        df =process_df(df, DOMAIN_MAP, 
+               FNEGE_MAP, cutoff, active_fuzzylookup,
+               start_year, start_month, end_year, end_month, filter_pubdate_by)
+    
         # desired_order=[]
         st.success(f"✅ {len(df)} articles trouvés!\n\n"
                     f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")    
@@ -288,16 +291,18 @@ if search_button:# and not invalid_date
     
     except Exception as e:
         st.warning (f"ERROR in process_df :\n {e}")   
-        st.divider()
+st.divider()
     
-    
+
+
 df = st.session_state.get("uploaded_df", None)
 if df is not None and not df.empty:
+    st.markdown("### 🗂️Résultat ###")        
+
     #----------------------show----------------------
     st.dataframe(df)
     st.divider()
     #----------------------quick check-----------
-    
     st.write(f"**🔎Aperçu rapide des données:**")
     cols= df.columns.tolist()
     col_en_question = st.selectbox("colonne en question", cols, index=cols.index("cl_fnege"))
@@ -307,35 +312,12 @@ if df is not None and not df.empty:
     st.divider()
 
     #------------------save to local-------------------
+    st.markdown("### 📥Téléchargement ###")        
     try :
         save_file_csv_xlsx(df,start_year, start_month, end_year, end_month)
     except Exception as e:
         st.warning (f"ERROR in save_file_csv_xlsx :\n {e}")   
-
     st.divider()   
-
-
-    
-
-    # if not df.empty:
-    #     #----------------------show----------------------
-    #     st.success(f"✅ {len(df)} articles trouvés!\n\n"
-    #                 f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")    
-    #     st.dataframe(df)
-    #     st.write()
-
-
-    #     #---------------- SAVE TO SESSION----------------
-    #     st.session_state["uploaded_df"] = df  
-    #     st.session_state["uploaded_df_source"] = "search"
-        
-             
-
-
-
-
-
-
 
 
 
@@ -346,9 +328,6 @@ if df is not None and not df.empty:
 
 df = st.session_state.get("uploaded_df", None)
 if df is not None and not df.empty:
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.divider()
-
     st.subheader("📄 Extraire le texte intégral")
     missing_data_warning(df, col='files_s',map={"files_s":"PDF liens"})
 
