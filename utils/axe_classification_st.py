@@ -43,10 +43,10 @@ from utils.plot import make_pie_chart
 
 ## auto-completion :
 
-from utils.auto_completion import parse_axes, split_axe, split_axe
-from utils.auto_completion import filtrate_df_to_emb, emb_text, check_before_emb_text
-from utils.auto_completion import to_df_long
-from utils.auto_completion import load_predict, merge_axes
+from utils.axe_classification import parse_axes, split_axe, split_axe
+from utils.axe_classification import filtrate_df_to_emb, emb_text, check_before_emb_text
+from utils.axe_classification import to_df_long
+from utils.axe_classification import load_predict, merge_axes
 
 
 

@@ -46,7 +46,7 @@ def wrap_text(text, max_len=30, html=True):
     return ("<br>" if html else "\n").join(lines)
 
 
-def explode_by_col(df, col="Axe"):
+def explode_by_col(df, col="axe"):
     """"
     空值填nan，
     多值按照，/；分割成list

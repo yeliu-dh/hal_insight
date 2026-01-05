@@ -221,7 +221,7 @@ st.divider()
 
 st.subheader("📒 README")
 st.markdown(
-    "**Classement FNEGE → cl_fnege**  \n"
+    "**Classement FNEGE => cl_fnege**  \n"
     "Pour chaque article, nous déterminons automatiquement le classement FNEGE du *journalTitle_s* correspondant à son année de *publicationDate_s*.  \n"
     "Le nom de la revue est comparé aux listes FNEGE pour trouver le classement :  \n"
     "- la recherche flou désactivée (par défault):  \n"
