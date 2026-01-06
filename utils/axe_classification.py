@@ -715,144 +715,6 @@ def tune_thresholds_oof(
 
 
 
-
-
-# def train_multilabel_mlp(X_train,X_val,y_train, y_val, hidden=512,
-#                 batch_size=32,dropout=0.5, n_epochs=40, patience=5, 
-#                 model_path="../model/test_mlp.pt"):
-#     import pandas as pd
-#     import numpy as np
-#     import torch
-#     import torch.nn as nn
-#     from torch.utils.data import Dataset, DataLoader, WeightedRandomSampler,Subset
-#     from sklearn.model_selection import train_test_split
-#     from sklearn.metrics import f1_score
-#     import random
-
-#     from sklearn.model_selection import KFold
-
-        
-#     # fixed seed 固定种子
-#     seed = 42
-#     torch.manual_seed(seed)
-#     torch.cuda.manual_seed_all(seed)
-#     np.random.seed(seed)
-#     random.seed(seed)
-#     torch.backends.cudnn.deterministic = True
-#     torch.backends.cudnn.benchmark = False
-#     device = "cuda" if torch.cuda.is_available() else "cpu"
-    
-   
-#     class MultiLabelDataset(Dataset):
-#         def __init__(self, X, y):
-#             # make sure float32
-#             self.X = torch.from_numpy(X).float()
-#             self.y = torch.from_numpy(y).float()
-#             print("X shape:", self.X.shape, "y shape:", self.y.shape)  # 加这个检查
-
-#         def __len__(self):
-#             return len(self.X)
-#         def __getitem__(self, idx):
-#             return self.X[idx], self.y[idx]
-
-#     val_dataset   = MultiLabelDataset(X_val, y_val)
-#     val_loader   = DataLoader(val_dataset, batch_size=batch_size, shuffle=True)
-
-#     train_dataset = MultiLabelDataset(X_train, y_train)  # X_train [N, 1024], y_train [N, 4]
-#     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-
-#     # 风险：梯度可能被少数类指数放大 → OOF threshold 偏高/低
-
-
-    
-#     ## 单头mlp
-#     # 优化二：更强 MLP + dropout（避免过拟合）
-#     class MultiLabelMLP(torch.nn.Module):
-#         def __init__(self, input_dim, hidden=hidden, dropout=dropout):
-#             super().__init__()
-#             self.net = torch.nn.Sequential(
-#                 torch.nn.Linear(input_dim, hidden),
-#                 torch.nn.ReLU(),
-#                 torch.nn.Dropout(dropout),
-
-#                 torch.nn.Linear(hidden, hidden//2),
-#                 torch.nn.ReLU(),
-#                 torch.nn.Dropout(dropout),
-
-#                 torch.nn.Linear(hidden//2, 4)
-#             )
-
-#         def forward(self, x):
-#             return self.net(x)# logits
-#     model = MultiLabelMLP(input_dim=X_train.shape[1]).to(device)
-
-#     ## optimizer 在train_model/tune中分别创建
-        
-#     ## criterion for mlp :focallos处理类别不平衡
-#     class FocalLoss(nn.Module):
-#         def __init__(self, alpha=0.25, gamma=2):
-#             super().__init__()
-#             self.alpha = alpha
-#             self.gamma = gamma
-#             self.bce = nn.BCEWithLogitsLoss(reduction='none')
-
-#         def forward(self, logits, targets):
-#             bce_loss = self.bce(logits, targets)
-#             probs = torch.sigmoid(logits)
-#             pt = probs * targets + (1 - probs) * (1 - targets)
-#             focal = self.alpha * (1 - pt) ** self.gamma * bce_loss
-#             return focal.mean()
-#     criterion = FocalLoss(alpha=0.5, gamma=2)
-
-#     # train 
-#     # 定义模型构造函数：train+oof要统一
-#     def build_model(input_dim=X_train.shape[1], 
-#                     hidden=hidden, 
-#                     dropout=dropout):
-#         return MultiLabelMLP(input_dim=input_dim, hidden=hidden, dropout=dropout)
-    
-#     # 主训练
-#     model = MultiLabelMLP(input_dim=X_train.shape[1]).to(device)
-#     model = train_model(
-#         model=model,
-#         train_loader=train_loader,
-#         val_loader=val_loader,
-#         criterion=criterion,
-#         device=device,
-#         n_epochs=40,
-#         patience=5,
-#         model_path=model_path,
-#         lr=1e-3,
-#         weight_decay=1e-4
-#     )
-
-#     # 用 OOF CV 得 threshold
-#     best_t_overall=tune_thresholds_oof(
-#         model_fn=build_model,          # 返回一个新的 nn.Module 实例
-#         train_dataset=train_dataset,     # 训练集 Dataset
-#         device=device,            # "cuda" or "cpu"
-#         n_splits=5,        # 内层 OOF 折数
-#         n_epochs=n_epochs,       # 与主训练 epoch 保持一致
-#         batch_size=batch_size,
-#         sampler=None,       # 可选 WeightedRandomSampler
-#         )
-#     print("Final thresholds:", best_t_overall)
-    
-    
-#     os.makedirs(os.path.dirname(model_path), exist_ok=True)
-    
-#     torch.save({
-#         'model_state_dict': model.state_dict(),
-#         'best_t_overall': best_t_overall,  # 保存最后训练得到的阈值
-#         'input_dim': X_train.shape[1],
-#         'hidden': hidden,
-#         'dropout': dropout
-#     }, model_path)
-#     print(f"[INFO] Model + thresholds saved to {model_path}")
-
-#     return model, best_t_overall
-
-
 def tune_thresholds_oof_for_3class(model_fn, train_dataset, device="cpu",
                                    n_splits=5, n_epochs=40, batch_size=32,
                                    sampler=None, lr=1e-3, weight_decay=1e-4):
@@ -949,7 +811,7 @@ def tune_thresholds_oof_for_3class(model_fn, train_dataset, device="cpu",
 
 
 
-def train_multilabel_mlp(X_train, X_val, y_train, y_val,
+def train_multilabel_mlp_3class(X_train, X_val, y_train, y_val,
                           hidden=512,
                           batch_size=32, dropout=0.5,
                           n_epochs=40, patience=5,
@@ -982,9 +844,12 @@ def train_multilabel_mlp(X_train, X_val, y_train, y_val,
     torch.backends.cudnn.benchmark = False
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    # ------------------- 数据只取前3类 -------------------
+    # # ------------------- 数据只取前3类 -------------------
     y_train_mlp = y_train[:, :3]
     y_val_mlp   = y_val[:, :3]
+    
+    # y_train_mlp = y_train
+    # y_val_mlp   = y_val
 
     class MultiLabelDataset(Dataset):
         def __init__(self, X, y):
@@ -1074,25 +939,15 @@ def train_multilabel_mlp(X_train, X_val, y_train, y_val,
     )
 
     # ------------------- OOF threshold -------------------
-    from utils.axe_classification import tune_thresholds_oof
-    # best_t_overall = tune_thresholds_oof(
-    #     model_fn=build_model,
-    #     train_dataset=train_dataset,
-    #     device=device,
-    #     n_splits=5,
-    #     n_epochs=n_epochs,
-    #     batch_size=batch_size,
-    #     sampler=sampler,
-    # )
-    
+    # from utils.axe_classification import tune_thresholds_oof   
     
     best_t_overall = tune_thresholds_oof_for_3class(
         model_fn=build_model,          # 返回 MLP(3类)实例
         train_dataset=train_dataset,
         device=device,
         n_splits=5,
-        n_epochs=40,
-        batch_size=32,
+        n_epochs=n_epochs,
+        batch_size=batch_size,
         sampler=None, #sampler
     )
 
@@ -1114,6 +969,151 @@ def train_multilabel_mlp(X_train, X_val, y_train, y_val,
 
 
 
+
+
+def train_multilabel_mlp_class(X_train, X_val, y_train, y_val,
+                          n_classes=3,     # 新增参数，自定义训练前几类
+                          hidden=512,
+                          batch_size=32, dropout=0.5,
+                          n_epochs=40, patience=5,
+                          model_path="../model/test_mlp.pt"):
+    """
+    多标签 MLP 训练函数，可选择训练前 n_classes 类
+    """
+    import numpy as np
+    import torch
+    import torch.nn as nn
+    from torch.utils.data import Dataset, DataLoader, WeightedRandomSampler
+    import os, random
+
+    # ------------------- 固定种子 -------------------
+    seed = 42
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    np.random.seed(seed)
+    random.seed(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+
+    # ------------------- 数据裁剪 -------------------
+    y_train_mlp = y_train[:, :n_classes]
+    y_val_mlp   = y_val[:, :n_classes]
+
+    class MultiLabelDataset(Dataset):
+        def __init__(self, X, y):
+            self.X = torch.from_numpy(X).float()
+            self.y = torch.from_numpy(y).float()
+        def __len__(self):
+            return len(self.X)
+        def __getitem__(self, idx):
+            return self.X[idx], self.y[idx]
+
+    train_dataset = MultiLabelDataset(X_train, y_train_mlp)
+    val_dataset   = MultiLabelDataset(X_val, y_val_mlp)
+
+    # ------------------- sample_weights -------------------
+    class_counts = y_train_mlp.sum(axis=0)
+    epsilon = 1e-2
+    class_weights = 1.0 / (class_counts + epsilon)
+    sample_weights = (y_train_mlp * class_weights).mean(axis=1)
+    sample_weights = np.clip(sample_weights, 0.01, 5.0)
+
+    sampler = WeightedRandomSampler(
+        weights=torch.tensor(sample_weights, dtype=torch.float),
+        num_samples=len(sample_weights),
+        replacement=True
+    )
+
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, sampler=sampler)
+    val_loader   = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
+
+    # ------------------- MLP -------------------
+    class MultiLabelMLP(nn.Module):
+        def __init__(self, input_dim, hidden=512, dropout=0.5, n_classes=3):
+            super().__init__()
+            self.net = nn.Sequential(
+                nn.Linear(input_dim, hidden),
+                nn.ReLU(),
+                nn.Dropout(dropout),
+                nn.Linear(hidden, hidden//2),
+                nn.ReLU(),
+                nn.Dropout(dropout),
+                nn.Linear(hidden//2, n_classes)
+            )
+        def forward(self, x):
+            return self.net(x)
+
+    def build_model():
+        return MultiLabelMLP(input_dim=X_train.shape[1],
+                             hidden=hidden,
+                             dropout=dropout,
+                             n_classes=n_classes).to(device)
+
+    model = build_model()
+
+    # ------------------- FocalLoss -------------------
+    class FocalLoss(nn.Module):
+        def __init__(self, alpha=0.25, gamma=1):
+            super().__init__()
+            self.alpha = alpha
+            self.gamma = gamma
+            self.bce = nn.BCEWithLogitsLoss(reduction='none')
+        def forward(self, logits, targets):
+            bce_loss = self.bce(logits, targets)
+            probs = torch.sigmoid(logits)
+            pt = probs * targets + (1 - probs) * (1 - targets)
+            focal = self.alpha * (1 - pt) ** self.gamma * bce_loss
+            return focal.mean()
+
+    criterion = FocalLoss(alpha=0.25, gamma=1)
+
+    # ------------------- optimizer -------------------
+    optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-4)
+
+    # ------------------- train_model -------------------
+    from utils.axe_classification import train_model  # 你的训练函数
+    model = train_model(
+        model=model,
+        train_loader=train_loader,
+        val_loader=val_loader,
+        criterion=criterion,
+        device=device,
+        n_epochs=n_epochs,
+        patience=patience,
+        model_path=model_path,
+        lr=1e-3,
+        weight_decay=1e-4
+    )
+
+    # ------------------- OOF threshold -------------------
+    from utils.axe_classification import tune_thresholds_oof
+    best_t_overall = tune_thresholds_oof(
+        model_fn=build_model,
+        train_dataset=train_dataset,
+        device=device,
+        n_splits=5,
+        n_epochs=n_epochs,
+        batch_size=batch_size,
+        sampler=None,
+    )
+
+    # 阈值下限保护
+    best_t_overall = np.maximum(best_t_overall, 0.3)
+
+    # ------------------- 保存模型 + 阈值 -------------------
+    os.makedirs(os.path.dirname(model_path), exist_ok=True)
+    torch.save({
+        'model_state_dict': model.state_dict(),
+        'best_t_overall': best_t_overall,
+        'input_dim': X_train.shape[1],
+        'hidden': hidden,
+        'dropout': dropout,
+        'n_classes': n_classes
+    }, model_path)
+    print(f"[INFO] Model + thresholds saved to {model_path}")
+
+    return model, best_t_overall
 
 
 
@@ -1645,6 +1645,7 @@ def predict_by_mlp(
             f"threshold length {len(threshold)} != n_classes {n_classes}"
 
     preds = (probs >= threshold[None, :]).astype(int)
+    # return probs, preds
 
     return {
         "probs": probs,
@@ -1735,6 +1736,101 @@ def evaluate_model(
         plt.show()
 
     return metrics
+
+
+# def evaluate_model(
+#     y_true: np.ndarray,
+#     y_pred: np.ndarray,
+#     probs: np.ndarray = None,          # 可选，用于绘制 PR 曲线
+#     class_names=None,
+#     show_confusion=True,
+#     show_pr_curve=True
+# ):
+#     """
+#     Evaluate multi-label classification with overall metrics, per-class report,
+#     optional confusion matrices, and optional PR curves.
+
+#     Parameters
+#     ----------
+#     y_true : np.ndarray [N, C] 
+#         True binary labels
+#     y_pred : np.ndarray [N, C]
+#         Predicted binary labels (after threshold)
+#     probs : np.ndarray [N, C], optional
+#         Predicted probabilities (sigmoid output)
+#     class_names : list[str], optional
+#         Names of classes
+#     show_confusion : bool, default True
+#         Whether to plot confusion matrices
+#     show_pr_curve : bool, default True
+#         Whether to plot per-class Precision-Recall curves
+#     """
+
+#     import numpy as np
+#     import matplotlib.pyplot as plt
+#     from sklearn.metrics import (
+#         f1_score, precision_score, recall_score,
+#         classification_report, confusion_matrix,
+#         ConfusionMatrixDisplay, precision_recall_curve, auc
+#     )
+
+#     assert y_true.shape == y_pred.shape
+#     n_classes = y_true.shape[1]
+
+#     if class_names is None:
+#         class_names = [f"class_{i}" for i in range(n_classes)]
+#     else:
+#         assert len(class_names) == n_classes
+
+#     # ---------------- Overall metrics ----------------
+#     print("="*80)
+#     print("Overall metrics".center(80))
+#     print("="*80)
+
+#     metrics = {
+#         "F1 micro": f1_score(y_true, y_pred, average="micro", zero_division=0),
+#         "F1 macro": f1_score(y_true, y_pred, average="macro", zero_division=0),
+#         "F1 weighted": f1_score(y_true, y_pred, average="weighted", zero_division=0),
+#         "Precision micro": precision_score(y_true, y_pred, average="micro", zero_division=0),
+#         "Recall micro": recall_score(y_true, y_pred, average="micro", zero_division=0),
+#     }
+
+#     for k, v in metrics.items():
+#         print(f"{k:<20}: {v:.4f}")
+
+#     # ---------------- Per-class report ----------------
+#     print("\n" + "="*80)
+#     print("Per-class report".center(80))
+#     print("="*80)
+#     print(classification_report(y_true, y_pred, target_names=class_names, zero_division=0))
+
+#     # ---------------- Confusion matrices ----------------
+#     if show_confusion:
+#         fig, axes = plt.subplots(1, n_classes, figsize=(4 * n_classes, 4), squeeze=False)
+#         for i in range(n_classes):
+#             cm = confusion_matrix(y_true[:, i], y_pred[:, i], labels=[0,1])
+#             disp = ConfusionMatrixDisplay(cm, display_labels=[0,1])
+#             disp.plot(ax=axes[0, i], cmap='Blues', colorbar=False)
+#             axes[0, i].set_title(class_names[i])
+#         plt.tight_layout()
+#         plt.show()
+
+#     # ---------------- Precision-Recall curves ----------------
+#     if show_pr_curve and probs is not None:
+#         fig, axes = plt.subplots(1, n_classes, figsize=(5 * n_classes, 4), squeeze=False)
+#         for i in range(n_classes):
+#             precision, recall, _ = precision_recall_curve(y_true[:, i], probs[:, i])
+#             auc_score = auc(recall, precision)
+#             axes[0, i].plot(recall, precision, label=f"AUC={auc_score:.2f}")
+#             axes[0, i].set_xlabel("Recall")
+#             axes[0, i].set_ylabel("Precision")
+#             axes[0, i].set_title(class_names[i])
+#             axes[0, i].legend()
+#             axes[0, i].grid(True)
+#         plt.tight_layout()
+#         plt.show()
+
+#     return metrics
 
 
 

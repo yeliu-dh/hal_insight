@@ -114,7 +114,7 @@ col1, col2 = st.columns(2)
 with col1:
     start_year = st.selectbox("Année de début", start_years, index=start_years.index(2025))
 with col2:
-    start_month = st.selectbox("Mois de début", start_months, index=start_months.index(current_month-1))
+    start_month = st.selectbox("Mois de début", start_months, index=start_months.index(current_month))
 
 col3, col4 = st.columns(2)
 with col3:
