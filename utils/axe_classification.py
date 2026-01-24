@@ -285,6 +285,8 @@ def filtrate_df_to_emb(df,
                     ):
     import pandas as pd
     df_all=pd.read_parquet(df_all_emb_path)
+    # 按照筛选出不存在于df_all_emb中的文章
+    
     df_to_emb=df[~df['halId_s'].isin(df_all['halId_s'].tolist())]
     df_embedded=df_all[df_all['halId_s'].isin(df['halId_s'].tolist())]
     print(f"[INFO]{len(df_embedded)} articles already embedded! \n" 
@@ -1526,9 +1528,6 @@ def load_predict_by_mlp_lr(
 
 
 
-
-
-
 # def predict_by_mlp(text_embeddings, model, threshold=0.4):
 #     """
 #     text_embeddings: numpy array [N, dim]
@@ -1602,6 +1601,8 @@ def load_predict_by_mlp_lr(
 #     plt.show()
 
 #     return 
+
+
 
 
 
@@ -1837,7 +1838,7 @@ def evaluate_model(
 
 def load_predict_by_mlp_lr(
     df_long,
-    path_mlp="../model/2024/test_mlp.pt",
+    path_mlp="../model/2024/mlp_3class.pt",
     path_lr="../model/2024/model_lr_abstract_0.80.pt",
     t_lr=0.5,
     class_names_mlp=("axe1", "axe2", "axe3"),

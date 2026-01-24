@@ -113,6 +113,8 @@ def clean_ponc(s):
     # \w\s → 匹配所有字母、数字、下划线、空白的字符（即标点符号）。
     # ^ 表示取反
     return clean_s
+
+
 def preprocess_text(text, user_stopwords=None, lang='fr'):
     # print(f"preprocess text :\n"
     #       f"delete stopwords by language, custom stopwords, non-alphabétique characters, punctuation, ;\n"
