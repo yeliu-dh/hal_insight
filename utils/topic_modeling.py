@@ -65,7 +65,6 @@ def combine_embeddings(row, w_title=1.0, w_kw=1.2, w_abs=1.5):# 给axe加权
 
 
 def preprocess_df_for_topic_modeling(df):
-    
     df['axe_list'] = df['final_axe'].apply(parse_axes)
         
     df['text'] = df.apply(build_text, axis=1)
@@ -127,7 +126,9 @@ def generate_force_scatterplot(df):
     
     
     # plot
-    plt.figure(figsize=(10, 10))
+    fig, ax = plt.subplots(figsize=(10, 10))
+    # plt.figure(figsize=(10, 10))
+    
     colors = {1:'blue', 2:'orange', 3:'green', 4:'red'}
     axe_label={"1":"Performances et responsabilités",
             "2":"Société de services et services à la société",
@@ -146,19 +147,25 @@ def generate_force_scatterplot(df):
         else:
             # 多轴文章 → 同位置画多个颜色点
             for axe in axes:
-                plt.scatter(x, y, c=colors[int(axe)], s=s_size, alpha=alpha_val)
+                # plt.scatter
+                ax.scatter(x, y, c=colors[int(axe)], s=s_size, alpha=alpha_val)
 
     # show legend ：只显示单轴颜色对应的 axe
     from matplotlib.lines import Line2D
     legend_elements = [Line2D([0],[0], marker='o', color='w', label=f"Axe {axe}",
                         markerfacecolor=color, markersize=10)
                     for axe, color in colors.items()]
-    plt.legend(handles=legend_elements, loc='best')
-
-    plt.axis('off')
+    
+    ax.legend(handles=legend_elements, loc='best')
+    ax.set_title(
+        "Scatterplot des axes thématiques",
+        fontsize=14,
+        pad=20
+    )
+    ax.axis('off')
     # plt.show()
     
-    return
+    return fig
 
 
 
