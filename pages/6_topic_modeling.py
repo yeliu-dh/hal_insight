@@ -137,15 +137,14 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     range_topic_size = list(range(0,50))
     min_topic_size = st.selectbox("Taille minimal d'articles pour un sujet", range_topic_size, index=30)#整除
     
-    range_top_kw = list(range(0, 10))
-    N_WORDS = st.selectbox("Afficher les premier N mots clés",range_top_kw, index=5)
+    range_top_kw = list(range(1, 11))
+    N_WORDS = st.selectbox("Afficher les premier N mots clés",range_top_kw, index=4)
      
     st.markdown("<br>", unsafe_allow_html=True)
 
     col_en_question="final_axe" if 'final_axe' in df_predicted.columns else 'axe'
-    show_distribution= st.checkbox("Afficher la répartition des valeurs ?", value=False, key="col_distribution")#key用于储存在session state中
-    missing_data_warning(df=df_predicted, col=col_en_question, show_distribution=show_distribution)
-
+    show_count= st.checkbox("Afficher le compte des classes ?", value=True, key="show_count")#key用于储存在session state中
+    missing_data_warning(df=df_predicted, col=col_en_question, show_count=show_count)
     st.divider()
     
     # =============START============
@@ -160,7 +159,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             df_axe_key=f"df_axe_{'_'.join(axe_id)}"
 
             topic_model_key=f"topic_model_{'_'.join(axe_id)}"
-            st.write(f"[KEYS] {df_axe_key}, {topic_model_key}")
+            # st.write(f"[KEYS] {df_axe_key}, {topic_model_key}")
             
             if not topic_model_key in st.session_state:
                 # filter by date
@@ -180,14 +179,14 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 # topic modeling
                 topic_model=get_topics_per_axe(df=df_axe, col_text='clean_text', min_topic_size=min_topic_size)
                 st.session_state[topic_model_key]=topic_model
-                
-                # show info
+            else :   
+                topic_model=st.session_state[topic_model_key]
                 topic_info = topic_model.get_topic_info()   
                 st.dataframe(topic_info)
             
         with st.spinner("🔄 Visualiser scatterplot..."):
             if df_axe_key in st.session_state and topic_model_key in st.session_state :
-                df_filtered=st.session_state[df_axe_key]
+                df_axe=st.session_state[df_axe_key]
                 topic_model=st.session_state[topic_model_key]
                 
                 fig=generate_topics_keywords_scatterplot(topic_model, df=df_axe, col_text="clean_text", axe_id=axe_id, N_WORDS = N_WORDS)

@@ -48,7 +48,7 @@ def explode_by_col(df, col="Axe"):
     df[col] = df[col].str.strip()
     return df[df[col].notna() & (df[col] != "")]
 
-def missing_data_warning(df, col=None, map:dict=None, show_distribution=False):
+def missing_data_warning(df, col=None, map:dict=None, show_distribution=False, show_count=False):
     if col not in df.columns:
         st.warning (f"⚠ {col} n'est pas trouvé dans la base de données !")
     else:        
@@ -71,13 +71,13 @@ def missing_data_warning(df, col=None, map:dict=None, show_distribution=False):
             dist = df[col].value_counts(normalize=True)* 100
             dist_str = " ; ".join([f"{k} : {v:.1f}%" for k, v in dist.items()])
             st.write(f"{dist_str}")
-
-        # else :
-        #     dist_str=" "
-   
-        # st.info (f"**Values**: {str_manquant} \n\n"
-        #          f"Distribution : {dist_str}")
-        # st.markdown(f"**Values :** {str_manquant}\n\n**Distribution :**\n{dist_str}")#mkd更好控制分行和格式
+        
+        if show_count:
+            df=explode_by_col(df, col=col)
+            dist = df[col].value_counts()
+            dist_str = " ; ".join([f"{k} : {v:.0f}" for k, v in dist.items()])
+            st.write(f"{dist_str}")
+      
 
     return
 

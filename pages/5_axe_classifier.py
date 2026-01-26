@@ -26,7 +26,6 @@ from utils.axe_classification import filtrate_df_to_emb, emb_text, check_before_
 from utils.axe_classification import to_df_long
 from utils.axe_classification import load_predict_by_mlp_lr
 from utils.axe_classification import gather_predicted_axes, merge_axes
-from utils.upload import missing_data_warning
 
 
 # topics
@@ -79,6 +78,7 @@ st.markdown("""
 | IRG_AXE4 | Ouvrages pédagogiques |
 """)
 
+st.markdown("👉Consulter [Entraînement du modèle MLP+LR  (notebook)](https://github.com/yeliu-dh/hal_insight/blob/main/notebooks/test_trainclf.ipynb)")
 
 
 # with open("md\clf_training.md", "r", encoding="utf-8") as f:
@@ -118,8 +118,6 @@ st.markdown("""
 # st.image(matrix_image, caption="matrice de confusion du classifieur")
 
 st.divider()
-
-
 
 if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None:
     # 若df存在则视为开始
@@ -174,6 +172,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         df_noaxe_embedded=check_before_emb_text(df=df_noaxe, embedding_model=embedding_model, 
                                                batch_size=32, 
                                                df_all_emb_path=df_all_emb_path)
+        
         ## update df_all_emb :
         df_all_emb=pd.read_parquet(df_all_emb_path)
         df_all_emb_updated = (
@@ -225,9 +224,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     st.write(f"[INFO] Df de {len(df_all)} lignes avec des axes fusionnés:\n")
     # st.dataframe(df_all[['halId_s','title_s',"keyword_s",'abstract_s','axe','predicted_axe','final_axe']])
     st.dataframe(df_all)
-
     st.session_state['df_all_pred']=df_all
 
+    
     
     #------------------save to local-------------------
     if "df_all_pred" in st.session_state:
@@ -239,7 +238,25 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             st.warning (f"ERROR in save_file_csv_xlsx :\n {e}")   
         st.divider()    
     
+    #------------------check-------------------
+    st.write(f"**[CHECK] vérification manuelle**")
+    cols_kept = st.multiselect(
+        "Type de documents",
+        options=df_all.columns.to_list(),
+        # format_func=lambda x: DOC_TYPE_MAP[x],
+        default=["title_s","keyword_s","abstract_s","axe","predicted_axe","final_axe"]
+    )
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    show_pred = st.checkbox("Afficher que la prédiction ? ", value=True, key="nan")
+    if show_pred:
+        df_check=df_all[df_all["axe"].isna()][cols_kept]
+    else :
+        df_check=df_all[cols_kept]
+    st.dataframe(df_check)
+    st.divider()
     
+    #------------------vis-------------------
     if "df_all_pred" in st.session_state:                
         st.subheader("🔢 Visualisation")
         st.markdown("<br>", unsafe_allow_html=True)
@@ -261,7 +278,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 # st.pyplot(fig)
                 st.pyplot(fig, use_container_width=True)
 
-
+    
 
 
 
