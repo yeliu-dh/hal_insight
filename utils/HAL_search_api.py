@@ -37,24 +37,31 @@ def build_period(start_year=None, start_month=None,
 
         # --- 构建开始日期 --如果非数值，则表示无限制
         if isinstance(start_year, int) and isinstance(start_month, int):
-            start_date = f"{start_year}-{start_month:02d}-01T00:00:00Z"
+            # start_date = f"{start_year}-{start_month:02d}-01T00:00:00Z"
+            start_date = f"{start_year}-{start_month:02d}"
+
         else:
             start_date = "*"
 
         # --- 构建结束日期 ---如果非数值，则表示截止至今天
         if isinstance(end_year, int) and isinstance(end_month, int):
             last_day = calendar.monthrange(end_year, end_month)[1]
-            end_date = f"{end_year}-{end_month:02d}-{last_day:02d}T23:59:59Z"
+            # end_date = f"{end_year}-{end_month:02d}-{last_day:02d}T23:59:59Z"
+            end_date = f"{end_year}-{end_month:02d}-{last_day:02d}"
+            
         elif end_year == "aujourd'hui":
             today = datetime.utcnow()
-            end_date = today.strftime("%Y-%m-%dT23:59:59Z")
+            # end_date = today.strftime("%Y-%m-%dT23:59:59Z")
+            end_date = today.strftime("%Y-%m-%d")
+
         else:
             # 理论上不会进入这里，但作为安全兜底
             today = datetime.utcnow()
-            end_date = today.strftime("%Y-%m-%dT23:59:59Z")
+            # end_date = today.strftime("%Y-%m-%dT23:59:59Z")
+            end_date = today.strftime("%Y-%m-%d")
 
         # --- 添加 fq 参数（提交日期区间） ---
-        # st.markdown(f"[INFO] **Période de recherche**: **{start_date} ~ {end_date}**  \n")
+        st.markdown(f"[INFO] **Période de recherche**: **{start_date} ~ {end_date}**  \n")
 
         return start_date, end_date
 
@@ -837,8 +844,15 @@ def filter_by_publicationdate(df_input, start_year, start_month, end_year, end_m
                                date_col="publicationDate_s", filter_pubdate_by=None):
     
     df=df_input.copy()# df==df_filtered
+    #确保df中的日期列+输入的起止年份为日期格式：
+    df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
+    
     if filter_pubdate_by=="année et mois":
         start_date, end_date=build_period(start_year, start_month,end_year, end_month)
+        start_date = pd.to_datetime(start_date, utc=False) if start_date else None
+        end_date = pd.to_datetime(end_date, utc=False) if end_date else None
+
+        # st.write(start_date, end_date, type(start_date), type(end_date))
         if start_date is not None:
             df = df[df[date_col] >= start_date]
         if end_date is not None:
@@ -852,7 +866,6 @@ def filter_by_publicationdate(df_input, start_year, start_month, end_year, end_m
         if end_year is not None:
             df = df[df["pub_year"] <= int(end_year)]
     # else: filter==None, return directely?
-    
     
     return df
 

@@ -133,6 +133,8 @@ def data_uploader(key="uploaded_df"):
         st.info("Aucun fichier importé. Veuillez chercher des articles ou charger un CSV.")
 
 
+
+
 def df_to_markdown(df):
     md = "| " + " | ".join(df.columns) + " |\n"
     md += "| " + " | ".join(["---"]*len(df.columns)) + " |\n"

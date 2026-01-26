@@ -26,6 +26,7 @@ from utils.axe_classification import filtrate_df_to_emb, emb_text, check_before_
 from utils.axe_classification import to_df_long
 from utils.axe_classification import load_predict_by_mlp_lr
 from utils.axe_classification import gather_predicted_axes, merge_axes
+from utils.upload import missing_data_warning
 
 
 # topics
@@ -45,7 +46,6 @@ from utils.axe_classification import gather_predicted_axes, merge_axes
 def load_embedding_model():
     from sentence_transformers import SentenceTransformer
     return SentenceTransformer("BAAI/bge-m3")
-
 
         
 st.set_page_config(page_title="HAL insight", page_icon="🛸",layout="wide")
@@ -240,22 +240,28 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         st.divider()    
     
     
-    if "df_all_pred" in st.session_state:
+    if "df_all_pred" in st.session_state:                
         st.subheader("🔢 Visualisation")
         st.markdown("<br>", unsafe_allow_html=True)
+        cols=st.columns([4,1])
+        with cols[1]:
+            start_button = st.button("⚡ Commencer")
+        if start_button:# and not invalid_date    
 
-        from utils.topic_modeling import preprocess_df_for_topic_modeling, generate_force_scatterplot 
-        
-        df_predicted=st.session_state['df_all_pred']
-        df_all_emb=pd.read_parquet(df_all_emb_path)
-        emb=df_all_emb[df_all_emb["halId_s"].isin(df_predicted['halId_s'].to_list())][["halId_s","emb_title_s","emb_keyword_s","emb_abstract_s"]]
-        df_predicted_emb=df_predicted.merge(emb, on='halId_s', how='left') 
-               
-        df_plot=preprocess_df_for_topic_modeling(df_predicted_emb)
-        with st.spinner("🔄 Génération de la visualisation..."):
-            fig=generate_force_scatterplot(df_plot)
-            # st.pyplot(fig)
-            st.pyplot(fig, use_container_width=True)
+            from utils.topic_modeling import preprocess_df_for_topic_modeling, generate_force_scatterplot         
+            df_predicted=st.session_state['df_all_pred']
+            df_all_emb=pd.read_parquet(df_all_emb_path)
+            emb=df_all_emb[df_all_emb["halId_s"].isin(df_predicted['halId_s'].to_list())][["halId_s","emb_title_s","emb_keyword_s","emb_abstract_s"]]
+            df_predicted_emb=df_predicted.merge(emb, on='halId_s', how='left') 
+                
+            df_plot=preprocess_df_for_topic_modeling(df_predicted_emb)
+            
+            with st.spinner("🔄 Génération de la visualisation..."):
+                fig=generate_force_scatterplot(df_plot)
+                # st.pyplot(fig)
+                st.pyplot(fig, use_container_width=True)
+
+
 
 
 
