@@ -241,7 +241,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     #------------------check-------------------
     st.write(f"**[CHECK] vérification manuelle**")
     cols_kept = st.multiselect(
-        "Type de documents",
+        "Colonnes à afficher",
         options=df_all.columns.to_list(),
         # format_func=lambda x: DOC_TYPE_MAP[x],
         default=["title_s","keyword_s","abstract_s","axe","predicted_axe","final_axe"]

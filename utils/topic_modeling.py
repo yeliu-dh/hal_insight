@@ -253,14 +253,16 @@ def get_topics_per_axe(df, col_text="clean_text",min_topic_size=30):
     # topic
     start_time=time.time()
     topic_model = BERTopic(
-        language="multilingual",  # 如果是法文 / 多语言
-        calculate_probabilities=True,#probs[i, k] = 文档 i 属于 topic k 的概率
+        language="multilingual",  
+        calculate_probabilities=True,
         min_topic_size=min_topic_size,
         verbose=True, #
         low_memory=False,
         umap_model=UMAP(random_state=42)
-        # umap_model= umap_model #决定降维
     )
+        #calculate_probabilitiesprobs[i, k] = 文档 i 属于 topic k 的概率
+        # umap_model= umap_model #决定降维
+
     topics, probs = topic_model.fit_transform(texts)    
     topic_info = topic_model.get_topic_info()   
     end_time=time.time()

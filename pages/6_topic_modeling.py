@@ -34,8 +34,8 @@ st.markdown("<br>", unsafe_allow_html=True)
 st.divider() 
 
 st.subheader("📒 README")
-st.write(f"")
-
+st.write(f"**Model de topic modeling: BERTopic**")
+st.write(f"**Model de réduction de dimension: UMAP**")
 
 st.divider() 
 
@@ -135,7 +135,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     )
 
     range_topic_size = list(range(0,50))
-    min_topic_size = st.selectbox("Taille minimal d'articles pour un sujet", range_topic_size, index=30)#整除
+    min_topic_size = st.selectbox("Taille minimale d'articles pour un sujet", range_topic_size, index=30)#整除
     
     range_top_kw = list(range(1, 11))
     N_WORDS = st.selectbox("Afficher les premier N mots clés",range_top_kw, index=4)
@@ -155,10 +155,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         ## 输入任意axe_id(str/lst)处理
         with st.spinner("🔄 Topic modeling..."):
             
-            df_filtered_key=f"df_filtered_{'_'.join(axe_id)}"
+            # df_filtered_key=f"df_filtered_{'_'.join(axe_id)}"
             df_axe_key=f"df_axe_{'_'.join(axe_id)}"
-
-            topic_model_key=f"topic_model_{'_'.join(axe_id)}"
+            topic_model_key=f"topic_model_{'_'.join(axe_id)}_{min_topic_size}"
             # st.write(f"[KEYS] {df_axe_key}, {topic_model_key}")
             
             if not topic_model_key in st.session_state:
@@ -168,7 +167,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                         date_col="submittedDate_s",
                         filter_pubdate_by="année et mois")
                 st.write(f"[INFO] filtrer selon 'submittedDate_s': {len(df_predicted)}=>{len(df_filtered)} lignes restent.  \n")    
-                st.session_state[df_filtered_key]=df_filtered
+                # st.session_state[df_filtered_key]=df_filtered
                 
                 # preprocess+filter by axe
                 df=preprocess_df_for_topic_modeling(df_filtered)#get 'axe_list'
