@@ -135,7 +135,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     )
 
     range_topic_size = list(range(0,50))
-    min_topic_size = st.selectbox("Taille minimale d'articles pour un sujet", range_topic_size, index=30)#整除
+    min_topic_size = st.selectbox("Taille minimale d'articles pour former un sujet", range_topic_size, index=30)#整除
     
     range_top_kw = list(range(1, 11))
     N_WORDS = st.selectbox("Afficher les premier N mots clés",range_top_kw, index=4)
@@ -180,9 +180,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 st.session_state[topic_model_key]=topic_model
             else :   
                 topic_model=st.session_state[topic_model_key]
-                topic_info = topic_model.get_topic_info()   
-                st.dataframe(topic_info)
-            
+            topic_info = topic_model.get_topic_info()   
+            st.dataframe(topic_info)
+        
         with st.spinner("🔄 Visualiser scatterplot..."):
             if df_axe_key in st.session_state and topic_model_key in st.session_state :
                 df_axe=st.session_state[df_axe_key]
