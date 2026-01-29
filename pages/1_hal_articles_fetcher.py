@@ -73,14 +73,24 @@ value=[],
 suggestions=[],
 maxtags=10
 )
+st.markdown("<br>", unsafe_allow_html=True)
+
 
 # 文档类型
+select_all_doctypes = st.checkbox("Sélectionner tout / Tout désélectionner")
 doc_types = st.multiselect(
     "Type de documents",
     options=list(DOC_TYPE_MAP.keys()),
     format_func=lambda x: DOC_TYPE_MAP[x],
-    default=["ART","OUV","COUV","COMM"]
+    default=list(DOC_TYPE_MAP.keys()) if select_all_doctypes else []
 )
+# doc_types = st.multiselect(
+#     "Type de documents",
+#     options=list(DOC_TYPE_MAP.keys()),
+#     format_func=lambda x: DOC_TYPE_MAP[x],
+#     default=["ART","OUV","COUV","COMM"]
+# )
+
 
 domains = st.multiselect(
     "**Domaine**",
