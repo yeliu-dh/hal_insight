@@ -77,7 +77,7 @@ st.markdown("<br>", unsafe_allow_html=True)
 
 
 # 文档类型
-select_all_doctypes = st.checkbox("Sélectionner tout / Tout désélectionner")
+select_all_doctypes = st.checkbox("Sélectionner tout / Tout désélectionner les types de document")
 doc_types = st.multiselect(
     "Type de documents",
     options=list(DOC_TYPE_MAP.keys()),
