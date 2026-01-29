@@ -260,7 +260,7 @@ def get_topics_per_axe(df, col_text="clean_text",min_topic_size=30):
         low_memory=False,
         umap_model=UMAP(random_state=42)
     )
-        #calculate_probabilitiesprobs[i, k] = 文档 i 属于 topic k 的概率
+        #calculate_probabilities : probs[i, k] = 文档 i 属于 topic k 的概率
         # umap_model= umap_model #决定降维
 
     topics, probs = topic_model.fit_transform(texts)    

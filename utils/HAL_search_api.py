@@ -9,6 +9,16 @@ import calendar
 from utils.upload import missing_data_warning
 
 
+"""
+[2026-01-01 TO 2026-01-27]
+[2026-01-01 TO NOW]
+[* TO NOW]
+
+"""
+
+from datetime import datetime, timezone, date
+
+utc_today = datetime.now(timezone.utc).date()
 
 
 
@@ -37,31 +47,27 @@ def build_period(start_year=None, start_month=None,
 
         # --- 构建开始日期 --如果非数值，则表示无限制
         if isinstance(start_year, int) and isinstance(start_month, int):
-            # start_date = f"{start_year}-{start_month:02d}-01T00:00:00Z"
-            start_date = f"{start_year}-{start_month:02d}"
-
+            start_date = f"{start_year}-{start_month:02d}-01T00:00:00Z"
         else:
             start_date = "*"
-
+            
+        # NB. HAL 的 _tdate 字段是 Solr Date 类型:它 不接受纯 YYYY-MM-DD,必须加上时间区域T23:59:59Z
         # --- 构建结束日期 ---如果非数值，则表示截止至今天
         if isinstance(end_year, int) and isinstance(end_month, int):
             last_day = calendar.monthrange(end_year, end_month)[1]
-            # end_date = f"{end_year}-{end_month:02d}-{last_day:02d}T23:59:59Z"
-            end_date = f"{end_year}-{end_month:02d}-{last_day:02d}"
+            end_date = f"{end_year}-{end_month:02d}-{last_day:02d}T23:59:59Z"
             
         elif end_year == "aujourd'hui":
             today = datetime.utcnow()
-            # end_date = today.strftime("%Y-%m-%dT23:59:59Z")
-            end_date = today.strftime("%Y-%m-%d")
-
+            end_date = today.strftime("%Y-%m-%dT23:59:59Z")
+            
+        # --- # 理论上不会进入这里，但作为安全兜底
         else:
-            # 理论上不会进入这里，但作为安全兜底
             today = datetime.utcnow()
-            # end_date = today.strftime("%Y-%m-%dT23:59:59Z")
-            end_date = today.strftime("%Y-%m-%d")
-
+            end_date = today.strftime("%Y-%m-%dT23:59:59Z")
+            
+        print(f'start-end:{start_date}-{end_date}')
         # --- 添加 fq 参数（提交日期区间） ---
-        st.markdown(f"[INFO] **Période de recherche**: **{start_date} ~ {end_date}**  \n")
 
         return start_date, end_date
 
@@ -178,11 +184,11 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         fq.append(f'labStructName_s:({" OR ".join(input)})')
     
     if collcode:
-        input = [f'"{t}"' for t in labs]
+        input = [f'"{t}"' for t in collcode]
         fq.append(f'collCode_s:({" OR ".join(input)})')
     
     if collname:
-        input = [f'"{t}"' for t in labs]
+        input = [f'"{t}"' for t in collname]
         fq.append(f'collName_s:({" OR ".join(input)})')
 
     if domains:
@@ -232,7 +238,15 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
 
     # 8. 自由文本（全文搜索）
     q = " AND ".join(text) if text else "*:*"
+    
+    """
+    start-end:2026-01-01-NOW
+    QUERY URL : https://api.archives-ouvertes.fr/search/?q=%2A%3A%2A&
+    fl=halId_s%2Curi_s%2CdocType_s%2Ctitle_s%2CsubTitle_s%2CauthFullName_s%2CauthIdHal_s%2ClabStructName_s%2Cdomain_s%2CopenAccess_bool%2Cvolume_s%2Cpage_s%2Cclassification_s%2CsubmittedDate_s%2CmodifiedDate_s%2CpublicationDate_s%2CjournalTitle_s%2CconferenceTitle_s%2CconferenceOrganizer_s%2CconferenceStartDate_s%2Ccountry_s%2Clanguage_s%2Ckeyword_s%2Cabstract_s%2Cfiles_s%2CurlFulltextEsr_s&rows=100&wt=json&start=0&sort=submittedDate_tdate+desc&
+    fq=docType=submittedDate_tdate%3A%5B2026-01-01+TO+NOW%5D
 
+
+    """
     #==================URL check==================
     # response = requests.get(url, params=params).json()
 
@@ -312,7 +326,7 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         # 构建 URL 用于打印检查
         query_string = urllib.parse.urlencode(params, doseq=True)
         full_url = BASE_URL + "?" + query_string
-        # st.info(f'QUERY URL : {full_url} \n')
+        # print(f'QUERY URL : {full_url} \n')
         
         resp = requests.get(BASE_URL, params=params, timeout=15)
         # print(resp.json())
@@ -849,6 +863,7 @@ def filter_by_publicationdate(df_input, start_year, start_month, end_year, end_m
     
     if filter_pubdate_by=="année et mois":
         start_date, end_date=build_period(start_year, start_month,end_year, end_month)
+        
         start_date = pd.to_datetime(start_date, utc=False) if start_date else None
         end_date = pd.to_datetime(end_date, utc=False) if end_date else None
 
