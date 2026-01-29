@@ -874,14 +874,31 @@ def filter_by_publicationdate(df_input, start_year, start_month, end_year, end_m
         if end_date is not None:
             df = df[df[date_col] <= end_date]
             
-    elif filter_pubdate_by=="année":
-        df["pub_year"] = pd.to_numeric(df[date_col].str[:4], errors="coerce")
+    elif filter_pubdate_by == "année":
+        # 将列转换为 datetime
+        df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
+
+        # 提取年份
+        df["pub_year"] = df[date_col].dt.year
+
+        # 根据年份筛选
         if start_year is not None:
             df = df[df["pub_year"] >= int(start_year)]
-
         if end_year is not None:
             df = df[df["pub_year"] <= int(end_year)]
-    # else: filter==None, return directely?
+
+
+
+    #     # 可能存在没有pubdate的列？=> skip date_col != str
+    #     mask = df[date_col].apply(lambda x: isinstance(x, str))
+    #     df.loc[mask, "pub_year"] = pd.to_numeric(df.loc[mask, date_col].str[:4], errors="coerce")
+    #     # df["pub_year"] = pd.to_numeric(df[date_col].str[:4], errors="coerce")
+        
+    #     if start_year is not None:
+    #         df = df[df["pub_year"] >= int(start_year)]
+    #     if end_year is not None:
+    #         df = df[df["pub_year"] <= int(end_year)]
+    # # else: filter==None, return directely?
     
     return df
 
@@ -954,7 +971,7 @@ def process_df(df, DOMAIN_MAP,
     st.markdown("<br>", unsafe_allow_html=True)
 
     #----------按照publicationDate_s筛选-----------------
-    # keys 与radio输入保持一致！
+    # # keys 与radio输入保持一致！
     df_filtered=filter_by_publicationdate(df_input=df, start_year=start_year, start_month=start_month, end_year=end_year, end_month=end_month,
                                         filter_pubdate_by=filter_pubdate_by)
     
@@ -972,7 +989,8 @@ def process_df(df, DOMAIN_MAP,
         st.markdown(f"✔ Résultat filtré selon **{filter_pubdate_by}** de la data de publication : **{period_str}**")
     # else: filter_pubdate_by==None=> no filter
     st.markdown("<br>", unsafe_allow_html=True)
-
+    df_filtered=df.copy()
+    
     return df_filtered
 
 

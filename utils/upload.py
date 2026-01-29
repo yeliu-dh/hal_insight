@@ -68,13 +68,13 @@ def missing_data_warning(df, col=None, map:dict=None, show_distribution=False, s
         # 是否显示分布
         if show_distribution:
             df=explode_by_col(df, col=col)
-            dist = df[col].value_counts(normalize=True)* 100
+            dist = df[col].value_counts(normalize=True, dropna=False)* 100
             dist_str = " ; ".join([f"{k} : {v:.1f}%" for k, v in dist.items()])
             st.write(f"{dist_str}")
         
         if show_count:
             df=explode_by_col(df, col=col)
-            dist = df[col].value_counts()
+            dist = df[col].value_counts(dropna=False)
             dist_str = " ; ".join([f"{k} : {v:.0f}" for k, v in dist.items()])
             st.write(f"{dist_str}")
       
