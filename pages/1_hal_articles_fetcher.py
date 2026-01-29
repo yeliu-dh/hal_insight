@@ -82,7 +82,7 @@ doc_types = st.multiselect(
     "Type de documents",
     options=list(DOC_TYPE_MAP.keys()),
     format_func=lambda x: DOC_TYPE_MAP[x],
-    default=list(DOC_TYPE_MAP.keys()) if select_all_doctypes else []
+    default=list(DOC_TYPE_MAP.keys()) if select_all_doctypes else ["ART","OUV","COUV","COMM"]
 )
 # doc_types = st.multiselect(
 #     "Type de documents",
