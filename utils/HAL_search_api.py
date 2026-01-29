@@ -854,12 +854,61 @@ def add_primarystructure(df, author_primarystructure_s_map):
 #     return df
 
 
+# def filter_by_publicationdate(df_input, start_year, start_month, end_year, end_month,
+#                                date_col="publicationDate_s", filter_pubdate_by=None):
+    
+#     df=df_input.copy()# df==df_filtered
+#     #确保df中的日期列+输入的起止年份为日期格式：
+#     df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
+    
+#     if filter_pubdate_by=="année et mois":
+#         start_date, end_date=build_period(start_year, start_month,end_year, end_month)
+        
+#         # utc=True!! 会把时间转换为 UTC 时区, 返回的是 带 tzinfo 的 datetime
+#         start_date = pd.to_datetime(start_date, utc=True) if start_date else None
+#         end_date = pd.to_datetime(end_date, utc=True) if end_date else None
+
+#         # st.write(start_date, end_date, type(start_date), type(end_date))
+#         if start_date is not None:
+#             df = df[df[date_col] >= start_date]
+#         if end_date is not None:
+#             df = df[df[date_col] <= end_date]
+            
+#     elif filter_pubdate_by == "année":
+#         # 将列转换为 datetime
+#         df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
+
+#         # 提取年份
+#         df["pub_year"] = df[date_col].dt.year
+#         df['pub_year']=pd.to_numeric(df['pub_year'], errors='coerce')
+        
+#         # 根据年份筛选
+#         if start_year is not None:
+#             df = df[df["pub_year"] >= int(start_year)]
+#         if end_year is not None:
+#             df = df[df["pub_year"] <= int(end_year)]
+            
+#     #     # 可能存在没有pubdate的列？=> skip date_col != str
+#     #     mask = df[date_col].apply(lambda x: isinstance(x, str))
+#     #     df.loc[mask, "pub_year"] = pd.to_numeric(df.loc[mask, date_col].str[:4], errors="coerce")
+#     #     # df["pub_year"] = pd.to_numeric(df[date_col].str[:4], errors="coerce")
+        
+#     #     if start_year is not None:
+#     #         df = df[df["pub_year"] >= int(start_year)]
+#     #     if end_year is not None:
+#     #         df = df[df["pub_year"] <= int(end_year)]
+#     # # else: filter==None, return directely?
+    
+#     return df
+
+
 def filter_by_publicationdate(df_input, start_year, start_month, end_year, end_month,
-                               date_col="publicationDate_s", filter_pubdate_by=None):
+                               date_col="publicationDate_s", filter_pubdate_by="année"):
     
     df=df_input.copy()# df==df_filtered
     #确保df中的日期列+输入的起止年份为日期格式：
     df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
+    print(f'df BEFORE filtrage:{len(df)}')
     
     if filter_pubdate_by=="année et mois":
         start_date, end_date=build_period(start_year, start_month,end_year, end_month)
@@ -873,13 +922,15 @@ def filter_by_publicationdate(df_input, start_year, start_month, end_year, end_m
             df = df[df[date_col] >= start_date]
         if end_date is not None:
             df = df[df[date_col] <= end_date]
-            
+    
     elif filter_pubdate_by == "année":
         # 将列转换为 datetime
-        df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
+        data_col_t=date_col.replace("_s",'_t')
+        df[data_col_t] = pd.to_datetime(df[date_col], errors="coerce")
 
         # 提取年份
         df["pub_year"] = df[date_col].dt.year
+        df['pub_year']=pd.to_numeric(df['pub_year'], errors='coerce').astype('Int64')
         
         # 根据年份筛选
         if start_year is not None:
@@ -887,20 +938,9 @@ def filter_by_publicationdate(df_input, start_year, start_month, end_year, end_m
         if end_year is not None:
             df = df[df["pub_year"] <= int(end_year)]
             
-    #     # 可能存在没有pubdate的列？=> skip date_col != str
-    #     mask = df[date_col].apply(lambda x: isinstance(x, str))
-    #     df.loc[mask, "pub_year"] = pd.to_numeric(df.loc[mask, date_col].str[:4], errors="coerce")
-    #     # df["pub_year"] = pd.to_numeric(df[date_col].str[:4], errors="coerce")
-        
-    #     if start_year is not None:
-    #         df = df[df["pub_year"] >= int(start_year)]
-    #     if end_year is not None:
-    #         df = df[df["pub_year"] <= int(end_year)]
-    # # else: filter==None, return directely?
-    
+    print(f'df AFTER filtrage:{len(df)}')
+
     return df
-
-
 
 
 
@@ -987,7 +1027,6 @@ def process_df(df, DOMAIN_MAP,
         st.markdown(f"✔ Résultat filtré selon **{filter_pubdate_by}** de la data de publication : **{period_str}**")
     # else: filter_pubdate_by==None=> no filter
     st.markdown("<br>", unsafe_allow_html=True)
-    df_filtered=df.copy()
     
     return df_filtered
 
