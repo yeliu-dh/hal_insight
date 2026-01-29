@@ -57,7 +57,7 @@ def build_period(start_year=None, start_month=None,
             last_day = calendar.monthrange(end_year, end_month)[1]
             end_date = f"{end_year}-{end_month:02d}-{last_day:02d}T23:59:59Z"
             
-        elif end_year == "aujourd'hui":
+        elif end_year == "aujourd'hui":# 不要用NOW，其他筛选的时候需要具体日期？
             today = datetime.utcnow()
             end_date = today.strftime("%Y-%m-%dT23:59:59Z")
             
@@ -864,8 +864,9 @@ def filter_by_publicationdate(df_input, start_year, start_month, end_year, end_m
     if filter_pubdate_by=="année et mois":
         start_date, end_date=build_period(start_year, start_month,end_year, end_month)
         
-        start_date = pd.to_datetime(start_date, utc=False) if start_date else None
-        end_date = pd.to_datetime(end_date, utc=False) if end_date else None
+        # utc=True!! 会把时间转换为 UTC 时区, 返回的是 带 tzinfo 的 datetime
+        start_date = pd.to_datetime(start_date, utc=True) if start_date else None
+        end_date = pd.to_datetime(end_date, utc=True) if end_date else None
 
         # st.write(start_date, end_date, type(start_date), type(end_date))
         if start_date is not None:
