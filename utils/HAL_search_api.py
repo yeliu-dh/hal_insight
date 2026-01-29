@@ -880,7 +880,7 @@ def filter_by_publicationdate(df_input, start_year, start_month, end_year, end_m
 
         # 提取年份
         df["pub_year"] = df[date_col].dt.year
-
+        
         # 根据年份筛选
         if start_year is not None:
             df = df[df["pub_year"] >= int(start_year)]

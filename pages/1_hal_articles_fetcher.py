@@ -229,7 +229,7 @@ st.markdown(
     "- la recherche flou sactivée:  \n"
     "Le seuil de match (cutoff) est ajustable. Les résultats trouvés par recherche floue sont indiqués avec `rang_nom-journal-uncertain_nomRevue`.  \n"
     "- Si le range n'est pas disponible, on note NaN, que ce soit en recherche exacte ou floue.  \n"
-    "👉 Consulter [le classement FNEGE (2011-2022)](https://github.com/yeliu-dh/hal_insight/blob/main/external_data/fnege_final_hal.csv)"
+    "👉 Consulter [le classement FNEGE (2011-2025)](https://github.com/yeliu-dh/hal_insight/blob/main/external_data/fnege_final_hal.csv)"
 )
 
 st.markdown("<br>", unsafe_allow_html=True)
