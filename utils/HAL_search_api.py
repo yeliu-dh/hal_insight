@@ -886,9 +886,7 @@ def filter_by_publicationdate(df_input, start_year, start_month, end_year, end_m
             df = df[df["pub_year"] >= int(start_year)]
         if end_year is not None:
             df = df[df["pub_year"] <= int(end_year)]
-
-
-
+            
     #     # 可能存在没有pubdate的列？=> skip date_col != str
     #     mask = df[date_col].apply(lambda x: isinstance(x, str))
     #     df.loc[mask, "pub_year"] = pd.to_numeric(df.loc[mask, date_col].str[:4], errors="coerce")
