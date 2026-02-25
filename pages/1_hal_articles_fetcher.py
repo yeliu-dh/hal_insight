@@ -319,7 +319,8 @@ if df is not None and not df.empty:
 
     #----------------------show----------------------
     st.dataframe(df)
-    # st.divider()
+    st.markdown("<br>", unsafe_allow_html=True)
+
     #----------------------quick check-----------
     st.write(f"**🔎Aperçu rapide des données:**")
     cols= df.columns.tolist()
@@ -351,44 +352,136 @@ if df is not None and not df.empty:
 
 
     #------------------save REFERENCES-------------------
-           
-    # def preview_and_download_references(df):
-    if df is not None and not df.empty and "ref_hal" in df.columns:
-        st.markdown("### 📚Téléchargement de la bibliographie ###") 
-        # -------- organiser la biblio --------
-        refs_list = df["ref_hal"].dropna().astype(str).tolist()
-        refs_list = sorted(refs_list, key=lambda x: x.split(",")[0].strip())  # 按第一个作者姓排序
-        txt_string = "\n\n".join(refs_list)
+        
+    # # def preview_and_download_references(df):
+    # if df is not None and not df.empty and "ref_hal" in df.columns:
+    #     st.markdown("### 📚Téléchargement de la bibliographie ###") 
+    #     # -------- organiser la biblio --------
+    #     refs_list = df["ref_hal"].dropna().astype(str).tolist()
+    #     refs_list = sorted(refs_list, key=lambda x: x.split(",")[0].strip())  # 按第一个作者姓排序
+    #     txt_string = "\n\n".join(refs_list)
 
-        # -------- preview --------
-        st.text_area(
-            "Aperçu (format TXT)",
-            value=txt_string,
-            height=300
+    #     # -------- preview --------
+    #     st.text_area(
+    #         "Aperçu (format TXT)",
+    #         value=txt_string,
+    #         height=300
+    #     )
+    #     # -------- download --------
+    #     col1, col2 = st.columns([3,1])
+
+    #     with col1:
+    #         ref_filename = st.text_input(
+    #             "Nom du fichier :",
+    #             value="references",
+    #             key="ref_txt_preview"
+    #         )
+
+    #     with col2:
+    #         st.download_button(
+    #             label="Télécharger TXT",
+    #             data=txt_string.encode("utf-8-sig"),
+    #             file_name=ref_filename + ".txt",
+    #             mime="text/plain"
+    #         )
+
+    # else:
+    #     st.warning("Colonne 'ref_hal' introuvable ou df vide.")
+    # st.divider()
+    
+    
+    def generate_apa(df):
+        import re
+        apa_list = []
+        for entry in df["ref_hal"].dropna():
+            parts = entry.split(". ")
+            authors = parts[0]
+            title = parts[1]
+            conference_info = parts[2] if len(parts) > 2 else ""
+
+            # 作者格式化
+            author_list = authors.split(", ")
+            apa_authors = []
+            for author in author_list:
+                names = author.split(" ")
+                last = names[-1]
+                initials = " ".join([n[0] + "." for n in names[:-1]])
+                apa_authors.append(f"{last}, {initials}")
+            apa_authors_str = ", ".join(apa_authors)
+
+            # 提取年份
+            year_match = re.search(r"\b(20\d{2})\b", conference_info)
+            year = year_match.group(1) if year_match else "n.d."
+
+            # APA 文献
+            apa_entry = f"{apa_authors_str} ({year}). {title}. In {conference_info}."
+            apa_list.append(apa_entry)
+        df["APA"] = apa_list
+        return df
+
+
+    def preview_and_download_references(df):
+        """
+        在 Streamlit 中预览和下载参考文献。
+        支持选择 HAL 原始格式或 APA 格式。
+        自动编号和按字母排序。
+        """
+        if df is None or df.empty:
+            st.warning("df vide !")
+            return
+        
+        if "ref_hal" not in df.columns:
+            st.warning("Colonne 'ref_hal' introuvable")
+            return
+        
+        st.markdown("### 📚Téléchargement de la bibliographie ###") 
+
+        # ------- 用户选择 APA 格式 -------
+        use_apa = st.selectbox(
+            "Format de citation :",
+            options=["HAL original", "APA format"]
         )
 
-        # -------- download --------
+        # ------- 选择显示的列 -------
+        if use_apa == "APA format":
+            if "APA" not in df.columns:
+                df = generate_apa(df)
+                # st.info("generating references APA!")
+            
+            refs_list = df["APA"].dropna().astype(str).tolist()
+        else:
+            refs_list = df["ref_hal"].dropna().astype(str).tolist()
+
+        # ------- 按第一个作者字母排序 -------
+        refs_list = sorted(refs_list, key=lambda x: x.split(",")[0].strip())
+
+        # ------- 自动编号 -------
+        txt_string = "\n\n".join([f"[{i+1}] {ref}" for i, ref in enumerate(refs_list)])
+
+        # ------- 预览区域 -------
+        # st.markdown("### 📚 Preview References")
+        st.text_area("Aperçu (format TXT)", value=txt_string, height=300)
+        st.markdown(f"La bibliographie est numérotée et trié par ordre alphabétique!  \n")
+        
+        # ------- 下载区域 -------
         col1, col2 = st.columns([3,1])
 
         with col1:
-            ref_filename = st.text_input(
+            file_name = st.text_input(
                 "Nom du fichier :",
                 value="references",
-                key="ref_txt_preview"
+                key="ref_file_name"
             )
 
         with col2:
             st.download_button(
                 label="Télécharger TXT",
                 data=txt_string.encode("utf-8-sig"),
-                file_name=ref_filename + ".txt",
+                file_name=file_name + ".txt",
                 mime="text/plain"
             )
-
-    else:
-        st.warning("Colonne 'ref_hal' introuvable ou df vide.")
+    preview_and_download_references(df)
     st.divider()
-    
         
     
 
