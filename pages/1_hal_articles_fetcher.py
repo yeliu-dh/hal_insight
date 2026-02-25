@@ -25,7 +25,7 @@ from utils.log import setup_logging
 from utils.upload import load_external_json
 from utils.HAL_search_api import fetch_hal_articles
 from utils.HAL_search_api import process_df
-from utils.HAL_search_api import save_file_csv_xlsx
+from utils.HAL_search_api import get_default_filename, save_file_csv_xlsx
 from utils.upload import missing_data_warning
 from utils.pdf2str import extract_text_from_pdf
 
@@ -67,7 +67,7 @@ st.subheader("🔢 Filtrer vos résultats")
 st.markdown("<br>", unsafe_allow_html=True)
 
 text = st_tags(
-label="Text",
+label="**Text**",
 text="Tapez et 'Entrée' (chercher un texte dans tous les champs...)",
 value=[],
 suggestions=[],
@@ -79,11 +79,12 @@ st.markdown("<br>", unsafe_allow_html=True)
 # 文档类型
 select_all_doctypes = st.checkbox("Sélectionner tout / Tout désélectionner les types de document")
 doc_types = st.multiselect(
-    "Type de documents",
+    "**Type de documents**",
     options=list(DOC_TYPE_MAP.keys()),
     format_func=lambda x: DOC_TYPE_MAP[x],
     default=list(DOC_TYPE_MAP.keys()) if select_all_doctypes else ["ART","OUV","COUV","COMM"]
 )
+
 # doc_types = st.multiselect(
 #     "Type de documents",
 #     options=list(DOC_TYPE_MAP.keys()),
@@ -161,14 +162,14 @@ st.markdown("<br>", unsafe_allow_html=True)
 
 # 语言、实验室
 languages = st.multiselect(
-    "Langues",
+    "**Langues**",
     options=list(LANG_MAP.keys()),
     format_func=lambda x: LANG_MAP[x],
     default=[]
 )
 
 labs = st_tags(
-    label="Laboratoire",
+    label="**Laboratoire**",
     text="Tapez et 'Entrée'",
     value=["Institut de Recherche en Gestion"],
     maxtags=10
@@ -194,7 +195,7 @@ options_fields = ['halId_s','uri_s',"docType_s", "title_s", "subTitle_s", "authF
                     "publicationDate_s","journalTitle_s","conferenceTitle_s","conferenceStartDate_s","country_s","city_s","audience_s",
                     "language_s", "keyword_s", "abstract_s","urlFulltextEsr_s","files_s",'page_s',"modifiedDate_s","submittedDate_s",
                      "openAccess_bool",'volume_s','conferenceStartDate_s',"conferenceOrganizer_s","classification_s","collName_s","collCode_s",
-                     "authIdHal_s","authLastNameFirstName_s"	
+                     "authIdHal_s","authLastNameFirstName_s","label_s"	
                      #"authIdHasPrimaryStructure_fs"                    
 ]
 # 默认输出字段
@@ -202,19 +203,20 @@ default_fields=['halId_s','uri_s', "docType_s", "title_s", "subTitle_s", "authFu
                 "domain_s","openAccess_bool",'volume_s',"page_s","classification_s",
                 "submittedDate_s","modifiedDate_s", "publicationDate_s","journalTitle_s","conferenceTitle_s","conferenceOrganizer_s","conferenceStartDate_s",
                 "country_s", "language_s",
-                "keyword_s", "abstract_s","files_s","urlFulltextEsr_s",
+                "keyword_s", "abstract_s","files_s","urlFulltextEsr_s","label_s"
 ]
 
 
 #⭐ check champs :https://api.archives-ouvertes.fr/docs/search/?schema=fields#fields
 fields = st.multiselect(
-    "Info à exporter",
+    "**Info à exporter**",
     options=options_fields,
     default=default_fields
 )
 
+
 st.markdown("<br>", unsafe_allow_html=True)
-active_fuzzylookup = st.checkbox("Active la recherche floue?", value=False, key="active_fuzzylookup")#key用于储存在session state中
+active_fuzzylookup = st.checkbox("Active la recherche floue de FNEGE ?", value=False, key="active_fuzzylookup")#key用于储存在session state中
 cutoff_range= list(range(50, 101)) 
 cutoff = st.selectbox("si oui, définir un **Cutoff%**",cutoff_range , index=cutoff_range.index(95))
 
@@ -222,9 +224,8 @@ st.markdown("<br>", unsafe_allow_html=True)
 
 
 
-
 rows_range = list(range(0, 5001))
-max_records = st.selectbox("les premier X articles (valeur maximale:5000):", rows_range, index=500)
+max_records = st.selectbox("**les premier X articles (valeur maximale:5000):**", rows_range, index=500)
 st.markdown("<br>", unsafe_allow_html=True)
 st.divider()
 
@@ -243,6 +244,9 @@ st.markdown(
 )
 
 st.markdown("<br>", unsafe_allow_html=True)
+
+## Pipeline – author_primarystructure_s
+
 
 st.markdown(
     f"**Structure primaire de l'auteur => author_primarystructure_s**:  \n"
@@ -315,7 +319,7 @@ if df is not None and not df.empty:
 
     #----------------------show----------------------
     st.dataframe(df)
-    st.divider()
+    # st.divider()
     #----------------------quick check-----------
     st.write(f"**🔎Aperçu rapide des données:**")
     cols= df.columns.tolist()
@@ -336,14 +340,57 @@ if df is not None and not df.empty:
     st.divider()
 
     #------------------save to local-------------------
-    st.markdown("### 📥Téléchargement ###")        
+    st.markdown("### 📥Téléchargement du résultat ###")        
     try :
-        save_file_csv_xlsx(df,start_year, start_month, end_year, end_month)
+        default_filename=get_default_filename(df,start_year, start_month, end_year, end_month)
+        save_file_csv_xlsx(df,default_filename)
+        
     except Exception as e:
         st.warning (f"ERROR in save_file_csv_xlsx :\n {e}")   
     st.divider()   
 
 
+    #------------------save REFERENCES-------------------
+           
+    # def preview_and_download_references(df):
+    if df is not None and not df.empty and "ref_hal" in df.columns:
+        st.markdown("### 📚Téléchargement de la bibliographie ###") 
+        # -------- organiser la biblio --------
+        refs_list = df["ref_hal"].dropna().astype(str).tolist()
+        refs_list = sorted(refs_list, key=lambda x: x.split(",")[0].strip())  # 按第一个作者姓排序
+        txt_string = "\n\n".join(refs_list)
+
+        # -------- preview --------
+        st.text_area(
+            "Aperçu (format TXT)",
+            value=txt_string,
+            height=300
+        )
+
+        # -------- download --------
+        col1, col2 = st.columns([3,1])
+
+        with col1:
+            ref_filename = st.text_input(
+                "Nom du fichier :",
+                value="references",
+                key="ref_txt_preview"
+            )
+
+        with col2:
+            st.download_button(
+                label="Télécharger TXT",
+                data=txt_string.encode("utf-8-sig"),
+                file_name=ref_filename + ".txt",
+                mime="text/plain"
+            )
+
+    else:
+        st.warning("Colonne 'ref_hal' introuvable ou df vide.")
+    st.divider()
+    
+        
+    
 
 
 
@@ -427,7 +474,11 @@ if df is not None and not df.empty:
 
         # ======================SAVE===========================
         try :    
-            save_file_csv_xlsx(df_text,start_year, start_month, end_year, end_month)        
+            #??
+            default_filename=get_default_filename(df, start_year, start_month, end_year, end_month)
+            save_file_csv_xlsx(df_text,default_filename)
+        
+            # save_file_csv_xlsx(df_text,start_year, start_month, end_year, end_month)        
         except Exception as e:
             st.warning (f"ERROR in save_file_csv_xlsx 2: \n {e}")
 

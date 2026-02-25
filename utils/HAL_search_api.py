@@ -233,7 +233,7 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     if start_year and start_month and end_year and end_month:
         start_date, end_date=build_period(start_year, start_month,end_year, end_month)
         fq.append(f"submittedDate_tdate:[{start_date} TO {end_date}]")
-        st.markdown(f"[INFO] **Période de recherche** selon submittedDate_tdate : **{start_date} ~ {end_date}**  \n")
+        st.markdown(f"[INFO] **Période de recherche** selon submittedDate_tdate : \n **{start_date} ~ {end_date}**  \n")
 
 
     # 8. 自由文本（全文搜索）
@@ -534,8 +534,8 @@ def fuzzy_lookup(journal_name: str, mapping: dict, cutoff: int = 90) -> str:
 
 
 def nearest_fnege_year(pub_year_raw):
-    FNEGE_YEARS = [2011, 2013, 2016, 2019, 2022]
-
+    # FNEGE_YEARS = [2011, 2013, 2016, 2019, 2022, 2025]
+    FNEGE_YEARS = [2011] + list(range(2013, 3000, 3))#range(start, stop, step)
     # 处理缺失
     if pd.isna(pub_year_raw):
         return None
@@ -566,54 +566,54 @@ def fuzzy_lookup_with_name(query, mapping, cutoff=80):
 
 
 
-def add_classement_fnege_v2(
-    df: pd.DataFrame,
-    fnege_df: pd.DataFrame,
-    journal_col: str = "journalTitle_s",
-    year_col: str = "publicationDate_s",
-    cl_name: str = 'cl_fnege',
-    cutoff: int = 90, 
-    active_fuzzylookup=False
-) -> pd.DataFrame:
+# def add_classement_fnege_v2(
+#     df: pd.DataFrame,
+#     fnege_df: pd.DataFrame,
+#     journal_col: str = "journalTitle_s",
+#     year_col: str = "publicationDate_s",
+#     cl_name: str = 'cl_fnege',
+#     cutoff: int = 90, 
+#     active_fuzzylookup=False
+# ) -> pd.DataFrame:
 
-    # 构建 lookup mapping
-    fnege_mapping = {normalize_journal(r['journal']): r.to_dict() for _, r in fnege_df.iterrows()}
+#     # 构建 lookup mapping
+#     fnege_mapping = {normalize_journal(r['journal']): r.to_dict() for _, r in fnege_df.iterrows()}
 
-    df['fnege_year'] = df[year_col].apply(nearest_fnege_year)
-    classement_list = []
+#     df['fnege_year'] = df[year_col].apply(nearest_fnege_year)
+#     classement_list = []
 
-    for _, row in df.iterrows():
-        journal_val = row.get(journal_col, "")
-        fnege_year = row['fnege_year']
-        rang_value = None
+#     for _, row in df.iterrows():
+#         journal_val = row.get(journal_col, "")
+#         fnege_year = row['fnege_year']
+#         rang_value = None
 
-        if pd.notna(journal_val) and str(journal_val).strip():
-            norm_journal = normalize_journal(journal_val)
+#         if pd.notna(journal_val) and str(journal_val).strip():
+#             norm_journal = normalize_journal(journal_val)
 
-            # 1️⃣ 精确匹配
-            matched_row = fnege_mapping.get(norm_journal, None)
+#             # 1️⃣ 精确匹配
+#             matched_row = fnege_mapping.get(norm_journal, None)
 
-            if matched_row and fnege_year:
-                rang_col = f"rang_{fnege_year}"
-                rang_value = matched_row.get(rang_col, None)#int
+#             if matched_row and fnege_year:
+#                 rang_col = f"rang_{fnege_year}"
+#                 rang_value = matched_row.get(rang_col, None)#int
 
-            # 2️⃣ 模糊匹配（只有精确匹配失败才尝试）
-            if not matched_row and fnege_year and active_fuzzylookup:
-                fuzzy_row, fuzzy_name = fuzzy_lookup_with_name(journal_val, fnege_mapping, cutoff=cutoff)
-                if fuzzy_row:
-                    rang_col = f"rang_{fnege_year}"
-                    rang_val = fuzzy_row.get(rang_col, None)# np.nan是float类型!=None
-                    if pd.notna(rang_val):# 
-                        rang_value = f"{rang_val}_uncertain_{fuzzy_name}"
-                    else :#模糊搜索有名字匹配，但还是没有对应的rang
-                        rang_value=None
+#             # 2️⃣ 模糊匹配（只有精确匹配失败才尝试）
+#             if not matched_row and fnege_year and active_fuzzylookup:
+#                 fuzzy_row, fuzzy_name = fuzzy_lookup_with_name(journal_val, fnege_mapping, cutoff=cutoff)
+#                 if fuzzy_row:
+#                     rang_col = f"rang_{fnege_year}"
+#                     rang_val = fuzzy_row.get(rang_col, None)# np.nan是float类型!=None
+#                     if pd.notna(rang_val):# 
+#                         rang_value = f"{rang_val}_uncertain_{fuzzy_name}"
+#                     else :#模糊搜索有名字匹配，但还是没有对应的rang
+#                         rang_value=None
                         
-        classement_list.append(rang_value)
-    # 插入新列
-    idx = df.columns.get_loc(journal_col)
-    df.insert(loc=idx + 1, column=cl_name, value=classement_list)
+#         classement_list.append(rang_value)
+#     # 插入新列
+#     idx = df.columns.get_loc(journal_col)
+#     df.insert(loc=idx + 1, column=cl_name, value=classement_list)
 
-    return df
+#     return df
 
 
 
@@ -695,14 +695,10 @@ def save_as_json(data, file_path="../external_data/author_primarystructure_s_map
     # &nbsp; == a no breaking space
     return 
 
-
-
 def read_json(file_path='../external_data/author_primarystructure_s_map.json'):
     with open (file_path, 'r', encoding="utf-8") as f:
         data=json.load(f)
     return data
-
-
 
 def get_author_primarystructure(names: list, author_primarystructure_s_map:dict=None):
     """
@@ -767,7 +763,6 @@ def get_author_primarystructure(names: list, author_primarystructure_s_map:dict=
                 author_primarystructure_s_map[name] = "no primary structure found"
                 continue
 
-
     return author_primarystructure_s_map
 
 
@@ -808,99 +803,6 @@ def add_primarystructure(df, author_primarystructure_s_map):
 
 
 #===========================================FILTRAGE BY PUBLICATION DATE=======================================================#
-
-# def filtrate_by_publicationdate(df_input, date_col="publicationDate_s",
-#                    start_year=None, start_month=None,
-#                    end_year=None, end_month=None):
-#     """
-#     Filtre un DataFrame selon une colonne date pouvant être au format :
-#     YYYY, YYYY-MM ou YYYY-MM-DD.
-    
-#     start_year/start_month : int /* 
-#     end_year/end_month : int/"aujourd'hui"
-    
-#     """
-
-#     # 1. to datetime (coerce=True => dates invalides deviennent NaT)
-#     df = df_input.copy()
-#     df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
-    
-#     # 2. Construire les bornes
-#     # start_date：若是数字，非*
-#     if isinstance(start_year,int):
-#         start_month = start_month or 1
-#         start_date = pd.Timestamp(start_year, start_month, 1)
-#     else:
-#         start_date = None
-
-#     # end_date
-#     if isinstance(end_year, int):
-#         end_month = end_month or 12
-#         # pour inclure tout le mois → dernier jour du mois
-#         end_date = pd.Timestamp(end_year, end_month, 1) + pd.offsets.MonthEnd(1)
-#     else:# 非数值=> today
-#         # end_date =None
-#         today = datetime.utcnow()
-#         end_date = today.strftime("%Y-%m-%dT23:59:59Z") 
-#     # 3. Appliquer le filtre
-#     if start_date is not None:
-#         df = df[df[date_col] >= start_date]
-
-#     if end_date is not None:
-#         df = df[df[date_col] <= end_date]
-
-#     st.markdown(f"[INFO] filtrer le résultat selon la date de publication : entre {start_date}~{end_date}!  \n"
-#         f"avant / après le filtrage: {len(df_input)}=>{len(df)} lignes!")
-#     return df
-
-
-# def filter_by_publicationdate(df_input, start_year, start_month, end_year, end_month,
-#                                date_col="publicationDate_s", filter_pubdate_by=None):
-    
-#     df=df_input.copy()# df==df_filtered
-#     #确保df中的日期列+输入的起止年份为日期格式：
-#     df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
-    
-#     if filter_pubdate_by=="année et mois":
-#         start_date, end_date=build_period(start_year, start_month,end_year, end_month)
-        
-#         # utc=True!! 会把时间转换为 UTC 时区, 返回的是 带 tzinfo 的 datetime
-#         start_date = pd.to_datetime(start_date, utc=True) if start_date else None
-#         end_date = pd.to_datetime(end_date, utc=True) if end_date else None
-
-#         # st.write(start_date, end_date, type(start_date), type(end_date))
-#         if start_date is not None:
-#             df = df[df[date_col] >= start_date]
-#         if end_date is not None:
-#             df = df[df[date_col] <= end_date]
-            
-#     elif filter_pubdate_by == "année":
-#         # 将列转换为 datetime
-#         df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
-
-#         # 提取年份
-#         df["pub_year"] = df[date_col].dt.year
-#         df['pub_year']=pd.to_numeric(df['pub_year'], errors='coerce')
-        
-#         # 根据年份筛选
-#         if start_year is not None:
-#             df = df[df["pub_year"] >= int(start_year)]
-#         if end_year is not None:
-#             df = df[df["pub_year"] <= int(end_year)]
-            
-#     #     # 可能存在没有pubdate的列？=> skip date_col != str
-#     #     mask = df[date_col].apply(lambda x: isinstance(x, str))
-#     #     df.loc[mask, "pub_year"] = pd.to_numeric(df.loc[mask, date_col].str[:4], errors="coerce")
-#     #     # df["pub_year"] = pd.to_numeric(df[date_col].str[:4], errors="coerce")
-        
-#     #     if start_year is not None:
-#     #         df = df[df["pub_year"] >= int(start_year)]
-#     #     if end_year is not None:
-#     #         df = df[df["pub_year"] <= int(end_year)]
-#     # # else: filter==None, return directely?
-    
-#     return df
-
 
 def filter_by_publicationdate(df_input, start_year, start_month, end_year, end_month,
                                date_col="publicationDate_s", filter_pubdate_by="année"):
@@ -945,6 +847,45 @@ def filter_by_publicationdate(df_input, start_year, start_month, end_year, end_m
 
 
 
+#======================================references===================================================#
+import re
+import pandas as pd
+
+def convert_to_apa(entry):
+    # 1. 分割作者和后面内容
+    parts = entry.split(". ")
+    authors = parts[0]
+    title = parts[1]
+    conference_info = parts[2]
+    
+    # 2. 处理作者
+    author_list = authors.split(", ")
+    apa_authors = []
+    
+    for author in author_list:
+        names = author.split(" ")
+        last_name = names[-1]
+        initials = " ".join([n[0] + "." for n in names[:-1]])
+        apa_authors.append(f"{last_name}, {initials}")
+    
+    apa_authors_str = ", ".join(apa_authors)
+    
+    # 3. 提取年份
+    year_match = re.search(r"\b(20\d{2})\b", conference_info)
+    year = year_match.group(1) if year_match else "n.d."
+    
+    # 4. 生成APA
+    apa_entry = f"{apa_authors_str} ({year}). {title}. In {conference_info}."
+    
+    return apa_entry
+
+# df["APA"] = df["label_s"].apply(convert_to_apa)
+
+# # 导出为txt
+# df["APA"].to_csv("references.txt", index=False, header=False)
+
+
+
 
 ##集合处理：
 def process_df(df, DOMAIN_MAP, 
@@ -959,7 +900,7 @@ def process_df(df, DOMAIN_MAP,
     if "domain_s" in df.columns:   
         df["domain_s"] = df["domain_s"].apply(lambda x : map_domains(x, map=DOMAIN_MAP))
     st.write(f"✔ Domaines mappés!")
-    st.markdown("<br>", unsafe_allow_html=True)
+    # st.markdown("<br>", unsafe_allow_html=True)
 
     #----------处理axe----------------------
     if "classification_s" in df.columns:
@@ -1028,6 +969,10 @@ def process_df(df, DOMAIN_MAP,
     # else: filter_pubdate_by==None=> no filter
     st.markdown("<br>", unsafe_allow_html=True)
     
+    #----------references from 'label_s'-----------------
+    df_filtered.rename(columns={"label_s":"ref_hal"},inplace=True)
+
+    
     return df_filtered
 
 
@@ -1039,9 +984,7 @@ def process_df(df, DOMAIN_MAP,
 
 
 #===========================================SAVE=======================================================#
-
-
-def save_file_csv_xlsx(df,start_year, start_month, end_year, end_month):
+def get_default_filename(df,start_year, start_month, end_year, end_month):
     import io
     from datetime import datetime   
     if end_year=="aujourd'hui" or end_month=="aujourd'hui":
@@ -1049,21 +992,27 @@ def save_file_csv_xlsx(df,start_year, start_month, end_year, end_month):
         current_year, current_month = now.year, now.month
         end_year, end_month=current_year, current_month
 
-    # df = st.session_state.get(session_key, None)
+    today_str = datetime.now().strftime("%Y%m%d")
+    default_filename=f"{today_str}-ProductionScientifiqueIRG-{start_year}{start_month}-{end_year}{end_month}_{len(df)}art"
+   
+    return default_filename
+
+
+def save_file_csv_xlsx(df,default_filename):
+    import io
+    from datetime import datetime   
 
     if df is not None and not df.empty:
     #  ----------------SAVE TO LOCAL----------------- 
         cols=st.columns(3)
         #---------------file name------------------- 
         with cols[0]:
-            today_str = datetime.now().strftime("%Y%m%d")
-            default_file_name=f"{today_str}-ProductionScientifiqueIRG-{start_year}{start_month}-{end_year}{end_month}_{len(df)}art"
-
+            
             # 用户输入框
             #\n format par défaut: today--ProductionScientifiqueIRG-start_date-end_date-nb_articles:
             file_name = st.text_input(
                 f"Nom du fichier :",  # 提示文字
-                value=default_file_name,            # 默认值
+                value=default_filename,            # 默认值
             )
 
         #---------------as CSV------------------- 
@@ -1095,6 +1044,64 @@ def save_file_csv_xlsx(df,start_year, start_month, end_year, end_month):
     else : 
         st.warning(f"df.empty!")
     return
+
+
+
+
+# def save_file_csv_xlsx(df,start_year, start_month, end_year, end_month):
+#     import io
+#     from datetime import datetime   
+#     if end_year=="aujourd'hui" or end_month=="aujourd'hui":
+#         now = datetime.now()
+#         current_year, current_month = now.year, now.month
+#         end_year, end_month=current_year, current_month
+
+#     # df = st.session_state.get(session_key, None)
+
+#     if df is not None and not df.empty:
+#     #  ----------------SAVE TO LOCAL----------------- 
+#         cols=st.columns(3)
+#         #---------------file name------------------- 
+#         with cols[0]:
+#             today_str = datetime.now().strftime("%Y%m%d")
+#             default_filename=f"{today_str}-ProductionScientifiqueIRG-{start_year}{start_month}-{end_year}{end_month}_{len(df)}art"
+
+#             # 用户输入框
+#             #\n format par défaut: today--ProductionScientifiqueIRG-start_date-end_date-nb_articles:
+#             file_name = st.text_input(
+#                 f"Nom du fichier :",  # 提示文字
+#                 value=default_filename,            # 默认值
+#             )
+
+#         #---------------as CSV------------------- 
+#         with cols[1]:
+#             csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
+#             st.download_button(
+#                 label="Télécharger CSV",
+#                 data=csv_data,
+#                 file_name = file_name+".csv",
+#                 mime="text/csv"
+#             )
+            
+#         #---------------as XLSX------------------- 
+#         with cols[2]:
+#             # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
+#             xlsx_buffer = io.BytesIO()
+#             with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
+#                 df.to_excel(writer, index=False, sheet_name="Articles")
+#             xlsx_data = xlsx_buffer.getvalue()
+
+#             st.download_button(
+#                 label="Télécharger XLSX",
+#                 data=xlsx_data,
+#                 file_name=file_name+".xlsx",
+#                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+#             )
+
+#             # 这是 XLSX 文件的 MIME 类型，告诉浏览器这是一个 Excel 文件，否则st button可能无法识别文件类型 
+#     else : 
+#         st.warning(f"df.empty!")
+#     return
 
 
 
