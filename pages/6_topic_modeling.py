@@ -41,12 +41,10 @@ st.divider()
 
 if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None:
     # 若df存在则视为开始
-    st.session_state.started=True
-    
+    st.session_state.started=True  
     st.subheader("🔢 Topic modeling sous axe")
     st.markdown("<br>", unsafe_allow_html=True)
   
-    #
     # 给输入df加上对应 emb ？
     df_predicted = st.session_state.uploaded_df.copy()
     
@@ -56,15 +54,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     # emb=df_all_emb[df_all_emb["halId_s"].isin(df['halId_s'].to_list())][["halId_s","emb_title_s","emb_keyword_s","emb_abstract_s"]]
     # df_emb=df.merge(emb, on='halId_s', how='left') 
 
-    # Assurer le bon type datetime
-    df_predicted["submittedDate_s"] = pd.to_datetime(
-        df_predicted["submittedDate_s"], errors="coerce"
-    )
-    date_min = df_predicted["submittedDate_s"].min()
-    date_max = df_predicted["submittedDate_s"].max()
 
-
-    
     # ======================= PARAMETRES===========================
     # 时间范围？
     # axe_id="1"
@@ -73,11 +63,18 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     from datetime import date
 
     # ----------------------période----------------------
-    
     st.markdown("#### Filtrer par période")
+    
+    # Assurer le bon type datetime
+    df_predicted["submittedDate_s"] = pd.to_datetime(
+        df_predicted["submittedDate_s"], errors="coerce"
+    )
+    date_min = df_predicted["submittedDate_s"].min()
+    date_max = df_predicted["submittedDate_s"].max()
+
     st.write(
         f"[INFO] Période couverte par les données: "
-        f"{date_min.strftime('%Y/%m')} → {date_max.strftime('%Y/%m')}"
+        f"**{date_min.strftime('%Y/%m')} → {date_max.strftime('%Y/%m')}**"
     )
     
     st.markdown("<br>", unsafe_allow_html=True)
@@ -136,8 +133,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             
             # df_filtered_key=f"df_filtered_{'_'.join(axe_id)}"
             df_axe_key=f"df_axe_{'_'.join(axe_id)}"
-            topic_model_key=f"topic_model_{'_'.join(axe_id)}_{min_topic_size}"
-            # st.write(f"[KEYS] {df_axe_key}, {topic_model_key}")
+            date_key=f"{start_year}_{start_month}-{end_year}_{end_month}"
+            topic_model_key=f"topic_model_{date_key}-axe{'_'.join(axe_id)}-{min_topic_size}"
+            # st.write(f"[KEYS] {topic_model_key}")
             
             if not topic_model_key in st.session_state:
                 #------- filter by date---------               

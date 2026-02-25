@@ -297,7 +297,6 @@ def generate_force_scatterplot(df):
     return fig
 
 
-
 def filter_by_axe(df, axe_id=None, col="axe_list"):
     """
     根据 axe_id 过滤 dataframe
@@ -388,15 +387,8 @@ def generate_topics_keywords_scatterplot(topic_model, df, col_text="clean_text",
     # 文本保持一致？
     if not 'axe_list' in df:
         df=preprocess_df_for_topic_modeling(df)
-    
-    # if len(axe_id)>0:
-    #     df_axe = filter_by_axe(df, axe_id=axe_id, col="axe_list")
-    # else :
-    #     df_axe=df.copy()
-    
     texts = df[col_text].tolist()
 
-    
     # 提取文本的emb和topic
     embeddings = topic_model.embedding_model.embed(texts)
     topics = topic_model.topics_#topics list
@@ -561,8 +553,11 @@ def generate_topics_keywords_scatterplot(topic_model, df, col_text="clean_text",
     #============================================================================
     axe_title=""
     if len(axe_id)>0:
-        axe_title= "sous Axe "+", ".join(axe_id) if len(axe_id)>1 else axe_id[0]
-    plt.title(f"Sujets et Mots clés {axe_title}")
+        axe_title= "sous Axe "+", ".join(axe_id) if len(axe_id)>=1 else axe_id[0]
+    date_min,date_max = df["submittedDate_s"].min(), df["submittedDate_s"].max()
+    date_title=f"{date_min.strftime('%Y/%m')} - {date_max.strftime('%Y/%m')}"
+
+    plt.title(f"Sujets et Mots clés {axe_title} entre {date_title}")
     
     # SHOW topics legend
     topics_sorted = sorted(df_vis.topic.unique())
