@@ -169,8 +169,11 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 
                 fig=generate_topics_keywords_scatterplot(topic_model, df=df_axe, col_text="clean_text", axe_id=axe_id, N_WORDS = N_WORDS)
                 st.pyplot(fig)
-
-            
-            
-
-
+                
+                
+                
+                
+                
+                
+                
+                

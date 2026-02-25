@@ -616,22 +616,6 @@ def generate_topics_keywords_scatterplot(topic_model, df, col_text="clean_text",
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def plot_topics_wc(axe_id, topic_model, plot_color="viridis"):
     # axe_label={"1":"Performances et responsabilités",
     #         "2":"Société de services et services à la société",
