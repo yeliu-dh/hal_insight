@@ -847,46 +847,6 @@ def filter_by_publicationdate(df_input, start_year, start_month, end_year, end_m
 
 
 
-#======================================references===================================================#
-import re
-import pandas as pd
-
-def convert_to_apa(entry):
-    # 1. 分割作者和后面内容
-    parts = entry.split(". ")
-    authors = parts[0]
-    title = parts[1]
-    conference_info = parts[2]
-    
-    # 2. 处理作者
-    author_list = authors.split(", ")
-    apa_authors = []
-    
-    for author in author_list:
-        names = author.split(" ")
-        last_name = names[-1]
-        initials = " ".join([n[0] + "." for n in names[:-1]])
-        apa_authors.append(f"{last_name}, {initials}")
-    
-    apa_authors_str = ", ".join(apa_authors)
-    
-    # 3. 提取年份
-    year_match = re.search(r"\b(20\d{2})\b", conference_info)
-    year = year_match.group(1) if year_match else "n.d."
-    
-    # 4. 生成APA
-    apa_entry = f"{apa_authors_str} ({year}). {title}. In {conference_info}."
-    
-    return apa_entry
-
-# df["APA"] = df["label_s"].apply(convert_to_apa)
-
-# # 导出为txt
-# df["APA"].to_csv("references.txt", index=False, header=False)
-
-
-
-
 ##集合处理：
 def process_df(df, DOMAIN_MAP, 
                FNEGE_MAP, cutoff, active_fuzzylookup,
@@ -983,6 +943,101 @@ def process_df(df, DOMAIN_MAP,
 
 
 
+#======================================references===================================================#
+def generate_ref_apa(df):
+    import re
+    apa_list = []
+    for entry in df["ref_hal"].dropna():
+        parts = entry.split(". ")
+        authors = parts[0]
+        title = parts[1]
+        conference_info = parts[2] if len(parts) > 2 else ""
+
+        # 作者格式化
+        author_list = authors.split(", ")
+        apa_authors = []
+        for author in author_list:
+            names = author.split(" ")
+            last = names[-1]
+            initials = " ".join([n[0] + "." for n in names[:-1]])
+            apa_authors.append(f"{last}, {initials}")
+        apa_authors_str = ", ".join(apa_authors)
+
+        # 提取年份
+        year_match = re.search(r"\b(20\d{2})\b", conference_info)
+        year = year_match.group(1) if year_match else "n.d."
+
+        # APA 文献
+        apa_entry = f"{apa_authors_str} ({year}). {title}. In {conference_info}."
+        apa_list.append(apa_entry)
+    df["APA"] = apa_list
+    return df
+
+
+def preview_and_download_references(df):
+    """
+    在 Streamlit 中预览和下载参考文献。
+    支持选择 HAL 原始格式或 APA 格式。
+    自动编号和按字母排序。
+    """
+    if df is None or df.empty:
+        st.warning("df vide !")
+        return
+    
+    if "ref_hal" not in df.columns:
+        st.warning("Colonne 'ref_hal' introuvable")
+        return
+    
+    st.markdown("### 📚Téléchargement de la bibliographie ###") 
+
+    # ------- 用户选择 APA 格式 -------
+    use_apa = st.selectbox(
+        "Format de citation :",
+        options=["HAL original", "APA format"]
+    )
+
+    # ------- 选择显示的列 -------
+    if use_apa == "APA format":
+        if "APA" not in df.columns:
+            df = generate_ref_apa(df)
+        
+        refs_list = df["APA"].dropna().astype(str).tolist()
+    else:
+        refs_list = df["ref_hal"].dropna().astype(str).tolist()
+
+    # ------- 按第一个作者字母排序 -------
+    refs_list = sorted(refs_list, key=lambda x: x.split(",")[0].strip())
+
+    # ------- 自动编号 -------
+    txt_string = "\n\n".join([f"[{i+1}] {ref}" for i, ref in enumerate(refs_list)])
+
+    # ------- 预览区域 -------
+    # st.markdown("### 📚 Preview References")
+    st.text_area("Aperçu (format TXT)", value=txt_string, height=300)
+    st.markdown(f"ps. La bibliographie est numérotée et trié par ordre alphabétique!  \n")
+    
+    # ------- 下载区域 -------
+    col1, col2 = st.columns([3,1])
+
+    with col1:
+        file_name = st.text_input(
+            "Nom du fichier :",
+            value="references",
+            key="ref"# ref_filename
+        )
+
+    with col2:
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.download_button(
+            label="Télécharger TXT",
+            data=txt_string.encode("utf-8-sig"),
+            file_name=file_name + ".txt",
+            mime="text/plain",
+            key='download_ref_txt'
+        )
+        
+
+
 #===========================================SAVE=======================================================#
 def get_default_filename(df,start_year, start_month, end_year, end_month):
     import io
@@ -998,13 +1053,15 @@ def get_default_filename(df,start_year, start_month, end_year, end_month):
     return default_filename
 
 
-def save_file_csv_xlsx(df,default_filename):
+def save_file_csv_xlsx(df,default_filename, key_filename):
     import io
     from datetime import datetime   
 
     if df is not None and not df.empty:
     #  ----------------SAVE TO LOCAL----------------- 
-        cols=st.columns(3)
+        # cols=st.columns(3)
+        cols = st.columns([2, 1, 1])
+
         #---------------file name------------------- 
         with cols[0]:
             
@@ -1013,20 +1070,28 @@ def save_file_csv_xlsx(df,default_filename):
             file_name = st.text_input(
                 f"Nom du fichier :",  # 提示文字
                 value=default_filename,            # 默认值
+                key=key_filename
             )
 
         #---------------as CSV------------------- 
         with cols[1]:
+            st.markdown("<br>", unsafe_allow_html=True)
             csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
             st.download_button(
                 label="Télécharger CSV",
                 data=csv_data,
                 file_name = file_name+".csv",
-                mime="text/csv"
+                mime="text/csv",
+                key=f"download_{key_filename}_csv"   
+
+                
+                
             )
             
         #---------------as XLSX------------------- 
         with cols[2]:
+            st.markdown("<br>", unsafe_allow_html=True)
+
             # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
             xlsx_buffer = io.BytesIO()
             with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
@@ -1037,7 +1102,8 @@ def save_file_csv_xlsx(df,default_filename):
                 label="Télécharger XLSX",
                 data=xlsx_data,
                 file_name=file_name+".xlsx",
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                key=f"download_{key_filename}_xlsx"  
             )
 
             # 这是 XLSX 文件的 MIME 类型，告诉浏览器这是一个 Excel 文件，否则st button可能无法识别文件类型 

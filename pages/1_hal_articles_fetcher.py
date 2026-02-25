@@ -24,6 +24,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.log import setup_logging 
 from utils.upload import load_external_json
 from utils.HAL_search_api import fetch_hal_articles
+from utils.HAL_search_api import generate_ref_apa, preview_and_download_references
 from utils.HAL_search_api import process_df
 from utils.HAL_search_api import get_default_filename, save_file_csv_xlsx
 from utils.upload import missing_data_warning
@@ -216,7 +217,7 @@ fields = st.multiselect(
 
 
 st.markdown("<br>", unsafe_allow_html=True)
-active_fuzzylookup = st.checkbox("Active la recherche floue de FNEGE ?", value=False, key="active_fuzzylookup")#key用于储存在session state中
+active_fuzzylookup = st.checkbox("**Active la recherche floue de FNEGE ?**", value=False, key="active_fuzzylookup")#key用于储存在session state中
 cutoff_range= list(range(50, 101)) 
 cutoff = st.selectbox("si oui, définir un **Cutoff%**",cutoff_range , index=cutoff_range.index(95))
 
@@ -344,145 +345,15 @@ if df is not None and not df.empty:
     st.markdown("### 📥Téléchargement du résultat ###")        
     try :
         default_filename=get_default_filename(df,start_year, start_month, end_year, end_month)
-        save_file_csv_xlsx(df,default_filename)
+        save_file_csv_xlsx(df,default_filename, key_filename="df")
         
     except Exception as e:
         st.warning (f"ERROR in save_file_csv_xlsx :\n {e}")   
     st.divider()   
 
-
-    #------------------save REFERENCES-------------------
-        
-    # # def preview_and_download_references(df):
-    # if df is not None and not df.empty and "ref_hal" in df.columns:
-    #     st.markdown("### 📚Téléchargement de la bibliographie ###") 
-    #     # -------- organiser la biblio --------
-    #     refs_list = df["ref_hal"].dropna().astype(str).tolist()
-    #     refs_list = sorted(refs_list, key=lambda x: x.split(",")[0].strip())  # 按第一个作者姓排序
-    #     txt_string = "\n\n".join(refs_list)
-
-    #     # -------- preview --------
-    #     st.text_area(
-    #         "Aperçu (format TXT)",
-    #         value=txt_string,
-    #         height=300
-    #     )
-    #     # -------- download --------
-    #     col1, col2 = st.columns([3,1])
-
-    #     with col1:
-    #         ref_filename = st.text_input(
-    #             "Nom du fichier :",
-    #             value="references",
-    #             key="ref_txt_preview"
-    #         )
-
-    #     with col2:
-    #         st.download_button(
-    #             label="Télécharger TXT",
-    #             data=txt_string.encode("utf-8-sig"),
-    #             file_name=ref_filename + ".txt",
-    #             mime="text/plain"
-    #         )
-
-    # else:
-    #     st.warning("Colonne 'ref_hal' introuvable ou df vide.")
-    # st.divider()
-    
-    
-    def generate_apa(df):
-        import re
-        apa_list = []
-        for entry in df["ref_hal"].dropna():
-            parts = entry.split(". ")
-            authors = parts[0]
-            title = parts[1]
-            conference_info = parts[2] if len(parts) > 2 else ""
-
-            # 作者格式化
-            author_list = authors.split(", ")
-            apa_authors = []
-            for author in author_list:
-                names = author.split(" ")
-                last = names[-1]
-                initials = " ".join([n[0] + "." for n in names[:-1]])
-                apa_authors.append(f"{last}, {initials}")
-            apa_authors_str = ", ".join(apa_authors)
-
-            # 提取年份
-            year_match = re.search(r"\b(20\d{2})\b", conference_info)
-            year = year_match.group(1) if year_match else "n.d."
-
-            # APA 文献
-            apa_entry = f"{apa_authors_str} ({year}). {title}. In {conference_info}."
-            apa_list.append(apa_entry)
-        df["APA"] = apa_list
-        return df
-
-
-    def preview_and_download_references(df):
-        """
-        在 Streamlit 中预览和下载参考文献。
-        支持选择 HAL 原始格式或 APA 格式。
-        自动编号和按字母排序。
-        """
-        if df is None or df.empty:
-            st.warning("df vide !")
-            return
-        
-        if "ref_hal" not in df.columns:
-            st.warning("Colonne 'ref_hal' introuvable")
-            return
-        
-        st.markdown("### 📚Téléchargement de la bibliographie ###") 
-
-        # ------- 用户选择 APA 格式 -------
-        use_apa = st.selectbox(
-            "Format de citation :",
-            options=["HAL original", "APA format"]
-        )
-
-        # ------- 选择显示的列 -------
-        if use_apa == "APA format":
-            if "APA" not in df.columns:
-                df = generate_apa(df)
-                # st.info("generating references APA!")
-            
-            refs_list = df["APA"].dropna().astype(str).tolist()
-        else:
-            refs_list = df["ref_hal"].dropna().astype(str).tolist()
-
-        # ------- 按第一个作者字母排序 -------
-        refs_list = sorted(refs_list, key=lambda x: x.split(",")[0].strip())
-
-        # ------- 自动编号 -------
-        txt_string = "\n\n".join([f"[{i+1}] {ref}" for i, ref in enumerate(refs_list)])
-
-        # ------- 预览区域 -------
-        # st.markdown("### 📚 Preview References")
-        st.text_area("Aperçu (format TXT)", value=txt_string, height=300)
-        st.markdown(f"La bibliographie est numérotée et trié par ordre alphabétique!  \n")
-        
-        # ------- 下载区域 -------
-        col1, col2 = st.columns([3,1])
-
-        with col1:
-            file_name = st.text_input(
-                "Nom du fichier :",
-                value="references",
-                key="ref_file_name"
-            )
-
-        with col2:
-            st.download_button(
-                label="Télécharger TXT",
-                data=txt_string.encode("utf-8-sig"),
-                file_name=file_name + ".txt",
-                mime="text/plain"
-            )
+    #-----------------save ref--------------------------
     preview_and_download_references(df)
     st.divider()
-        
     
 
 
@@ -569,9 +440,8 @@ if df is not None and not df.empty:
         try :    
             #??
             default_filename=get_default_filename(df, start_year, start_month, end_year, end_month)
-            save_file_csv_xlsx(df_text,default_filename)
-        
-            # save_file_csv_xlsx(df_text,start_year, start_month, end_year, end_month)        
+            save_file_csv_xlsx(df_text,default_filename, key_filename="pdf")
+    
         except Exception as e:
             st.warning (f"ERROR in save_file_csv_xlsx 2: \n {e}")
 
