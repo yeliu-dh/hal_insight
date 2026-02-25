@@ -213,10 +213,10 @@ fields = st.multiselect(
     default=default_fields
 )
 
-
-cutoff_range= list(range(50, 101)) 
-cutoff = st.selectbox("**Cutoff%**",cutoff_range , index=cutoff_range.index(95))
+st.markdown("<br>", unsafe_allow_html=True)
 active_fuzzylookup = st.checkbox("Active la recherche floue?", value=False, key="active_fuzzylookup")#key用于储存在session state中
+cutoff_range= list(range(50, 101)) 
+cutoff = st.selectbox("si oui, définir un **Cutoff%**",cutoff_range , index=cutoff_range.index(95))
 
 st.markdown("<br>", unsafe_allow_html=True)
 
