@@ -217,24 +217,6 @@ def emb_text(df, model=None, batch_size=32, col_text=None, col_emb=None, pq_path
 
     texts_nonempty = df.loc[mask_nonempty, col_text].astype(str).tolist()
 
-
-    # V1:Encode 只有非空文本
-    # print(f"- Encoding {len(texts_nonempty)} non-empty texts in column '{col_text}'...")
-    # emb_nonempty = model.encode(
-    #     texts_nonempty,
-    #     batch_size=batch_size,
-    #     normalize_embeddings=True,
-    #     show_progress_bar=True
-    # )
-
-    # # print(f"[ENCODE] done. Shape = {emb_nonempty.shape}. Time: {end_time-start_time:.2f} sec")
-
-    # # 创建最终 embedding 列
-    # emb_all = np.zeros((len(df), emb_dim), dtype=np.float32)
-
-    # # 对非空文本填入真实 embedding
-    # emb_all[mask_nonempty.values] = emb_nonempty
-
     # V2
     # Encode 只有非空文本
     emb_nonempty = model.encode(
@@ -297,7 +279,7 @@ def filtrate_df_to_emb(df,
 
 
 # filtrate+emb: main
-def check_before_emb_text(df,embedding_model,  batch_size=32,
+def check_before_emb_text(df, embedding_model,  batch_size=32,
                           df_all_emb_path="external_data/df_all_3emb.parquet",
                           ):
     

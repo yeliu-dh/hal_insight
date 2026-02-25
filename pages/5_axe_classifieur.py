@@ -186,6 +186,12 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             .fillna("")        # NaN → 空字符串
             .astype(str)       # 强制字符串
         )
+        ## submittedDate_s格式不统一问题
+        date_cols=["submittedDate_s","modifiedDate_s","publicationDate_s","publicationDate_t"]
+        for date_col in date_cols:
+            df_all_emb_updated[date_col] = pd.to_datetime(df_all_emb_updated[date_col], errors="coerce")
+
+        
         df_all_emb_updated.to_parquet(df_all_emb_path)
         st.write(f"[INFO] Fichier d'embeddings mis à jour : +{len(df_all_emb_updated) - len(df_all_emb)} entrées")
         st.session_state['df_noaxe_embedded']=df_noaxe_embedded
@@ -232,13 +238,14 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     if "df_all_pred" in st.session_state:
         df_all_pred=st.session_state['df_all_pred']
         try :    
+            
             filename=st.session_state['uploaded_df_filename'].split('.')[0]+"_final_axe"
             save_file_csv_xlsx_by_filename(df_all_pred, filename)
         except Exception as e:
             st.warning (f"ERROR in save_file_csv_xlsx :\n {e}")   
         st.divider()    
     
-    #------------------check-------------------
+    #------------------check/show-------------------
     st.write(f"**[CHECK] vérification manuelle**")
     cols_kept = st.multiselect(
         "Colonnes à afficher",
@@ -266,12 +273,16 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         if start_button:# and not invalid_date    
 
             from utils.topic_modeling import preprocess_df_for_topic_modeling, generate_force_scatterplot         
+            
             df_predicted=st.session_state['df_all_pred']
             df_all_emb=pd.read_parquet(df_all_emb_path)
+            
+            #----------take embeddings of texts in question------
             emb=df_all_emb[df_all_emb["halId_s"].isin(df_predicted['halId_s'].to_list())][["halId_s","emb_title_s","emb_keyword_s","emb_abstract_s"]]
             df_predicted_emb=df_predicted.merge(emb, on='halId_s', how='left') 
-                
+            
             df_plot=preprocess_df_for_topic_modeling(df_predicted_emb)
+            # st.dataframe(df_plot)
             
             with st.spinner("🔄 Génération de la visualisation..."):
                 fig=generate_force_scatterplot(df_plot)

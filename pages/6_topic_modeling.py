@@ -34,8 +34,8 @@ st.markdown("<br>", unsafe_allow_html=True)
 st.divider() 
 
 st.subheader("📒 README")
-st.write(f"**Model de topic modeling: BERTopic**")
-st.write(f"**Model de réduction de dimension: UMAP**")
+st.write(f"**Model de topic modeling:** BERTopic")
+st.write(f"**Model de réduction de dimension:** UMAP")
 
 st.divider() 
 
@@ -65,15 +65,14 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 
     
-    # ============ PARAMETRES============
-
+    # ======================= PARAMETRES===========================
     # 时间范围？
     # axe_id="1"
     # min_topic_size=5
     # N_WORDS=5
     from datetime import date
 
-    # Dates min/max du df
+    # ----------------------période----------------------
     
     st.markdown("#### Filtrer par période")
     st.write(
@@ -81,6 +80,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         f"{date_min.strftime('%Y/%m')} → {date_max.strftime('%Y/%m')}"
     )
     
+    st.markdown("<br>", unsafe_allow_html=True)
     min_date = date(date_min.year, date_min.month, 1)
     max_date = date(date_max.year, date_max.month, 1)
     
@@ -101,32 +101,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     st.markdown("<br>", unsafe_allow_html=True)
 
     
-    
-        
-    # def filter_by_publicationdate(df_input, start_year, start_month, end_year, end_month,
-    #                             date_col="publicationDate_s", filter_pubdate_by=None):
-        
-    #     df=df_input.copy()# df==df_filtered
-    #     if filter_pubdate_by=="année et mois":
-    #         start_date, end_date=build_period(start_year, start_month,end_year, end_month)
-    #         if start_date is not None:
-    #             df = df[df[date_col] >= start_date]
-    #         if end_date is not None:
-    #             df = df[df[date_col] <= end_date]
-                
-    #     elif filter_pubdate_by=="année":
-    #         df["pub_year"] = pd.to_numeric(df[date_col].str[:4], errors="coerce")
-    #         if start_year is not None:
-    #             df = df[df["pub_year"] >= int(start_year)]
-
-    #         if end_year is not None:
-    #             df = df[df["pub_year"] <= int(end_year)]
-    #     # else: filter==None, return directely?
-        
-    #     return df
-
-
-
+    #------------------sous un seul axe-----------------
     axe_id = st.multiselect(
         "Axes thématiques",
         options=["1","2","3","4"],
@@ -134,9 +109,11 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         default=["1"]
     )
 
+    #-------------------topic size----------------------
     range_topic_size = list(range(0,50))
     min_topic_size = st.selectbox("Taille minimale d'articles pour former un sujet", range_topic_size, index=30)#整除
     
+    #------------------top n keywords-------------------
     range_top_kw = list(range(1, 11))
     N_WORDS = st.selectbox("Afficher les premier N mots clés",range_top_kw, index=4)
      
@@ -147,7 +124,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     missing_data_warning(df=df_predicted, col=col_en_question, show_count=show_count)
     st.divider()
     
-    # =============START============
+    
+    
+    # ==========================START==============================
     cols=st.columns([4,1])
     with cols[1]:
         start_button = st.button("⚡ Commencer")
@@ -161,15 +140,17 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             # st.write(f"[KEYS] {df_axe_key}, {topic_model_key}")
             
             if not topic_model_key in st.session_state:
-                # filter by date
+                #------- filter by date---------               
                 df_filtered=filter_by_publicationdate(df_input=df_predicted, 
-                        start_year=start_year, start_month=start_month, end_year=end_year, end_month=end_month,
-                        date_col="submittedDate_s",
-                        filter_pubdate_by="année et mois")
+                    start_year=start_year, start_month=start_month, 
+                    end_year=end_year, end_month=end_month,          
+                    date_col="submittedDate_s",
+                    filter_pubdate_by="année")
+                        
                 st.write(f"[INFO] filtrer selon 'submittedDate_s': {len(df_predicted)}=>{len(df_filtered)} lignes restent.  \n")    
                 # st.session_state[df_filtered_key]=df_filtered
                 
-                # preprocess+filter by axe
+                #------- preprocess+filter by axe--------
                 df=preprocess_df_for_topic_modeling(df_filtered)#get 'axe_list'
                 df_axe= filter_by_axe(df, axe_id=axe_id, col="axe_list")
                 st.write(f"[INFO] filtrer selon axe {','.join(axe_id)}: {len(df_filtered)}=>{len(df_axe)} lignes restent.  \n")    

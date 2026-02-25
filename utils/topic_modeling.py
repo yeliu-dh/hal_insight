@@ -88,7 +88,7 @@ def combine_embeddings(row, w_title=1.0, w_kw=1.2, w_abs=1.5):
 def preprocess_df_for_topic_modeling(df):
     df = df.copy()
 
-    #处理axe
+    # 处理axe
     if 'final_axe' in df.columns:
         col_axe = 'final_axe'
     elif 'axe' in df.columns:
@@ -96,8 +96,13 @@ def preprocess_df_for_topic_modeling(df):
     else:
         raise ValueError("Neither 'final_axe' nor 'axe' column found in dataframe")
     df['axe_list'] = df[col_axe].apply(parse_axes)
+    
+    #    
+    df['true_axe_list'] = df["axe"].apply(parse_axes)
+    df['predicted_axe_list'] = df["predicted_axe"].apply(parse_axes)
 
-    #处理text
+
+    # 处理text
     df['text'] = df.apply(build_text, axis=1)
     df['clean_text'] = df['text'].apply(preprocess_text)
     
@@ -111,6 +116,33 @@ def preprocess_df_for_topic_modeling(df):
 
     return df
 
+
+# def preprocess_df_for_topic_modeling(df):
+#     df = df.copy()
+
+#     # 处理axe
+    
+#     if 'axe' in df.columns:
+#         df['axe_list'] = df["axe"].apply(parse_axes)
+#     if 'predicted_axe' in df.columns:
+#         df['predicted_axe_list'] = df["predicted_axe"].apply(parse_axes)
+
+#     # else:
+#     #     raise ValueError("Neither 'final_axe' nor 'axe' column found in dataframe")
+
+#     # 处理text
+#     df['text'] = df.apply(build_text, axis=1)
+#     df['clean_text'] = df['text'].apply(preprocess_text)
+    
+#     #处理emb
+#     emb_cols=["emb_title_s","emb_keyword_s","emb_abstract_s"]
+#     if all(col in df.columns for col in emb_cols):#检查所有col_emb是否在df中
+#         df['combined_emb'] = df.apply(combine_embeddings, axis=1)
+#         mask_valid = df['combined_emb'].notna()
+#         X = np.vstack(df.loc[mask_valid, 'combined_emb'].values)
+#         df = df.loc[mask_valid].copy()
+
+#     return df
         
 
 def generate_force_scatterplot(df):
@@ -159,30 +191,93 @@ def generate_force_scatterplot(df):
     )
     
     
-    # plot
+    # ------------------------plot--------------------------
     fig, ax = plt.subplots(figsize=(10, 10))
-    # plt.figure(figsize=(10, 10))
     
     colors = {1:'blue', 2:'orange', 3:'green', 4:'red'}
-    axe_label={"1":"Performances et responsabilités",
-            "2":"Société de services et services à la société",
-            "3":"Innovations, transformations et résistances organisationnelles et sociétales",
-            "4":"Ouvrages pédagogiques"}
-
-    s_size = 20      # 点大小
-    alpha_val = 0.5  # 透明度
+    
+    s_size = 20
+    alpha_val = 0.4
 
     for idx, row in df_plot.iterrows():
         x, y = pos[idx]
-        axes = row['axe_list']
-        if len(axes) == 1:
-            # 单轴文章 → 一个点
-            plt.scatter(x, y, c=colors[int(axes[0])], s=s_size, alpha=alpha_val)
+
+        real_axes = row.get('true_axe_list', [])
+        pred_axes = row.get('predicted_axe_list', [])
+
+        # ===== 情况 1：真实 axe → 彩色 =====
+        if len(real_axes) > 0:
+            if len(real_axes) == 1:
+                ax.scatter(
+                    x, y,
+                    c=colors[int(real_axes[0])],
+                    s=s_size,
+                    alpha=alpha_val
+                )
+            else:
+                for axe in real_axes:
+                    ax.scatter(
+                        x, y,
+                        c=colors[int(axe)],
+                        s=s_size,
+                        alpha=alpha_val
+                    )
+
+        # ===== 情况 2：预测 axe → 灰色数字 =====
+        elif len(pred_axes) > 0:
+            # 灰色小圆点
+            ax.scatter(
+                x, y,
+                c='lightgrey',
+                s=s_size,
+                alpha=0.8,
+                edgecolors='black',
+                linewidth=0.3
+            )
+
+            # 在点上显示数字
+            ax.text(
+                x, y,
+                str(pred_axes[0]),  # 如果只有一个预测
+                fontsize=7,
+                ha='center',
+                va='center',
+                color='black'
+            )
+
+        # ===== 情况 3：都没有 =====
         else:
-            # 多轴文章 → 同位置画多个颜色点
-            for axe in axes:
-                # plt.scatter
-                ax.scatter(x, y, c=colors[int(axe)], s=s_size, alpha=alpha_val)
+            ax.scatter(
+                x, y,
+                c='whitesmoke',
+                s=s_size,
+                alpha=0.4
+            )
+            
+    # fig, ax = plt.subplots(figsize=(10, 10))
+    # # plt.figure(figsize=(10, 10))
+    
+    # colors = {1:'blue', 2:'orange', 3:'green', 4:'red'}
+    # axe_label={"1":"Performances et responsabilités",
+    #         "2":"Société de services et services à la société",
+    #         "3":"Innovations, transformations et résistances organisationnelles et sociétales",
+    #         "4":"Ouvrages pédagogiques"}
+
+    # s_size = 20      # 点大小
+    # alpha_val = 0.5  # 透明度
+
+    # for idx, row in df_plot.iterrows():
+    #     x, y = pos[idx]
+    #     axes = row['axe_list']
+    #     if len(axes) == 1:
+    #         # 单轴文章 → 一个点
+    #         plt.scatter(x, y, c=colors[int(axes[0])], s=s_size, alpha=alpha_val)
+    #     else:
+    #         # 多轴文章 → 同位置画多个颜色点
+    #         for axe in axes:
+    #             # plt.scatter
+    #             ax.scatter(x, y, c=colors[int(axe)], s=s_size, alpha=alpha_val)
+
 
     # show legend ：只显示单轴颜色对应的 axe
     from matplotlib.lines import Line2D
@@ -205,6 +300,146 @@ def generate_force_scatterplot(df):
 
 
 
+
+
+# def generate_force_scatterplot(df):
+#     import numpy as np
+#     import networkx as nx
+#     import matplotlib.pyplot as plt
+#     from sklearn.metrics.pairwise import cosine_similarity
+#     from matplotlib.lines import Line2D
+
+#     df_plot = df.copy()
+
+#     # ===== 安全检查 =====
+#     if "axe_list" not in df_plot.columns:
+#         df_plot["axe_list"] = [[] for _ in range(len(df_plot))]
+
+#     if "predicted_axe_list" not in df_plot.columns:
+#         df_plot["predicted_axe_list"] = [[] for _ in range(len(df_plot))]
+
+#     if "combined_emb" not in df_plot.columns:
+#         raise ValueError("combined_emb column is required")
+
+#     # ===== 初始化图 =====
+#     G = nx.Graph()
+
+#     for idx, row in df_plot.iterrows():
+#         G.add_node(
+#             idx,
+#             axes=row["axe_list"],
+#             emb=row["combined_emb"]
+#         )
+
+#     # ===== 语义相似度吸引力 =====
+#     X = np.vstack(df_plot["combined_emb"])
+#     S = cosine_similarity(X)
+
+#     K = 10
+#     sim_thresh = 0.85
+
+#     for i in range(len(df_plot)):
+#         topk_idx = np.argpartition(-S[i], K+1)[:K+1]
+#         for j in topk_idx:
+#             if i < j and S[i, j] > sim_thresh:
+#                 G.add_edge(i, j, weight=0.3)
+
+#     # ===== 只对真实 axe 建立虚拟节点 =====
+#     for idx, row in df_plot.iterrows():
+#         real_axes = row["axe_list"]
+#         if len(real_axes) > 0:
+#             for axe in real_axes:
+#                 axe_node = f"AXE_{axe}"
+#                 if axe_node not in G:
+#                     G.add_node(axe_node, type="axe")
+#                 G.add_edge(idx, axe_node, weight=0.1)
+
+#     # ===== Force layout =====
+#     pos = nx.spring_layout(
+#         G,
+#         weight="weight",
+#         iterations=100,
+#         seed=42
+#     )
+
+#     # ===== 开始画图 =====
+#     fig, ax = plt.subplots(figsize=(10, 10))
+
+#     colors = {1: "blue", 2: "orange", 3: "green", 4: "red"}
+
+#     s_size_real = 25
+#     s_size_pred = 18
+
+#     for idx, row in df_plot.iterrows():
+#         x, y = pos[idx]
+
+#         real_axes = row["axe_list"]
+#         pred_axes = row["predicted_axe_list"]
+
+#         # -------- 情况1：有真实 axe → 彩色 --------
+#         if len(real_axes) > 0:
+
+#             if len(real_axes) == 1:
+#                 ax.scatter(
+#                     x, y,
+#                     c=colors.get(int(real_axes[0]), "black"),
+#                     s=s_size_real,
+#                     alpha=0.6
+#                 )
+#             else:
+#                 # 多轴文章 → 同位置叠加多个颜色
+#                 for axe in real_axes:
+#                     ax.scatter(
+#                         x, y,
+#                         c=colors.get(int(axe), "black"),
+#                         s=s_size_real,
+#                         alpha=0.6
+#                     )
+
+#         # -------- 情况2：没有真实 axe → 灰色 --------
+#         elif len(pred_axes) > 0:
+#             ax.scatter(
+#                 x, y,
+#                 c="lightgrey",
+#                 s=s_size_pred,
+#                 alpha=0.8,
+#                 edgecolors="black",
+#                 linewidth=0.3
+#             )
+
+#         # -------- 情况3：都没有 → 淡灰 --------
+#         else:
+#             ax.scatter(
+#                 x, y,
+#                 c="whitesmoke",
+#                 s=s_size_pred,
+#                 alpha=0.5
+#             )
+
+#     # ===== Legend =====
+#     legend_elements = [
+#         Line2D([0], [0], marker='o', color='w',
+#                label=f"Axe {axe}",
+#                markerfacecolor=color,
+#                markersize=10)
+#         for axe, color in colors.items()
+#     ]
+
+#     legend_elements.append(
+#         Line2D([0], [0], marker='o', color='w',
+#                label="Predicted axe",
+#                markerfacecolor="lightgrey",
+#                markeredgecolor="black",
+#                markersize=10)
+#     )
+
+#     ax.legend(handles=legend_elements, loc="best")
+
+#     ax.set_title("Scatterplot des axes thématiques", fontsize=14, pad=20)
+#     ax.axis("off")
+
+#     return fig
+    
 
 def filter_by_axe(df, axe_id=None, col="axe_list"):
     """
@@ -288,7 +523,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.patches import Circle
-
 
 def generate_topics_keywords_scatterplot(topic_model, df, col_text="clean_text", axe_id="1",N_WORDS = 5):
 
