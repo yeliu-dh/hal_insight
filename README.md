@@ -70,7 +70,7 @@ s'il y a un '(venv)' au début de la ligne, environement est activé!)
 
 **b) activer l'app:**
 
-tapper 'streamlit run home.py' 
+streamlit run home.py
 
 ---
 
