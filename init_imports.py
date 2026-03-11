@@ -19,7 +19,6 @@ from utils.mapping import add_axe
 from utils.ranking import add_classement_fnege
 
 
-
 # 对外提供引用
 __all__ = [
     "fetch_hal_articles",
