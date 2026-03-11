@@ -43,7 +43,6 @@ def get_fnege_tables(pdf_path, year, start_page, end_page,
 def get_info_from_pdf_tables (pdf_path, ):
     
     # read & extract
-    
     tables = camelot.read_pdf(pdf_path, pages="all")#camelot只提取
     df_list = [t.df for t in tables]
     df = pd.concat(df_list, ignore_index=True)
@@ -58,9 +57,6 @@ def get_info_from_pdf_tables (pdf_path, ):
     logging.info(f"[SAVE] fnege csv saved to {outpath_csv}!")
     
     return 
-
-
-
 
 
 
@@ -141,7 +137,7 @@ def find_journals_hal(journals_str, fnege_hal):
 
 def get_fnege_main(input_folder, 
                    fnege_hal_path, 
-                   output_folder):
+                   output_path):
 
     print("clean & reorder csv".center(100, '-'),"\n") 
     years=['2011',"2013", "2016", "2019", "2022"]
@@ -224,9 +220,12 @@ def get_fnege_main(input_folder,
     print(f"[CHECK] len df final: {len(df_final)} !")
     # display(df_final.head())
 
-    outpath_fnege_final=os.path.join(output_folder, 'fnege_final_hal.csv')
-    df_final.to_csv(outpath_fnege_final, index=False) 
-    print(f"[SAVE] fnege_final_hal saved to {outpath_fnege_final}!!")
+    # outpath_fnege_final=os.path.join(output_folder, 'fnege_final_hal.csv')
+    if not output_path.endswith('.csv'):
+        print(f"[WARNING] check path, data should be saved in '.csv'!!")
+    else:
+        df_final.to_csv(output_path, index=False) 
+        print(f"[SAVE] fnege_final_hal NOT saved to {output_path}!!")
     
     return df_final
 
