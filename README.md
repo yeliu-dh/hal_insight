@@ -22,8 +22,7 @@ https://code.visualstudio.com/download
 
 **1) Télécharger le git**
 
--par clone (recommandé!) 
-
+**1.1) [recommandé!] par git clone:**
 ouvrir le terminal(de vscode, par exemple), entrer dans un dossier où vous voulez mettre ce git
 
 'git clone https://github.com/yeliu-dh/hal_insight.git'
@@ -33,12 +32,16 @@ entrer dans le git :
 cd hal_insight
 
 
--Télécharger le git par zip
+**1.2)par zip**
 
-appuyer le bouton vert'Code', choisir 'download ZIP', unzip, obtenir un dossier 'hal_insight-main'
+appuyer le bouton vert'Code', choisir 'download ZIP', unzip, obtenir un noueavu dossier
 
-**2) Créer un environement virtuel**
- py -3.10 -m venv venv 
+
+**2) Créer un environement virtuel** 
+
+ouvrir le vscode, ce dossier et un nouveau terminal
+
+py -3.10 -m venv venv 
 
 **3) installer les librairies nécessaires**
 
@@ -54,7 +57,7 @@ Ctrl+c
 
 ---
 
-### *️⃣Lancement régulier
+### *️⃣ Lancement régulier
 
 **a) activer l'environement :**
 
@@ -69,12 +72,16 @@ s'il y a un '(venv)' au début de la ligne, environement est activé!)
 
 tapper 'streamlit run home.py' 
 
+---
 
-### 🔃Mis à jour 
+### 🔃 Mis à jour 
 - dans le terminal
+
 cd 'votre_path_à_git_HAL_INSIGHT'
+
 git pull
 
 - re-télécharger
+
 télécharger le zip sur Github et répéter 'premier lancement'
 
