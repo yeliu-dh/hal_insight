@@ -30,7 +30,9 @@ if "started" not in st.session_state:
 # -------------------------------
 st.markdown("<br>", unsafe_allow_html=True)#不容易被 Markdown 渲染压缩掉
 data_uploader()# 调用上传器（会自动处理已有/新上传）
+# st.markdown("NB.assurez vous les colonnes d'axe' sont disponibles")
 st.markdown("<br>", unsafe_allow_html=True)
+
 st.divider() 
 
 st.subheader("📒 README")
@@ -107,8 +109,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     )
 
     #-------------------topic size----------------------
-    range_topic_size = list(range(0,50))
+    range_topic_size = list(range(0,100))
     min_topic_size = st.selectbox("Taille minimale d'articles pour former un sujet", range_topic_size, index=30)#整除
+    st.markdown("Moins de nombre d'articles à analyse!")
     
     #------------------top n keywords-------------------
     range_top_kw = list(range(1, 11))

@@ -20,14 +20,16 @@ from utils.preprocess import preprocess_text
 
 
 # # axe
-# def parse_axes(x):
-#     if pd.isna(x):
-#         return []
-#     return [a.strip() for a in str(x).split(';')]
 def parse_axes(x):
     if pd.isna(x):
         return []
-    return [int(float(a.strip())) for a in str(x).split(';')]
+    return [a.strip() for a in str(x).split(';')]
+
+
+# def parse_axes(x):
+#     if pd.isna(x):
+#         return []
+#     return [int(float(a.strip())) for a in str(x).split(';')]
 
 
 # text
