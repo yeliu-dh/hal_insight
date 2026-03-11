@@ -19,11 +19,16 @@ import streamlit as st
 from utils.preprocess import preprocess_text
 
 
-# axe
+# # axe
+# def parse_axes(x):
+#     if pd.isna(x):
+#         return []
+#     return [a.strip() for a in str(x).split(';')]
 def parse_axes(x):
     if pd.isna(x):
         return []
-    return [a.strip() for a in str(x).split(';')]
+    return [int(float(a.strip())) for a in str(x).split(';')]
+
 
 # text
 def build_text(row):
@@ -210,7 +215,9 @@ def generate_force_scatterplot(df):
             if len(real_axes) == 1:
                 ax.scatter(
                     x, y,
-                    c=colors[int(real_axes[0])],
+                    # c = colors[real_axes[0]],
+                    c = colors[int(float(real_axes[0]))],
+                    # c=colors[int(real_axes[0])],
                     s=s_size,
                     alpha=alpha_val
                 )

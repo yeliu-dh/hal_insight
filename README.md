@@ -11,6 +11,8 @@
 
 ## Utilisation en local (Windows)
 
+### Premier lancement
+
 **Prérequis : 2 INDISPENSABLES !**
 - Python 3.10 dans l'oridinateur!
 La dernière version de 3.10.x préférable!(Télécharger ici)[https://www.python.org/downloads/release/python-3100/] 
@@ -52,14 +54,17 @@ taper 'streamlit run home.py'
 
 dans le termnial, taper 'Ctrl+c'.
 
---
 
-**NB. Assurez vous chaque fois vous êtez dans le bon environement virtuel!**
+NB. Assurez vous chaque fois vous êtez dans le bon environement virtuel!
 
-Comment entrer dans ce environement ?
+### lancement régulier
 
-a) ouvrir le termnial
+a) activer l'environement :
 
-b) taper 'venv\Scripts\activate'
+ouvrir le termnial et tapper 'venv\Scripts\activate'
 
-c) voir s'il y a un '(venv)' au début de la ligne.
+(attention à la direction de slash ! s'il y a un '(venv)' au début de la ligne, environement est activé!)
+
+b) activer l'app:
+
+tapper 'streamlit run home.py' dans le terminal
