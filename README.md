@@ -1,7 +1,4 @@
-# projet HAL INSIGHT pour IRG
-
-## Pages :
-
+# Projet HAL INSIGHT pour l'IRG
 
 
 
@@ -11,7 +8,7 @@
 
 ## Utilisation en local (Windows)
 
-### Premier lancement
+### 1️⃣Premier lancement
 
 **Prérequis : 2 INDISPENSABLES !**
 - Python 3.10 dans l'oridinateur!
@@ -57,7 +54,7 @@ dans le termnial, taper 'Ctrl+c'.
 
 NB. Assurez vous chaque fois vous êtez dans le bon environement virtuel!
 
-### lancement régulier
+### *️⃣Lancement régulier
 
 a) activer l'environement :
 
