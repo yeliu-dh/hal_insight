@@ -22,37 +22,35 @@ https://code.visualstudio.com/download
 
 **1) Télécharger le git**
 
-- appuyer le bouton vert'Code',choisir 'download ZIP', unzip => obtenir un dossier 'hal_insight-main'
+-par clone (recommandé!) 
 
-- par git: bash clone https://github.com/yeliu-dh/hal_insight.git
+ouvrir le terminal(de vscode, par exemple), entrer dans un dossier où vous voulez mettre ce git
+
+'git clone https://github.com/yeliu-dh/hal_insight.git'
+
+entrer dans le git :
+
+cd hal_insight
 
 
-**2) Ouvrir vscode, choisir ce folder**
+-Télécharger le git par zip
 
-**3) Ouvrir un noueauv terminal**
+appuyer le bouton vert'Code', choisir 'download ZIP', unzip, obtenir un dossier 'hal_insight-main'
 
-- en cliquant au haut-gauche 'Terminal> New terminal'
+**2) Créer un environement virtuel**
+ py -3.10 -m venv venv 
 
-- voir au bas de la page: '(base) D:\Work\hal_insight-main'
+**3) installer les librairies nécessaires**
 
-**4) Créer un environement virtuel**
+pip install -r requirements.txt
 
-taper 'py -3.10 -m venv venv '
+**4) Lancer streamlit en local:**
 
-**5) installer les librairies nécessaires**
+streamlit run home.py
 
-taper 'pip install -r requirements.txt'
+**5) Cessez l'application**
 
-et vous patientez...
-
-**6) Lancer streamlit en local:**
-
-taper 'streamlit run home.py'
-
-**7) Cessez l'application**
-
-taper 'Ctrl+c'.
-
+Ctrl+c
 
 ---
 
@@ -70,3 +68,13 @@ s'il y a un '(venv)' au début de la ligne, environement est activé!)
 **b) activer l'app:**
 
 tapper 'streamlit run home.py' 
+
+
+### 🔃Mis à jour 
+- dans le terminal
+cd 'votre_path_à_git_HAL_INSIGHT'
+git pull
+
+- re-télécharger
+télécharger le zip sur Github et répéter 'premier lancement'
+
