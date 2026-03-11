@@ -10,12 +10,14 @@
 
 ### 1️⃣Premier lancement
 
-**Prérequis : 2 INDISPENSABLES !**
+**Prérequis :**
 - Python 3.10 dans l'oridinateur!
-La dernière version de 3.10.x préférable!(Télécharger ici)[https://www.python.org/downloads/release/python-3100/] 
+La dernière version de 3.10.x préférable!
+https://www.python.org/downloads/release/python-3100/
 
 - VSCODE:
-Choisir selon le système de votre ordinateur! (Télécharger ici)[https://code.visualstudio.com/download]
+Choisir selon le système de votre ordinateur! 
+https://code.visualstudio.com/download
 
 
 **1) Télécharger le git**
@@ -29,9 +31,9 @@ Choisir selon le système de votre ordinateur! (Télécharger ici)[https://code.
 
 **3) Ouvrir un noueauv terminal**
 
-en cliquant au haut-gauche 'Terminal> New terminal'
+- en cliquant au haut-gauche 'Terminal> New terminal'
 
-voir au bas de la page: '(base) D:\Work\hal_insight-main'
+- voir au bas de la page: '(base) D:\Work\hal_insight-main'
 
 **4) Créer un environement virtuel**
 
@@ -39,7 +41,7 @@ taper 'py -3.10 -m venv venv '
 
 **5) installer les librairies nécessaires**
 
-pip install -r requirements.txt
+taper 'pip install -r requirements.txt'
 
 et vous patientez...
 
@@ -49,12 +51,14 @@ taper 'streamlit run home.py'
 
 **7) Cessez l'application**
 
-dans le termnial, taper 'Ctrl+c'.
+taper 'Ctrl+c'.
 
 
-NB. Assurez vous chaque fois vous êtez dans le bon environement virtuel!
+---
 
 ### *️⃣Lancement régulier
+
+NB. Assurez vous chaque fois vous êtez dans le bon environement virtuel!
 
 a) activer l'environement :
 
