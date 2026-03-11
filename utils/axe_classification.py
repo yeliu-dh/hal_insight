@@ -2048,7 +2048,7 @@ def gather_predicted_axes(df_long_predicted,
     df_no_predaxe=df_hal[df_hal[axe_cols].sum(axis=1)==0]
     if len(df_no_predaxe)>0:
         print(f"[INFO] {len(df_no_predaxe)} lignes qui n'ont pas de prédictions: \n")
-        display(df_all[df_all['halId_s'].isin(df_no_predaxe['halId_s'].tolist())][['halId_s','title_s','keyword_s','abstract_s','axe',"predicted_axe"]].head())
+        st.dataframe(df_all[df_all['halId_s'].isin(df_no_predaxe['halId_s'].tolist())][['halId_s','title_s','keyword_s','abstract_s','axe',"predicted_axe"]].head())
     else :
         print(f"[INFO] Au moins une prédiction pour chaque ligne non-axée!")
 
@@ -2173,7 +2173,8 @@ def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifique
     df_noaxe_pred=df_all[(df_all['axe'].isna())|(df_all['axe']=="nan")]
     print(f"[INFO] Répartiton des axes prédits sur {len(df_noaxe_pred)} lignes:\n"
           f"{df_noaxe_pred.predicted_axe.value_counts(dropna=False)}\n")    
-    display(df_noaxe_pred[['halId_s','title_s','keyword_s','abstract_s','axe',"predicted_axe"]].head())
+    
+    st.dataframe(df_noaxe_pred[['halId_s','title_s','keyword_s','abstract_s','axe',"predicted_axe"]].head())
 
 
 
@@ -2183,7 +2184,7 @@ def apply_auto_completion_axes(df_all_path="data/20251201-ProductionScientifique
     print(f"Répartiton des axes prédits sur toutes les {len(df_all)} lignes:\n"
           f"{df_all.final_axe.value_counts(dropna=False)}\n")
     
-    display(df_all[['halId_s','title_s','keyword_s','abstract_s',"axe",'predicted_axe',"final_axe"]].head())
+    st.dataframe(df_all[['halId_s','title_s','keyword_s','abstract_s',"axe",'predicted_axe',"final_axe"]].head())
 
     # save to outpath!!!
     os.makedirs(os.path.dirname(df_all_outpath), exist_ok=True)
