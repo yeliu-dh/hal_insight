@@ -266,7 +266,20 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     #------------------vis-------------------
     if "df_all_pred" in st.session_state:                
         st.subheader("🔢 Visualisation")
+        
         st.markdown("<br>", unsafe_allow_html=True)
+                
+        st.markdown("### 📒 README")
+        st.markdown(
+            "Chaque article est représenté par un point, **coloré selon leur vrai axe thématique**.  \n"
+            "Les articles qui n'ont pas d'axe se présentent comme **des points gris, labelisés par l'axe prédit**!  \n"
+            "S'un article est multi-axé, les points de couleurs correspondantes se superpose dans un même endroit.  \n"
+            "\n"
+            "La position des articles sont influencée par **deux force d'attraction**:  \n"
+            "a) la similarité d'embeddings entre eux; b) l'appartenance à un axe."
+        )
+            
+        
         cols=st.columns([4,1])
         with cols[1]:
             start_button = st.button("⚡ Commencer")

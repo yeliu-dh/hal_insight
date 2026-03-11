@@ -22,7 +22,7 @@ https://code.visualstudio.com/download
 
 **1) Télécharger le git**
 
-- appuyer le bouton vert'Code',choisir download ZIP, unzip => obtenir un dossier 'hal_insight-main'
+- appuyer le bouton vert'Code',choisir 'download ZIP', unzip => obtenir un dossier 'hal_insight-main'
 
 - par git: bash clone https://github.com/yeliu-dh/hal_insight.git
 
@@ -65,6 +65,7 @@ ouvrir le termnial et tapper 'venv\Scripts\activate'
 (attention à la direction de slash ! 
 
 s'il y a un '(venv)' au début de la ligne, environement est activé!)
+
 
 **b) activer l'app:**
 
