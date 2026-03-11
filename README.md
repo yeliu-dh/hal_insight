@@ -58,14 +58,13 @@ taper 'Ctrl+c'.
 
 ### *️⃣Lancement régulier
 
-NB. Assurez vous chaque fois vous êtez dans le bon environement virtuel!
 
-a) activer l'environement :
+**a) activer l'environement :**
 
 ouvrir le termnial et tapper 'venv\Scripts\activate'
 
 (attention à la direction de slash ! s'il y a un '(venv)' au début de la ligne, environement est activé!)
 
-b) activer l'app:
+**b) activer l'app:**
 
 tapper 'streamlit run home.py' dans le terminal
