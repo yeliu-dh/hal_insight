@@ -977,7 +977,11 @@ def generate_ref_apa(df):
         # APA 文献
         apa_entry = f"{apa_authors_str} ({year}). {title}. In {conference_info}."
         apa_list.append(apa_entry)
-    df["APA"] = apa_list
+        
+    idx=df.columns.get_loc("ref_hal")
+    df.insert(loc=idx+1, column="ref_apa", value=apa_list)
+     
+    # df["APA"] = apa_list
     return df
 
 
@@ -1005,18 +1009,30 @@ def preview_and_download_references(df):
 
     # ------- 选择显示的列 -------
     if use_apa == "APA format":
-        if "APA" not in df.columns:
+        if "ref_apa" not in df.columns:
             df = generate_ref_apa(df)
-        
-        refs_list = df["APA"].dropna().astype(str).tolist()
+        refs_list = df["ref_apa"].dropna().astype(str).tolist()
     else:
         refs_list = df["ref_hal"].dropna().astype(str).tolist()
 
     # ------- 按第一个作者字母排序 -------
     refs_list = sorted(refs_list, key=lambda x: x.split(",")[0].strip())
-
+    
+   
     # ------- 自动编号 -------
+    # txt_string = "\n\n".join([f"{ref}" for i, ref in enumerate(refs_list)])
     txt_string = "\n\n".join([f"[{i+1}] {ref}" for i, ref in enumerate(refs_list)])
+
+    #--------rtf format------
+    # {\rtf1 → RTF 文件头
+    # \par → 换行
+    # \b → 加粗
+    
+    rtf_string = r"{\rtf1\ansi\deff0" + "\n"
+    for i, ref in enumerate(refs_list):
+        rtf_string += f"{ref}\\par"
+    rtf_string += "}"
+
 
     # ------- 预览区域 -------
     # st.markdown("### 📚 Preview References")
@@ -1042,7 +1058,13 @@ def preview_and_download_references(df):
             mime="text/plain",
             key='download_ref_txt'
         )
-        
+        # st.download_button(
+        #     label="Télécharger RTF",
+        #     data=rtf_string.encode("utf-8"),
+        #     file_name=file_name + ".rtf",
+        #     mime="application/rtf",
+        #     key='download_ref_rtf'
+        # )
 
 
 #===========================================SAVE=======================================================#

@@ -1,0 +1,196 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 700px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+    <div style="
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255,255,255,0.9);
+        padding: 10px 14px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+        z-index: 9999;
+    ">
+    <span style="color:red;">■</span> Auteurs IRG <br>
+    <span style="color:royalblue;">■</span> Autres auteurs<br>
+    <span style="color:black;">■</span> Mots-clés<br>
+    <span style="color:gray;">■</span> Arêtes
+    </div>
+    
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "red", "size": 66.66666666666666}, "id": "Joan Le Goff", "label": "Joan Le Goff", "shape": "text", "size": 10, "title": "Auteur : Joan Le Goff\u003cbr\u003eInstitution : 1004418_Institut de Recherche en Gestion\u003cbr\u003eConnexions : 8"}, {"color": "#97c2fc", "font": {"color": "black", "size": 20.0}, "id": "tapir", "label": "tapir", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : tapir\u003cbr\u003eConnexions : 1"}, {"color": "#97c2fc", "font": {"color": "black", "size": 20.0}, "id": "entrepreneur", "label": "entrepreneur", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : entrepreneur\u003cbr\u003eConnexions : 1"}, {"color": "#97c2fc", "font": {"color": "black", "size": 26.666666666666668}, "id": "s\u00e9rie", "label": "s\u00e9rie", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : s\u00e9rie\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "black", "size": 33.333333333333336}, "id": "article", "label": "article", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : article\u003cbr\u003eConnexions : 3"}, {"color": "#97c2fc", "font": {"color": "black", "size": 20.0}, "id": "homme", "label": "homme", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : homme\u003cbr\u003eConnexions : 1"}, {"color": "#97c2fc", "font": {"color": "black", "size": 20.0}, "id": "figure", "label": "figure", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : figure\u003cbr\u003eConnexions : 1"}, {"color": "#97c2fc", "font": {"color": "black", "size": 33.333333333333336}, "id": "production", "label": "production", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : production\u003cbr\u003eConnexions : 3"}, {"color": "#97c2fc", "font": {"color": "black", "size": 20.0}, "id": "series", "label": "series", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : series\u003cbr\u003eConnexions : 1"}, {"color": "#97c2fc", "font": {"color": "red", "size": 80.0}, "id": "Mathias Szpirglas", "label": "Mathias Szpirglas", "shape": "text", "size": 10, "title": "Auteur : Mathias Szpirglas\u003cbr\u003eInstitution : 57129_Institut de Recherche en Gestion\u003cbr\u003eConnexions : 10"}, {"color": "#97c2fc", "font": {"color": "red", "size": 80.0}, "id": "V\u00e9ronique Attias-Delattre", "label": "V\u00e9ronique Attias-Delattre", "shape": "text", "size": 10, "title": "Auteur : V\u00e9ronique Attias-Delattre\u003cbr\u003eInstitution : 57129_Institut de Recherche en Gestion\u003cbr\u003eConnexions : 10"}, {"color": "#97c2fc", "font": {"color": "red", "size": 60.0}, "id": "Catherine Maman", "label": "Catherine Maman", "shape": "text", "size": 10, "title": "Auteur : Catherine Maman\u003cbr\u003eInstitution : 1004418_Institut de Recherche en Gestion\u003cbr\u003eConnexions : 7"}, {"color": "#97c2fc", "font": {"color": "black", "size": 20.0}, "id": "formation", "label": "formation", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : formation\u003cbr\u003eConnexions : 1"}, {"color": "#97c2fc", "font": {"color": "black", "size": 26.666666666666668}, "id": "pratique", "label": "pratique", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : pratique\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "black", "size": 20.0}, "id": "th\u00e9\u00e2tral", "label": "th\u00e9\u00e2tral", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : th\u00e9\u00e2tral\u003cbr\u003eConnexions : 1"}, {"color": "#97c2fc", "font": {"color": "black", "size": 26.666666666666668}, "id": "projet", "label": "projet", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : projet\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "black", "size": 20.0}, "id": "frugalit\u00e9", "label": "frugalit\u00e9", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : frugalit\u00e9\u003cbr\u003eConnexions : 1"}, {"color": "#97c2fc", "font": {"color": "black", "size": 20.0}, "id": "objectif", "label": "objectif", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : objectif\u003cbr\u003eConnexions : 1"}, {"color": "#97c2fc", "font": {"color": "black", "size": 33.333333333333336}, "id": "p\u00e9dagogique", "label": "p\u00e9dagogique", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : p\u00e9dagogique\u003cbr\u003eConnexions : 3"}, {"color": "#97c2fc", "font": {"color": "red", "size": 80.0}, "id": "Philippe L\u00e9pinard", "label": "Philippe L\u00e9pinard", "shape": "text", "size": 10, "title": "Auteur : Philippe L\u00e9pinard\u003cbr\u003eInstitution : 1004418_Institut de Recherche en Gestion\u003cbr\u003eConnexions : 10"}, {"color": "#97c2fc", "font": {"color": "red", "size": 40.0}, "id": "Isabelle Vandangeon-Derumez", "label": "Isabelle Vandangeon-Derumez", "shape": "text", "size": 10, "title": "Auteur : Isabelle Vandangeon-Derumez\u003cbr\u003eInstitution : 57129_Institut de Recherche en Gestion\u003cbr\u003eConnexions : 4"}, {"color": "#97c2fc", "font": {"color": "royalblue", "size": 80.0}, "id": "Abdoulaye Kabore", "label": "Abdoulaye Kabore", "shape": "text", "size": 10, "title": "Auteur : Abdoulaye Kabore\u003cbr\u003eInstitution : 1324609_Laboratory of Environmental Physics and Chemistry (LPCE), University Joseph KI-ZERBO, Ouagadougou 01 BP: 4560, Burkina Faso.\u003cbr\u003eConnexions : 10"}, {"color": "#97c2fc", "font": {"color": "black", "size": 26.666666666666668}, "id": "blood", "label": "blood", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : blood\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "black", "size": 26.666666666666668}, "id": "ethnique", "label": "ethnique", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : ethnique\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "black", "size": 26.666666666666668}, "id": "sang", "label": "sang", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : sang\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "black", "size": 26.666666666666668}, "id": "ethnic", "label": "ethnic", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : ethnic\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "black", "size": 26.666666666666668}, "id": "population", "label": "population", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : population\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "black", "size": 26.666666666666668}, "id": "afro", "label": "afro", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : afro\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "black", "size": 26.666666666666668}, "id": "donation", "label": "donation", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : donation\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "black", "size": 26.666666666666668}, "id": "comportement", "label": "comportement", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : comportement\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "black", "size": 26.666666666666668}, "id": "adoption", "label": "adoption", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : adoption\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "black", "size": 26.666666666666668}, "id": "message", "label": "message", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : message\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "red", "size": 80.0}, "id": "Sophie Rieunier", "label": "Sophie Rieunier", "shape": "text", "size": 10, "title": "Auteur : Sophie Rieunier\u003cbr\u003eInstitution : 1004418_Institut de Recherche en Gestion\u003cbr\u003eConnexions : 10"}, {"color": "#97c2fc", "font": {"color": "black", "size": 20.0}, "id": "ludop\u00e9dagogie", "label": "ludop\u00e9dagogie", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : ludop\u00e9dagogie\u003cbr\u003eConnexions : 1"}, {"color": "#97c2fc", "font": {"color": "black", "size": 26.666666666666668}, "id": "jeu", "label": "jeu", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : jeu\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "black", "size": 20.0}, "id": "ludique", "label": "ludique", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : ludique\u003cbr\u003eConnexions : 1"}, {"color": "#97c2fc", "font": {"color": "black", "size": 20.0}, "id": "enseignement", "label": "enseignement", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : enseignement\u003cbr\u003eConnexions : 1"}, {"color": "#97c2fc", "font": {"color": "black", "size": 26.666666666666668}, "id": "r\u00f4le", "label": "r\u00f4le", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : r\u00f4le\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "black", "size": 20.0}, "id": "eduteam", "label": "eduteam", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : eduteam\u003cbr\u003eConnexions : 1"}, {"color": "#97c2fc", "font": {"color": "black", "size": 20.0}, "id": "table", "label": "table", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : table\u003cbr\u003eConnexions : 1"}, {"color": "#97c2fc", "font": {"color": "black", "size": 20.0}, "id": "d\u00e9couvrir", "label": "d\u00e9couvrir", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : d\u00e9couvrir\u003cbr\u003eConnexions : 1"}, {"color": "#97c2fc", "font": {"color": "royalblue", "size": 26.666666666666668}, "id": "D\u00e9borah Philippe", "label": "D\u00e9borah Philippe", "shape": "text", "size": 10, "title": "Auteur : D\u00e9borah Philippe\u003cbr\u003eInstitution : 325014_Facult\u00e9 des Hautes Etudes Commerciales (HEC Lausanne)\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "black", "size": 33.333333333333336}, "id": "cat\u00e9gorie", "label": "cat\u00e9gorie", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : cat\u00e9gorie\u003cbr\u003eConnexions : 3"}, {"color": "#97c2fc", "font": {"color": "black", "size": 33.333333333333336}, "id": "march\u00e9", "label": "march\u00e9", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : march\u00e9\u003cbr\u003eConnexions : 3"}, {"color": "#97c2fc", "font": {"color": "royalblue", "size": 26.666666666666668}, "id": "Alain Debenedetti", "label": "Alain Debenedetti", "shape": "text", "size": 10, "title": "Auteur : Alain Debenedetti\u003cbr\u003eInstitution : no primary structure found\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "royalblue", "size": 26.666666666666668}, "id": "David Zajtmann", "label": "David Zajtmann", "shape": "text", "size": 10, "title": "Auteur : David Zajtmann\u003cbr\u003eInstitution : 341726_Institut fran\u00e7ais de la mode\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "red", "size": 53.333333333333336}, "id": "Marie Greil", "label": "Marie Greil", "shape": "text", "size": 10, "title": "Auteur : Marie Greil\u003cbr\u003eInstitution : 1004418_Institut de Recherche en Gestion\u003cbr\u003eConnexions : 6"}, {"color": "#97c2fc", "font": {"color": "black", "size": 20.0}, "id": "normative", "label": "normative", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : normative\u003cbr\u003eConnexions : 1"}, {"color": "#97c2fc", "font": {"color": "black", "size": 20.0}, "id": "leadership", "label": "leadership", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : leadership\u003cbr\u003eConnexions : 1"}, {"color": "#97c2fc", "font": {"color": "black", "size": 20.0}, "id": "s\u00e9ries", "label": "s\u00e9ries", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : s\u00e9ries\u003cbr\u003eConnexions : 1"}, {"color": "#97c2fc", "font": {"color": "black", "size": 20.0}, "id": "subjectivation", "label": "subjectivation", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : subjectivation\u003cbr\u003eConnexions : 1"}, {"color": "#97c2fc", "font": {"color": "black", "size": 20.0}, "id": "deux", "label": "deux", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : deux\u003cbr\u003eConnexions : 1"}, {"color": "#97c2fc", "font": {"color": "black", "size": 20.0}, "id": "motif", "label": "motif", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : motif\u003cbr\u003eConnexions : 1"}, {"color": "#97c2fc", "font": {"color": "black", "size": 26.666666666666668}, "id": "organisation", "label": "organisation", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : organisation\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "black", "size": 26.666666666666668}, "id": "partenariat", "label": "partenariat", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : partenariat\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "black", "size": 26.666666666666668}, "id": "exploration", "label": "exploration", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : exploration\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "black", "size": 26.666666666666668}, "id": "coop\u00e9ration", "label": "coop\u00e9ration", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : coop\u00e9ration\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "black", "size": 26.666666666666668}, "id": "inter", "label": "inter", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : inter\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "black", "size": 26.666666666666668}, "id": "hybride", "label": "hybride", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : hybride\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "black", "size": 26.666666666666668}, "id": "analyse", "label": "analyse", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : analyse\u003cbr\u003eConnexions : 2"}, {"color": "#97c2fc", "font": {"color": "black", "size": 20.0}, "id": "tension", "label": "tension", "shape": "text", "size": 10, "title": "Mot-cl\u00e9 : tension\u003cbr\u003eConnexions : 1"}]);
+                  edges = new vis.DataSet([{"color": "lightgray", "from": "Joan Le Goff", "title": "Cooccurrence : 8", "to": "tapir", "width": 13.25}, {"color": "lightgray", "from": "Joan Le Goff", "title": "Cooccurrence : 5", "to": "entrepreneur", "width": 6.5}, {"color": "lightgray", "from": "Joan Le Goff", "title": "Cooccurrence : 4", "to": "s\u00e9rie", "width": 4.25}, {"color": "lightgray", "from": "Joan Le Goff", "title": "Cooccurrence : 4", "to": "article", "width": 4.25}, {"color": "lightgray", "from": "Joan Le Goff", "title": "Cooccurrence : 3", "to": "homme", "width": 2.0}, {"color": "lightgray", "from": "Joan Le Goff", "title": "Cooccurrence : 3", "to": "figure", "width": 2.0}, {"color": "lightgray", "from": "Joan Le Goff", "title": "Cooccurrence : 3", "to": "production", "width": 2.0}, {"color": "lightgray", "from": "Joan Le Goff", "title": "Cooccurrence : 3", "to": "series", "width": 2.0}, {"color": "lightgray", "from": "s\u00e9rie", "title": "Cooccurrence : 4", "to": "Mathias Szpirglas", "width": 4.25}, {"color": "lightgray", "from": "article", "title": "Cooccurrence : 4", "to": "Mathias Szpirglas", "width": 4.25}, {"color": "lightgray", "from": "article", "title": "Cooccurrence : 4", "to": "V\u00e9ronique Attias-Delattre", "width": 4.25}, {"color": "lightgray", "from": "production", "title": "Cooccurrence : 4", "to": "Mathias Szpirglas", "width": 4.25}, {"color": "lightgray", "from": "production", "title": "Cooccurrence : 4", "to": "V\u00e9ronique Attias-Delattre", "width": 4.25}, {"color": "lightgray", "from": "Catherine Maman", "title": "Cooccurrence : 7", "to": "formation", "width": 11.0}, {"color": "lightgray", "from": "Catherine Maman", "title": "Cooccurrence : 6", "to": "pratique", "width": 8.75}, {"color": "lightgray", "from": "Catherine Maman", "title": "Cooccurrence : 5", "to": "th\u00e9\u00e2tral", "width": 6.5}, {"color": "lightgray", "from": "Catherine Maman", "title": "Cooccurrence : 3", "to": "projet", "width": 2.0}, {"color": "lightgray", "from": "Catherine Maman", "title": "Cooccurrence : 3", "to": "frugalit\u00e9", "width": 2.0}, {"color": "lightgray", "from": "Catherine Maman", "title": "Cooccurrence : 3", "to": "objectif", "width": 2.0}, {"color": "lightgray", "from": "Catherine Maman", "title": "Cooccurrence : 3", "to": "p\u00e9dagogique", "width": 2.0}, {"color": "lightgray", "from": "pratique", "title": "Cooccurrence : 5", "to": "Philippe L\u00e9pinard", "width": 6.5}, {"color": "lightgray", "from": "projet", "title": "Cooccurrence : 3", "to": "Isabelle Vandangeon-Derumez", "width": 2.0}, {"color": "lightgray", "from": "p\u00e9dagogique", "title": "Cooccurrence : 8", "to": "Philippe L\u00e9pinard", "width": 13.25}, {"color": "lightgray", "from": "p\u00e9dagogique", "title": "Cooccurrence : 3", "to": "Isabelle Vandangeon-Derumez", "width": 2.0}, {"color": "lightgray", "from": "Abdoulaye Kabore", "title": "Cooccurrence : 10", "to": "blood", "width": 17.75}, {"color": "lightgray", "from": "Abdoulaye Kabore", "title": "Cooccurrence : 8", "to": "ethnique", "width": 13.25}, {"color": "lightgray", "from": "Abdoulaye Kabore", "title": "Cooccurrence : 8", "to": "sang", "width": 13.25}, {"color": "lightgray", "from": "Abdoulaye Kabore", "title": "Cooccurrence : 7", "to": "ethnic", "width": 11.0}, {"color": "lightgray", "from": "Abdoulaye Kabore", "title": "Cooccurrence : 7", "to": "population", "width": 11.0}, {"color": "lightgray", "from": "Abdoulaye Kabore", "title": "Cooccurrence : 6", "to": "afro", "width": 8.75}, {"color": "lightgray", "from": "Abdoulaye Kabore", "title": "Cooccurrence : 4", "to": "donation", "width": 4.25}, {"color": "lightgray", "from": "Abdoulaye Kabore", "title": "Cooccurrence : 4", "to": "comportement", "width": 4.25}, {"color": "lightgray", "from": "Abdoulaye Kabore", "title": "Cooccurrence : 4", "to": "adoption", "width": 4.25}, {"color": "lightgray", "from": "Abdoulaye Kabore", "title": "Cooccurrence : 4", "to": "message", "width": 4.25}, {"color": "lightgray", "from": "blood", "title": "Cooccurrence : 10", "to": "Sophie Rieunier", "width": 17.75}, {"color": "lightgray", "from": "ethnique", "title": "Cooccurrence : 8", "to": "Sophie Rieunier", "width": 13.25}, {"color": "lightgray", "from": "sang", "title": "Cooccurrence : 8", "to": "Sophie Rieunier", "width": 13.25}, {"color": "lightgray", "from": "ethnic", "title": "Cooccurrence : 7", "to": "Sophie Rieunier", "width": 11.0}, {"color": "lightgray", "from": "population", "title": "Cooccurrence : 7", "to": "Sophie Rieunier", "width": 11.0}, {"color": "lightgray", "from": "afro", "title": "Cooccurrence : 6", "to": "Sophie Rieunier", "width": 8.75}, {"color": "lightgray", "from": "donation", "title": "Cooccurrence : 4", "to": "Sophie Rieunier", "width": 4.25}, {"color": "lightgray", "from": "comportement", "title": "Cooccurrence : 4", "to": "Sophie Rieunier", "width": 4.25}, {"color": "lightgray", "from": "adoption", "title": "Cooccurrence : 4", "to": "Sophie Rieunier", "width": 4.25}, {"color": "lightgray", "from": "message", "title": "Cooccurrence : 4", "to": "Sophie Rieunier", "width": 4.25}, {"color": "lightgray", "from": "Philippe L\u00e9pinard", "title": "Cooccurrence : 11", "to": "ludop\u00e9dagogie", "width": 20.0}, {"color": "lightgray", "from": "Philippe L\u00e9pinard", "title": "Cooccurrence : 11", "to": "jeu", "width": 20.0}, {"color": "lightgray", "from": "Philippe L\u00e9pinard", "title": "Cooccurrence : 9", "to": "ludique", "width": 15.5}, {"color": "lightgray", "from": "Philippe L\u00e9pinard", "title": "Cooccurrence : 7", "to": "enseignement", "width": 11.0}, {"color": "lightgray", "from": "Philippe L\u00e9pinard", "title": "Cooccurrence : 7", "to": "r\u00f4le", "width": 11.0}, {"color": "lightgray", "from": "Philippe L\u00e9pinard", "title": "Cooccurrence : 6", "to": "eduteam", "width": 8.75}, {"color": "lightgray", "from": "Philippe L\u00e9pinard", "title": "Cooccurrence : 6", "to": "table", "width": 8.75}, {"color": "lightgray", "from": "Philippe L\u00e9pinard", "title": "Cooccurrence : 6", "to": "d\u00e9couvrir", "width": 8.75}, {"color": "lightgray", "from": "jeu", "title": "Cooccurrence : 4", "to": "Isabelle Vandangeon-Derumez", "width": 4.25}, {"color": "lightgray", "from": "r\u00f4le", "title": "Cooccurrence : 3", "to": "Isabelle Vandangeon-Derumez", "width": 2.0}, {"color": "lightgray", "from": "D\u00e9borah Philippe", "title": "Cooccurrence : 4", "to": "cat\u00e9gorie", "width": 4.25}, {"color": "lightgray", "from": "D\u00e9borah Philippe", "title": "Cooccurrence : 3", "to": "march\u00e9", "width": 2.0}, {"color": "lightgray", "from": "cat\u00e9gorie", "title": "Cooccurrence : 4", "to": "Alain Debenedetti", "width": 4.25}, {"color": "lightgray", "from": "cat\u00e9gorie", "title": "Cooccurrence : 4", "to": "David Zajtmann", "width": 4.25}, {"color": "lightgray", "from": "march\u00e9", "title": "Cooccurrence : 3", "to": "Alain Debenedetti", "width": 2.0}, {"color": "lightgray", "from": "march\u00e9", "title": "Cooccurrence : 3", "to": "David Zajtmann", "width": 2.0}, {"color": "lightgray", "from": "Marie Greil", "title": "Cooccurrence : 4", "to": "normative", "width": 4.25}, {"color": "lightgray", "from": "Marie Greil", "title": "Cooccurrence : 3", "to": "leadership", "width": 2.0}, {"color": "lightgray", "from": "Marie Greil", "title": "Cooccurrence : 3", "to": "s\u00e9ries", "width": 2.0}, {"color": "lightgray", "from": "Marie Greil", "title": "Cooccurrence : 3", "to": "subjectivation", "width": 2.0}, {"color": "lightgray", "from": "Marie Greil", "title": "Cooccurrence : 3", "to": "deux", "width": 2.0}, {"color": "lightgray", "from": "Marie Greil", "title": "Cooccurrence : 3", "to": "motif", "width": 2.0}, {"color": "lightgray", "from": "Mathias Szpirglas", "title": "Cooccurrence : 8", "to": "organisation", "width": 13.25}, {"color": "lightgray", "from": "Mathias Szpirglas", "title": "Cooccurrence : 7", "to": "partenariat", "width": 11.0}, {"color": "lightgray", "from": "Mathias Szpirglas", "title": "Cooccurrence : 5", "to": "exploration", "width": 6.5}, {"color": "lightgray", "from": "Mathias Szpirglas", "title": "Cooccurrence : 4", "to": "coop\u00e9ration", "width": 4.25}, {"color": "lightgray", "from": "Mathias Szpirglas", "title": "Cooccurrence : 4", "to": "inter", "width": 4.25}, {"color": "lightgray", "from": "Mathias Szpirglas", "title": "Cooccurrence : 4", "to": "hybride", "width": 4.25}, {"color": "lightgray", "from": "Mathias Szpirglas", "title": "Cooccurrence : 4", "to": "analyse", "width": 4.25}, {"color": "lightgray", "from": "organisation", "title": "Cooccurrence : 8", "to": "V\u00e9ronique Attias-Delattre", "width": 13.25}, {"color": "lightgray", "from": "partenariat", "title": "Cooccurrence : 7", "to": "V\u00e9ronique Attias-Delattre", "width": 11.0}, {"color": "lightgray", "from": "exploration", "title": "Cooccurrence : 5", "to": "V\u00e9ronique Attias-Delattre", "width": 6.5}, {"color": "lightgray", "from": "coop\u00e9ration", "title": "Cooccurrence : 4", "to": "V\u00e9ronique Attias-Delattre", "width": 4.25}, {"color": "lightgray", "from": "inter", "title": "Cooccurrence : 4", "to": "V\u00e9ronique Attias-Delattre", "width": 4.25}, {"color": "lightgray", "from": "hybride", "title": "Cooccurrence : 4", "to": "V\u00e9ronique Attias-Delattre", "width": 4.25}, {"color": "lightgray", "from": "analyse", "title": "Cooccurrence : 4", "to": "V\u00e9ronique Attias-Delattre", "width": 4.25}, {"color": "lightgray", "from": "V\u00e9ronique Attias-Delattre", "title": "Cooccurrence : 4", "to": "tension", "width": 4.25}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
