@@ -4,8 +4,6 @@
 
 
 
-
-
 ## Utilisation en local (Windows)
 
 ### 1️⃣Premier lancement

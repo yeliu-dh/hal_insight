@@ -456,8 +456,15 @@ def clean_axe_from_classification(df,axe_name='axe'):
     """   
     整理成字符串数字，列名改为axe
     """
-    df["classification_s"] = df["classification_s"].apply(extract_irg_axes)
-    df=df.rename(columns={"classification_s":axe_name})
+    idx=df.columns.get_loc("classification_s")
+    axe_values=[extract_irg_axes(axe) for axe in df['classification_s']]
+    df.insert(loc=idx+1, column=axe_name, value=axe_values)
+
+    # df[axe_name]=df["classification_s"].apply(extract_irg_axes)
+    
+    # df["classification_s"] = df["classification_s"].apply(extract_irg_axes)
+    # df=df.rename(columns={"classification_s":axe_name})
+
     return df
 
 
