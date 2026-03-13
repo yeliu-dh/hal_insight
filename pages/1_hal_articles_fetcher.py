@@ -366,7 +366,7 @@ if df is not None and not df.empty:
     st.divider()
 
     
-    st.markdown("### 🕰️ filtrer le résultat selon la date")
+    st.markdown("### 🕰️ filtrer le résultat par la date")
     start_year, start_month, end_year, end_month, date_field=get_start_end_field(key_prefix='filter')
         
     date_field_s_map={"soumission":"submittedDate_s", 
