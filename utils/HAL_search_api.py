@@ -26,7 +26,7 @@ def build_period(start_year=None, start_month=None,
                     end_year=None, end_month=None):
 
         # --- 强化逻辑：如果 start_year 或 start_month 任一s为 "*"，则都视为无限制 ---
-        if start_year == "*" or start_month == "*":
+        if start_year == "" or start_month == "*":
             start_year = start_month = "*"
 
         # --- 强化逻辑：如果 end_year 或 end_month 任一为 aujourd'hui，则都视为今天 ---
@@ -40,10 +40,9 @@ def build_period(start_year=None, start_month=None,
 
             # 比较年月元组（保证稳定）
             if (end_year, end_month) < (start_year, start_month):
-                st.error("⚠️ Période invalide : la fin est antérieure au début!")
+                st.error("Période invalide : la fin est antérieure au début!")
                 return []  # 返回空过滤，避免继续运行
             
-        # fq = []#不能清空啊！！！！！！
 
         # --- 构建开始日期 --如果非数值，则表示无限制
         if isinstance(start_year, int) and isinstance(start_month, int):
@@ -66,18 +65,132 @@ def build_period(start_year=None, start_month=None,
             today = datetime.utcnow()
             end_date = today.strftime("%Y-%m-%dT23:59:59Z")
             
-        print(f'start-end:{start_date}-{end_date}')
+        # print(f'start-end:{start_date}-{end_date}')
+        
         # --- 添加 fq 参数（提交日期区间） ---
 
         return start_date, end_date
 
 
+def get_start_end_field(key_prefix):
+    # title_divider='Période'.center(120, '-')
+    st.markdown(f"**Période**.  \n")
+    
+    # ---start~end---
+    st.markdown(f"- si vous ne voulez pas définir la date de début, choisisssez '*' dans l'année de début' *ou/et* 'mois de début';  \n"
+                f"- si vous ne voulez pas définir la date de fin, choisisssez 'aujourd'hui' dans 'années de fin' *ou/et* 'mois de fin'.")
+    now = datetime.now()
+    current_year, current_month = now.year, now.month
+
+    start_years = ["*"] + list(range(current_year, 1901, -1))
+    start_months= ["*"] + list(range(1, 13)) 
+    end_years = ["aujourd'hui"] + list(range(current_year, 1901, -1))
+    end_months = ["aujourd'hui"] + list(range(1, 13))
+
+    col1, col2 = st.columns(2)
+    with col1:
+        start_year = st.selectbox("Année de début", start_years, index=start_years.index(current_year),key=f"{key_prefix}_start_year")
+    with col2:
+        start_month = st.selectbox("Mois de début", start_months, index=start_months.index(current_month), key=f"{key_prefix}_start_month")#JAN!
+        
+    col3, col4 = st.columns(2)
+    with col3:
+        end_year = st.selectbox("Année de fin", end_years, index=end_years.index(current_year),key=f"{key_prefix}_end_year")
+    with col4:
+        end_month = st.selectbox("Mois de fin", end_months, index=end_months.index("aujourd'hui"), key=f"{key_prefix}_end_month")
+        
+    start_date, end_date=build_period(start_year=start_year, start_month=start_month,
+                        end_year=end_year, end_month=end_month)
+
+    # ---date field---
+    date_field = st.radio(
+        "**Chercher les résultats selon la date de :**",
+        ['soumission','modification','publication'],
+        horizontal=True, 
+        index=2,# default value!
+        key=f"{key_prefix}_date_field",
+        help="HAL cherche les articles par l'année de la publication (publicationDateY_i)."
+    )
+    
+    
+    # ---check---
+    st.markdown(f"[check] chercher les articles pendant **{start_date} ~ {end_date}** selon **{date_field}**!")
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    return start_year, start_month, end_year, end_month, date_field
 
 
-def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_month=None,
-                       doc_types=None, domains=None,keywords=None, languages=None,labs=None,
-                       collcode=None, collname=None, authors=None, text=None,
-                       fields:list=None, rows=100, max_records=5000):
+
+
+def complete_pub_date(df):
+    if "publicationDate_s" not in df.columns:
+        # st.write("[warning] 'publicationDate_s' not in df!!!")
+        return df
+    else :
+        df["publicationDate_s"] = df["publicationDate_s"].astype(str)
+
+        # 年 → 补成 01-01
+        df["publicationDate_s"] = df["publicationDate_s"].str.replace(
+            r"^\d{4}$",
+            lambda x: x.group(0) + "-01-01",
+            regex=True
+        )
+        # 年月 → 补成 -01
+        df["publicationDate_s"] = df["publicationDate_s"].str.replace(
+            r"^\d{4}-\d{2}$",
+            lambda x: x.group(0) + "-01",
+            regex=True
+        )
+    return df
+
+
+
+
+def filter_par_date(df, 
+                    start_year, start_month, 
+                    end_year, end_month, 
+                    date_field_col="submittedDate_s"):
+    # --- complete---
+    df=complete_pub_date(df)
+    df_filtered=df.copy()
+    
+    # ---satrt-end---        
+    start_date, end_date=build_period(start_year=start_year, start_month=start_month,
+                                      end_year=end_year,end_month=end_month)
+    
+    # correct for pub date
+    if date_field_col =="publicationDate_s":
+        start_date=start_date.split('T')[0]
+        end_date=end_date.split('T')[0]
+    # print(f"START :{start_date}; END: {end_date}\n")
+    
+    
+    # ---filter---
+    if start_date !="*" and start_date is not None :
+        df_filtered=df_filtered[df_filtered[date_field_col] >= start_date]
+    if end_date is not None:
+        df_filtered=df_filtered[df_filtered[date_field_col] < end_date]
+
+    return df_filtered
+
+
+
+
+
+
+
+
+
+##=====================================recherche des articles================================================
+def fetch_hal_articles(
+            # start_date=None, end_date=None,
+            start_year=None, start_month=None, end_year=None, end_month=None,date_field_col="publicationDate_tdate",
+            doc_types=None, domains=None,keywords=None, languages=None,labs=None,
+                       
+            collcode=None, collname=None, authors=None, 
+            
+            text=None,
+            fields:list=None, rows=100, max_records=5000):
     """
     grammaire basique de requête:
 
@@ -93,6 +206,12 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
 
     # consulter toutes les conditions (facettes) possibles:
     rows=0
+    
+    
+    fl:field list
+    fq:field query
+    
+    wt:writer type
     """
         
     """
@@ -103,7 +222,6 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     doc_types: list of str
     fields: list of str
     rows: int
-
 
     web HAL :
     https://hal.science/search/index/?q=*&rows=30&labStructName_s=Institut+de+Recherche+en+Gestion
@@ -202,6 +320,7 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     if languages:
         input = [f'"{t}"' for t in languages]
         fq.append(f'language_s:({" OR ".join(input)})')
+        
     if authors:
         input = [f'"{t}"' for t in authors]
         fq.append(f'authFullName_s:({" OR ".join(input)})')
@@ -229,11 +348,15 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     # else:
     #     fq.append(f'submittedDate_tdate:[* TO {end_date}]')  # * 表示不限下限
 
-    #-------------------------------------------------------------------------------
+    #-------------------------------------period------------------------------------------
+    # if start_date and end_date and date_field_col:
+    #     fq.append(f"{date_field_col}:[{start_date} TO {end_date}]")
+    
     if start_year and start_month and end_year and end_month:
         start_date, end_date=build_period(start_year, start_month,end_year, end_month)
-        fq.append(f"submittedDate_tdate:[{start_date} TO {end_date}]")
-        st.markdown(f"[INFO] **Période de recherche** selon submittedDate_tdate : \n **{start_date} ~ {end_date}**  \n")
+        fq.append(f"{date_field_col}:[{start_date} TO {end_date}]")
+        start_date_s=start_date if start_date!="*" else 'BEFORE'
+        st.write(f"[INFO] Période de recherche selon '{date_field_col}' : \n {start_date_s} ~ {end_date}  \n")
 
 
     # 8. 自由文本（全文搜索）
@@ -244,7 +367,6 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     QUERY URL : https://api.archives-ouvertes.fr/search/?q=%2A%3A%2A&
     fl=halId_s%2Curi_s%2CdocType_s%2Ctitle_s%2CsubTitle_s%2CauthFullName_s%2CauthIdHal_s%2ClabStructName_s%2Cdomain_s%2CopenAccess_bool%2Cvolume_s%2Cpage_s%2Cclassification_s%2CsubmittedDate_s%2CmodifiedDate_s%2CpublicationDate_s%2CjournalTitle_s%2CconferenceTitle_s%2CconferenceOrganizer_s%2CconferenceStartDate_s%2Ccountry_s%2Clanguage_s%2Ckeyword_s%2Cabstract_s%2Cfiles_s%2CurlFulltextEsr_s&rows=100&wt=json&start=0&sort=submittedDate_tdate+desc&
     fq=docType=submittedDate_tdate%3A%5B2026-01-01+TO+NOW%5D
-
 
     """
     #==================URL check==================
@@ -326,15 +448,13 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
         # 构建 URL 用于打印检查
         query_string = urllib.parse.urlencode(params, doseq=True)
         full_url = BASE_URL + "?" + query_string
-        # print(f'QUERY URL : {full_url} \n')
+        print(f'QUERY URL : {full_url} \n')
         
         resp = requests.get(BASE_URL, params=params, timeout=15)
         # print(resp.json())
-
         # resp = requests.get(BASE_URL, params=params, timeout=15)
         # st.info(f"[DEBUG] Response status: {resp.status_code} | start={start}")
         
-
         resp.raise_for_status()
         data = resp.json()
 
@@ -375,10 +495,13 @@ def fetch_hal_articles(start_year=None, start_month=None, end_year=None, end_mon
     # if not data.get('response', {}).get('docs'):
     df = pd.DataFrame(info)
     df=df.drop_duplicates(subset='halId_s')
-
-    if 'submittedDate_s' in df.columns:
-        df['submittedDate_s'] = pd.to_datetime(df['submittedDate_s'], errors='coerce')
-        df = df.sort_values(by='submittedDate_s', ascending=False)
+      
+    
+    # ---clean---
+    # date_fields=["submittedDate_s","modifiedDate_s", "publicationDate_s",]
+    # if 'submittedDate_s' in df.columns:
+    #     df['submittedDate_s'] = pd.to_datetime(df['submittedDate_s'], errors='coerce')
+    #     df = df.sort_values(by='submittedDate_s', ascending=False)
         
     return df
 
@@ -542,6 +665,7 @@ def fuzzy_lookup(journal_name: str, mapping: dict, cutoff: int = 90) -> str:
 
 def nearest_fnege_year(pub_year_raw):
     # FNEGE_YEARS = [2011, 2013, 2016, 2019, 2022, 2025]
+    
     FNEGE_YEARS = [2011] + list(range(2013, 3000, 3))#range(start, stop, step)
     # 处理缺失
     if pd.isna(pub_year_raw):
@@ -573,61 +697,10 @@ def fuzzy_lookup_with_name(query, mapping, cutoff=80):
 
 
 
-# def add_classement_fnege_v2(
-#     df: pd.DataFrame,
-#     fnege_df: pd.DataFrame,
-#     journal_col: str = "journalTitle_s",
-#     year_col: str = "publicationDate_s",
-#     cl_name: str = 'cl_fnege',
-#     cutoff: int = 90, 
-#     active_fuzzylookup=False
-# ) -> pd.DataFrame:
 
-#     # 构建 lookup mapping
-#     fnege_mapping = {normalize_journal(r['journal']): r.to_dict() for _, r in fnege_df.iterrows()}
-
-#     df['fnege_year'] = df[year_col].apply(nearest_fnege_year)
-#     classement_list = []
-
-#     for _, row in df.iterrows():
-#         journal_val = row.get(journal_col, "")
-#         fnege_year = row['fnege_year']
-#         rang_value = None
-
-#         if pd.notna(journal_val) and str(journal_val).strip():
-#             norm_journal = normalize_journal(journal_val)
-
-#             # 1️⃣ 精确匹配
-#             matched_row = fnege_mapping.get(norm_journal, None)
-
-#             if matched_row and fnege_year:
-#                 rang_col = f"rang_{fnege_year}"
-#                 rang_value = matched_row.get(rang_col, None)#int
-
-#             # 2️⃣ 模糊匹配（只有精确匹配失败才尝试）
-#             if not matched_row and fnege_year and active_fuzzylookup:
-#                 fuzzy_row, fuzzy_name = fuzzy_lookup_with_name(journal_val, fnege_mapping, cutoff=cutoff)
-#                 if fuzzy_row:
-#                     rang_col = f"rang_{fnege_year}"
-#                     rang_val = fuzzy_row.get(rang_col, None)# np.nan是float类型!=None
-#                     if pd.notna(rang_val):# 
-#                         rang_value = f"{rang_val}_uncertain_{fuzzy_name}"
-#                     else :#模糊搜索有名字匹配，但还是没有对应的rang
-#                         rang_value=None
-                        
-#         classement_list.append(rang_value)
-#     # 插入新列
-#     idx = df.columns.get_loc(journal_col)
-#     df.insert(loc=idx + 1, column=cl_name, value=classement_list)
-
-#     return df
-
-
-
-
-def add_classement_fnege_v3(
-    DF: pd.DataFrame,
-    FNEGE_MAP: pd.DataFrame,
+def add_classement_fnege(
+    df: pd.DataFrame,
+    fnege_map: pd.DataFrame,
     journal_col: str = "journalTitle_s",
     year_col: str = "publicationDate_s",
     fnege_col_name: str = 'cl_fnege',
@@ -636,15 +709,13 @@ def add_classement_fnege_v3(
 ) -> pd.DataFrame:
 
     # 构建 lookup mapping
-    fnege_mapping = {r['journal_hal']: r.to_dict() for _, r in FNEGE_MAP.iterrows()}
+    fnege_mapping = {r['journal_hal']: r.to_dict() for _, r in fnege_map.iterrows()}
 
     # 获取年份
-    DF["fnege_year"]= DF[year_col].apply(nearest_fnege_year)
+    df["fnege_year"]= df[year_col].apply(nearest_fnege_year)
     
     classement_list = []
-
-
-    for _, row in DF.iterrows():
+    for _, row in df.iterrows():
         journal_val = row.get(journal_col, "")
         fnege_year = row['fnege_year']
         rang_value = None #init
@@ -674,10 +745,10 @@ def add_classement_fnege_v3(
         classement_list.append(rang_value)
     
     # ADD
-    idx = DF.columns.get_loc(journal_col)
-    DF.insert(loc=idx + 1, column=fnege_col_name, value=classement_list)
+    idx = df.columns.get_loc(journal_col)
+    df.insert(loc=idx + 1, column=fnege_col_name, value=classement_list)
 
-    return DF
+    return df
 
 
 
@@ -811,53 +882,58 @@ def add_primarystructure(df, author_primarystructure_s_map):
 
 #===========================================FILTRAGE BY PUBLICATION DATE=======================================================#
 
-def filter_by_publicationdate(df_input, start_year, start_month, end_year, end_month,
-                               date_col="publicationDate_s", filter_pubdate_by="année"):
+# def filter_by_publicationdate(df_input, start_year, start_month, end_year, end_month,
+#                                date_col="publicationDate_s", filter_pubdate_by="année"):
+#     if filter_pubdate_by==None:
+#         return df_input
     
-    df=df_input.copy()# df==df_filtered
-    #确保df中的日期列+输入的起止年份为日期格式：
-    df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
-    print(f'df BEFORE filtrage:{len(df)}')
+#     df=df_input.copy()# df==df_filtered
+#     #确保df中的日期列+输入的起止年份为日期格式：
+#     df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
+#     print(f'df BEFORE filtrage selon date de publication:{len(df)}')
     
-    if filter_pubdate_by=="année et mois":
-        start_date, end_date=build_period(start_year, start_month,end_year, end_month)
+#     if filter_pubdate_by=="année et mois":
+#         start_date, end_date=build_period(start_year, start_month,end_year, end_month)
         
-        # utc=True!! 会把时间转换为 UTC 时区, 返回的是 带 tzinfo 的 datetime
-        start_date = pd.to_datetime(start_date, utc=True) if start_date else None
-        end_date = pd.to_datetime(end_date, utc=True) if end_date else None
+#         # utc=True!! 会把时间转换为 UTC 时区, 返回的是 带 tzinfo 的 datetime
+#         if start_date!="*" and start_date is not None:
+#             start_date = pd.to_datetime(start_date, utc=True) if start_date else None
+#             df = df[df[date_col] >= start_date]
 
-        # st.write(start_date, end_date, type(start_date), type(end_date))
-        if start_date is not None:
-            df = df[df[date_col] >= start_date]
-        if end_date is not None:
-            df = df[df[date_col] <= end_date]
+#         end_date = pd.to_datetime(end_date, utc=True) if end_date else None
+#         if end_date is not None:
+#             df = df[df[date_col] <= end_date]
     
-    elif filter_pubdate_by == "année":
-        # 将列转换为 datetime
-        data_col_t=date_col.replace("_s",'_t')
-        df[data_col_t] = pd.to_datetime(df[date_col], errors="coerce")
+    
+    
+#     elif filter_pubdate_by == "année":
+#         # 将列转换为 datetime
+#         data_col_t=date_col.replace("_s",'_t')# add "publicationDate_t"
+#         df[data_col_t] = pd.to_datetime(df[date_col], errors="coerce")
 
-        # 提取年份
-        df["pub_year"] = df[date_col].dt.year
-        df['pub_year']=pd.to_numeric(df['pub_year'], errors='coerce').astype('Int64')
+#         # 提取年份
+#         df["pub_year"] = df[date_col].dt.year
+#         df['pub_year']=pd.to_numeric(df['pub_year'], errors='coerce').astype('Int64')
         
-        # 根据年份筛选
-        if start_year is not None:
-            df = df[df["pub_year"] >= int(start_year)]
-        if end_year is not None:
-            df = df[df["pub_year"] <= int(end_year)]
-            
-    print(f'df AFTER filtrage:{len(df)}')
+#         # 根据年份筛选
+#         if start_year is not None and start_year!="*":# 避免不指定start_yr的情况
+#             df = df[df["pub_year"] >= int(start_year)]
+#         if end_year is not None:
+#             df = df[df["pub_year"] <= int(end_year)]
+       
+#     print(f'AFTER:{len(df)}')
 
-    return df
+#     return df
+ 
 
-
+## =================================filtrer par date =====================================
 
 
 ##集合处理：
 def process_df(df, DOMAIN_MAP, 
                FNEGE_MAP, cutoff, active_fuzzylookup,
-               start_year, start_month, end_year, end_month, filter_pubdate_by):
+            #    start_year, start_month, end_year, end_month, filter_pubdate_by
+               ):
     
     """
     todo：增加methodologie！
@@ -878,21 +954,17 @@ def process_df(df, DOMAIN_MAP,
 
 
     #--------- 处理fnege----------------
-
     if "journalTitle_s" in df.columns and "publicationDate_s" in df.columns :       
-        
         #先精确，再模糊
-        df=add_classement_fnege_v3(
-            DF=df,
-            FNEGE_MAP=FNEGE_MAP,
+        df=add_classement_fnege(
+            df=df,
+            fnege_map=FNEGE_MAP,
             journal_col = "journalTitle_s",
             year_col = "publicationDate_s",
             fnege_col_name='cl_fnege',
             cutoff= cutoff, 
             active_fuzzylookup=active_fuzzylookup
         )
-        
-        # missing_data_warning(df, col='fnege_year')
         st.write(f"✔ Classements FNEGE selon la date de publication mappés dans la colonne 'cl_fnege'!")
         missing_data_warning(df, col="journalTitle_s", show_distribution=False)
         missing_data_warning(df, col='cl_fnege', show_distribution=True)
@@ -916,34 +988,37 @@ def process_df(df, DOMAIN_MAP,
         missing_data_warning(df, col="author_primarystructure_s", show_distribution=False)#check   
     st.markdown("<br>", unsafe_allow_html=True)
 
-    #----------按照publicationDate_s筛选-----------------
-    # # keys 与radio输入保持一致！
-    df_filtered=filter_by_publicationdate(df_input=df, start_year=start_year, start_month=start_month, end_year=end_year, end_month=end_month,
-                                        filter_pubdate_by=filter_pubdate_by)
-    
-    if filter_pubdate_by=="année":
-        period_str=f"{start_year}~{end_year}" 
-        st.markdown(f"✔ Résultat filtré selon **{filter_pubdate_by}** de la data de publication : **{period_str}**")
 
-    elif filter_pubdate_by=="année et mois":
-        if end_year !="aujourd'hui" and end_month!="aujourd'hui":#有一个是ajd就会被同化          
-           period_str= f"{start_year}/{start_month}~{end_year}/{end_month}"           
-        else:
-            today=datetime.today().strftime("%Y/%m")
-            period_str= f"{start_year}/{start_month}~{today}"
+    # st.write("DF avant filtrage!")
+    # st.dataframe(df)
+
+    # #----------按照publicationDate_s筛选-----------------
+    # # # keys 与radio输入保持一致！
+    # df_filtered=filter_by_publicationdate(df_input=df, start_year=start_year, start_month=start_month, end_year=end_year, end_month=end_month,
+    #                                     filter_pubdate_by=filter_pubdate_by)
     
-        st.markdown(f"✔ Résultat filtré selon **{filter_pubdate_by}** de la data de publication : **{period_str}**")
-    # else: filter_pubdate_by==None=> no filter
-    st.markdown("<br>", unsafe_allow_html=True)
+    # if filter_pubdate_by=="année":
+    #     period_str=f"{start_year}~{end_year}" 
+    #     st.markdown(f"✔ Résultat filtré selon **{filter_pubdate_by}** de la data de publication : **{period_str}**")
+
+    # elif filter_pubdate_by=="année et mois":
+    #     if end_year !="aujourd'hui" and end_month!="aujourd'hui":#有一个是ajd就会被同化          
+    #        period_str= f"{start_year}/{start_month}~{end_year}/{end_month}"           
+    #     else:
+    #         today=datetime.today().strftime("%Y/%m")
+    #         period_str= f"{start_year}/{start_month}~{today}"
+    
+    #     st.markdown(f"✔ Résultat filtré selon **{filter_pubdate_by}** de la data de publication : **{period_str}**")
+    # # else: filter_pubdate_by==None=> no filter
+    # st.markdown("<br>", unsafe_allow_html=True)
     
     #----------references from 'label_s'-----------------
-    df_filtered.rename(columns={"label_s":"ref_hal"},inplace=True)
-
+    df.rename(columns={"label_s":"ref_hal"},inplace=True)   
+    df=generate_ref_apa(df)
     
-    return df_filtered
-
-
-
+    st.markdown(f"✔ Bibliographie disponible dans les colonnes 'ref_hal' et 'ref_apa'! Decendez pour la télécharger!")
+     
+    return df
 
 
 
@@ -1010,7 +1085,7 @@ def preview_and_download_references(df):
     # ------- 选择显示的列 -------
     if use_apa == "APA format":
         if "ref_apa" not in df.columns:
-            df = generate_ref_apa(df)
+            df = generate_ref_apa(df) # just check
         refs_list = df["ref_apa"].dropna().astype(str).tolist()
     else:
         refs_list = df["ref_hal"].dropna().astype(str).tolist()
@@ -1037,7 +1112,7 @@ def preview_and_download_references(df):
     # ------- 预览区域 -------
     # st.markdown("### 📚 Preview References")
     st.text_area("Aperçu (format TXT)", value=txt_string, height=300)
-    st.markdown(f"ps. La bibliographie est numérotée et trié par ordre alphabétique!  \n")
+    st.markdown(f"ps. La bibliographie est numérotée et triée par ordre alphabétique!  \n")
     
     # ------- 下载区域 -------
     col1, col2 = st.columns([3,1])
@@ -1058,14 +1133,10 @@ def preview_and_download_references(df):
             mime="text/plain",
             key='download_ref_txt'
         )
-        # st.download_button(
-        #     label="Télécharger RTF",
-        #     data=rtf_string.encode("utf-8"),
-        #     file_name=file_name + ".rtf",
-        #     mime="application/rtf",
-        #     key='download_ref_rtf'
-        # )
-
+        
+        
+        
+        
 
 #===========================================SAVE=======================================================#
 def get_default_filename(df,start_year, start_month, end_year, end_month):

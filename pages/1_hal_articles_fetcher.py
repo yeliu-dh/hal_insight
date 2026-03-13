@@ -21,8 +21,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 
 # my utils
-from utils.log import setup_logging 
+# from utils.log import setup_logging 
 from utils.upload import load_external_json
+from utils.HAL_search_api import build_period, get_start_end_field, filter_par_date
 from utils.HAL_search_api import fetch_hal_articles
 from utils.HAL_search_api import generate_ref_apa, preview_and_download_references
 from utils.HAL_search_api import process_df
@@ -30,9 +31,8 @@ from utils.HAL_search_api import get_default_filename, save_file_csv_xlsx
 from utils.upload import missing_data_warning
 from utils.pdf2str import extract_text_from_pdf
 
-st.set_page_config(page_title="HAL insight", page_icon="🛸",layout='wide')
-#必须是第一行命令
-setup_logging(save_log=True, log_file="../sandbox/run.log")
+st.set_page_config(page_title="HAL insight", page_icon="🛸",layout='wide')#必须是第一行命令
+# setup_logging(save_log=True, log_file="../sandbox/run.log")
  
 
 #====================CACHE=========================#
@@ -58,6 +58,10 @@ FNEGE_MAP=get_mappings_csv()
 
 
 st.title("Hal Articles Fetcher")
+# st.markdown("HAL permet de chercher des articles scientifiques par le type de document, la structure, l'année de publication...  \n"
+#             "cette application vise à compléter sa fonction, en permettant  \n"
+#             "- filtrer par l'année, le mois, la date indiqué")
+
 
 # 左右布局：左侧显示结果，右侧显示检索栏
 # left_col, right_col = st.columns([2, 1])  # 左:右 = 3:1
@@ -80,18 +84,12 @@ st.markdown("<br>", unsafe_allow_html=True)
 # 文档类型
 select_all_doctypes = st.checkbox("Sélectionner tout / Tout désélectionner les types de document")
 doc_types = st.multiselect(
-    "**Type de documents**",
+    "**Type de document**",
     options=list(DOC_TYPE_MAP.keys()),
     format_func=lambda x: DOC_TYPE_MAP[x],
     default=list(DOC_TYPE_MAP.keys()) if select_all_doctypes else ["ART","OUV","COUV","COMM"]
 )
 
-# doc_types = st.multiselect(
-#     "Type de documents",
-#     options=list(DOC_TYPE_MAP.keys()),
-#     format_func=lambda x: DOC_TYPE_MAP[x],
-#     default=["ART","OUV","COUV","COMM"]
-# )
 
 
 domains = st.multiselect(
@@ -111,51 +109,69 @@ keywords = st_tags(
 
 
 st.markdown("<br>", unsafe_allow_html=True)
-st.markdown(f"**Période (selon date du dépôt)**  \n"
-            f"- si vous ne voulez pas définir la date de début, choisisssez '*' dans l'année de début' *ou/et* 'mois de début';  \n"
-            f"- si vous ne voulez pas définir la date de fin, choisisssez 'aujourd'hui' dans 'années de fin' *ou/et* 'mois de fin'.")
-now = datetime.now()
-current_year, current_month = now.year, now.month
 
-start_years = ["*"] + list(range(current_year, 1901, -1))
-start_months= ["*"] + list(range(1, 13)) 
-end_years = ["aujourh'dui"] + list(range(current_year, 1901, -1))
-end_months = ["aujourd'hui"] + list(range(1, 13))
+start_year, start_month, end_year, end_month, date_field=get_start_end_field(key_prefix="search")
 
-col1, col2 = st.columns(2)
-with col1:
-    start_year = st.selectbox("Année de début", start_years, index=start_years.index(current_year))
-with col2:
-    start_month = st.selectbox("Mois de début", start_months, index=start_months.index(current_month))#JAN!
+date_field_tdate_map={"soumission":"submittedDate_tdate", 
+                    "modification":"modifiedDate_tdate",
+                    "publication":"publicationDate_tdate"
+                    }
+date_field_tdate=date_field_tdate_map.get(date_field,None)
+
+
+
+# st.markdown(f"**Période de recherche**  \n"
+#             f"- si vous ne voulez pas définir la date de début, choisisssez '*' dans l'année de début' *ou/et* 'mois de début';  \n"
+#             f"- si vous ne voulez pas définir la date de fin, choisisssez 'aujourd'hui' dans 'années de fin' *ou/et* 'mois de fin'.")
+
+# date_field = st.radio(
+#     "Chercher les résultats selon la date de :",
+#     ['soumission','modification','publication'],
+#     horizontal=True, 
+#     help="HAL cherche les articles par l'année de la publication (publicationDateY_i)."
+# )
+# date_field_map={"soumission":"submittedDate_tdate", 
+#                 "modification":"modifiedDate_tdate",
+#                 "publication":"publicationDate_tdate"
+#                 }
+# date_field_col=date_field_map.get(date_field,None)
+
+
+# now = datetime.now()
+# current_year, current_month = now.year, now.month
+
+# start_years = ["*"] + list(range(current_year, 1901, -1))
+# start_months= ["*"] + list(range(1, 13)) 
+# end_years = ["aujourh'dui"] + list(range(current_year, 1901, -1))
+# end_months = ["aujourd'hui"] + list(range(1, 13))
+
+# col1, col2 = st.columns(2)
+# with col1:
+#     start_year = st.selectbox("Année de début", start_years, index=start_years.index(current_year))
+# with col2:
+#     start_month = st.selectbox("Mois de début", start_months, index=start_months.index(current_month))#JAN!
     
-col3, col4 = st.columns(2)
-with col3:
-    end_year = st.selectbox("Année de fin", end_years, index=end_years.index(current_year))
-with col4:
-    end_month = st.selectbox("Mois de fin", end_months, index=end_months.index("aujourd'hui"))
+# col3, col4 = st.columns(2)
+# with col3:
+#     end_year = st.selectbox("Année de fin", end_years, index=end_years.index(current_year))
+# with col4:
+#     end_month = st.selectbox("Mois de fin", end_months, index=end_months.index("aujourd'hui"))
 
-filter_pubdate_by = st.radio(
-    "Filtrer les résultats par date de publication :",
-    ["année", "année et mois","None"],
-    horizontal=True, 
-    help="HAL filtre les dates de publication par 'année'de période."
-)
+# start_date, end_date=build_period(start_year=start_year, start_month=start_month,
+#                     end_year=end_year, end_month=end_month)
 
+# st.markdown(f"[check] chercher les articles pendant **{start_date} ~ {end_date}** selon **{date_field_col}**!")
+# st.markdown("<br>", unsafe_allow_html=True)
 
 
 
-
-# # 日期校验
-# invalid_date = False
-# if start_year and start_month:#not None
-#     if (end_year, end_month) < (start_year, start_month):
-#         st.error("⚠️ Période invalide : la fin est antérieur au début!")
-#         invalid_date = True
-
-# if start_year is None:#无开始年份，选取过往所有文章
-#     start_month=None
-# if start_year and start_month is None:#没开始月份，默认从1月开始
-#     start_month=1
+# # ---filter period---
+# filter_pubdate_by = st.radio(
+#     "Filtrer les résultats par date de publication :",
+#     ["année", "année et mois","None"],
+#     horizontal=True, 
+#     help="HAL filtre les dates de publication par 'année'de période."
+# )
 
 
 
@@ -199,6 +215,8 @@ options_fields = ['halId_s','uri_s',"docType_s", "title_s", "subTitle_s", "authF
                      "authIdHal_s","authLastNameFirstName_s","label_s"	
                      #"authIdHasPrimaryStructure_fs"                    
 ]
+
+
 # 默认输出字段
 default_fields=['halId_s','uri_s', "docType_s", "title_s", "subTitle_s", "authFullName_s","authIdHal_s","labStructName_s",
                 "domain_s","openAccess_bool",'volume_s',"page_s","classification_s",
@@ -232,6 +250,8 @@ st.divider()
 
 
 st.subheader("📒 README")
+
+
 st.markdown(
     "**Classement FNEGE => cl_fnege**  \n"
     "Pour chaque article, nous déterminons automatiquement le classement FNEGE du *journalTitle_s* correspondant à son année de *publicationDate_s*.  \n"
@@ -276,6 +296,7 @@ if search_button:# and not invalid_date
                 start_month=start_month,
                 end_year=end_year,
                 end_month=end_month,
+                date_field_col=date_field_tdate,
                 doc_types=doc_types,
                 domains=domains,
                 keywords=keywords,
@@ -293,12 +314,15 @@ if search_button:# and not invalid_date
             st.error(f"⚠️ ERROR in fetch_hal_articles: \n {e}")
             st.stop()#==break
 
+    # st.write("RAW DF")
+    # st.dataframe(df)
 
     #================处理domain, axe, fnenge, primarystructure================ 
     try :
         df =process_df(df, DOMAIN_MAP, 
                FNEGE_MAP, cutoff, active_fuzzylookup,
-               start_year, start_month, end_year, end_month, filter_pubdate_by)
+            #    start_year, start_month, end_year, end_month, filter_pubdate_by=None
+               )#***
     
         # desired_order=[]
         st.success(f"✅ {len(df)} articles trouvés!\n\n"
@@ -322,24 +346,51 @@ if df is not None and not df.empty:
     st.dataframe(df)
     st.markdown("<br>", unsafe_allow_html=True)
 
-    #----------------------quick check-----------
-    st.write(f"**🔎Aperçu rapide des données:**")
-    cols= df.columns.tolist()
-    col_en_question = st.selectbox("colonne en question", cols, index=cols.index("axe"))
-    # show_distribution= st.checkbox("Afficher la répartition des valeurs ?", value=False, key="col_distribution")#key用于储存在session state中
+    # #----------------------quick check-----------
+    # st.write(f"**🔎Aperçu rapide des données:**")
+    # cols= df.columns.tolist()
+    # col_en_question = st.selectbox("colonne en question", cols, index=cols.index("axe"))
+    # # show_distribution= st.checkbox("Afficher la répartition des valeurs ?", value=False, key="col_distribution")#key用于储存在session state中
 
     
-    show_way = st.radio(
-        "Show la distribution ou le compte des valeurs ?",
-        ["distribution", "compte"],
-        horizontal=True, 
-        # help=
-    )
-    show_distribution = show_way == "distribution"
-    show_count = show_way == "compte"
-    missing_data_warning(df, col=col_en_question, show_distribution=show_distribution, show_count=show_count)
+    # show_way = st.radio(
+    #     "Show la distribution ou le compte des valeurs ?",
+    #     ["distribution", "compte"],
+    #     horizontal=True, 
+    #     # help=
+    # )
+    # show_distribution = show_way == "distribution"
+    # show_count = show_way == "compte"
+    # missing_data_warning(df, col=col_en_question, show_distribution=show_distribution, show_count=show_count)
 
     st.divider()
+
+    
+    st.markdown("### 🕰️ filtrer le résultat selon la date")
+    start_year, start_month, end_year, end_month, date_field=get_start_end_field(key_prefix='filter')
+        
+    date_field_s_map={"soumission":"submittedDate_s", 
+                        "modification":"modifiedDate_s",
+                        "publication":"publicationDate_s"
+                        }
+    date_field_s=date_field_s_map.get(date_field,None)
+
+    df_filtered=filter_par_date(df, 
+                    start_year, start_month, 
+                    end_year, end_month, 
+                    date_field_col=date_field_s)
+    st.write(f"**Résultat : {len(df)} lignes => {len(df_filtered)} lignes**")#  {start_month}/{start_year} ~ {end_month}/{end_year} par {date_col}
+    st.dataframe(df_filtered)
+
+      
+    # -------------------update uploaded_df?-------------------
+    update_df = st.checkbox("Mettre à jour le dataset pour l'analyse suivante? ", value=False, key="nan")
+    if update_df==True:
+        st.session_state["uploaded_df"] = df_filtered
+        st.success("Continuez l'analyse avec le dataset mis à jour!")
+    st.divider()
+    
+
 
     #------------------save to local-------------------
     st.markdown("### 📥Téléchargement du résultat ###")        
