@@ -248,7 +248,7 @@ st.markdown("<br>", unsafe_allow_html=True)
 
 
 st.markdown(
-    f"**authPrimaryStructureIdName_s** : les structures primaires des auteurs de chaque article"
+    f"**authPrimaryStructureIdName_s** : les structures primaires des auteurs de chaque article  \n"
     # f"**Structure primaire de l'auteur => author_primarystructure_s**:  \n"
     f"Pour chaque article, nous identifions automatiquement l’institution principale de chaque auteur en utilisant la colonne *authFullName_s* pour retrouver les structures via *authIdHasPrimaryStructure_fs*.  \n"
     f"L'info est structurée sous forme de *Nom complet de l'auteur_Identifiant de sa structure primaire_Nom de la structure  \n"
