@@ -15,15 +15,24 @@ from utils.upload import missing_data_warning
 [* TO NOW]
 
 """
-
+##===========================================PERIODE=====================================================
 from datetime import datetime, timezone, date
 
 utc_today = datetime.now(timezone.utc).date()
 
-
-
 def build_period(start_year=None, start_month=None,
                     end_year=None, end_month=None):
+        
+        """
+        根据输入生成合法的起止时间
+        如果开始年月任一为*，则不指定开始时间，
+        如果结束年任一以为“aujourd'hui”，自动替换成当下年月
+        
+        检查结束年月不早于开始年月
+        
+        输出start_date, end_date(带时间戳)
+        """
+        
 
         # --- 强化逻辑：如果 start_year 或 start_month 任一s为 "*"，则都视为无限制 ---
         if start_year == "" or start_month == "*":
@@ -65,16 +74,17 @@ def build_period(start_year=None, start_month=None,
             today = datetime.utcnow()
             end_date = today.strftime("%Y-%m-%dT23:59:59Z")
             
-        # print(f'start-end:{start_date}-{end_date}')
-        
-        # --- 添加 fq 参数（提交日期区间） ---
-
         return start_date, end_date
 
 
 def get_start_end_field(key_prefix):
-    # title_divider='Période'.center(120, '-')
-    st.markdown(f"**Période**.  \n")
+
+    """
+    streamlit 输入模块：获得起、止，年、月，和筛选的日期列
+    
+    """
+
+    st.markdown(f"**📆 Période**.  \n")
     
     # ---start~end---
     st.markdown(f"- si vous ne voulez pas définir la date de début, choisisssez '*' dans l'année de début' *ou/et* 'mois de début';  \n"
@@ -111,11 +121,10 @@ def get_start_end_field(key_prefix):
         key=f"{key_prefix}_date_field",
         help="HAL cherche les articles par l'année de la publication (publicationDateY_i)."
     )
-    
-    
+        
     # ---check---
-    st.markdown(f"[check] chercher les articles pendant **{start_date} ~ {end_date}** selon **{date_field}**!")
-    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown(f"[check] chercher les articles pendant **{start_date} ~ {end_date}** par la date de **{date_field}**!")
+    # st.markdown("<br>", unsafe_allow_html=True)
 
     return start_year, start_month, end_year, end_month, date_field
 
@@ -123,6 +132,10 @@ def get_start_end_field(key_prefix):
 
 
 def complete_pub_date(df):
+    """
+    补全publicationDate_s为YYYY/MM/DD 格式
+    
+    """
     if "publicationDate_s" not in df.columns:
         # st.write("[warning] 'publicationDate_s' not in df!!!")
         return df
@@ -141,15 +154,23 @@ def complete_pub_date(df):
             lambda x: x.group(0) + "-01",
             regex=True
         )
+        # ## 统一变成时间戳格式
+        # df["publicationDate_s"]=pd.to_datetime(df["publicationDate_s"], errors="coerce")
+        
     return df
-
-
 
 
 def filter_par_date(df, 
                     start_year, start_month, 
                     end_year, end_month, 
                     date_field_col="submittedDate_s"):
+    """
+    输入：起、止，年、月，筛选列
+    生成带时间戳的start_date, end_date
+    如果按照pub date筛选，则先清洗格式为YY/MM/DD
+    
+    """
+    
     # --- complete---
     df=complete_pub_date(df)
     df_filtered=df.copy()
@@ -1074,7 +1095,7 @@ def preview_and_download_references(df):
         st.warning("Colonne 'ref_hal' introuvable")
         return
     
-    st.markdown("### 📚Téléchargement de la bibliographie ###") 
+    st.markdown("### 📚Bibliographie ###") 
 
     # ------- 用户选择 APA 格式 -------
     use_apa = st.selectbox(
@@ -1115,19 +1136,19 @@ def preview_and_download_references(df):
     st.markdown(f"ps. La bibliographie est numérotée et triée par ordre alphabétique!  \n")
     
     # ------- 下载区域 -------
-    col1, col2 = st.columns([3,1])
+    col1, col2, col3 = st.columns([3,1,1])
 
     with col1:
         file_name = st.text_input(
-            "Nom du fichier :",
-            value="references",
+            f"📥 Télécharger la bibliographie :",
+            value=f"references_{use_apa.split()[0]}",
             key="ref"# ref_filename
         )
 
-    with col2:
+    with col3:
         st.markdown("<br>", unsafe_allow_html=True)
         st.download_button(
-            label="Télécharger TXT",
+            label="as TXT",
             data=txt_string.encode("utf-8-sig"),
             file_name=file_name + ".txt",
             mime="text/plain",
@@ -1136,183 +1157,3 @@ def preview_and_download_references(df):
         
         
         
-        
-
-#===========================================SAVE=======================================================#
-def get_default_filename(df,start_year, start_month, end_year, end_month):
-    import io
-    from datetime import datetime   
-    if end_year=="aujourd'hui" or end_month=="aujourd'hui":
-        now = datetime.now()
-        current_year, current_month = now.year, now.month
-        end_year, end_month=current_year, current_month
-
-    today_str = datetime.now().strftime("%Y%m%d")
-    default_filename=f"{today_str}-ProductionScientifiqueIRG-{start_year}{start_month}-{end_year}{end_month}_{len(df)}art"
-   
-    return default_filename
-
-
-def save_file_csv_xlsx(df,default_filename, key_filename):
-    import io
-    from datetime import datetime   
-
-    if df is not None and not df.empty:
-    #  ----------------SAVE TO LOCAL----------------- 
-        # cols=st.columns(3)
-        cols = st.columns([2, 1, 1])
-
-        #---------------file name------------------- 
-        with cols[0]:
-            
-            # 用户输入框
-            #\n format par défaut: today--ProductionScientifiqueIRG-start_date-end_date-nb_articles:
-            file_name = st.text_input(
-                f"Nom du fichier :",  # 提示文字
-                value=default_filename,            # 默认值
-                key=key_filename
-            )
-
-        #---------------as CSV------------------- 
-        with cols[1]:
-            st.markdown("<br>", unsafe_allow_html=True)
-            csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
-            st.download_button(
-                label="Télécharger CSV",
-                data=csv_data,
-                file_name = file_name+".csv",
-                mime="text/csv",
-                key=f"download_{key_filename}_csv"   
-
-                
-                
-            )
-            
-        #---------------as XLSX------------------- 
-        with cols[2]:
-            st.markdown("<br>", unsafe_allow_html=True)
-
-            # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
-            xlsx_buffer = io.BytesIO()
-            with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
-                df.to_excel(writer, index=False, sheet_name="Articles")
-            xlsx_data = xlsx_buffer.getvalue()
-
-            st.download_button(
-                label="Télécharger XLSX",
-                data=xlsx_data,
-                file_name=file_name+".xlsx",
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                key=f"download_{key_filename}_xlsx"  
-            )
-
-            # 这是 XLSX 文件的 MIME 类型，告诉浏览器这是一个 Excel 文件，否则st button可能无法识别文件类型 
-    else : 
-        st.warning(f"df.empty!")
-    return
-
-
-
-
-# def save_file_csv_xlsx(df,start_year, start_month, end_year, end_month):
-#     import io
-#     from datetime import datetime   
-#     if end_year=="aujourd'hui" or end_month=="aujourd'hui":
-#         now = datetime.now()
-#         current_year, current_month = now.year, now.month
-#         end_year, end_month=current_year, current_month
-
-#     # df = st.session_state.get(session_key, None)
-
-#     if df is not None and not df.empty:
-#     #  ----------------SAVE TO LOCAL----------------- 
-#         cols=st.columns(3)
-#         #---------------file name------------------- 
-#         with cols[0]:
-#             today_str = datetime.now().strftime("%Y%m%d")
-#             default_filename=f"{today_str}-ProductionScientifiqueIRG-{start_year}{start_month}-{end_year}{end_month}_{len(df)}art"
-
-#             # 用户输入框
-#             #\n format par défaut: today--ProductionScientifiqueIRG-start_date-end_date-nb_articles:
-#             file_name = st.text_input(
-#                 f"Nom du fichier :",  # 提示文字
-#                 value=default_filename,            # 默认值
-#             )
-
-#         #---------------as CSV------------------- 
-#         with cols[1]:
-#             csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
-#             st.download_button(
-#                 label="Télécharger CSV",
-#                 data=csv_data,
-#                 file_name = file_name+".csv",
-#                 mime="text/csv"
-#             )
-            
-#         #---------------as XLSX------------------- 
-#         with cols[2]:
-#             # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
-#             xlsx_buffer = io.BytesIO()
-#             with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
-#                 df.to_excel(writer, index=False, sheet_name="Articles")
-#             xlsx_data = xlsx_buffer.getvalue()
-
-#             st.download_button(
-#                 label="Télécharger XLSX",
-#                 data=xlsx_data,
-#                 file_name=file_name+".xlsx",
-#                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-#             )
-
-#             # 这是 XLSX 文件的 MIME 类型，告诉浏览器这是一个 Excel 文件，否则st button可能无法识别文件类型 
-#     else : 
-#         st.warning(f"df.empty!")
-#     return
-
-
-
-
-def save_file_csv_xlsx_by_filename(df, filename):
-    import io
-    from datetime import datetime   
-    import streamlit as st
-    
-    if df is not None and not df.empty:
-    #  ----------------SAVE TO LOCAL----------------- 
-        cols=st.columns(4)
-        #---------------file name------------------- 
-        with cols[0]:
-            file_name = st.text_input(
-                f"Nom du fichier :",  # 提示文字
-                value=filename,            # 默认值
-            )
-        #---------------as CSV------------------- 
-        with cols[2]:
-            csv_data = df.to_csv(index=False, encoding="utf-8-sig").encode("utf-8-sig")
-            st.download_button(
-                label="Télécharger CSV",
-                data=csv_data,
-                file_name = file_name+".csv",
-                mime="text/csv"
-            )
-
-        #---------------as XLSX------------------- 
-        with cols[3]:
-            # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
-            xlsx_buffer = io.BytesIO()
-            with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
-                df.to_excel(writer, index=False, sheet_name="Articles")
-            xlsx_data = xlsx_buffer.getvalue()
-
-            st.download_button(
-                label="Télécharger XLSX",
-                data=xlsx_data,
-                file_name=file_name+".xlsx",
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            )
-
-            # 这是 XLSX 文件的 MIME 类型，告诉浏览器这是一个 Excel 文件，否则st button可能无法识别文件类型 
-    else : 
-        st.warning(f"df.empty!")
-    return
-

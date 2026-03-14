@@ -24,10 +24,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 # from utils.log import setup_logging 
 from utils.upload import load_external_json
 from utils.HAL_search_api import build_period, get_start_end_field, filter_par_date
-from utils.HAL_search_api import fetch_hal_articles
+from utils.HAL_search_api import fetch_hal_articles, process_df
 from utils.HAL_search_api import generate_ref_apa, preview_and_download_references
-from utils.HAL_search_api import process_df
-from utils.HAL_search_api import get_default_filename, save_file_csv_xlsx
+from utils.download import save_file_csv_xlsx
 from utils.upload import missing_data_warning
 from utils.pdf2str import extract_text_from_pdf
 
@@ -345,7 +344,11 @@ if df is not None and not df.empty:
     #----------------------show----------------------
     st.dataframe(df)
     st.markdown("<br>", unsafe_allow_html=True)
-
+    #----------------------save-----------------------
+    save_file_csv_xlsx(df=df,start_year=start_year, start_month=start_month, end_year=end_year, 
+                       end_month=end_month, key_filename="result")
+    
+    
     # #----------------------quick check-----------
     # st.write(f"**🔎Aperçu rapide des données:**")
     # cols= df.columns.tolist()
@@ -366,7 +369,7 @@ if df is not None and not df.empty:
     st.divider()
 
     
-    st.markdown("### 🕰️ filtrer le résultat par la date")
+    st.markdown("### Filtrer le résultat par la date")
     start_year, start_month, end_year, end_month, date_field=get_start_end_field(key_prefix='filter')
         
     date_field_s_map={"soumission":"submittedDate_s", 
@@ -379,10 +382,15 @@ if df is not None and not df.empty:
                     start_year, start_month, 
                     end_year, end_month, 
                     date_field_col=date_field_s)
-    st.write(f"**Résultat : {len(df)} lignes => {len(df_filtered)} lignes**")#  {start_month}/{start_year} ~ {end_month}/{end_year} par {date_col}
+    st.info(f"**Résultat filtré : {len(df)} lignes => {len(df_filtered)} lignes**")#  {start_month}/{start_year} ~ {end_month}/{end_year} par {date_col}
     st.dataframe(df_filtered)
+    st.markdown("<br>", unsafe_allow_html=True)
 
-      
+
+    #--------------------save filtered df?----------------------
+    save_file_csv_xlsx(df=df,start_year=None, start_month=None, 
+                       end_year=None, end_month=None, key_filename="filtered_result")
+    
     # -------------------update uploaded_df?-------------------
     update_df = st.checkbox("Mettre à jour le dataset pour l'analyse suivante? ", value=False, key="nan")
     if update_df==True:
@@ -392,15 +400,15 @@ if df is not None and not df.empty:
     
 
 
-    #------------------save to local-------------------
-    st.markdown("### 📥Téléchargement du résultat ###")        
-    try :
-        default_filename=get_default_filename(df,start_year, start_month, end_year, end_month)
-        save_file_csv_xlsx(df,default_filename, key_filename="df")
+    # #------------------save to local-------------------
+    # st.markdown("### 📥 Téléchargement du résultat ###")        
+    # try :
+    #     default_filename=get_default_filename(df,start_year, start_month, end_year, end_month)
+    #     save_file_csv_xlsx(df,default_filename, key_filename="df")
         
-    except Exception as e:
-        st.warning (f"ERROR in save_file_csv_xlsx :\n {e}")   
-    st.divider()   
+    # except Exception as e:
+    #     st.warning (f"ERROR in save_file_csv_xlsx :\n {e}")   
+    # st.divider()   
 
     #-----------------save ref--------------------------
     preview_and_download_references(df)

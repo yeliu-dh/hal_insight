@@ -4,8 +4,9 @@ import sys
 import os
 import json
 from pathlib import Path
+import io
+from datetime import datetime   
 
-#my utils :
 
 # from utils.preprocess import explode_by_col# preprocess用到了这里的load_exetrnal_json, 无法互相循环导入包
 
@@ -13,7 +14,6 @@ def read_json(json_path):
     with open(json_path, "r", encoding="utf-8") as f:
         return json.load(f)
     
- 
 
 def save_as_json(data, path):
     with open (path, "w", encoding='utf-8') as f:
@@ -33,53 +33,6 @@ def load_external_json(file_path):
         return json.load(f)
 
 
-
-
-def explode_by_col(df, col="Axe"):
-    """"
-    空值填nan，
-    多值按照，/；分割成list
-    =>在某一col上explode；
-    检查notna
-    """
-    df = df.copy()
-    df[col] = df[col].fillna('nan').astype(str).str.split("[,;]") # axe中有nan所以type:objet，先变成str
-    df = df.explode(col)
-    df[col] = df[col].str.strip()
-    return df[df[col].notna() & (df[col] != "")]
-
-def missing_data_warning(df, col=None, map:dict=None, show_distribution=False, show_count=False):
-    if col not in df.columns:
-        st.warning (f"⚠ {col} n'est pas trouvé dans la base de données !")
-    else:        
-        if map:
-            col_readable= map.get(col,col)
-        else :
-            col_readable=col
-        
-        # 是否有缺失：
-        nb_manquant=df[col].isna().sum()
-        if nb_manquant==0:
-            str_manquant=f"**{col_readable}** sont disponibles dans toutes les {len(df)} lignes.\n\n"
-        else :
-            str_manquant=f"**{col_readable}** sont manquants dans {df[col].isna().sum()} ({df[col].isna().sum()*100/len(df):.2f}%) / {len(df)} articles! \n\n"
-        st.markdown(f"[INFO] {str_manquant}")
-
-        # 是否显示分布
-        if show_distribution:
-            df=explode_by_col(df, col=col)
-            dist = df[col].value_counts(normalize=True, dropna=False)* 100
-            dist_str = " ; ".join([f"{k} : {v:.1f}%" for k, v in dist.items()])
-            st.write(f"{dist_str}")
-        
-        if show_count:
-            df=explode_by_col(df, col=col)
-            dist = df[col].value_counts(dropna=False)
-            dist_str = " ; ".join([f"{k} : {v:.0f}" for k, v in dist.items()])
-            st.write(f"{dist_str}")
-      
-
-    return
 
 
 
@@ -131,6 +84,56 @@ def data_uploader(key="uploaded_df"):
         st.dataframe(st.session_state[key])
     else:
         st.info("Aucun fichier importé. Veuillez chercher des articles ou charger un CSV.")
+
+
+
+
+## ===================================date helpers====================================
+def explode_by_col(df, col="Axe"):
+    """"
+    空值填nan，
+    多值按照，/；分割成list
+    =>在某一col上explode；
+    检查notna
+    """
+    df = df.copy()
+    df[col] = df[col].fillna('nan').astype(str).str.split("[,;]") # axe中有nan所以type:objet，先变成str
+    df = df.explode(col)
+    df[col] = df[col].str.strip()
+    return df[df[col].notna() & (df[col] != "")]
+
+
+def missing_data_warning(df, col=None, map:dict=None, show_distribution=False, show_count=False):
+    if col not in df.columns:
+        st.warning (f"⚠ {col} n'est pas trouvé dans la base de données !")
+    else:        
+        if map:
+            col_readable= map.get(col,col)
+        else :
+            col_readable=col
+        
+        # 是否有缺失：
+        nb_manquant=df[col].isna().sum()
+        if nb_manquant==0:
+            str_manquant=f"**{col_readable}** sont disponibles dans toutes les {len(df)} lignes.\n\n"
+        else :
+            str_manquant=f"**{col_readable}** sont manquants dans {df[col].isna().sum()} ({df[col].isna().sum()*100/len(df):.2f}%) / {len(df)} articles! \n\n"
+        st.markdown(f"[INFO] {str_manquant}")
+
+        # 是否显示分布
+        if show_distribution:
+            df=explode_by_col(df, col=col)
+            dist = df[col].value_counts(normalize=True, dropna=False)* 100
+            dist_str = " ; ".join([f"{k} : {v:.1f}%" for k, v in dist.items()])
+            st.write(f"{dist_str}")
+        
+        if show_count:
+            df=explode_by_col(df, col=col)
+            dist = df[col].value_counts(dropna=False)
+            dist_str = " ; ".join([f"{k} : {v:.0f}" for k, v in dist.items()])
+            st.write(f"{dist_str}")
+
+    return
 
 
 def df_to_markdown(df):
