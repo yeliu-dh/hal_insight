@@ -680,11 +680,10 @@ def search_authIdHasPrimaryStructure_fs_by_authFullName_s(list_fullnames):
         facet_query=('facet.field', f)
         params.append(facet_query)
         
-        
     # check url：
     query_string = urllib.parse.urlencode(params, doseq=True)
     full_url = BASE_URL + "?" + query_string
-    print(f'[authFullName_s] QUERY URL : {full_url} \n')
+    # print(f'[authFullName_s] QUERY URL : {full_url} \n')
 
     # parse
     resp = requests.get(BASE_URL, params=params, timeout=15)
@@ -751,7 +750,7 @@ def update_map_auth_struct(map_auth_struct, list_new_fullnames,
     # save
     with open(path_map_auth_struct, 'w', encoding='utf-8')as f:
         json.dump(map_auth_struct, f, indent=2, ensure_ascii=False)
-        print(f'map_auth_struct updated and saved in {path_map_auth_struct}!')
+        st.write(f'map_auth_struct updated and saved in {path_map_auth_struct}!')
 
     # stat
     print(f"old map_auth_struct: {len(map_auth_struct)}; new:{len(new_map_auth_struct)}")
@@ -775,8 +774,7 @@ def map_auth_struct_per_row(authFullName_s, map_auth_struct):
                 list_authPrimaryStructureIdName.append(f"{name}_{dict_info.get('labStructId_i','xxx')}_{dict_info.get('labStructName_s','xxx')}")
 
     authPrimaryStructureIdName_s="; ".join(list_authPrimaryStructureIdName)
-    print(authPrimaryStructureIdName_s)
-    print()
+    # print(authPrimaryStructureIdName_s)
     
     return authPrimaryStructureIdName_s
 
@@ -808,14 +806,16 @@ def add_authPrimaryStructureIdName_s(df_input, map_auth_struct):
 
 def check_irgStructureID(df, list_structureid=["1004418","57129"]):
     values=df['authPrimaryStructureIdName_s'].apply(lambda x : any(id_ in x for id_ in list_structureid))
+   
     
-    if "authPrimaryStructure_IRG_bool" in df.columns:
-        df["authPrimaryStructure_IRG_bool"]=values
+    if "authPrimaryStructure_hasIRG_bool" in df.columns:
+        df["authPrimaryStructure_hasIRG_bool"]=values
     else :
         idx_authprimarystructure=df.columns.get_loc("authPrimaryStructureIdName_s")
-        df.insert(loc=idx_authprimarystructure+1, column="authPrimaryStructure_IRG_bool", value=values)
+        df.insert(loc=idx_authprimarystructure+1, column="authPrimaryStructure_hasIRG_bool", value=values)
 
     return df
+
 
 
 

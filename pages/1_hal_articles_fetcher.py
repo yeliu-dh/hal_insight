@@ -231,7 +231,7 @@ st.subheader("📒 README")
 
 
 st.markdown(
-    "**Classement FNEGE => cl_fnege**  \n"
+    "**cl_fnege** : Classement FNEGE du journal de l'année de la publication  \n"
     "Pour chaque article, nous déterminons automatiquement le classement FNEGE du *journalTitle_s* correspondant à son année de *publicationDate_s*.  \n"
     "Le nom de la revue est comparé aux listes FNEGE pour trouver le classement :  \n"
     "- la recherche flou désactivée (par défault):  \n"
@@ -248,10 +248,13 @@ st.markdown("<br>", unsafe_allow_html=True)
 
 
 st.markdown(
-    f"**Structure primaire de l'auteur => author_primarystructure_s**:  \n"
+    f"**authPrimaryStructureIdName_s** : les structures primaires des auteurs de chaque article"
+    # f"**Structure primaire de l'auteur => author_primarystructure_s**:  \n"
     f"Pour chaque article, nous identifions automatiquement l’institution principale de chaque auteur en utilisant la colonne *authFullName_s* pour retrouver les structures via *authIdHasPrimaryStructure_fs*.  \n"
-    f"Les IDs *1004418* et *57129* correspondent à l’IRG.  \n"
-    "👉 Consulter [la structure primarire des auteurs](https://github.com/yeliu-dh/hal_insight/blob/main/external_data/author_primarystructure_s_map.json)"
+    f"L'info est structurée sous forme de *Nom complet de l'auteur_Identifiant de sa structure primaire_Nom de la structure  \n"
+    f"par example, Anne-Claire Chêne_57129_Institut de Recherche en Gestion  \n\n"
+    f"**authPrimaryStructure_hasIRG_bool**: si les identifiants *1004418* ou/et *57129* apparaît dans les structures primaires, cette colonne prend une valeur *True*  \n"    
+    "👉 Consulter [Dictionnaire des structures primarires des auteurs](https://github.com/yeliu-dh/hal_insight/blob/main/external_data/auth_struct_map.json)"
     # f"Les différentes institutions d’un même article sont concaténées avec un point-virgule ';'."
 )
 
