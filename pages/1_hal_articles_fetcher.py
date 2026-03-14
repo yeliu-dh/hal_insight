@@ -250,10 +250,10 @@ st.markdown("<br>", unsafe_allow_html=True)
 st.markdown(
     f"**authPrimaryStructureIdName_s** : les structures primaires des auteurs de chaque article  \n"
     # f"**Structure primaire de l'auteur => author_primarystructure_s**:  \n"
-    f"Pour chaque article, nous identifions automatiquement l’institution principale de chaque auteur en utilisant la colonne *authFullName_s* pour retrouver les structures via *authIdHasPrimaryStructure_fs*.  \n"
-    f"L'info est structurée sous forme de *Nom complet de l'auteur_Identifiant de sa structure primaire_Nom de la structure  \n"
-    f"par example, Anne-Claire Chêne_57129_Institut de Recherche en Gestion  \n\n"
-    f"**authPrimaryStructure_hasIRG_bool**: si les identifiants *1004418* ou/et *57129* apparaît dans les structures primaires, cette colonne prend une valeur *True*  \n"    
+    f"- Pour chaque article, nous identifions automatiquement l’institution principale de chaque auteur en utilisant la colonne *authFullName_s* pour retrouver les structures via *authIdHasPrimaryStructure_fs*.  \n"
+    f"- L'info est structurée sous forme de *Nom complet de l'auteur_Identifiant de sa structure primaire_Nom de la structure  \n"
+    f"- Par example, Anne-Claire Chêne_57129_Institut de Recherche en Gestion  \n\n"
+    f"**authPrimaryStructure_hasIRG_bool**: si les identifiants *1004418* ou/et *57129* apparaît dans les structures primaires, cette colonne prend une valeur *True*  \n\n"    
     "👉 Consulter [Dictionnaire des structures primarires des auteurs](https://github.com/yeliu-dh/hal_insight/blob/main/external_data/auth_struct_map.json)"
     # f"Les différentes institutions d’un même article sont concaténées avec un point-virgule ';'."
 )
