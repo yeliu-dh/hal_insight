@@ -41,13 +41,15 @@ def get_mappings_json(mapping_folder='external_data'):
         "DOMAIN_MAP": load_external_json(f"{mapping_folder}/domain_map.json"),
         "LANG_MAP": load_external_json(f"{mapping_folder}/lang_map.json"),
         "DOC_TYPE_MAP": load_external_json(f"{mapping_folder}/doctype_map.json"),
+        "AUTH_STRUCT_MAP":load_external_json(f"{mapping_folder}/auth_struct_map.json")
     }
-    
     
 maps = get_mappings_json()
 DOMAIN_MAP = maps["DOMAIN_MAP"]
 LANG_MAP = maps["LANG_MAP"]
 DOC_TYPE_MAP = maps["DOC_TYPE_MAP"]
+AUTH_STRUCT_MAP=maps['AUTH_STRUCT_MAP']
+# st.write(AUTH_STRUCT_MAP)
 
 ## fnege 
 def get_mappings_csv(mapping_folder='external_data'):
@@ -89,7 +91,33 @@ doc_types = st.multiselect(
     default=list(DOC_TYPE_MAP.keys()) if select_all_doctypes else ["ART","OUV","COUV","COMM"]
 )
 
+auth_names = st_tags(
+label="**Auteurs**",
+text="Tapez et 'Entrée' (chercher un texte dans tous les champs...)",
+value=None,
+suggestions=[],
+maxtags=10,
+key="auth_names"
+)
 
+# input names TO authFullName_s
+if auth_names:
+    from fuzzywuzzy import process
+    def fuzzy_lookup(query, choices, cutoff=80):
+        if query in choices:
+            return query
+        else :
+            best_match, score = process.extractOne(query, choices)
+            if score >= cutoff:
+                return best_match
+            return None
+    choices=list(AUTH_STRUCT_MAP.keys())
+    # st.write(f"len choices:{len(choices)}")
+    auth_names_valid=[fuzzy_lookup(query=name, choices=choices, cutoff=80) for name in auth_names]
+    # st.write(f"[check] authFullName_s: {auth_names_valid}")
+else :
+    auth_names_valid=None
+    
 
 domains = st.multiselect(
     "**Domaine**",
@@ -107,8 +135,10 @@ keywords = st_tags(
 )
 
 
-st.markdown("<br>", unsafe_allow_html=True)
 
+
+st.markdown("<br>", unsafe_allow_html=True)
+#===========================PEIODE DE REQUETE===================================
 start_year, start_month, end_year, end_month, date_field=get_start_end_field(key_prefix="search")
 
 date_field_tdate_map={"soumission":"submittedDate_tdate", 
@@ -116,62 +146,6 @@ date_field_tdate_map={"soumission":"submittedDate_tdate",
                     "publication":"publicationDate_tdate"
                     }
 date_field_tdate=date_field_tdate_map.get(date_field,None)
-
-
-
-# st.markdown(f"**Période de recherche**  \n"
-#             f"- si vous ne voulez pas définir la date de début, choisisssez '*' dans l'année de début' *ou/et* 'mois de début';  \n"
-#             f"- si vous ne voulez pas définir la date de fin, choisisssez 'aujourd'hui' dans 'années de fin' *ou/et* 'mois de fin'.")
-
-# date_field = st.radio(
-#     "Chercher les résultats selon la date de :",
-#     ['soumission','modification','publication'],
-#     horizontal=True, 
-#     help="HAL cherche les articles par l'année de la publication (publicationDateY_i)."
-# )
-# date_field_map={"soumission":"submittedDate_tdate", 
-#                 "modification":"modifiedDate_tdate",
-#                 "publication":"publicationDate_tdate"
-#                 }
-# date_field_col=date_field_map.get(date_field,None)
-
-
-# now = datetime.now()
-# current_year, current_month = now.year, now.month
-
-# start_years = ["*"] + list(range(current_year, 1901, -1))
-# start_months= ["*"] + list(range(1, 13)) 
-# end_years = ["aujourh'dui"] + list(range(current_year, 1901, -1))
-# end_months = ["aujourd'hui"] + list(range(1, 13))
-
-# col1, col2 = st.columns(2)
-# with col1:
-#     start_year = st.selectbox("Année de début", start_years, index=start_years.index(current_year))
-# with col2:
-#     start_month = st.selectbox("Mois de début", start_months, index=start_months.index(current_month))#JAN!
-    
-# col3, col4 = st.columns(2)
-# with col3:
-#     end_year = st.selectbox("Année de fin", end_years, index=end_years.index(current_year))
-# with col4:
-#     end_month = st.selectbox("Mois de fin", end_months, index=end_months.index("aujourd'hui"))
-
-# start_date, end_date=build_period(start_year=start_year, start_month=start_month,
-#                     end_year=end_year, end_month=end_month)
-
-# st.markdown(f"[check] chercher les articles pendant **{start_date} ~ {end_date}** selon **{date_field_col}**!")
-# st.markdown("<br>", unsafe_allow_html=True)
-
-
-
-# # ---filter period---
-# filter_pubdate_by = st.radio(
-#     "Filtrer les résultats par date de publication :",
-#     ["année", "année et mois","None"],
-#     horizontal=True, 
-#     help="HAL filtre les dates de publication par 'année'de période."
-# )
-
 
 
 st.markdown("<br>", unsafe_allow_html=True)
@@ -297,11 +271,13 @@ if search_button:# and not invalid_date
                 end_month=end_month,
                 date_field_col=date_field_tdate,
                 doc_types=doc_types,
+                auth_names_valid=auth_names_valid,
                 domains=domains,
                 keywords=keywords,
                 languages=languages,
                 labs=labs,
                 text=text,
+            
                 fields=fields,
                 rows=100,
                 max_records=max_records

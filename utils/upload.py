@@ -26,10 +26,12 @@ def save_as_json(data, path):
 def load_external_json(file_path):
     BASE_DIR = Path(__file__).parent.parent # 当前文件的上上级文件路径
     file_path = BASE_DIR / file_path
-    # st.write(file_path)
     if not file_path.exists():
+        # st.write('file_path: ',file_path)
         raise FileNotFoundError("utils.upload : load_external_json : NO FILE FOUND!")
+
     with open(file_path, "r", encoding="utf-8") as f:
+        # st.write(f"{file_path} opened successufully!")
         return json.load(f)
 
 

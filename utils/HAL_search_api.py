@@ -198,15 +198,14 @@ def filter_par_date(df,
 
 
 
-
-
-
-
 ##=====================================recherche des articles================================================
 def fetch_hal_articles(
             # start_date=None, end_date=None,
-            start_year=None, start_month=None, end_year=None, end_month=None,date_field_col="publicationDate_tdate",
-            doc_types=None, domains=None,keywords=None, languages=None,labs=None,
+            start_year=None, start_month=None, end_year=None, end_month=None, 
+            date_field_col="publicationDate_tdate", # 默认值
+            doc_types=None, auth_names_valid=None,
+            
+            domains=None,keywords=None, languages=None, labs=None, 
                        
             collcode=None, collname=None, authors=None, 
             
@@ -226,13 +225,14 @@ def fetch_hal_articles(
     | == OR
 
     # consulter toutes les conditions (facettes) possibles:
-    rows=0
-    
+    rows=0    
     
     fl:field list
     fq:field query
     
     wt:writer type
+    
+    
     """
         
     """
@@ -254,8 +254,6 @@ def fetch_hal_articles(
     https://api.archives-ouvertes.fr/search/?q=*:*&wt=xml&fq=submittedDate_tdate:[2025-11-01T00:00:00Z-1YEARS/DAY%20TO%20NOW/DAY]&fl=label_s,submittedDate_tdate,submitType_s&sort=submittedDate_tdate%20asc
     
     """
-
-
     import requests
     import pandas as pd
     import calendar
@@ -266,50 +264,16 @@ def fetch_hal_articles(
     
     # 默认输出列：
     if fields is None:
-        fields = ['halId_s', "title_s", "authFullName_s", "publicationDate_s",
-                  "labStructName_s", "keyword_s", "abstract_s", "urlFulltextEsr_s"]
+        fields=[
+            'halId_s','uri_s', "docType_s", "title_s", "subTitle_s", "authFullName_s","authIdHal_s","labStructName_s",
+            "domain_s","openAccess_bool",'volume_s',"page_s","classification_s",
+            "submittedDate_s","modifiedDate_s", "publicationDate_s","journalTitle_s","conferenceTitle_s","conferenceOrganizer_s","conferenceStartDate_s",
+            "country_s", "language_s",
+            "keyword_s", "abstract_s","files_s","urlFulltextEsr_s","label_s"
+        ]
+        # fields = ['halId_s', "title_s", "authFullName_s", "publicationDate_s",
+        #           "labStructName_s", "keyword_s", "abstract_s", "urlFulltextEsr_s"]
     
-
-    # # 构建过滤条件[无法继续使用]
-    # fq = []
-    # if doc_types:
-    #     fq.append("(" + " OR ".join([f'docType_s:"{t}"' for t in doc_types]) + ")") 
-    #     #formule：(docType_s:"ART" OR docType_s:"COMM")
-    # if domains:
-    #     fq.append("(" + " OR ".join([f'domain_s:"{t}"' for t in domains]) + ")") 
-
-    # if keywords:
-    #     fq.append("(" + " OR ".join([f'keyword_s:"{t}"' for t in keywords]) + ")") 
-
-    # if languages:
-    #     fq.append("(" + " OR ".join([f'language_s:"{t}"' for t in languages]) + ")") 
-
-    # if labs:
-    #     fq.append("(" + " OR ".join([f'labStructName_s:"{lab}"' for lab in labs]) + ")")
-
-    # 日期1:
-    # #HAL（以及 Solr/Elasticsearch）检索时，如果字段是字符串 (_s 后缀通常是 string 类型)，直接用 [start TO end] 比较的是字典序，而不是时间
-
-    # # if start_year is not None and start_month is not None:
-    # #     start_date = f"{start_year}-{start_month:02d}"
-
-    # #     # start_date = f"{start_year}-{start_month:02d}-01 00:00:00"
-    # #     # start_date = f"{start_year}-{start_month:02d}-01T00:00:00Z"
-    # #     # 你生成的是 ISO 8601 带 T 和 Z，而你存储的 modifiedDate_s 是空格分隔且没有 Z
-    # # else:
-    # #     start_date = None
-    
-    # # # end_day = calendar.monthrange(end_year, end_month)[1]#按月份决定最后一天是29/30/31
-    # # end_date = f"{end_year}-{end_month:02d}"
-
-    # # # f"{end_year}-{end_month:02d}-{end_day:02d} 23:59:59"
-    # # # end_date = f"{end_year}-{end_month:02d}-{end_day:02d}T23:59:59Z"
-    
-    # # if start_date:
-    # #     fq.append(f'submittedDate_s:[{start_date} TO {end_date}]')#publicationDate_s,modifiedDate_s
-    # #     # print(f"PERIODE : {start_date} TO {end_date}")
-    # # else:
-    # #     fq.append(f'submittedDate_s:[* TO {end_date}]')  # * 表示不限下限
 
 
     # -------------构建搜索条件v2 11/10/25--------------------
@@ -321,6 +285,11 @@ def fetch_hal_articles(
     if labs:
         input = [f'"{t}"' for t in labs]
         fq.append(f'labStructName_s:({" OR ".join(input)})')
+    
+    
+    if auth_names_valid:
+        input = [f'"{t}"' for t in auth_names_valid]
+        fq.append(f'authFullName_s:({" OR ".join(input)})')
     
     if collcode:
         input = [f'"{t}"' for t in collcode]
@@ -346,33 +315,7 @@ def fetch_hal_articles(
         input = [f'"{t}"' for t in authors]
         fq.append(f'authFullName_s:({" OR ".join(input)})')
 
-
-
-    # ----------------#⭐ 日期范围：submittedDate_s不能继续使用！--------------------
-    # #如果有起始年月则加入，如果None，不指定
-    # if start_year and start_month:
-    #     start_date = f"{start_year}-{start_month:02d}-01T00:00:00Z"
-    # else:
-    #     start_date = None
-
-    # #如果有起结束月则加入，如果无，
-    # if end_year and end_month:
-    #     end_day = calendar.monthrange(end_year, end_month)[1]  # 当月最后一天
-    #     end_date = f"{end_year:04d}-{end_month:02d}-{end_day:02d}T23:59:59Z"
-    # else:
-    #     raise ValueError("Préciser l'année de fin ou/et le mois de fin!")
-    
-    # ##按日期范围查询：
-    # if start_date:
-    #     fq.append(f'submittedDate_tdate:[{start_date} TO {end_date}]')#publicationDate_s,modifiedDate_s
-    #     # print(f"PERIODE : {start_date} TO {end_date}")
-    # else:
-    #     fq.append(f'submittedDate_tdate:[* TO {end_date}]')  # * 表示不限下限
-
-    #-------------------------------------period------------------------------------------
-    # if start_date and end_date and date_field_col:
-    #     fq.append(f"{date_field_col}:[{start_date} TO {end_date}]")
-    
+    #-------------------------------------period------------------------------------------    
     if start_year and start_month and end_year and end_month:
         start_date, end_date=build_period(start_year, start_month,end_year, end_month)
         fq.append(f"{date_field_col}:[{start_date} TO {end_date}]")
@@ -381,7 +324,8 @@ def fetch_hal_articles(
 
 
     # 8. 自由文本（全文搜索）
-    q = " AND ".join(text) if text else "*:*"
+    # q = " AND ".join(text) if text else "*:*"
+    q="*:*"
     
     """
     start-end:2026-01-01-NOW
@@ -390,37 +334,6 @@ def fetch_hal_articles(
     fq=docType=submittedDate_tdate%3A%5B2026-01-01+TO+NOW%5D
 
     """
-    #==================URL check==================
-    # response = requests.get(url, params=params).json()
-
-    # if "response" in response:
-    #     docs = response["response"].get("docs", [])
-    #     if docs:
-    #         print(f"查询到 {len(docs)} 条结果")
-    #         for d in docs:
-    #             print(d)
-    #     else:
-    #         print("没有查询到结果")
-    # else:
-    #     print("查询返回异常")
-
-
-    # CHECK: 
-    #输入筛选条件
-    # params = {
-    #     "q": q,
-    #     "fq": fq,
-    #     "fl": ",".join(fields),
-    #     "rows": rows,
-    #     "wt": "json",
-    #     "sort": "submittedDate_t"
-    # }   
-
-    # # 构建 URL 用于打印检查
-    # query_string = urllib.parse.urlencode(params, doseq=True)
-    # full_url = BASE_URL + "?" + query_string
-    # print(f'QUERY URL : {full_url} \n')
-
 
 
     # ========= 请求循环 =========
@@ -430,28 +343,6 @@ def fetch_hal_articles(
     total_found = None
 
     while True:
-        #[无法使用]
-        # params = {
-        #     "q": q,
-        #     "fq": fq,
-        #     "fl": ",".join(fields),
-        #     "rows":  rows,
-        #     "start": start,
-        #     "wt": "json",
-        #     "sort":"submittedDate_t"
-        # }
-
-        # # 固定条件测试：
-        # params = [
-        #     ("q", "*:*"),
-        #     ("fq", 'docType_s:("ART" OR "OUV")'),
-        #     ("fl", ','.join(fields)),
-        #     ("rows", rows),
-        #     ("wt", "json"), 
-        # ]
-
-
-
         # 10/2025 updates:fq=单独条件
         params = [
         ("q", q),
@@ -465,7 +356,6 @@ def fetch_hal_articles(
             params.append(("fq", f))
         
 
-        
         # 构建 URL 用于打印检查
         query_string = urllib.parse.urlencode(params, doseq=True)
         full_url = BASE_URL + "?" + query_string
@@ -517,21 +407,8 @@ def fetch_hal_articles(
     df = pd.DataFrame(info)
     df=df.drop_duplicates(subset='halId_s')
       
-    
-    # ---clean---
-    # date_fields=["submittedDate_s","modifiedDate_s", "publicationDate_s",]
-    # if 'submittedDate_s' in df.columns:
-    #     df['submittedDate_s'] = pd.to_datetime(df['submittedDate_s'], errors='coerce')
-    #     df = df.sort_values(by='submittedDate_s', ascending=False)
-        
+
     return df
-
-
-
-
-
-
-
 
 
 

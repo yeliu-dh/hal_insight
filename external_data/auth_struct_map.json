@@ -1,0 +1,764 @@
+{
+  "Philippe Lépinard": [
+    {
+      "authIdHal_s": "philippe-lépinard",
+      "authIdHal_i": "5412",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "philippe-lépinard",
+      "authIdHal_i": "5412",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Eugénie Briot": [
+    {
+      "authIdHal_s": "eugénie-briot",
+      "authIdHal_i": "2779",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Joan Le Goff": [
+    {
+      "authIdHal_s": "joan-le-goff",
+      "authIdHal_i": "18675",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "joan-le-goff",
+      "authIdHal_i": "18675",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Amina Béji-Bécheur": [
+    {
+      "authIdHal_s": "amina-béji-bécheur",
+      "authIdHal_i": "2644",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Florence Allard-Poesi": [
+    {
+      "authIdHal_s": "florence-allard-poesi",
+      "authIdHal_i": "2437",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Claire Edey Gamassou": [
+    {
+      "authIdHal_s": "claire-edey-gamassou",
+      "authIdHal_i": "744807",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    },
+    {
+      "authIdHal_s": "claire-edey-gamassou",
+      "authIdHal_i": "744807",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Stéphanie Mignot-Gerard": [
+    {
+      "authIdHal_s": "stéphanie-mignot-gerard",
+      "authIdHal_i": "1123120",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Abdelmajid Amine": [
+    {
+      "authIdHal_s": "abdelmajid-amine",
+      "authIdHal_i": "754019",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    },
+    {
+      "authIdHal_s": "abdelmajid-amine",
+      "authIdHal_i": "754019",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Christel de Lassus": [
+    {
+      "authIdHal_s": "christel-de-lassus",
+      "authIdHal_i": "3051",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Fanny Reniou": [
+    {
+      "authIdHal_s": "fanny-reniou",
+      "authIdHal_i": "9275",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Sabri Boubaker": [
+    {
+      "authIdHal_s": "sabri-boubaker",
+      "authIdHal_i": "1654447",
+      "labStructName_s": "Groupe ESC Troyes en Champagne",
+      "labStructId_i": "303579"
+    },
+    {
+      "authIdHal_s": "sabri-boubaker",
+      "authIdHal_i": "1654447",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    },
+    {
+      "authIdHal_s": "sabri-boubaker",
+      "authIdHal_i": "1654447",
+      "labStructName_s": "Métis Lab EM Normandie",
+      "labStructId_i": "150910"
+    }
+  ],
+  "Audrey Bonnemaizon": [
+    {
+      "authIdHal_s": "audrey-bonnemaizon",
+      "authIdHal_i": "9553",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    },
+    {
+      "authIdHal_s": "audrey-bonnemaizon",
+      "authIdHal_i": "9553",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Christine Musselin": [
+    {
+      "authIdHal_s": "christine-musselin",
+      "authIdHal_i": "184722",
+      "labStructName_s": "Centre de sociologie des organisations (Sciences Po, CNRS)",
+      "labStructId_i": "1059"
+    }
+  ],
+  "Frédérique Pigeyre": [
+    {
+      "authIdHal_s": "frédérique-pigeyre",
+      "authIdHal_i": "10613",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Faten Ben Slimane": [
+    {
+      "authIdHal_s": "faten-ben-slimane",
+      "authIdHal_i": "15033",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Éric Gautier": [
+    {
+      "authIdHal_s": "éric-gautier",
+      "authIdHal_i": "754413",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Véronique Attias-Delattre": [
+    {
+      "authIdHal_s": "véronique-attias-delattre",
+      "authIdHal_i": "4046",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Sylvie Chevrier": [
+    {
+      "authIdHal_s": "sylvie-chevrier",
+      "authIdHal_i": "5696",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    },
+    {
+      "authIdHal_s": "sylvie-chevrier",
+      "authIdHal_i": "5696",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Isabelle Vandangeon-Derumez": [
+    {
+      "authIdHal_s": "isabelle-vandangeon-derumez",
+      "authIdHal_i": "10175",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Catherine Maman": [
+    {
+      "authIdHal_s": "catherine-maman",
+      "authIdHal_i": "15695",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Alain Debenedetti": [
+    {
+      "authIdHal_s": "alain-debenedetti",
+      "authIdHal_i": "5445",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Philippe Jourdan": [
+    {
+      "authIdHal_s": "philippe-jourdan",
+      "authIdHal_i": "3143",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Rémi Bourguignon": [
+    {
+      "authIdHal_s": "rémi-bourguignon",
+      "authIdHal_i": "172683",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Faten Lakhal": [
+    {
+      "authIdHal_s": "faten-lakhal",
+      "authIdHal_i": "1262622",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Ophélie Mugel": [
+    {
+      "authIdHal_s": "ophélie-mugel",
+      "authIdHal_i": "9324",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Rebecca Dickason": [
+    {
+      "authIdHal_s": "rebecca-dickason",
+      "authIdHal_i": "744424",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Pauline de Pechpeyrou": [
+    {
+      "authIdHal_s": "pauline-de-pechpeyrou",
+      "authIdHal_i": "9606",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Mahaut Fanchini": [
+    {
+      "authIdHal_s": "mahaut-fanchini",
+      "authIdHal_i": "737367",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    },
+    {
+      "authIdHal_s": "mahaut-fanchini",
+      "authIdHal_i": "737367",
+      "labStructName_s": "ESTIA - Institute of technology",
+      "labStructId_i": "39415"
+    }
+  ],
+  "Emmanuelle Dubocage": [
+    {
+      "authIdHal_s": "emmanuelle-dubocage",
+      "authIdHal_i": "184943",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "emmanuelle-dubocage",
+      "authIdHal_i": "184943",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Laure Lavorata": [
+    {
+      "authIdHal_s": "laure-lavorata",
+      "authIdHal_i": "183882",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Johanna Habib": [
+    {
+      "authIdHal_s": "johanna-habib",
+      "authIdHal_i": "751976",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Souad Lajili Jarjir": [
+    {
+      "authIdHal_s": "souad-lajili-jarjir",
+      "authIdHal_i": "743949",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "David Autissier": [
+    {
+      "authIdHal_s": "david-autissier",
+      "authIdHal_i": "2975",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "François Grima": [
+    {
+      "authIdHal_s": "françois-grima",
+      "authIdHal_i": "4627",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Mathias Szpirglas": [
+    {
+      "authIdHal_s": "mathias-szpirglas",
+      "authIdHal_i": "3069",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Romain Pierronnet": [
+    {
+      "authIdHal_s": "romain-pierronnet",
+      "authIdHal_i": "8854",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "romain-pierronnet",
+      "authIdHal_i": "8854",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Mathias Béjean": [
+    {
+      "authIdHal_s": "mathias-béjean",
+      "authIdHal_i": "3199",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "mathias-béjean",
+      "authIdHal_i": "3199",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Pascale Chateau Terrisse": [
+    {
+      "authIdHal_s": "pascale-chateau-terrisse",
+      "authIdHal_i": "2742",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Justine Arnoud": [
+    {
+      "authIdHal_s": "justine-arnoud",
+      "authIdHal_i": "743490",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Elisa Monnot": [
+    {
+      "authIdHal_s": "elisa-monnot",
+      "authIdHal_i": "1219356",
+      "labStructName_s": "Théorie économique, modélisation et applications",
+      "labStructId_i": "10592"
+    }
+  ],
+  "Bénédicte Vidaillet": [
+    {
+      "authIdHal_s": "bénédicte-vidaillet",
+      "authIdHal_i": "2944",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    },
+    {
+      "authIdHal_s": "bénédicte-vidaillet",
+      "authIdHal_i": "2944",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Shérazade Gatfaoui": [
+    {
+      "authIdHal_s": "shérazade-gatfaoui",
+      "authIdHal_i": "11423",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Hajar El Karmouni": [
+    {
+      "authIdHal_s": "hajar-el-karmouni",
+      "authIdHal_i": "8339",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Cécile Fonrouge": [
+    {
+      "authIdHal_s": "cécile-fonrouge",
+      "authIdHal_i": "4469",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Sophie Rieunier": [
+    {
+      "authIdHal_s": "sophie-rieunier",
+      "authIdHal_i": "745165",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Muriel Jougleux": [
+    {
+      "authIdHal_s": "muriel-jougleux",
+      "authIdHal_i": "7061",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Luciana Castro Gonçalves": [
+    {
+      "authIdHal_s": "luciana-castro-gonçalves",
+      "authIdHal_i": "178419",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "luciana-castro-gonçalves",
+      "authIdHal_i": "178419",
+      "labStructName_s": "ESIEE Paris",
+      "labStructId_i": "302035"
+    }
+  ],
+  "Jérôme Baray": [
+    {
+      "authIdHal_s": "jérôme-baray",
+      "authIdHal_i": "1273552",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Samuel Sponem": [
+    {
+      "authIdHal_s": "samuel-sponem",
+      "authIdHal_i": "2814",
+      "labStructName_s": "HEC Montréal",
+      "labStructId_i": "304765"
+    }
+  ],
+  "Dominique Roux": [
+    {
+      "authIdHal_s": "dominique-roux",
+      "authIdHal_i": "172717",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Alix Poels": [
+    {
+      "authIdHal_s": "alix-poels",
+      "authIdHal_i": "9596",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Julie Tixier": [
+    {
+      "authIdHal_s": "julie-tixier",
+      "authIdHal_i": "745468",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    },
+    {
+      "authIdHal_s": "julie-tixier",
+      "authIdHal_i": "745468",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Faouzi Bensebaa": [
+    {
+      "authIdHal_s": "faouzi-bensebaa",
+      "authIdHal_i": "987006",
+      "labStructName_s": "Laboratoire d'Economie Dionysien",
+      "labStructId_i": "173249"
+    }
+  ],
+  "Kévin Flamme": [
+    {
+      "authIdHal_s": "kévin-flamme",
+      "authIdHal_i": "1094942",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "kévin-flamme",
+      "authIdHal_i": "1094942",
+      "labStructName_s": "Éthique et Gouvernance de l’Entreprise et des Institutions",
+      "labStructId_i": "1065850"
+    }
+  ],
+  "Marianne Abramovici": [
+    {
+      "authIdHal_s": "marianne-abramovici",
+      "authIdHal_i": "3249",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Lucas Boucaud": [
+    {
+      "authIdHal_s": "lucas-boucaud",
+      "authIdHal_i": "747375",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Sandrine Cadenat": [
+    {
+      "authIdHal_s": "sandrine-cadenat",
+      "authIdHal_i": "10178",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Julienne Brabet": [
+    {
+      "authIdHal_s": "julienne-brabet",
+      "authIdHal_i": "745445",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Olivier Joffre": [
+    {
+      "authIdHal_s": "olivier-joffre",
+      "authIdHal_i": "5490",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    },
+    {
+      "authIdHal_s": "olivier-joffre",
+      "authIdHal_i": "5490",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "François de March": [
+    {
+      "authIdHal_s": "françois-de-march",
+      "authIdHal_i": "10179",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Madeleine Besson": [
+    {
+      "authIdHal_s": "madeleine-besson",
+      "authIdHal_i": "182054",
+      "labStructName_s": "Département Management, Marketing et Stratégie",
+      "labStructId_i": "95598"
+    }
+  ],
+  "Alvin Panjeta": [
+    {
+      "authIdHal_s": "alvin-panjeta",
+      "authIdHal_i": "736888",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Liliana Mitkova": [
+    {
+      "authIdHal_s": "liliana-mitkova",
+      "authIdHal_i": "2997",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Béatrice Parguel": [
+    {
+      "authIdHal_s": "béatrice-parguel",
+      "authIdHal_i": "11155",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    },
+    {
+      "authIdHal_s": "béatrice-parguel",
+      "authIdHal_i": "11155",
+      "labStructName_s": "Dauphine Recherches en Management",
+      "labStructId_i": "1032"
+    }
+  ],
+  "Margaret Josion-Portail": [
+    {
+      "authIdHal_s": "margaret-josion-portail",
+      "authIdHal_i": "7317",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "margaret-josion-portail",
+      "authIdHal_i": "7317",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Amina Djedidi": [
+    {
+      "authIdHal_s": "amina-djedidi",
+      "authIdHal_i": "10174",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Arnaud Mias": [
+    {
+      "authIdHal_s": "arnaud-mias",
+      "authIdHal_i": "750939",
+      "labStructName_s": "Institut de Recherche Interdisciplinaire en Sciences Sociales",
+      "labStructId_i": "1008489"
+    }
+  ],
+  "Céleste Fournier": [
+    {
+      "authIdHal_s": "céleste-fournier",
+      "authIdHal_i": "754911",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Evelyne Rousselet": [
+    {
+      "authIdHal_s": "evelyne-rousselet",
+      "authIdHal_i": "744376",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Valérie Pallas": [
+    {
+      "authIdHal_s": "valérie-pallas",
+      "authIdHal_i": "737375",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Marc Desban": [
+    {
+      "authIdHal_s": "marc-desban",
+      "authIdHal_i": "736816",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Marie-Laure Mourre": [
+    {
+      "authIdHal_s": "marie-laure-mourre",
+      "authIdHal_i": "999094",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Laurence Beierlein": [
+    {
+      "authIdHal_s": "laurence-beierlein",
+      "authIdHal_i": "1009432",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Stéphanie Mignot-Gérard": [
+    {
+      "authIdHal_s": "stéphanie-mignot-gérard",
+      "authIdHal_i": "1123120",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Jérôme Lacoeuilhe": [
+    {
+      "authIdHal_s": "jérôme-lacoeuilhe",
+      "authIdHal_i": "4723",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Yu Zhou": [
+    {
+      "authIdHal_s": "yu-zhou",
+      "authIdHal_i": "747714",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Hélène Peton": [
+    {
+      "authIdHal_s": "hélène-peton",
+      "authIdHal_i": "745718",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Fatima Shuwaikh": [
+    {
+      "authIdHal_s": "fatima-shuwaikh",
+      "authIdHal_i": "743861",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Ghislaine Garmilis": [
+    {
+      "authIdHal_s": "ghislaine-garmilis",
+      "authIdHal_i": "181697",
+      "labStructName_s": "Département Droit, Économie et Finances",
+      "labStructId_i": "95568"
+    }
+  ],
+  "Anne-Catherine Moquet": [
+    {
+      "authIdHal_s": "anne-catherine-moquet",
+      "authIdHal_i": "3157",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Sondes Zouaghi": [
+    {
+      "authIdHal_s": "sondes-zouaghi",
+      "authIdHal_i": "3655",
+      "labStructName_s": "Normandie Innovation Marché Entreprise Consommation",
+      "labStructId_i": "190306"
+    }
+  ]
+}
