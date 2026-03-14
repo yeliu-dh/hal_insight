@@ -36,6 +36,11 @@ st.set_page_config(page_title="HAL insight", page_icon="🛸",layout='wide')#必
 
 #====================CACHE=========================#
 @st.cache_data 
+# map_maps_filename={'DOMAIN_MAP':"domain_map",
+#                    "LANG_MAP":"lang_map.json",
+#                    "DOC_TYPE_MAP":"doctype_map.json",
+#                    "AUTH_STRUCT_MAP":"auth_struct_map.json"}
+
 def get_mappings_json(mapping_folder='external_data'):
     return {
         "DOMAIN_MAP": load_external_json(f"{mapping_folder}/domain_map.json"),
@@ -73,7 +78,7 @@ st.subheader("🔢 Filtrer vos résultats")
 st.markdown("<br>", unsafe_allow_html=True)
 
 text = st_tags(
-label="**Text**",
+label="**Cherche un text dans tous les champs:**",
 text="Tapez et 'Entrée' (chercher un texte dans tous les champs...)",
 value=[],
 suggestions=[],
@@ -185,13 +190,13 @@ options_fields = ['halId_s','uri_s',"docType_s", "title_s", "subTitle_s", "authF
                     "publicationDate_s","journalTitle_s","conferenceTitle_s","conferenceStartDate_s","country_s","city_s","audience_s",
                     "language_s", "keyword_s", "abstract_s","urlFulltextEsr_s","files_s",'page_s',"modifiedDate_s","submittedDate_s",
                      "openAccess_bool",'volume_s','conferenceStartDate_s',"conferenceOrganizer_s","classification_s","collName_s","collCode_s",
-                     "authIdHal_s","authLastNameFirstName_s","label_s"	
+                     "authIdHal_s","authLastNameFirstName_s","label_s","labStructIdName_fs"
                      #"authIdHasPrimaryStructure_fs"                    
 ]
 
 
 # 默认输出字段
-default_fields=['halId_s','uri_s', "docType_s", "title_s", "subTitle_s", "authFullName_s","authIdHal_s","labStructName_s",
+default_fields=['halId_s','uri_s', "docType_s", "title_s", "subTitle_s", "authFullName_s","labStructName_s","labStructIdName_fs",
                 "domain_s","openAccess_bool",'volume_s',"page_s","classification_s",
                 "submittedDate_s","modifiedDate_s", "publicationDate_s","journalTitle_s","conferenceTitle_s","conferenceOrganizer_s","conferenceStartDate_s",
                 "country_s", "language_s",
@@ -296,7 +301,8 @@ if search_button:# and not invalid_date
     try :
         df =process_df(df, DOMAIN_MAP, 
                FNEGE_MAP, cutoff, active_fuzzylookup,
-            #    start_year, start_month, end_year, end_month, filter_pubdate_by=None
+            #  start_year, start_month, end_year, end_month, filter_pubdate_by=None
+               AUTH_STRUCT_MAP
                )#***
     
         # desired_order=[]

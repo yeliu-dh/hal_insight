@@ -5,12 +5,6 @@
       "authIdHal_i": "5412",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "1004418"
-    },
-    {
-      "authIdHal_s": "philippe-lépinard",
-      "authIdHal_i": "5412",
-      "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
     }
   ],
   "Eugénie Briot": [
@@ -26,16 +20,16 @@
       "authIdHal_s": "joan-le-goff",
       "authIdHal_i": "18675",
       "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "1004418"
-    },
-    {
-      "authIdHal_s": "joan-le-goff",
-      "authIdHal_i": "18675",
-      "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "57129"
     }
   ],
   "Amina Béji-Bécheur": [
+    {
+      "authIdHal_s": "amina-béji-bécheur",
+      "authIdHal_i": "2644",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
     {
       "authIdHal_s": "amina-béji-bécheur",
       "authIdHal_i": "2644",
@@ -124,12 +118,6 @@
     }
   ],
   "Audrey Bonnemaizon": [
-    {
-      "authIdHal_s": "audrey-bonnemaizon",
-      "authIdHal_i": "9553",
-      "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
-    },
     {
       "authIdHal_s": "audrey-bonnemaizon",
       "authIdHal_i": "9553",
@@ -373,6 +361,12 @@
       "authIdHal_i": "2742",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "57129"
+    },
+    {
+      "authIdHal_s": "pascale-chateau-terrisse",
+      "authIdHal_i": "2742",
+      "labStructName_s": "AGroécologie, Innovations, teRritoires",
+      "labStructId_i": "1002209"
     }
   ],
   "Justine Arnoud": [
@@ -418,7 +412,19 @@
       "authIdHal_s": "hajar-el-karmouni",
       "authIdHal_i": "8339",
       "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "hajar-el-karmouni",
+      "authIdHal_i": "8339",
+      "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "57129"
+    },
+    {
+      "authIdHal_s": "hajar-el-karmouni",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
     }
   ],
   "Cécile Fonrouge": [
@@ -488,7 +494,7 @@
       "authIdHal_s": "alix-poels",
       "authIdHal_i": "9596",
       "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
+      "labStructId_i": "1004418"
     }
   ],
   "Julie Tixier": [
@@ -759,6 +765,780 @@
       "authIdHal_i": "3655",
       "labStructName_s": "Normandie Innovation Marché Entreprise Consommation",
       "labStructId_i": "190306"
+    }
+  ],
+  "Leila Damak": [
+    {
+      "authIdHal_s": "leila-damak",
+      "authIdHal_i": "184568",
+      "labStructName_s": "Laboratoire d'Economie et de Gestion de l'Ouest",
+      "labStructId_i": "489734"
+    }
+  ],
+  "Danielle Pailler": [
+    {
+      "authIdHal_s": "danielle-pailler",
+      "authIdHal_i": "1036431",
+      "labStructName_s": "Institut d'Économie et de Management de Nantes - Institut d'Administration des Entreprises - Nantes",
+      "labStructId_i": "115068"
+    },
+    {
+      "authIdHal_s": "danielle-pailler",
+      "authIdHal_i": "1036431",
+      "labStructName_s": "Laboratoire d'économie et de management de Nantes Atlantique",
+      "labStructId_i": "95496"
+    },
+    {
+      "authIdHal_s": "danielle-pailler",
+      "authIdHal_i": "1036431",
+      "labStructName_s": "Laboratoire d'économie et de management de Nantes Atlantique",
+      "labStructId_i": "1088598"
+    }
+  ],
+  "Leïla Damak": [
+    {
+      "authIdHal_s": "leïla-damak",
+      "authIdHal_i": "184568",
+      "labStructName_s": "Laboratoire d'Economie et de Gestion de l'Ouest",
+      "labStructId_i": "489734"
+    },
+    {
+      "authIdHal_s": "leïla-damak",
+      "authIdHal_i": "184568",
+      "labStructName_s": "Laboratoire d'économie et de management de Nantes Atlantique",
+      "labStructId_i": "95496"
+    }
+  ],
+  "Anne-France Kogan": [
+    {
+      "authIdHal_s": "anne-france-kogan",
+      "authIdHal_i": "102",
+      "labStructName_s": "Pôle de Recherche Francophonies, Interculturel, Communication, Sociolinguistique",
+      "labStructId_i": "489709"
+    }
+  ],
+  "Nathalie Schieb-Bienfait": [
+    {
+      "authIdHal_s": "nathalie-schieb-bienfait",
+      "authIdHal_i": "182044",
+      "labStructName_s": "Laboratoire d'économie et de management de Nantes Atlantique",
+      "labStructId_i": "95496"
+    }
+  ],
+  "Alice Anberrée": [
+    {
+      "authIdHal_s": "alice-anberrée",
+      "authIdHal_i": "184271",
+      "labStructName_s": "Laboratoire interdisciplinaire de recherche en sciences de l'action",
+      "labStructId_i": "186209"
+    },
+    {
+      "authIdHal_s": "alice-anberrée",
+      "authIdHal_i": "184271",
+      "labStructName_s": "Université de Rennes",
+      "labStructId_i": "105160"
+    },
+    {
+      "authIdHal_s": "alice-anberrée",
+      "authIdHal_i": "184271",
+      "labStructName_s": "Conservatoire National des Arts et Métiers [Cnam]",
+      "labStructId_i": "300351"
+    }
+  ],
+  "Caroline Urbain": [
+    {
+      "authIdHal_s": "caroline-urbain",
+      "authIdHal_i": "1001469",
+      "labStructName_s": "Laboratoire d'économie et de management de Nantes Atlantique",
+      "labStructId_i": "95496"
+    }
+  ],
+  "Lena Boisard Le Coat": [
+    {
+      "authIdHal_s": "lena-boisard-le-coat",
+      "authIdHal_i": "1128525",
+      "labStructName_s": "Laboratoire d'économie et de management de Nantes Atlantique",
+      "labStructId_i": "95496"
+    }
+  ],
+  "Frédéric Kletz": [
+    {
+      "authIdHal_s": "frédéric-kletz",
+      "authIdHal_i": "12917",
+      "labStructName_s": "Centre de Gestion Scientifique i3",
+      "labStructId_i": "39111"
+    }
+  ],
+  "Aïda Robbana": [
+    {
+      "authIdHal_s": "aïda-robbana",
+      "authIdHal_i": "1546340",
+      "labStructName_s": "UN-Habitat",
+      "labStructId_i": "1294027"
+    }
+  ],
+  "Sandrine Emin": [
+    {
+      "authIdHal_s": "sandrine-emin",
+      "authIdHal_i": "183434",
+      "labStructName_s": "Groupe de Recherche Angevin en Economie et Management",
+      "labStructId_i": "190313"
+    }
+  ],
+  "Nicolas Antheaume": [
+    {
+      "authIdHal_s": "nicolas-antheaume",
+      "authIdHal_i": "914897",
+      "labStructName_s": "Laboratoire d'économie et de management de Nantes Atlantique",
+      "labStructId_i": "95496"
+    }
+  ],
+  "Melaine Cervera": [
+    {
+      "authIdHal_s": "melaine-cervera",
+      "authIdHal_i": "737932",
+      "labStructName_s": "Laboratoire Lorrain de Sciences Sociales",
+      "labStructId_i": "247144"
+    },
+    {
+      "authIdHal_s": "melaine-cervera",
+      "authIdHal_i": "737932",
+      "labStructName_s": "Laboratoire de sociologie des Territoires, du travail, des âges et de la santé",
+      "labStructId_i": "1184951"
+    },
+    {
+      "authIdHal_s": "melaine-cervera",
+      "authIdHal_i": "737932",
+      "labStructName_s": "Association de Promotion des Expérimentations sociales",
+      "labStructId_i": "537780"
+    },
+    {
+      "authIdHal_s": "melaine-cervera",
+      "authIdHal_i": "737932",
+      "labStructName_s": "Equipe de Recherche sur l’Utilisation des Données Individuelles en lien avec la Théorie Economique",
+      "labStructId_i": "1004415"
+    },
+    {
+      "authIdHal_s": "melaine-cervera",
+      "authIdHal_i": "737932",
+      "labStructName_s": "Programme Handicaps et Sociétés",
+      "labStructId_i": "220525"
+    },
+    {
+      "authIdHal_s": "melaine-cervera",
+      "authIdHal_i": "737932",
+      "labStructName_s": "Laboratoire interdisciplinaire pour la sociologie économique",
+      "labStructId_i": "172735"
+    },
+    {
+      "authIdHal_s": "melaine-cervera",
+      "authIdHal_i": "737932",
+      "labStructName_s": "Travail, Emploi et Politiques Publiques",
+      "labStructId_i": "188024"
+    }
+  ],
+  "Vincent Lhuillier": [
+    {
+      "authIdHal_s": "vincent-lhuillier",
+      "authIdHal_i": "866269",
+      "labStructName_s": "Laboratoire Lorrain de Sciences Sociales",
+      "labStructId_i": "247144"
+    },
+    {
+      "authIdHal_s": "vincent-lhuillier",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire de sociologie des Territoires, du travail, des âges et de la santé",
+      "labStructId_i": "1184951"
+    },
+    {
+      "authIdHal_s": "vincent-lhuillier",
+      "authIdHal_i": "866269",
+      "labStructName_s": "Laboratoire de sociologie des Territoires, du travail, des âges et de la santé",
+      "labStructId_i": "1184951"
+    }
+  ],
+  "Marion Maignan": [
+    {
+      "authIdHal_s": "marion-maignan",
+      "authIdHal_i": "8491",
+      "labStructName_s": "Centre de Recherche sur les Institutions, l'Industrie et les Systèmes Économiques d'Amiens - UR UPJV 3908",
+      "labStructId_i": "199527"
+    },
+    {
+      "authIdHal_s": "marion-maignan",
+      "authIdHal_i": "8491",
+      "labStructName_s": "Université Paris-Est",
+      "labStructId_i": "303005"
+    },
+    {
+      "authIdHal_s": "marion-maignan",
+      "authIdHal_i": "8491",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Laurent Gardin": [
+    {
+      "authIdHal_s": "laurent-gardin",
+      "authIdHal_i": "175291",
+      "labStructName_s": "Laboratoire de Recherche Sociétés & Humanités",
+      "labStructId_i": "1079112"
+    },
+    {
+      "authIdHal_s": "laurent-gardin",
+      "authIdHal_i": "175291",
+      "labStructName_s": "Université Polytechnique Hauts-de-France",
+      "labStructId_i": "1001263"
+    }
+  ],
+  "Renaud Hourcade": [
+    {
+      "authIdHal_s": "renaud-hourcade",
+      "authIdHal_i": "739643",
+      "labStructName_s": "Association de Promotion des Expérimentations sociales",
+      "labStructId_i": "537780"
+    },
+    {
+      "authIdHal_s": "renaud-hourcade",
+      "authIdHal_i": "739643",
+      "labStructName_s": "Arènes: politique, santé publique, environnement, médias",
+      "labStructId_i": "2577"
+    },
+    {
+      "authIdHal_s": "renaud-hourcade",
+      "authIdHal_i": "739643",
+      "labStructName_s": "Centre Émile Durkheim",
+      "labStructId_i": "150294"
+    }
+  ],
+  "Elise Marcandella": [
+    {
+      "authIdHal_s": "elise-marcandella",
+      "authIdHal_i": "738229",
+      "labStructName_s": "Centre Européen de Recherche en Economie Financière et Gestion des Entreprises",
+      "labStructId_i": "221899"
+    }
+  ],
+  "Céline Jung": [
+    {
+      "authIdHal_s": "céline-jung",
+      "authIdHal_i": "1170351",
+      "labStructName_s": "Association de Promotion des Expérimentations sociales",
+      "labStructId_i": "537780"
+    },
+    {
+      "authIdHal_s": "céline-jung",
+      "authIdHal_i": "1170351",
+      "labStructName_s": "Laboratoire interdisciplinaire pour la sociologie économique",
+      "labStructId_i": "172735"
+    }
+  ],
+  "Pierre Robert": [
+    {
+      "authIdHal_s": "pierre-robert",
+      "authIdHal_i": "1319714",
+      "labStructName_s": "Centre Lillois d’Études et de Recherches Sociologiques et Économiques - UMR 8019",
+      "labStructId_i": "1188"
+    }
+  ],
+  "Stéphane Vialle": [
+    {
+      "authIdHal_s": "stéphane-vialle",
+      "authIdHal_i": "7818",
+      "labStructName_s": "Algorithms for the Grid",
+      "labStructId_i": "2346"
+    },
+    {
+      "authIdHal_s": "stéphane-vialle",
+      "authIdHal_i": "7818",
+      "labStructName_s": "SUPELEC-Campus Metz",
+      "labStructId_i": "26305"
+    }
+  ],
+  "Rémi Le Gall": [
+    {
+      "authIdHal_s": "rémi-le-gall",
+      "authIdHal_i": "9979",
+      "labStructName_s": "Travail, Emploi et Politiques Publiques",
+      "labStructId_i": "188024"
+    },
+    {
+      "authIdHal_s": "rémi-le-gall",
+      "authIdHal_i": "9979",
+      "labStructName_s": "Equipe de Recherche sur l’Utilisation des Données Individuelles en lien avec la Théorie Economique",
+      "labStructId_i": "1004415"
+    },
+    {
+      "authIdHal_s": "rémi-le-gall",
+      "authIdHal_i": "9979",
+      "labStructName_s": "Laboratoire de sociologie des Territoires, du travail, des âges et de la santé",
+      "labStructId_i": "1184951"
+    },
+    {
+      "authIdHal_s": "rémi-le-gall",
+      "authIdHal_i": "9979",
+      "labStructName_s": "Laboratoire Lorrain de Sciences Sociales",
+      "labStructId_i": "247144"
+    },
+    {
+      "authIdHal_s": "rémi-le-gall",
+      "authIdHal_i": "9979",
+      "labStructName_s": "Association de Promotion des Expérimentations sociales",
+      "labStructId_i": "537780"
+    }
+  ],
+  "Anne-Claire Chêne": [
+    {
+      "authIdHal_s": "anne-claire-chêne",
+      "authIdHal_i": "22099",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Wilfried Kirschenmann": [
+    {
+      "authIdHal_s": "wilfried-kirschenmann",
+      "authIdHal_i": "761268",
+      "labStructName_s": "EDF – Électricité de France",
+      "labStructId_i": "302313"
+    },
+    {
+      "authIdHal_s": "wilfried-kirschenmann",
+      "authIdHal_i": "761268",
+      "labStructName_s": "Algorithms for the Grid",
+      "labStructId_i": "2346"
+    },
+    {
+      "authIdHal_s": "wilfried-kirschenmann",
+      "authIdHal_i": "1379763",
+      "labStructName_s": "ANEO",
+      "labStructId_i": "1197748"
+    }
+  ],
+  "Laurent Plagne": [
+    {
+      "authIdHal_s": "laurent-plagne",
+      "authIdHal_i": "0",
+      "labStructName_s": "EDF – Électricité de France",
+      "labStructId_i": "302313"
+    }
+  ],
+  "Bernard Balzani": [
+    {
+      "authIdHal_s": "bernard-balzani",
+      "authIdHal_i": "181976",
+      "labStructName_s": "Laboratoire Lorrain de Sciences Sociales",
+      "labStructId_i": "247144"
+    },
+    {
+      "authIdHal_s": "bernard-balzani",
+      "authIdHal_i": "181976",
+      "labStructName_s": "Centre de Recherche sur les Expertises, les Arts et les Transitions",
+      "labStructId_i": "1184950"
+    }
+  ],
+  "Sylvain Starck": [
+    {
+      "authIdHal_s": "sylvain-starck",
+      "authIdHal_i": "15373",
+      "labStructName_s": "Laboratoire Interuniversitaire des Sciences de l'Education et de la Communication",
+      "labStructId_i": "93791"
+    },
+    {
+      "authIdHal_s": "sylvain-starck",
+      "authIdHal_i": "15373",
+      "labStructName_s": "Profeor-CIREL",
+      "labStructId_i": "403738"
+    }
+  ],
+  "Delphine Wannenmacher": [
+    {
+      "authIdHal_s": "delphine-wannenmacher",
+      "authIdHal_i": "739407",
+      "labStructName_s": "Centre Européen de Recherche en Economie Financière et Gestion des Entreprises",
+      "labStructId_i": "221899"
+    }
+  ],
+  "David Mahut": [
+    {
+      "authIdHal_s": "david-mahut",
+      "authIdHal_i": "0",
+      "labStructName_s": "Association de Promotion des Expérimentations sociales",
+      "labStructId_i": "537780"
+    }
+  ],
+  "Audrey Parron": [
+    {
+      "authIdHal_s": "audrey-parron",
+      "authIdHal_i": "13647",
+      "labStructName_s": "Laboratoire Interdisciplinaire Solidarités, Sociétés, Territoires",
+      "labStructId_i": "44429"
+    },
+    {
+      "authIdHal_s": "audrey-parron",
+      "authIdHal_i": "13647",
+      "labStructName_s": "Programme Handicaps et Sociétés",
+      "labStructId_i": "220525"
+    }
+  ],
+  "Yannig Robin": [
+    {
+      "authIdHal_s": "yannig-robin",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire d'Études et de Recherche en Sociologie",
+      "labStructId_i": "249690"
+    }
+  ],
+  "Charlène Arnaud": [
+    {
+      "authIdHal_s": "charlène-arnaud",
+      "authIdHal_i": "178560",
+      "labStructName_s": "Université de Versailles Saint-Quentin-en-Yvelines",
+      "labStructId_i": "81173"
+    }
+  ],
+  "Hervé Defalvard": [
+    {
+      "authIdHal_s": "hervé-defalvard",
+      "authIdHal_i": "0",
+      "labStructName_s": "Equipe de Recherche sur l’Utilisation des Données Individuelles en lien avec la Théorie Economique",
+      "labStructId_i": "1004415"
+    }
+  ],
+  "Céline Jung Loriente": [
+    {
+      "authIdHal_s": "céline-jung-loriente",
+      "authIdHal_i": "1170351",
+      "labStructName_s": "Association de Promotion des Expérimentations sociales",
+      "labStructId_i": "537780"
+    }
+  ],
+  "Céline Emond": [
+    {
+      "authIdHal_s": "céline-emond",
+      "authIdHal_i": "0",
+      "labStructName_s": "Association de Promotion des Expérimentations sociales",
+      "labStructId_i": "537780"
+    }
+  ],
+  "Isabelle Houot": [
+    {
+      "authIdHal_s": "isabelle-houot",
+      "authIdHal_i": "740504",
+      "labStructName_s": "Laboratoire Interuniversitaire des Sciences de l'Education et de la Communication",
+      "labStructId_i": "93791"
+    }
+  ],
+  "Yana Zdravkova": [
+    {
+      "authIdHal_s": "yana-zdravkova",
+      "authIdHal_i": "1509057",
+      "labStructName_s": "Association de Promotion des Expérimentations sociales",
+      "labStructId_i": "537780"
+    },
+    {
+      "authIdHal_s": "yana-zdravkova",
+      "authIdHal_i": "1509057",
+      "labStructName_s": "Laboratoire interdisciplinaire pour la sociologie économique",
+      "labStructId_i": "172735"
+    },
+    {
+      "authIdHal_s": "yana-zdravkova",
+      "authIdHal_i": "1509057",
+      "labStructName_s": "Groupe de recherche sur le handicap, l’accessibilité, les pratiques éducatives et scolaires",
+      "labStructId_i": "495019"
+    }
+  ],
+  "Souleymane Mbaye": [
+    {
+      "authIdHal_s": "souleymane-mbaye",
+      "authIdHal_i": "1100379",
+      "labStructName_s": "Université Gustave Eiffel",
+      "labStructId_i": "580722"
+    }
+  ],
+  "Yannick L'Horty": [
+    {
+      "authIdHal_s": "yannick-l'horty",
+      "authIdHal_i": "3911",
+      "labStructName_s": "Travail, Emploi et Politiques Publiques",
+      "labStructId_i": "188024"
+    }
+  ],
+  "Ingrid Fasshauer": [
+    {
+      "authIdHal_s": "ingrid-fasshauer",
+      "authIdHal_i": "0",
+      "labStructName_s": "Dispositifs d'Information et de Communication à l'Ère du Numérique - Paris Île-de-France",
+      "labStructId_i": "1040094"
+    },
+    {
+      "authIdHal_s": "ingrid-fasshauer",
+      "authIdHal_i": "177067",
+      "labStructName_s": "Dispositifs d'Information et de Communication à l'Ère du Numérique - Paris Île-de-France",
+      "labStructId_i": "1040094"
+    }
+  ],
+  "Florence Tardif-Bourgoin": [
+    {
+      "authIdHal_s": "florence-tardif-bourgoin",
+      "authIdHal_i": "749122",
+      "labStructName_s": "CREF: Équipe Apprenance et Formation des Adultes",
+      "labStructId_i": "217708"
+    },
+    {
+      "authIdHal_s": "florence-tardif-bourgoin",
+      "authIdHal_i": "749122",
+      "labStructName_s": "Centre de recherches éducation et formation",
+      "labStructId_i": "43465"
+    },
+    {
+      "authIdHal_s": "florence-tardif-bourgoin",
+      "authIdHal_i": "749122",
+      "labStructName_s": "Association de Promotion des Expérimentations sociales",
+      "labStructId_i": "537780"
+    }
+  ],
+  "Collectif Picote": [
+    {
+      "authIdHal_s": "collectif-picote",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre Européen de Recherche en Economie Financière et Gestion des Entreprises",
+      "labStructId_i": "221899"
+    },
+    {
+      "authIdHal_s": "collectif-picote",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Lorrain de Sciences Sociales",
+      "labStructId_i": "247144"
+    },
+    {
+      "authIdHal_s": "collectif-picote",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Interuniversitaire des Sciences de l'Education et de la Communication",
+      "labStructId_i": "93791"
+    }
+  ],
+  "Laëtitia Lethielleux": [
+    {
+      "authIdHal_s": "laëtitia-lethielleux",
+      "authIdHal_i": "183468",
+      "labStructName_s": "Recherches en Économie Gestion AgroRessources Durabilité Santé- EA 6292",
+      "labStructId_i": "451480"
+    }
+  ],
+  "Khoudia Guèye": [
+    {
+      "authIdHal_s": "khoudia-guèye",
+      "authIdHal_i": "738572",
+      "labStructName_s": "Centre Européen de Recherche en Economie Financière et Gestion des Entreprises",
+      "labStructId_i": "221899"
+    }
+  ],
+  "Angélique Ponçot": [
+    {
+      "authIdHal_s": "angélique-ponçot",
+      "authIdHal_i": "0",
+      "labStructName_s": "EDF – Électricité de France",
+      "labStructId_i": "302313"
+    }
+  ],
+  "Eléonore Pigalle": [
+    {
+      "authIdHal_s": "eléonore-pigalle",
+      "authIdHal_i": "10419",
+      "labStructName_s": "Laboratoire Ville, Mobilité, Transport",
+      "labStructId_i": "581044"
+    }
+  ],
+  "Laetitia Challe": [
+    {
+      "authIdHal_s": "laetitia-challe",
+      "authIdHal_i": "1228180",
+      "labStructName_s": "Equipe de Recherche sur l’Utilisation des Données Individuelles en lien avec la Théorie Economique",
+      "labStructId_i": "1004415"
+    }
+  ],
+  "Delphine Vallade": [
+    {
+      "authIdHal_s": "delphine-vallade",
+      "authIdHal_i": "174374",
+      "labStructName_s": "Acteurs, Ressources et Territoires dans le Développement",
+      "labStructId_i": "107303"
+    }
+  ],
+  "David Defour": [
+    {
+      "authIdHal_s": "david-defour",
+      "authIdHal_i": "4651",
+      "labStructName_s": "LAboratoire de Modélisation Pluridisciplinaire et Simulations",
+      "labStructId_i": "81635"
+    }
+  ],
+  "Stephane Vialle": [
+    {
+      "authIdHal_s": "stephane-vialle",
+      "authIdHal_i": "7818",
+      "labStructName_s": "Laboratoire Interdisciplinaire des Sciences du Numérique",
+      "labStructId_i": "1061259"
+    },
+    {
+      "authIdHal_s": "stephane-vialle",
+      "authIdHal_i": "7818",
+      "labStructName_s": "Systèmes Parallèles - LISN",
+      "labStructId_i": "1062149"
+    },
+    {
+      "authIdHal_s": "stephane-vialle",
+      "authIdHal_i": "7818",
+      "labStructName_s": "CentraleSupélec [campus de Metz]",
+      "labStructId_i": "1068135"
+    },
+    {
+      "authIdHal_s": "stephane-vialle",
+      "authIdHal_i": "7818",
+      "labStructName_s": "CentraleSupélec",
+      "labStructId_i": "411575"
+    },
+    {
+      "authIdHal_s": "stephane-vialle",
+      "authIdHal_i": "7818",
+      "labStructName_s": "Université Paris-Saclay",
+      "labStructId_i": "419361"
+    }
+  ],
+  "Meriem Maazoul": [
+    {
+      "authIdHal_s": "meriem-maazoul",
+      "authIdHal_i": "0",
+      "labStructName_s": "Université de Tunis",
+      "labStructId_i": "51213"
+    }
+  ],
+  "Eric Fiat": [
+    {
+      "authIdHal_s": "eric-fiat",
+      "authIdHal_i": "993882",
+      "labStructName_s": "Laboratoire Interdisciplinaire d'étude du Politique Hannah Arendt Paris-Est",
+      "labStructId_i": "1004417"
+    }
+  ],
+  "Firas Jarboui": [
+    {
+      "authIdHal_s": "firas-jarboui",
+      "authIdHal_i": "0",
+      "labStructName_s": "Ecole Normale Supérieure  Paris-Saclay",
+      "labStructId_i": "523723"
+    }
+  ],
+  "Sarra Mokaddem": [
+    {
+      "authIdHal_s": "sarra-mokaddem",
+      "authIdHal_i": "0",
+      "labStructName_s": "École normale supérieure - Kouba-Alger",
+      "labStructId_i": "307225"
+    }
+  ],
+  "Nicolas Hautière": [
+    {
+      "authIdHal_s": "nicolas-hautière",
+      "authIdHal_i": "926204",
+      "labStructName_s": "Département Composants et Systèmes",
+      "labStructId_i": "580830"
+    }
+  ],
+  "Fabien Hildwein": [
+    {
+      "authIdHal_s": "fabien-hildwein",
+      "authIdHal_i": "1229679",
+      "labStructName_s": "Centre d'Economie de l'Université Paris Nord",
+      "labStructId_i": "1001031"
+    }
+  ],
+  "Laurent Terral": [
+    {
+      "authIdHal_s": "laurent-terral",
+      "authIdHal_i": "17680",
+      "labStructName_s": "Laboratoire Ville, Mobilité, Transport",
+      "labStructId_i": "581044"
+    }
+  ],
+  "Matthieu Guillot": [
+    {
+      "authIdHal_s": "matthieu-guillot",
+      "authIdHal_i": "1129083",
+      "labStructName_s": "Optimisation Combinatoire",
+      "labStructId_i": "1043140"
+    },
+    {
+      "authIdHal_s": "matthieu-guillot",
+      "authIdHal_i": "1129083",
+      "labStructName_s": "Laboratoire d’Ingénierie Circulation Transport et Éco-gestion des systèmes énergétiques pour les transports",
+      "labStructId_i": "1088961"
+    }
+  ],
+  "Asmae Diani": [
+    {
+      "authIdHal_s": "asmae-diani",
+      "authIdHal_i": "1028476",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Wissam El-Hage": [
+    {
+      "authIdHal_s": "wissam-el-hage",
+      "authIdHal_i": "183525",
+      "labStructName_s": "Imaging, Brain & Neuropsychiatry",
+      "labStructId_i": "53727"
+    }
+  ],
+  "Mahdi Zargayouna": [
+    {
+      "authIdHal_s": "mahdi-zargayouna",
+      "authIdHal_i": "1135522",
+      "labStructName_s": "Génie des Réseaux de Transport Terrestres et Informatique Avancée",
+      "labStructId_i": "580990"
+    }
+  ],
+  "Khoudia Gueye": [
+    {
+      "authIdHal_s": "khoudia-gueye",
+      "authIdHal_i": "738572",
+      "labStructName_s": "Centre Européen de Recherche en Economie Financière et Gestion des Entreprises",
+      "labStructId_i": "221899"
+    }
+  ],
+  "Inès Bouden": [
+    {
+      "authIdHal_s": "inès-bouden",
+      "authIdHal_i": "744313",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Mariagrazia Cairo Crocco": [
+    {
+      "authIdHal_s": "mariagrazia-cairo-crocco",
+      "authIdHal_i": "0",
+      "labStructName_s": "Aix-Marseille Université - Institut national supérieur du professorat et de l'éducation",
+      "labStructId_i": "574226"
+    }
+  ],
+  "Hamed Haddouche": [
+    {
+      "authIdHal_s": "hamed-haddouche",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Maud Chalmel": [
+    {
+      "authIdHal_s": "maud-chalmel",
+      "authIdHal_i": "1544590",
+      "labStructName_s": "Charte des Illustrateur·rices Ludiques",
+      "labStructId_i": "1286022"
     }
   ]
 }

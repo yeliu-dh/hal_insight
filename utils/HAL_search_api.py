@@ -650,128 +650,295 @@ def add_classement_fnege(
 
 
 
-
-
-#===========================================PRIMARYSTRUCTURE===========================================================#
-
+##==========================================authPrimaryStructureIdName_s==================================================
+##==========================================   ==================================================
 import urllib.parse
 import requests
-import time
-import numpy as np
-from tqdm import tqdm
-import os
-import json
 
-# def check_primarystructure_map()
-def save_as_json(data, file_path="../external_data/author_primarystructure_s_map.json"):
-    os.makedirs(os.path.dirname(file_path), exist_ok=True)
-    with open (file_path, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
-    # st.markdown(f'[SAVE] Les données sauvegardées / mises à jour :\n{file_path}!')
-    # &nbsp; == a no breaking space
-    return 
 
-def read_json(file_path='../external_data/author_primarystructure_s_map.json'):
-    with open (file_path, 'r', encoding="utf-8") as f:
-        data=json.load(f)
+def search_authIdHasPrimaryStructure_fs_by_authFullName_s(list_fullnames):
+        
+    BASE_URL = "https://api.archives-ouvertes.fr/search/"
+    params = [
+            ('q', "*:*"),           
+            ("rows", 0),
+            ("wt", "json"),
+            ("facet","True"),
+            ('facet.mincount',1),
+        ]
+    
+    if list_fullnames:
+        input = [f'"{t}"' for t in list_fullnames]
+        # print(f'authFullName_s:({" OR ".join(input)})')
+        params.append(('fq',f'authFullName_s:({" OR ".join(input)})'))
+    
+
+    # ---facet---
+    facet_list=['authIdHasPrimaryStructure_fs']
+
+    for f in facet_list:
+        facet_query=('facet.field', f)
+        params.append(facet_query)
+        
+        
+    # check url：
+    query_string = urllib.parse.urlencode(params, doseq=True)
+    full_url = BASE_URL + "?" + query_string
+    print(f'[authFullName_s] QUERY URL : {full_url} \n')
+
+    # parse
+    resp = requests.get(BASE_URL, params=params, timeout=15)
+    resp.raise_for_status()  # 检查HTTP状态码
+    data = resp.json()
+    # print(data)
     return data
 
-def get_author_primarystructure(names: list, author_primarystructure_s_map:dict=None):
-    """
-    查询作者主要所属机构（Primary Structure），返回一个 dict 映射。
-    使用 tqdm 显示查询进度。
-    可能有作者在HAL没有HalId，所以通过fullname查询更加保险？
-    """
+
+
+def trim_authIdHasPrimaryStructure_data(data):
+    data_auth_struct=data["facet_counts"]['facet_fields']['authIdHasPrimaryStructure_fs']
     
-    if author_primarystructure_s_map == None:
-        author_primarystructure_s_map={}
-
-    BASE_URL = "https://api.archives-ouvertes.fr/search/"
-    # for name in tqdm(names, desc="🔍 chercher la structure primaire de l'auteurs:", ncols=100):
-    for i, name in enumerate (names):#如果改变value，应该删除json，不然查询到已经存在的名字，不会再重新搜索!
-        if name not in author_primarystructure_s_map.keys():
-            try:
-                params = [
-                    ("fq", f'authFullName_s:"{name}"'),
-                    ("fl", "authIdHasPrimaryStructure_fs"),
-                    ("rows", 1),
-                    ("wt", "json")
-                ]
-                # #检查生成的url：
-                query_string = urllib.parse.urlencode(params, doseq=True)
-                full_url = BASE_URL + "?" + query_string
-                # st.write(f'QUERY URL : {full_url} \n')
-
-                resp = requests.get(BASE_URL, params=params, timeout=15)
-                resp.raise_for_status()  # 检查HTTP状态码
-                data = resp.json()
-                # print(data)
-                
-                #提取：
-                #ex.{'response': {'numFound': 79, 'start': 0, 'maxScore': 1.0, 'numFoundExact': True, 'docs': [{'authIdHasPrimaryStructure_fs': ['1271130-1099011_FacetSep_Ziad Malas_JoinSep_1151738_FacetSep_Laboratoire de Gestion et des Transitions Organisationnelles', '1271130-1099011_FacetSep_Ziad Malas_JoinSep_301366_FacetSep_Institut Universitaire de Technologie - Paul Sabatier', "12474-177028_FacetSep_Samuel Guillemot_JoinSep_489734_FacetSep_Laboratoire d'Economie et de Gestion de l'Ouest", '21015-5244_FacetSep_Andréa Gourmelen_JoinSep_117385_FacetSep_Montpellier Research in Management']}]}}
-
-                # Identifiant interne + _FacetSep_ + Nom complet + _JoinSep_ + Identifiant HAL de structure primaire + _FacetSep_ + Nom de la structure primaire
-                #ex. ['3657528-1564101_FacetSep_Adel Horrig_JoinSep_1004418_FacetSep_Institut de Recherche en Gestion']
-                
-                docs = data.get("response", {}).get("docs", [])
-                if not docs:
-                    continue
-
-                records = docs[0]["authIdHasPrimaryStructure_fs"]
-                # print(records)# liste de structure >=1
-               
-                target_records = [r for r in records if f"_FacetSep_{name}_" in r][0]#理论上<=0
-
-                if target_records:
-                    parts = target_records.split("_")
-                    structure_id= parts[-3] if parts else None #1004418 ou 57129 
-                    structure_s = parts[-1] if parts else None
-                    id_structure=str(structure_id)+"_"+str(structure_s)
-                # else :
-                # 会转到except中
-
-                #记录：
-                author_primarystructure_s_map[name] = id_structure
-
-
-            except Exception as e:
-                # st.warning (f"ERROR in get_author_primarystructure: \n {e}")
-                author_primarystructure_s_map[name] = "no primary structure found"
-                continue
-
-    return author_primarystructure_s_map
+    map_auth_struct={}
+    i= 0
+    for auth_struct in data_auth_struct:
+        if type(auth_struct)!=int:
+            els=auth_struct.split("_")
+            
+            # ---extract info---
+            authFullname_s=els[2]
+            authIdHal_s=authFullname_s.lower().replace(" ", "-")
+            authIdHal_i=els[0].split('-')[1]        
+            labStructName_s=els[-1]
+            labStructId_i=els[4]
+            
+            # ---organise info---
+            info = {
+                # "authFullname_s": authFullname_s,
+                "authIdHal_s": authIdHal_s,
+                "authIdHal_i": authIdHal_i,
+                "labStructName_s": labStructName_s,
+                "labStructId_i": labStructId_i
+            }
+            if authFullname_s not in map_auth_struct:
+                map_auth_struct[authFullname_s] = []
+            map_auth_struct[authFullname_s].append(info)
+            i+=1
+    # print(f"[DONE] {i} new info mapped!")
+    return map_auth_struct
 
 
 
-def update_author_primarystructure_s(names:list, file_path='../external_data/author_primarystructure_s_map.json'):
-    #读取已存在的author_primarystructure_s_map，如果authFullName_s不存在则搜索，然后更新至map
-    try :
-        if os.path.exists(file_path):
-            author_primarystructure_s_map=read_json(file_path)
-        else :
-            author_primarystructure_s_map={}
-        updated_author_primarystructure_s_map=get_author_primarystructure(names, author_primarystructure_s_map)
-        save_as_json(updated_author_primarystructure_s_map, file_path)
-    except Exception as e:
-        st.warning (f"ERROR in update_author_primarystructure_s: \n {e}")
+import json
+import pandas as pd
+
+def update_map_auth_struct(map_auth_struct, list_new_fullnames,
+                           path_map_auth_struct='../external_data/auth_struct_map.json'
+    ):
+    if list_new_fullnames==[]:
+        st.write(' No updates in map_auth_struct!')
+        return map_auth_struct
     
-    return updated_author_primarystructure_s_map
+    new_map_auth_struct=map_auth_struct.copy()
+    # search
+    data=search_authIdHasPrimaryStructure_fs_by_authFullName_s(list_fullnames=list_new_fullnames)
 
+    # trim
+    updates_auth_struct=trim_authIdHasPrimaryStructure_data(data)
 
+    # update
+    map_auth_struct.update(updates_auth_struct)
 
-def add_primarystructure(df, author_primarystructure_s_map):
-    #读取map中author对应的id_structure str
-    # 把author_primarystructure添加到lab后的一列，命名为author_primarystructure_s
-    # primarystructures=df['authFullName_s'].apply(lambda x: ";".join([author_primarystructure_s_map.get(a, np.nan) 
-    #                                                     for a in x.split(";")]) if isinstance(x, str) else np.nan)
+    # save
+    with open(path_map_auth_struct, 'w', encoding='utf-8')as f:
+        json.dump(map_auth_struct, f, indent=2, ensure_ascii=False)
+        print(f'map_auth_struct updated and saved in {path_map_auth_struct}!')
+
+    # stat
+    print(f"old map_auth_struct: {len(map_auth_struct)}; new:{len(new_map_auth_struct)}")
     
-    primarystructures=df['authFullName_s'].apply(lambda x: ";".join([str(author_primarystructure_s_map.get(a.strip(), "mapping_error"))
-                                                    for a in x.split(";") if a.strip()]
-                                                ) if isinstance(x, str) else "fullname_not_strs")
-        
-    idx = df.columns.get_loc('labStructName_s')
-    df.insert(loc=idx+1, column='author_primarystructure_s', value=primarystructures)
+    return new_map_auth_struct
+
+
+#------------------------------------------------------------------------------------------------------------------------
+
+
+def map_auth_struct_per_row(authFullName_s, map_auth_struct):
+    list_authFullName_s=authFullName_s.split(';')
+    
+    list_authPrimaryStructureIdName=[]    
+    
+    for name in list_authFullName_s:#不止一个名字
+        info_auth=map_auth_struct.get(name.strip(),[]) 
+          
+        if info_auth:#一个名字不止一个主要机构
+            for dict_info in info_auth:                 
+                list_authPrimaryStructureIdName.append(f"{name}_{dict_info.get('labStructId_i','xxx')}_{dict_info.get('labStructName_s','xxx')}")
+
+    authPrimaryStructureIdName_s="; ".join(list_authPrimaryStructureIdName)
+    print(authPrimaryStructureIdName_s)
+    print()
+    
+    return authPrimaryStructureIdName_s
+
+
+def add_authPrimaryStructureIdName_s(df_input, map_auth_struct):
+    df=df_input.copy()
+    
+    # ---list_new_fullnames---
+    list_fullnames = []
+    for name_str in df['authFullName_s']:
+        list_fullnames.extend(name.strip() for name in name_str.split(';'))
+        list_new_fullnames=[n for n in list_fullnames if n not in list(map_auth_struct.keys())]
+    
+    # ---update map_auth_struct---
+    new_map_auth_struct=update_map_auth_struct(map_auth_struct, list_new_fullnames=list_new_fullnames,
+                        path_map_auth_struct='../external_data/auth_struct_map.json'
+    )
+    
+    # ---map ---   
+    values=df['authFullName_s'].apply(lambda x : map_auth_struct_per_row(x, new_map_auth_struct))
+    if "authPrimaryStructureIdName_s" in df.columns:
+        df["authPrimaryStructureIdName_s"]=values
+    else :
+        idx_authFullName=df.columns.get_loc("authFullName_s")
+        df.insert(loc=idx_authFullName+1, column="authPrimaryStructureIdName_s", value=values)
+    
     return df
+
+
+def check_irgStructureID(df, list_structureid=["1004418","57129"]):
+    values=df['authPrimaryStructureIdName_s'].apply(lambda x : any(id_ in x for id_ in list_structureid))
+    
+    if "authPrimaryStructure_IRG_bool" in df.columns:
+        df["authPrimaryStructure_IRG_bool"]=values
+    else :
+        idx_authprimarystructure=df.columns.get_loc("authPrimaryStructureIdName_s")
+        df.insert(loc=idx_authprimarystructure+1, column="authPrimaryStructure_IRG_bool", value=values)
+
+    return df
+
+
+
+# #===========================================PRIMARYSTRUCTURE===========================================================#
+
+# import urllib.parse
+# import requests
+# import time
+# import numpy as np
+# from tqdm import tqdm
+# import os
+# import json
+
+# # def check_primarystructure_map()
+# def save_as_json(data, file_path="../external_data/author_primarystructure_s_map.json"):
+#     os.makedirs(os.path.dirname(file_path), exist_ok=True)
+#     with open (file_path, 'w', encoding='utf-8') as f:
+#         json.dump(data, f, ensure_ascii=False, indent=2)
+#     # st.markdown(f'[SAVE] Les données sauvegardées / mises à jour :\n{file_path}!')
+#     # &nbsp; == a no breaking space
+#     return 
+
+# def read_json(file_path='../external_data/author_primarystructure_s_map.json'):
+#     with open (file_path, 'r', encoding="utf-8") as f:
+#         data=json.load(f)
+#     return data
+
+# def get_author_primarystructure(names: list, author_primarystructure_s_map:dict=None):
+#     """
+#     查询作者主要所属机构（Primary Structure），返回一个 dict 映射。
+#     使用 tqdm 显示查询进度。
+#     可能有作者在HAL没有HalId，所以通过fullname查询更加保险？
+#     """
+    
+#     if author_primarystructure_s_map == None:
+#         author_primarystructure_s_map={}
+
+#     BASE_URL = "https://api.archives-ouvertes.fr/search/"
+#     # for name in tqdm(names, desc="🔍 chercher la structure primaire de l'auteurs:", ncols=100):
+#     for i, name in enumerate (names):#如果改变value，应该删除json，不然查询到已经存在的名字，不会再重新搜索!
+#         if name not in author_primarystructure_s_map.keys():
+#             try:
+#                 params = [
+#                     ("fq", f'authFullName_s:"{name}"'),
+#                     ("fl", "authIdHasPrimaryStructure_fs"),
+#                     ("rows", 1),
+#                     ("wt", "json")
+#                 ]
+#                 # #检查生成的url：
+#                 query_string = urllib.parse.urlencode(params, doseq=True)
+#                 full_url = BASE_URL + "?" + query_string
+#                 # st.write(f'QUERY URL : {full_url} \n')
+
+#                 resp = requests.get(BASE_URL, params=params, timeout=15)
+#                 resp.raise_for_status()  # 检查HTTP状态码
+#                 data = resp.json()
+#                 # print(data)
+                
+#                 #提取：
+#                 #ex.{'response': {'numFound': 79, 'start': 0, 'maxScore': 1.0, 'numFoundExact': True, 'docs': [{'authIdHasPrimaryStructure_fs': ['1271130-1099011_FacetSep_Ziad Malas_JoinSep_1151738_FacetSep_Laboratoire de Gestion et des Transitions Organisationnelles', '1271130-1099011_FacetSep_Ziad Malas_JoinSep_301366_FacetSep_Institut Universitaire de Technologie - Paul Sabatier', "12474-177028_FacetSep_Samuel Guillemot_JoinSep_489734_FacetSep_Laboratoire d'Economie et de Gestion de l'Ouest", '21015-5244_FacetSep_Andréa Gourmelen_JoinSep_117385_FacetSep_Montpellier Research in Management']}]}}
+
+#                 # Identifiant interne + _FacetSep_ + Nom complet + _JoinSep_ + Identifiant HAL de structure primaire + _FacetSep_ + Nom de la structure primaire
+#                 #ex. ['3657528-1564101_FacetSep_Adel Horrig_JoinSep_1004418_FacetSep_Institut de Recherche en Gestion']
+                
+#                 docs = data.get("response", {}).get("docs", [])
+#                 if not docs:
+#                     continue
+
+#                 records = docs[0]["authIdHasPrimaryStructure_fs"]
+#                 # print(records)# liste de structure >=1
+               
+#                 target_records = [r for r in records if f"_FacetSep_{name}_" in r][0]#理论上<=0
+
+#                 if target_records:
+#                     parts = target_records.split("_")
+#                     structure_id= parts[-3] if parts else None #1004418 ou 57129 
+#                     structure_s = parts[-1] if parts else None
+#                     id_structure=str(structure_id)+"_"+str(structure_s)
+#                 # else :
+#                 # 会转到except中
+
+#                 #记录：
+#                 author_primarystructure_s_map[name] = id_structure
+
+
+#             except Exception as e:
+#                 # st.warning (f"ERROR in get_author_primarystructure: \n {e}")
+#                 author_primarystructure_s_map[name] = "no primary structure found"
+#                 continue
+
+#     return author_primarystructure_s_map
+
+
+
+# def update_author_primarystructure_s(names:list, file_path='../external_data/author_primarystructure_s_map.json'):
+#     #读取已存在的author_primarystructure_s_map，如果authFullName_s不存在则搜索，然后更新至map
+#     try :
+#         if os.path.exists(file_path):
+#             author_primarystructure_s_map=read_json(file_path)
+#         else :
+#             author_primarystructure_s_map={}
+#         updated_author_primarystructure_s_map=get_author_primarystructure(names, author_primarystructure_s_map)
+#         save_as_json(updated_author_primarystructure_s_map, file_path)
+#     except Exception as e:
+#         st.warning (f"ERROR in update_author_primarystructure_s: \n {e}")
+    
+#     return updated_author_primarystructure_s_map
+
+
+
+# def add_primarystructure(df, author_primarystructure_s_map):
+#     #读取map中author对应的id_structure str
+#     # 把author_primarystructure添加到lab后的一列，命名为author_primarystructure_s
+#     # primarystructures=df['authFullName_s'].apply(lambda x: ";".join([author_primarystructure_s_map.get(a, np.nan) 
+#     #                                                     for a in x.split(";")]) if isinstance(x, str) else np.nan)
+    
+#     primarystructures=df['authFullName_s'].apply(lambda x: ";".join([str(author_primarystructure_s_map.get(a.strip(), "mapping_error"))
+#                                                     for a in x.split(";") if a.strip()]
+#                                                 ) if isinstance(x, str) else "fullname_not_strs")
+        
+#     idx = df.columns.get_loc('labStructName_s')
+#     df.insert(loc=idx+1, column='author_primarystructure_s', value=primarystructures)
+#     return df
 
 
 
@@ -830,7 +997,8 @@ def add_primarystructure(df, author_primarystructure_s_map):
 ##集合处理：
 def process_df(df, DOMAIN_MAP, 
                FNEGE_MAP, cutoff, active_fuzzylookup,
-            #    start_year, start_month, end_year, end_month, filter_pubdate_by
+            #  start_year, start_month, end_year, end_month, filter_pubdate_by
+               AUTH_STRUCT_MAP
                ):
     
     """
@@ -868,23 +1036,31 @@ def process_df(df, DOMAIN_MAP,
         missing_data_warning(df, col='cl_fnege', show_distribution=True)
     st.markdown("<br>", unsafe_allow_html=True)
 
+    # -------------authPrimaryStructureIdName_s+authPrimaryStructure_IRG_bool----------------------
+    if "authFullName_s" in df.columns and AUTH_STRUCT_MAP :  
+        st.write(f"✔ Structures primaires des auteurs mappées!")
+        
+        df=add_authPrimaryStructureIdName_s(df, map_auth_struct=AUTH_STRUCT_MAP)
+        df=check_irgStructureID(df,list_structureid=["1004418","57129"])
 
-    #----------处理author_primarystructure-----------
-    # st.write(os.getcwd())
-    with st.spinner("Chercher la structure primaire de l'auteur selon le nom complet de l'auteur..."):
-        author_col='authFullName_s'
-        names = set([
-            n.strip()
-            for _, r in df.iterrows()
-            if isinstance(r[author_col], str)
-            for n in r[author_col].split(';')
-            if n.strip()
-        ])
-        author_primarystructure_s_map=update_author_primarystructure_s(names, file_path='external_data/author_primarystructure_s_map.json')
-        df= add_primarystructure(df, author_primarystructure_s_map)#map
-        st.write(f"✔ Structures primaires mappées!")
-        missing_data_warning(df, col="author_primarystructure_s", show_distribution=False)#check   
-    st.markdown("<br>", unsafe_allow_html=True)
+
+    
+    # #----------处理author_primarystructure-----------
+    # # st.write(os.getcwd())
+    # with st.spinner("Chercher la structure primaire de l'auteur selon le nom complet de l'auteur..."):
+    #     author_col='authFullName_s'
+    #     names = set([
+    #         n.strip()
+    #         for _, r in df.iterrows()
+    #         if isinstance(r[author_col], str)
+    #         for n in r[author_col].split(';')
+    #         if n.strip()
+    #     ])
+    #     author_primarystructure_s_map=update_author_primarystructure_s(names, file_path='external_data/author_primarystructure_s_map.json')
+    #     df= add_primarystructure(df, author_primarystructure_s_map)#map
+    #     st.write(f"✔ Structures primaires mappées!")
+    #     missing_data_warning(df, col="author_primarystructure_s", show_distribution=False)#check   
+    # st.markdown("<br>", unsafe_allow_html=True)
 
 
     # st.write("DF avant filtrage!")
