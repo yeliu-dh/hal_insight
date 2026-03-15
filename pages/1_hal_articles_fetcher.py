@@ -87,14 +87,31 @@ maxtags=10
 st.markdown("<br>", unsafe_allow_html=True)
 
 
-# 文档类型
-select_all_doctypes = st.checkbox("Sélectionner tout / Tout désélectionner les types de document")
+# # 文档类型
+# select_all_doctypes = st.checkbox("(De)sélectionner tous les types de document")
+# doc_types = st.multiselect(
+#     "**📚 Type de document**",
+#     options=list(DOC_TYPE_MAP.keys()),
+#     format_func=lambda x: DOC_TYPE_MAP[x],
+#     default=list(DOC_TYPE_MAP.keys()) if select_all_doctypes else ["ART","OUV","COUV","COMM"]
+# )
+
+# 控制初始化状态
+if "select_all_doctypes" not in st.session_state:
+    st.session_state.select_all_doctypes = False
+
 doc_types = st.multiselect(
-    "**Type de document**",
+    "**📚 Type de document**",
     options=list(DOC_TYPE_MAP.keys()),
     format_func=lambda x: DOC_TYPE_MAP[x],
-    default=list(DOC_TYPE_MAP.keys()) if select_all_doctypes else ["ART","OUV","COUV","COMM"]
+    default=list(DOC_TYPE_MAP.keys()) if st.session_state.select_all_doctypes else ["ART","OUV","COUV","COMM"]
 )
+st.checkbox(
+    "(De)sélectionner tous les types de document",
+    key="select_all_doctypes"
+)
+
+
 
 auth_names = st_tags(
 label="**Auteurs**",
