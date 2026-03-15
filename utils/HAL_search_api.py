@@ -362,7 +362,9 @@ def fetch_hal_articles(
         # 构建 URL 用于打印检查
         query_string = urllib.parse.urlencode(params, doseq=True)
         full_url = BASE_URL + "?" + query_string
-        print(f'QUERY URL : {full_url} \n')
+        now=datetime.now()
+        
+        print(f'QUERY URL({datetime.now()}) \n : {full_url} \n')
         
         resp = requests.get(BASE_URL, params=params, timeout=15)
         # print(resp.json())
@@ -689,7 +691,7 @@ def search_authIdHasPrimaryStructure_fs_by_authFullName_s(list_fullnames):
     # check url：
     query_string = urllib.parse.urlencode(params, doseq=True)
     full_url = BASE_URL + "?" + query_string
-    # print(f'[authFullName_s] QUERY URL : {full_url} \n')
+    print(f'[authFullName_s] QUERY URL : {full_url} \n')
 
     # parse
     resp = requests.get(BASE_URL, params=params, timeout=15)
@@ -736,22 +738,32 @@ def trim_authIdHasPrimaryStructure_data(data):
 import json
 import pandas as pd
 
-def update_map_auth_struct(map_auth_struct, list_new_fullnames,
-                           path_map_auth_struct='external_data/auth_struct_map.json'
-    ):
-    if list_new_fullnames==[]:
-        print(' No updates in map_auth_struct!')
-        return map_auth_struct
+def update_map_auth_struct(map_auth_struct, list_new_fullnames, path_map_auth_struct
+                           ):
+    # data
+    # inside load#2
+    with open(path_map_auth_struct, 'r', encoding='utf-8')as f:
+        map_auth_struct=json.load(f)    
+    # print(f"nb keys in map_auth_struct: {len(list(map_auth_struct.keys()))}!!")
+
     
-    new_map_auth_struct=map_auth_struct.copy()
+    if list_new_fullnames==[]:
+        print('No updates in map_auth_struct!')
+        return map_auth_struct
+
+    old_map_auth_struct=map_auth_struct.copy()
+
+
     # search
     data=search_authIdHasPrimaryStructure_fs_by_authFullName_s(list_fullnames=list_new_fullnames)
 
     # trim
     updates_auth_struct=trim_authIdHasPrimaryStructure_data(data)
-
+    print(f"updates in map_auth_struct: {len(updates_auth_struct)}!")
+    
     # update
     map_auth_struct.update(updates_auth_struct)
+    # print(f"updates keys: {[n for n in list(map_auth_struct.keys()) if n not in list(old_map_auth_struct.keys())]}")
 
     # save
     with open(path_map_auth_struct, 'w', encoding='utf-8')as f:
@@ -759,9 +771,10 @@ def update_map_auth_struct(map_auth_struct, list_new_fullnames,
         print(f'map_auth_struct updated and saved in {path_map_auth_struct}!')
 
     # stat
-    print(f"old map_auth_struct: {len(map_auth_struct)}; new:{len(new_map_auth_struct)}")
+    print(f"old map_auth_struct: {len(old_map_auth_struct)}; new:{len(map_auth_struct)}")
     
-    return new_map_auth_struct
+    return map_auth_struct
+
 
 
 #------------------------------------------------------------------------------------------------------------------------
@@ -784,25 +797,28 @@ def map_auth_struct_per_row(authFullName_s, map_auth_struct):
     return authPrimaryStructureIdName_s
 
 
-def add_authPrimaryStructureIdName_s(df_input, map_auth_struct):
+def add_authPrimaryStructureIdName_s(df_input, path_map_auth_struct):
     """
     ~= clean + organise 'authIdHasPrimaryStructure_fs'
     """
-    
+    # ---data---
     df=df_input.copy()
-    
-    # ---list_new_fullnames---
+    with open(path_map_auth_struct, 'r', encoding='utf-8')as f:
+        map_auth_struct=json.load(f)# load#1
+        
+    # ---list_NEW_fullnames---
     list_fullnames = []
     for name_str in df['authFullName_s']:
         list_fullnames.extend(name.strip() for name in name_str.split(';'))
         list_new_fullnames=[n for n in list_fullnames if n not in list(map_auth_struct.keys())]
     
-    # ---update map_auth_struct---
-    new_map_auth_struct=update_map_auth_struct(map_auth_struct, list_new_fullnames=list_new_fullnames,
-                        path_map_auth_struct='external_data/auth_struct_map.json'
+    # ---update map_auth_struct---# inside load#2
+    new_map_auth_struct=update_map_auth_struct(map_auth_struct,                        
+                        list_new_fullnames=list_new_fullnames,
+                        path_map_auth_struct=path_map_auth_struct
     )
     
-    # ---map ---   
+    # ---mapping ---   
     values=df['authFullName_s'].apply(lambda x : map_auth_struct_per_row(x, new_map_auth_struct))
     if "authPrimaryStructureIdName_s" in df.columns:
         df["authPrimaryStructureIdName_s"]=values
@@ -814,18 +830,15 @@ def add_authPrimaryStructureIdName_s(df_input, map_auth_struct):
 
 
 
-def check_irgStructureID(df, list_structureid=["1004418","57129"]):
-    #    
-    values=df['authPrimaryStructureIdName_s'].apply(lambda x : any(id_ in x for id_ in list_structureid))
-   
-    
-    if "authPrimaryStructure_hasIRG_bool" in df.columns:
-        df["authPrimaryStructure_hasIRG_bool"]=values
-    else :
-        idx_authprimarystructure=df.columns.get_loc("authPrimaryStructureIdName_s")
-        df.insert(loc=idx_authprimarystructure+1, column="authPrimaryStructure_hasIRG_bool", value=values)
-
-    return df
+# def check_irgStructureID(df, list_structureid=["1004418","57129"]):
+#     #    
+#     values=df['authPrimaryStructureIdName_s'].apply(lambda x : any(id_ in x for id_ in list_structureid))
+#     if "authPrimaryStructure_hasIRG_bool" in df.columns:
+#         df["authPrimaryStructure_hasIRG_bool"]=values
+#     else :
+#         idx_authprimarystructure=df.columns.get_loc("authPrimaryStructureIdName_s")
+#         df.insert(loc=idx_authprimarystructure+1, column="authPrimaryStructure_hasIRG_bool", value=values)
+#     return df
 
 
 
@@ -1006,22 +1019,22 @@ def check_irgStructureID(df, list_structureid=["1004418","57129"]):
 
 ##集合处理：
 def process_df(df, DOMAIN_MAP, 
-               FNEGE_MAP, cutoff, active_fuzzylookup,
+            FNEGE_MAP, cutoff, active_fuzzylookup,
             #  start_year, start_month, end_year, end_month, filter_pubdate_by
-               AUTH_STRUCT_MAP
-               ):
+            path_map_auth_struct, 
+        ):
     
     """
     todo：增加methodologie！
 
     """
-    # -----------处理 domain----------------
+    # -------------domaines----------------
     if "domain_s" in df.columns:   
         df["domain_s"] = df["domain_s"].apply(lambda x : map_domains(x, map=DOMAIN_MAP))
     st.write(f"✔ Domaines mappés!")
     # st.markdown("<br>", unsafe_allow_html=True)
 
-    #----------处理axe----------------------
+    #-------------axe----------------------
     if "classification_s" in df.columns:
         df=clean_axe_from_classification(df)
     st.write(f"✔ Axes nettoyés!")
@@ -1029,7 +1042,7 @@ def process_df(df, DOMAIN_MAP,
     st.markdown("<br>", unsafe_allow_html=True)
 
 
-    #--------- 处理fnege----------------
+    #------------fnege----------------
     if "journalTitle_s" in df.columns and "publicationDate_s" in df.columns :       
         #先精确，再模糊
         df=add_classement_fnege(
@@ -1047,8 +1060,9 @@ def process_df(df, DOMAIN_MAP,
     st.markdown("<br>", unsafe_allow_html=True)
 
     # -------------authPrimaryStructureIdName_s+authPrimaryStructure_IRG_bool----------------------
-    if "authFullName_s" in df.columns and AUTH_STRUCT_MAP :  
-        df=add_authPrimaryStructureIdName_s(df, map_auth_struct=AUTH_STRUCT_MAP)
+    
+    if "authFullName_s" in df.columns and path_map_auth_struct :  
+        df=add_authPrimaryStructureIdName_s(df, path_map_auth_struct=path_map_auth_struct)
         # df=check_irgStructureID(df,list_structureid=["1004418","57129"])
         st.write(f"✔ Structures primaires des auteurs mappées!")
 

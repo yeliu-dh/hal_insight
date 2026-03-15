@@ -20,7 +20,7 @@
       "authIdHal_s": "joan-le-goff",
       "authIdHal_i": "18675",
       "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
+      "labStructId_i": "1004418"
     }
   ],
   "Amina Béji-Bécheur": [
@@ -38,6 +38,12 @@
     }
   ],
   "Florence Allard-Poesi": [
+    {
+      "authIdHal_s": "florence-allard-poesi",
+      "authIdHal_i": "2437",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
     {
       "authIdHal_s": "florence-allard-poesi",
       "authIdHal_i": "2437",
@@ -277,12 +283,6 @@
       "authIdHal_i": "184943",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "1004418"
-    },
-    {
-      "authIdHal_s": "emmanuelle-dubocage",
-      "authIdHal_i": "184943",
-      "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
     }
   ],
   "Laure Lavorata": [
@@ -322,7 +322,7 @@
       "authIdHal_s": "françois-grima",
       "authIdHal_i": "4627",
       "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
+      "labStructId_i": "1004418"
     }
   ],
   "Mathias Szpirglas": [
@@ -331,18 +331,6 @@
       "authIdHal_i": "3069",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "1004418"
-    },
-    {
-      "authIdHal_s": "mathias-szpirglas",
-      "authIdHal_i": "3069",
-      "labStructName_s": "IAE Paris-Est-Université Gustave Eiffel",
-      "labStructId_i": "1152368"
-    },
-    {
-      "authIdHal_s": "mathias-szpirglas",
-      "authIdHal_i": "3069",
-      "labStructName_s": "Université Gustave Eiffel",
-      "labStructId_i": "580722"
     }
   ],
   "Romain Pierronnet": [
@@ -365,12 +353,6 @@
       "authIdHal_i": "3199",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "1004418"
-    },
-    {
-      "authIdHal_s": "mathias-béjean",
-      "authIdHal_i": "3199",
-      "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
     }
   ],
   "Pascale Chateau Terrisse": [
@@ -2215,6 +2197,1996 @@
       "authIdHal_i": "0",
       "labStructName_s": "France Business School",
       "labStructId_i": "240959"
+    }
+  ],
+  "Yvon Pesqueux": [
+    {
+      "authIdHal_s": "yvon-pesqueux",
+      "authIdHal_i": "184697",
+      "labStructName_s": "Laboratoire d'Innovation, Prospective Stratégique et ORganisation",
+      "labStructId_i": "6552"
+    },
+    {
+      "authIdHal_s": "yvon-pesqueux",
+      "authIdHal_i": "184697",
+      "labStructName_s": "Équipe Sécurité & Défense - Renseignement, Criminologie, Crises, Cybermenaces",
+      "labStructId_i": "1008082"
+    },
+    {
+      "authIdHal_s": "yvon-pesqueux",
+      "authIdHal_i": "184697",
+      "labStructName_s": "Laboratoire interdisciplinaire de recherche en sciences de l'action",
+      "labStructId_i": "186209"
+    },
+    {
+      "authIdHal_s": "yvon-pesqueux",
+      "authIdHal_i": "184697",
+      "labStructName_s": "Conservatoire National des Arts et Métiers [Cnam]",
+      "labStructId_i": "300351"
+    },
+    {
+      "authIdHal_s": "yvon-pesqueux",
+      "authIdHal_i": "184697",
+      "labStructName_s": "HEC Paris - Recherche - Hors Laboratoire",
+      "labStructId_i": "108894"
+    }
+  ],
+  "Laurent Cappelletti": [
+    {
+      "authIdHal_s": "laurent-cappelletti",
+      "authIdHal_i": "1045670",
+      "labStructName_s": "Laboratoire interdisciplinaire de recherche en sciences de l'action",
+      "labStructId_i": "186209"
+    },
+    {
+      "authIdHal_s": "laurent-cappelletti",
+      "authIdHal_i": "1045670",
+      "labStructName_s": "Institut de Socio-économie des Entreprises et des ORganisations",
+      "labStructId_i": "50632"
+    },
+    {
+      "authIdHal_s": "laurent-cappelletti",
+      "authIdHal_i": "1045670",
+      "labStructName_s": "Institut d'Administration des Entreprises (IAE) - Lyon",
+      "labStructId_i": "302032"
+    }
+  ],
+  "Lucie Sirieix": [
+    {
+      "authIdHal_s": "lucie-sirieix",
+      "authIdHal_i": "738668",
+      "labStructName_s": "Montpellier Interdisciplinary center on Sustainable Agri-food systems (Social and nutritional sciences)",
+      "labStructId_i": "1096430"
+    }
+  ],
+  "Patrick Gilbert": [
+    {
+      "authIdHal_s": "patrick-gilbert",
+      "authIdHal_i": "172042",
+      "labStructName_s": "IAE Paris - Sorbonne Business School",
+      "labStructId_i": "300334"
+    },
+    {
+      "authIdHal_s": "patrick-gilbert",
+      "authIdHal_i": "172042",
+      "labStructName_s": "LAB IAE Paris - Sorbonne",
+      "labStructId_i": "1154480"
+    }
+  ],
+  "Sami Basly": [
+    {
+      "authIdHal_s": "sami-basly",
+      "authIdHal_i": "13863",
+      "labStructName_s": "Centre d'Etudes et de Recherches sur les Organisations et la Stratégie",
+      "labStructId_i": "109951"
+    },
+    {
+      "authIdHal_s": "sami-basly",
+      "authIdHal_i": "13863",
+      "labStructName_s": "3]",
+      "labStructId_i": "539508"
+    }
+  ],
+  "Olivier Brunel": [
+    {
+      "authIdHal_s": "olivier-brunel",
+      "authIdHal_i": "7821",
+      "labStructName_s": "Laboratoire de Recherche Magellan",
+      "labStructId_i": "171535"
+    }
+  ],
+  "Christine Noël Lemaitre": [
+    {
+      "authIdHal_s": "christine-noël-lemaitre",
+      "authIdHal_i": "1501084",
+      "labStructName_s": "Audencia Business School",
+      "labStructId_i": "456031"
+    },
+    {
+      "authIdHal_s": "christine-noël-lemaitre",
+      "authIdHal_i": "1501084",
+      "labStructName_s": "Aix Marseille Université",
+      "labStructId_i": "198056"
+    },
+    {
+      "authIdHal_s": "christine-noël-lemaitre",
+      "authIdHal_i": "1501084",
+      "labStructName_s": "Laboratoire de théorie du droit",
+      "labStructId_i": "264614"
+    }
+  ],
+  "Cécile Godé": [
+    {
+      "authIdHal_s": "cécile-godé",
+      "authIdHal_i": "13995",
+      "labStructName_s": "Centre d'Études et de Recherche en Gestion d'Aix-Marseille",
+      "labStructId_i": "108098"
+    }
+  ],
+  "Bernard Quinio": [
+    {
+      "authIdHal_s": "bernard-quinio",
+      "authIdHal_i": "13952",
+      "labStructName_s": "Centre d'Etudes et de Recherches sur les Organisations et la Stratégie",
+      "labStructId_i": "109951"
+    }
+  ],
+  "Hugo Letiche": [
+    {
+      "authIdHal_s": "hugo-letiche",
+      "authIdHal_i": "1154843",
+      "labStructName_s": "Département Droit, Économie et Finances",
+      "labStructId_i": "95568"
+    },
+    {
+      "authIdHal_s": "hugo-letiche",
+      "authIdHal_i": "1154843",
+      "labStructName_s": "University of Leicester",
+      "labStructId_i": "300751"
+    },
+    {
+      "authIdHal_s": "hugo-letiche",
+      "authIdHal_i": "1154843",
+      "labStructName_s": "Laboratoire en Innovation, Technologies, Economie et Management (EA 7363)",
+      "labStructId_i": "1042294"
+    },
+    {
+      "authIdHal_s": "hugo-letiche",
+      "authIdHal_i": "1154843",
+      "labStructName_s": "Laboratoire en Innovation, Technologies, Economie et Management (EA 7363)",
+      "labStructId_i": "230315"
+    },
+    {
+      "authIdHal_s": "hugo-letiche",
+      "authIdHal_i": "1154843",
+      "labStructName_s": "Nyenrode Business Universiteit",
+      "labStructId_i": "341918"
+    }
+  ],
+  "Vanessa Serret": [
+    {
+      "authIdHal_s": "vanessa-serret",
+      "authIdHal_i": "180901",
+      "labStructName_s": "Centre Européen de Recherche en Economie Financière et Gestion des Entreprises",
+      "labStructId_i": "221899"
+    },
+    {
+      "authIdHal_s": "vanessa-serret",
+      "authIdHal_i": "180901",
+      "labStructName_s": "Laboratoire d'Economie et de Gestion de l'Ouest",
+      "labStructId_i": "489734"
+    },
+    {
+      "authIdHal_s": "vanessa-serret",
+      "authIdHal_i": "180901",
+      "labStructName_s": "Institut de Recherche sur les Entreprises et les Administrations",
+      "labStructId_i": "185331"
+    }
+  ],
+  "Alice Bellicha": [
+    {
+      "authIdHal_s": "alice-bellicha",
+      "authIdHal_i": "1132432",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Radu Burlacu": [
+    {
+      "authIdHal_s": "radu-burlacu",
+      "authIdHal_i": "1198376",
+      "labStructName_s": "Centre d'études et de recherches appliquées à la gestion",
+      "labStructId_i": "784"
+    },
+    {
+      "authIdHal_s": "radu-burlacu",
+      "authIdHal_i": "1198376",
+      "labStructName_s": "Centre d'études et de recherches appliquées à la gestion",
+      "labStructId_i": "1043181"
+    },
+    {
+      "authIdHal_s": "radu-burlacu",
+      "authIdHal_i": "1198376",
+      "labStructName_s": "Centre d'études et de recherches appliquées à la gestion",
+      "labStructId_i": "1041636"
+    }
+  ],
+  "Sandrine Costa": [
+    {
+      "authIdHal_s": "sandrine-costa",
+      "authIdHal_i": "736074",
+      "labStructName_s": "Montpellier Interdisciplinary center on Sustainable Agri-food systems (Social and nutritional sciences)",
+      "labStructId_i": "1096430"
+    }
+  ],
+  "Sabine Ruaud": [
+    {
+      "authIdHal_s": "sabine-ruaud",
+      "authIdHal_i": "744341",
+      "labStructName_s": "EDHEC Business School",
+      "labStructId_i": "301965"
+    }
+  ],
+  "Carine Girard": [
+    {
+      "authIdHal_s": "carine-girard",
+      "authIdHal_i": "932859",
+      "labStructName_s": "Audencia Business School",
+      "labStructId_i": "456031"
+    }
+  ],
+  "Marc Bidan": [
+    {
+      "authIdHal_s": "marc-bidan",
+      "authIdHal_i": "1293888",
+      "labStructName_s": "Laboratoire d'économie et de management de Nantes Atlantique",
+      "labStructId_i": "1088598"
+    },
+    {
+      "authIdHal_s": "marc-bidan",
+      "authIdHal_i": "1293888",
+      "labStructName_s": "Nantes Université - Ecole Polytechnique de l'Université de Nantes",
+      "labStructId_i": "1088614"
+    },
+    {
+      "authIdHal_s": "marc-bidan",
+      "authIdHal_i": "1293888",
+      "labStructName_s": "Laboratoire d'économie et de management de Nantes Atlantique",
+      "labStructId_i": "95496"
+    }
+  ],
+  "Andréa Gourmelen": [
+    {
+      "authIdHal_s": "andréa-gourmelen",
+      "authIdHal_i": "5244",
+      "labStructName_s": "Montpellier Research in Management",
+      "labStructId_i": "1087123"
+    },
+    {
+      "authIdHal_s": "andréa-gourmelen",
+      "authIdHal_i": "5244",
+      "labStructName_s": "Université de Montpellier",
+      "labStructId_i": "410122"
+    },
+    {
+      "authIdHal_s": "andréa-gourmelen",
+      "authIdHal_i": "5244",
+      "labStructName_s": "Montpellier Research in Management",
+      "labStructId_i": "117385"
+    },
+    {
+      "authIdHal_s": "andréa-gourmelen",
+      "authIdHal_i": "5244",
+      "labStructName_s": "Montpellier Research in Management",
+      "labStructId_i": "1100812"
+    }
+  ],
+  "Patrick Mathieu": [
+    {
+      "authIdHal_s": "patrick-mathieu",
+      "authIdHal_i": "1201611",
+      "labStructName_s": "Centre Interdisciplinaire d'Étude des Littératures d'Aix-Marseille",
+      "labStructId_i": "129439"
+    },
+    {
+      "authIdHal_s": "patrick-mathieu",
+      "authIdHal_i": "1201611",
+      "labStructName_s": "Aix Marseille Université",
+      "labStructId_i": "198056"
+    },
+    {
+      "authIdHal_s": "patrick-mathieu",
+      "authIdHal_i": "1201611",
+      "labStructName_s": "Université de Mayotte (UMay)",
+      "labStructId_i": "1201578"
+    }
+  ],
+  "Nathalie Raulet-Croset": [
+    {
+      "authIdHal_s": "nathalie-raulet-croset",
+      "authIdHal_i": "172783",
+      "labStructName_s": "IAE Paris - Sorbonne Business School",
+      "labStructId_i": "300334"
+    }
+  ],
+  "Arnaud Lamy": [
+    {
+      "authIdHal_s": "arnaud-lamy",
+      "authIdHal_i": "741531",
+      "labStructName_s": "Montpellier Interdisciplinary center on Sustainable Agri-food systems (Social and nutritional sciences)",
+      "labStructId_i": "1096430"
+    },
+    {
+      "authIdHal_s": "arnaud-lamy",
+      "authIdHal_i": "741531",
+      "labStructName_s": "Institut Lyfe Research & Innovation Center (ex-Institut Paul Bocuse Research Center)",
+      "labStructId_i": "1175340"
+    }
+  ],
+  "Thierry Grandpierre": [
+    {
+      "authIdHal_s": "thierry-grandpierre",
+      "authIdHal_i": "4958",
+      "labStructName_s": "Laboratoire d'Informatique Gaspard-Monge",
+      "labStructId_i": "3210"
+    }
+  ],
+  "Jean-Luc Moriceau": [
+    {
+      "authIdHal_s": "jean-luc-moriceau",
+      "authIdHal_i": "183537",
+      "labStructName_s": "Département Droit, Économie et Finances",
+      "labStructId_i": "95568"
+    }
+  ],
+  "Emmanuelle Kesse-Guyot": [
+    {
+      "authIdHal_s": "emmanuelle-kesse-guyot",
+      "authIdHal_i": "736379",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Céline Vial": [
+    {
+      "authIdHal_s": "céline-vial",
+      "authIdHal_i": "737747",
+      "labStructName_s": "Montpellier Interdisciplinary center on Sustainable Agri-food systems (Social and nutritional sciences)",
+      "labStructId_i": "1096430"
+    },
+    {
+      "authIdHal_s": "céline-vial",
+      "authIdHal_i": "737747",
+      "labStructName_s": "Institut Français du Cheval et de l'Equitation [Saumur]",
+      "labStructId_i": "200225"
+    },
+    {
+      "authIdHal_s": "céline-vial",
+      "authIdHal_i": "737747",
+      "labStructName_s": "Pôle développement innovation et recherche [Arnac-Pompadour]",
+      "labStructId_i": "532198"
+    }
+  ],
+  "Sandrine Péneau": [
+    {
+      "authIdHal_s": "sandrine-péneau",
+      "authIdHal_i": "754586",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Guillaume Garçon": [
+    {
+      "authIdHal_s": "guillaume-garçon",
+      "authIdHal_i": "0",
+      "labStructName_s": "Impact de l'environnement chimique sur la santé humaine - ULR 4483",
+      "labStructId_i": "171461"
+    }
+  ],
+  "Fabrice Wendling": [
+    {
+      "authIdHal_s": "fabrice-wendling",
+      "authIdHal_i": "1053223",
+      "labStructName_s": "Laboratoire Traitement du Signal et de l'Image",
+      "labStructId_i": "182223"
+    }
+  ],
+  "Camille Eslan": [
+    {
+      "authIdHal_s": "camille-eslan",
+      "authIdHal_i": "179560",
+      "labStructName_s": "Fédération Française d'Equitation",
+      "labStructId_i": "563371"
+    },
+    {
+      "authIdHal_s": "camille-eslan",
+      "authIdHal_i": "179560",
+      "labStructName_s": "Montpellier Interdisciplinary center on Sustainable Agri-food systems (Social and nutritional sciences)",
+      "labStructId_i": "1096430"
+    }
+  ],
+  "Marine Agogué": [
+    {
+      "authIdHal_s": "marine-agogué",
+      "authIdHal_i": "925071",
+      "labStructName_s": "Centre de Gestion Scientifique i3",
+      "labStructId_i": "39111"
+    }
+  ],
+  "Mahmoud Hassan": [
+    {
+      "authIdHal_s": "mahmoud-hassan",
+      "authIdHal_i": "769779",
+      "labStructName_s": "Laboratoire Traitement du Signal et de l'Image",
+      "labStructId_i": "182223"
+    },
+    {
+      "authIdHal_s": "mahmoud-hassan",
+      "authIdHal_i": "972855",
+      "labStructName_s": "Laboratoire Traitement du Signal et de l'Image",
+      "labStructId_i": "182223"
+    }
+  ],
+  "Luc Marco": [
+    {
+      "authIdHal_s": "luc-marco",
+      "authIdHal_i": "6018",
+      "labStructName_s": "Centre d'Economie de l'Université Paris Nord",
+      "labStructId_i": "147976"
+    }
+  ],
+  "Jean-Fabrice Lebraty": [
+    {
+      "authIdHal_s": "jean-fabrice-lebraty",
+      "authIdHal_i": "19799",
+      "labStructName_s": "Laboratoire de Recherche Magellan",
+      "labStructId_i": "171535"
+    }
+  ],
+  "Sylvie Michel": [
+    {
+      "authIdHal_s": "sylvie-michel",
+      "authIdHal_i": "1237157",
+      "labStructName_s": "Institut de Recherche en Gestion des Organisations",
+      "labStructId_i": "1070633"
+    }
+  ],
+  "Henri Savall": [
+    {
+      "authIdHal_s": "henri-savall",
+      "authIdHal_i": "932440",
+      "labStructName_s": "Institut de Socio-économie des Entreprises et des ORganisations",
+      "labStructId_i": "50632"
+    }
+  ],
+  "Agnès Helme-Guizon": [
+    {
+      "authIdHal_s": "agnès-helme-guizon",
+      "authIdHal_i": "744187",
+      "labStructName_s": "Centre d'études et de recherches appliquées à la gestion",
+      "labStructId_i": "1041636"
+    },
+    {
+      "authIdHal_s": "agnès-helme-guizon",
+      "authIdHal_i": "744187",
+      "labStructName_s": "Centre d'études et de recherches appliquées à la gestion",
+      "labStructId_i": "1043181"
+    }
+  ],
+  "Florence Noguera": [
+    {
+      "authIdHal_s": "florence-noguera",
+      "authIdHal_i": "932490",
+      "labStructName_s": "Institut de Socio-économie des Entreprises et des ORganisations",
+      "labStructId_i": "50632"
+    }
+  ],
+  "Emilie Frenkiel": [
+    {
+      "authIdHal_s": "emilie-frenkiel",
+      "authIdHal_i": "1016156",
+      "labStructName_s": "Laboratoire Interdisciplinaire d'Etude du Politique Hannah Arendt Paris-Est",
+      "labStructId_i": "416300"
+    }
+  ],
+  "Arnaud Lacan": [
+    {
+      "authIdHal_s": "arnaud-lacan",
+      "authIdHal_i": "1036165",
+      "labStructName_s": "Kedge Business School",
+      "labStructId_i": "426646"
+    }
+  ],
+  "Anthony Verdin": [
+    {
+      "authIdHal_s": "anthony-verdin",
+      "authIdHal_i": "1184224",
+      "labStructName_s": "Unité de Chimie Environnementale et Interactions sur le Vivant",
+      "labStructId_i": "219804"
+    }
+  ],
+  "Michel Coulmont": [
+    {
+      "authIdHal_s": "michel-coulmont",
+      "authIdHal_i": "0",
+      "labStructName_s": "Université de Sherbrooke = University of Sherbrooke  [Sherbrooke]",
+      "labStructId_i": "92849"
+    }
+  ],
+  "Pascal Barneto": [
+    {
+      "authIdHal_s": "pascal-barneto",
+      "authIdHal_i": "1055799",
+      "labStructName_s": "Institut de Recherche en Gestion des Organisations",
+      "labStructId_i": "1070633"
+    }
+  ],
+  "Amélie Notais": [
+    {
+      "authIdHal_s": "amélie-notais",
+      "authIdHal_i": "1211079",
+      "labStructName_s": "Laboratoire de recherche en gestion Le Mans Université",
+      "labStructId_i": "1091282"
+    }
+  ],
+  "Virginie Martin": [
+    {
+      "authIdHal_s": "virginie-martin",
+      "authIdHal_i": "1222748",
+      "labStructName_s": "Institut d'histoire moderne et contemporaine",
+      "labStructId_i": "1222"
+    }
+  ],
+  "Pirouz Shirali": [
+    {
+      "authIdHal_s": "pirouz-shirali",
+      "authIdHal_i": "1114012",
+      "labStructName_s": "Laboratoire de Catalyse et Environnement",
+      "labStructId_i": "3200"
+    }
+  ],
+  "Sylvie Gerbaix": [
+    {
+      "authIdHal_s": "sylvie-gerbaix",
+      "authIdHal_i": "171829",
+      "labStructName_s": "Aix-Marseille Université - Faculté d'économie et de gestion",
+      "labStructId_i": "412215"
+    }
+  ],
+  "Pascal Le Masson": [
+    {
+      "authIdHal_s": "pascal-le-masson",
+      "authIdHal_i": "1111",
+      "labStructName_s": "Centre de Gestion Scientifique i3",
+      "labStructId_i": "39111"
+    }
+  ],
+  "Aurélien Acquier": [
+    {
+      "authIdHal_s": "aurélien-acquier",
+      "authIdHal_i": "880716",
+      "labStructName_s": "ESCP-EAP",
+      "labStructId_i": "59542"
+    }
+  ],
+  "Céline Gallen": [
+    {
+      "authIdHal_s": "céline-gallen",
+      "authIdHal_i": "885217",
+      "labStructName_s": "Laboratoire d'économie et de management de Nantes Atlantique",
+      "labStructId_i": "95496"
+    }
+  ],
+  "Gilles Grolleau": [
+    {
+      "authIdHal_s": "gilles-grolleau",
+      "authIdHal_i": "173592",
+      "labStructName_s": "Laboratoire Montpelliérain d'Économie Théorique et Appliquée",
+      "labStructId_i": "2583"
+    }
+  ],
+  "Mathieu Cassotti": [
+    {
+      "authIdHal_s": "mathieu-cassotti",
+      "authIdHal_i": "735946",
+      "labStructName_s": "Laboratoire de psychologie du développement et de l'éducation de l'enfant",
+      "labStructId_i": "215263"
+    }
+  ],
+  "Bernard Srour": [
+    {
+      "authIdHal_s": "bernard-srour",
+      "authIdHal_i": "1284322",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Mohamed Akil": [
+    {
+      "authIdHal_s": "mohamed-akil",
+      "authIdHal_i": "172163",
+      "labStructName_s": "Laboratoire d'Informatique Gaspard-Monge",
+      "labStructId_i": "3210"
+    }
+  ],
+  "Catherine Voynnet Fourboul": [
+    {
+      "authIdHal_s": "catherine-voynnet-fourboul",
+      "authIdHal_i": "1235065",
+      "labStructName_s": "Laboratoire de recherche en sciences de gestion Panthéon-Assas",
+      "labStructId_i": "1096497"
+    }
+  ],
+  "Jean-Michel Oppert": [
+    {
+      "authIdHal_s": "jean-michel-oppert",
+      "authIdHal_i": "0",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Mathilde Touvier": [
+    {
+      "authIdHal_s": "mathilde-touvier",
+      "authIdHal_i": "0",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    },
+    {
+      "authIdHal_s": "mathilde-touvier",
+      "authIdHal_i": "757411",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Valentina Carbone": [
+    {
+      "authIdHal_s": "valentina-carbone",
+      "authIdHal_i": "0",
+      "labStructName_s": "Ecole Supérieure de Commerce de Paris",
+      "labStructId_i": "327869"
+    },
+    {
+      "authIdHal_s": "valentina-carbone",
+      "authIdHal_i": "831812",
+      "labStructName_s": "Systèmes productifs, logistique, organisation des transports",
+      "labStructId_i": "245596"
+    }
+  ],
+  "Nesrine Bentemessek Kahia": [
+    {
+      "authIdHal_s": "nesrine-bentemessek-kahia",
+      "authIdHal_i": "1432834",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "nesrine-bentemessek-kahia",
+      "authIdHal_i": "1432834",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    },
+    {
+      "authIdHal_s": "nesrine-bentemessek-kahia",
+      "authIdHal_i": "1432834",
+      "labStructName_s": "Université Paris-Est Créteil Val-de-Marne - Paris 12",
+      "labStructId_i": "420786"
+    }
+  ],
+  "Ji-Yong Lee": [
+    {
+      "authIdHal_s": "ji-yong-lee",
+      "authIdHal_i": "1069925",
+      "labStructName_s": "Audencia Business School",
+      "labStructId_i": "456031"
+    },
+    {
+      "authIdHal_s": "ji-yong-lee",
+      "authIdHal_i": "0",
+      "labStructName_s": "Audencia Business School",
+      "labStructId_i": "456031"
+    }
+  ],
+  "Maxime Michaud": [
+    {
+      "authIdHal_s": "maxime-michaud",
+      "authIdHal_i": "806780",
+      "labStructName_s": "Institut Lyfe Research & Innovation Center (ex-Institut Paul Bocuse Research Center)",
+      "labStructId_i": "1175340"
+    },
+    {
+      "authIdHal_s": "maxime-michaud",
+      "authIdHal_i": "1478599",
+      "labStructName_s": "Institut Lyfe Research & Innovation Center (ex-Institut Paul Bocuse Research Center)",
+      "labStructId_i": "1175340"
+    },
+    {
+      "authIdHal_s": "maxime-michaud",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut Lyfe Research & Innovation Center (ex-Institut Paul Bocuse Research Center)",
+      "labStructId_i": "1175340"
+    }
+  ],
+  "Philippe Mérigot": [
+    {
+      "authIdHal_s": "philippe-mérigot",
+      "authIdHal_i": "15529",
+      "labStructName_s": "Institut des hautes études économiques et commerciales | School of Business and Economics",
+      "labStructId_i": "458547"
+    }
+  ],
+  "Lorena Bezerra de Souza Matos": [
+    {
+      "authIdHal_s": "lorena-bezerra-de-souza-matos",
+      "authIdHal_i": "742103",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "lorena-bezerra-de-souza-matos",
+      "authIdHal_i": "742103",
+      "labStructName_s": "Universidade Estadual do Ceará [Brasil] = State University of Ceará [Brazil]",
+      "labStructId_i": "496046"
+    },
+    {
+      "authIdHal_s": "lorena-bezerra-de-souza-matos",
+      "authIdHal_i": "742103",
+      "labStructName_s": "Fundação Getúlio Vargas - Escola de Administração de Empresas de São Paulo = Fundação Getulio Vargas’s Sao Paulo School of Business Administration",
+      "labStructId_i": "173027"
+    }
+  ],
+  "Yves Rannou": [
+    {
+      "authIdHal_s": "yves-rannou",
+      "authIdHal_i": "177929",
+      "labStructName_s": "Clermont Recherche Management",
+      "labStructId_i": "490676"
+    },
+    {
+      "authIdHal_s": "yves-rannou",
+      "authIdHal_i": "177929",
+      "labStructName_s": "École Supérieure de Commerce (ESC) - Clermont-Ferrand",
+      "labStructId_i": "350924"
+    }
+  ],
+  "Jérôme de Boyer Des Roches": [
+    {
+      "authIdHal_s": "jérôme-de-boyer-des-roches",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire d'Economie de Dauphine",
+      "labStructId_i": "559342"
+    },
+    {
+      "authIdHal_s": "jérôme-de-boyer-des-roches",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire d'Economie de Dauphine",
+      "labStructId_i": "163511"
+    }
+  ],
+  "Catherine Mercier-Suissa": [
+    {
+      "authIdHal_s": "catherine-mercier-suissa",
+      "authIdHal_i": "3166",
+      "labStructName_s": "Laboratoire de Recherche Magellan",
+      "labStructId_i": "171535"
+    }
+  ],
+  "Peter Daly": [
+    {
+      "authIdHal_s": "peter-daly",
+      "authIdHal_i": "0",
+      "labStructName_s": "EDHEC Business School",
+      "labStructId_i": "301965"
+    }
+  ],
+  "Karine Goglio-Primard": [
+    {
+      "authIdHal_s": "karine-goglio-primard",
+      "authIdHal_i": "0",
+      "labStructName_s": "Kedge Business School",
+      "labStructId_i": "426646"
+    },
+    {
+      "authIdHal_s": "karine-goglio-primard",
+      "authIdHal_i": "0",
+      "labStructName_s": "Euromed Marseille - École de management",
+      "labStructId_i": "153634"
+    }
+  ],
+  "Chikako Oka": [
+    {
+      "authIdHal_s": "chikako-oka",
+      "authIdHal_i": "737377",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Marc Kouzez": [
+    {
+      "authIdHal_s": "marc-kouzez",
+      "authIdHal_i": "1067757",
+      "labStructName_s": "Groupe de Recherche Angevin en Economie et Management",
+      "labStructId_i": "190313"
+    },
+    {
+      "authIdHal_s": "marc-kouzez",
+      "authIdHal_i": "1067757",
+      "labStructName_s": "Centre Européen de Recherche en Economie Financière et Gestion des Entreprises",
+      "labStructId_i": "221899"
+    }
+  ],
+  "Anaïs Garin": [
+    {
+      "authIdHal_s": "anaïs-garin",
+      "authIdHal_i": "1189473",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Olivier Meier": [
+    {
+      "authIdHal_s": "olivier-meier",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    },
+    {
+      "authIdHal_s": "olivier-meier",
+      "authIdHal_i": "3007",
+      "labStructName_s": "Université Paris-Est",
+      "labStructId_i": "303005"
+    },
+    {
+      "authIdHal_s": "olivier-meier",
+      "authIdHal_i": "3007",
+      "labStructName_s": "Fondation Nationale pour l'Enseignement de la Gestion des Entreprises",
+      "labStructId_i": "1032072"
+    },
+    {
+      "authIdHal_s": "olivier-meier",
+      "authIdHal_i": "3007",
+      "labStructName_s": "Conseil national des universités",
+      "labStructId_i": "1078832"
+    },
+    {
+      "authIdHal_s": "olivier-meier",
+      "authIdHal_i": "3007",
+      "labStructName_s": "Université Paris Dauphine-PSL",
+      "labStructId_i": "300302"
+    },
+    {
+      "authIdHal_s": "olivier-meier",
+      "authIdHal_i": "3007",
+      "labStructName_s": "Laboratoire Interdisciplinaire d'Etude du Politique Hannah Arendt Paris-Est",
+      "labStructId_i": "416300"
+    },
+    {
+      "authIdHal_s": "olivier-meier",
+      "authIdHal_i": "3007",
+      "labStructName_s": "Université Paris-Est Créteil Val-de-Marne - Paris 12",
+      "labStructId_i": "420786"
+    }
+  ],
+  "Michel Barabel": [
+    {
+      "authIdHal_s": "michel-barabel",
+      "authIdHal_i": "745106",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Rebeca Gomez Betancourt": [
+    {
+      "authIdHal_s": "rebeca-gomez-betancourt",
+      "authIdHal_i": "15928",
+      "labStructName_s": "Triangle : action, discours, pensée politique et économique",
+      "labStructId_i": "145357"
+    }
+  ],
+  "Richard Major": [
+    {
+      "authIdHal_s": "richard-major",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut d'Administration des Entreprises (IAE) - Aix-en-Provence",
+      "labStructId_i": "302033"
+    }
+  ],
+  "Véronique Boulocher-Passet": [
+    {
+      "authIdHal_s": "véronique-boulocher-passet",
+      "authIdHal_i": "1092643",
+      "labStructName_s": "University of Brighton",
+      "labStructId_i": "209121"
+    }
+  ],
+  "Anne-Sophie Thelisson": [
+    {
+      "authIdHal_s": "anne-sophie-thelisson",
+      "authIdHal_i": "7045",
+      "labStructName_s": "UR CONFLUENCE : Sciences et Humanités (EA 1598)",
+      "labStructId_i": "1042740"
+    },
+    {
+      "authIdHal_s": "anne-sophie-thelisson",
+      "authIdHal_i": "7045",
+      "labStructName_s": "ESDES, Lyon Business School - UCLy",
+      "labStructId_i": "129963"
+    }
+  ],
+  "Anne-Sophie Volz-Tollet": [
+    {
+      "authIdHal_s": "anne-sophie-volz-tollet",
+      "authIdHal_i": "746570",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Florence Crespin-Mazet": [
+    {
+      "authIdHal_s": "florence-crespin-mazet",
+      "authIdHal_i": "0",
+      "labStructName_s": "EMLyon Business School",
+      "labStructId_i": "301362"
+    },
+    {
+      "authIdHal_s": "florence-crespin-mazet",
+      "authIdHal_i": "0",
+      "labStructName_s": "Kedge Business School",
+      "labStructId_i": "426646"
+    }
+  ],
+  "Jale Minibas-Poussard": [
+    {
+      "authIdHal_s": "jale-minibas-poussard",
+      "authIdHal_i": "15478",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Philippe Robert-Tanguy": [
+    {
+      "authIdHal_s": "philippe-robert-tanguy",
+      "authIdHal_i": "1171533",
+      "labStructName_s": "Groupe de recherches interdisciplinaires sur les processus d’information et de communication",
+      "labStructId_i": "542208"
+    },
+    {
+      "authIdHal_s": "philippe-robert-tanguy",
+      "authIdHal_i": "1171533",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Jean Redis": [
+    {
+      "authIdHal_s": "jean-redis",
+      "authIdHal_i": "18826",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "jean-redis",
+      "authIdHal_i": "18826",
+      "labStructName_s": "ESIEE Paris",
+      "labStructId_i": "302035"
+    }
+  ],
+  "Mamadou Sarr": [
+    {
+      "authIdHal_s": "mamadou-sarr",
+      "authIdHal_i": "0",
+      "labStructName_s": "Unité Mixte Internationale \"Environnement Santé Sociétés\"",
+      "labStructId_i": "176345"
+    }
+  ],
+  "Emilie Peneloux": [
+    {
+      "authIdHal_s": "emilie-peneloux",
+      "authIdHal_i": "1238033",
+      "labStructName_s": "Centre d'Études et de Recherche en Gestion d'Aix-Marseille",
+      "labStructId_i": "108098"
+    }
+  ],
+  "Salomon Bernier-Khedache": [
+    {
+      "authIdHal_s": "salomon-bernier-khedache",
+      "authIdHal_i": "178417",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Gurvan Branellec": [
+    {
+      "authIdHal_s": "gurvan-branellec",
+      "authIdHal_i": "1548640",
+      "labStructName_s": "Université catholique de Lille - Faculté de droit",
+      "labStructId_i": "1095305"
+    }
+  ],
+  "Alexandre Salvatori": [
+    {
+      "authIdHal_s": "alexandre-salvatori",
+      "authIdHal_i": "747046",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Samia Khenniche": [
+    {
+      "authIdHal_s": "samia-khenniche",
+      "authIdHal_i": "1269786",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "samia-khenniche",
+      "authIdHal_i": "1269786",
+      "labStructName_s": "Université Gustave Eiffel",
+      "labStructId_i": "580722"
+    },
+    {
+      "authIdHal_s": "samia-khenniche",
+      "authIdHal_i": "1269786",
+      "labStructName_s": "Laboratoire interdisciplinaire de recherche en sciences de l'action",
+      "labStructId_i": "186209"
+    }
+  ],
+  "Anna Bonnet": [
+    {
+      "authIdHal_s": "anna-bonnet",
+      "authIdHal_i": "1133289",
+      "labStructName_s": "Laboratoire de Probabilités, Statistique et Modélisation",
+      "labStructId_i": "1004954"
+    }
+  ],
+  "Pascal Berruet": [
+    {
+      "authIdHal_s": "pascal-berruet",
+      "authIdHal_i": "7539",
+      "labStructName_s": "MOCS",
+      "labStructId_i": "389915"
+    }
+  ],
+  "Gaël Le Boulch": [
+    {
+      "authIdHal_s": "gaël-le-boulch",
+      "authIdHal_i": "839253",
+      "labStructName_s": "Dauphine Recherches en Management",
+      "labStructId_i": "1032"
+    }
+  ],
+  "Henri Dehove": [
+    {
+      "authIdHal_s": "henri-dehove",
+      "authIdHal_i": "1418891",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Patricia Fournier-Noel": [
+    {
+      "authIdHal_s": "patricia-fournier-noel",
+      "authIdHal_i": "13040",
+      "labStructName_s": "Institut des Mondes Anglophone, Germanique et Roman - EA 3958",
+      "labStructId_i": "533711"
+    }
+  ],
+  "Corinne Blanquart": [
+    {
+      "authIdHal_s": "corinne-blanquart",
+      "authIdHal_i": "864757",
+      "labStructName_s": "Systèmes productifs, logistique, organisation des transports et travail",
+      "labStructId_i": "86648"
+    }
+  ],
+  "Marina Bastounis": [
+    {
+      "authIdHal_s": "marina-bastounis",
+      "authIdHal_i": "0",
+      "labStructName_s": "Pôle de Recherche - Rouen Business School",
+      "labStructId_i": "135519"
+    }
+  ],
+  "Carol-Anne Loher-Delalune": [
+    {
+      "authIdHal_s": "carol-anne-loher-delalune",
+      "authIdHal_i": "184776",
+      "labStructName_s": "Laboratoire d'Economie et de Gestion de l'Ouest",
+      "labStructId_i": "489734"
+    },
+    {
+      "authIdHal_s": "carol-anne-loher-delalune",
+      "authIdHal_i": "184776",
+      "labStructName_s": "Groupe de Recherche Angevin en Economie et Management",
+      "labStructId_i": "1096406"
+    }
+  ],
+  "Cédric Poivret": [
+    {
+      "authIdHal_s": "cédric-poivret",
+      "authIdHal_i": "974808",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "cédric-poivret",
+      "authIdHal_i": "974808",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Robert Salle": [
+    {
+      "authIdHal_s": "robert-salle",
+      "authIdHal_i": "0",
+      "labStructName_s": "EMLyon Business School",
+      "labStructId_i": "301362"
+    }
+  ],
+  "Elise Lefèvre": [
+    {
+      "authIdHal_s": "elise-lefèvre",
+      "authIdHal_i": "1145676",
+      "labStructName_s": "Laboratoire d'Etude des Mécanismes Cognitifs",
+      "labStructId_i": "2562"
+    }
+  ],
+  "Thomas Burger": [
+    {
+      "authIdHal_s": "thomas-burger",
+      "authIdHal_i": "753188",
+      "labStructName_s": "Laboratoire des sciences et techniques de l'information, de la communication et de la connaissance (UMR 3192)",
+      "labStructId_i": "81533"
+    }
+  ],
+  "Thomas Zéroual": [
+    {
+      "authIdHal_s": "thomas-zéroual",
+      "authIdHal_i": "14541",
+      "labStructName_s": "Centre Lillois d’Études et de Recherches Sociologiques et Économiques - UMR 8019",
+      "labStructId_i": "1188"
+    },
+    {
+      "authIdHal_s": "thomas-zéroual",
+      "authIdHal_i": "14541",
+      "labStructName_s": "Systèmes productifs, logistique, organisation des transports et travail",
+      "labStructId_i": "86648"
+    }
+  ],
+  "Madina Rival": [
+    {
+      "authIdHal_s": "madina-rival",
+      "authIdHal_i": "735745",
+      "labStructName_s": "Laboratoire interdisciplinaire de recherche en sciences de l'action",
+      "labStructId_i": "186209"
+    }
+  ],
+  "Jamila Al Khatib": [
+    {
+      "authIdHal_s": "jamila-al-khatib",
+      "authIdHal_i": "1145427",
+      "labStructName_s": "Formation et apprentissages professionnels",
+      "labStructId_i": "1096483"
+    },
+    {
+      "authIdHal_s": "jamila-al-khatib",
+      "authIdHal_i": "1145427",
+      "labStructName_s": "Centre de recherche sur la formation",
+      "labStructId_i": "160459"
+    },
+    {
+      "authIdHal_s": "jamila-al-khatib",
+      "authIdHal_i": "1145427",
+      "labStructName_s": "Formation et apprentissages professionnels",
+      "labStructId_i": "552876"
+    }
+  ],
+  "Anne-Laure Delaunay": [
+    {
+      "authIdHal_s": "anne-laure-delaunay",
+      "authIdHal_i": "1162102",
+      "labStructName_s": "Laboratoire en Innovation, Technologies, Economie et Management (EA 7363)",
+      "labStructId_i": "1042294"
+    },
+    {
+      "authIdHal_s": "anne-laure-delaunay",
+      "authIdHal_i": "1162102",
+      "labStructName_s": "Département Technologies, Information & Management",
+      "labStructId_i": "566965"
+    }
+  ],
+  "Florian Beaudette": [
+    {
+      "authIdHal_s": "florian-beaudette",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Jeremy Andrea": [
+    {
+      "authIdHal_s": "jeremy-andrea",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut Pluridisciplinaire Hubert Curien",
+      "labStructId_i": "93777"
+    }
+  ],
+  "Marc Besancon": [
+    {
+      "authIdHal_s": "marc-besancon",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "Serguei Ganjour": [
+    {
+      "authIdHal_s": "serguei-ganjour",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "Maksym Titov": [
+    {
+      "authIdHal_s": "maksym-titov",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "Pierre Depasse": [
+    {
+      "authIdHal_s": "pierre-depasse",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Alexandre Zabi": [
+    {
+      "authIdHal_s": "alexandre-zabi",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Fabrice Couderc": [
+    {
+      "authIdHal_s": "fabrice-couderc",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "Jean-Laurent Agram": [
+    {
+      "authIdHal_s": "jean-laurent-agram",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut Pluridisciplinaire Hubert Curien",
+      "labStructId_i": "93777"
+    },
+    {
+      "authIdHal_s": "jean-laurent-agram",
+      "authIdHal_i": "0",
+      "labStructName_s": "Université de Haute-Alsace (UHA) Mulhouse - Colmar",
+      "labStructId_i": "237692"
+    }
+  ],
+  "Raphael Granier de Cassagnac": [
+    {
+      "authIdHal_s": "raphael-granier-de-cassagnac",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Philippe Gras": [
+    {
+      "authIdHal_s": "philippe-gras",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "Marc Dejardin": [
+    {
+      "authIdHal_s": "marc-dejardin",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "Daniel Denegri": [
+    {
+      "authIdHal_s": "daniel-denegri",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "Jean-Louis Faure": [
+    {
+      "authIdHal_s": "jean-louis-faure",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "Claude Charlot": [
+    {
+      "authIdHal_s": "claude-charlot",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Christophe Ochando": [
+    {
+      "authIdHal_s": "christophe-ochando",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Roberto Salerno": [
+    {
+      "authIdHal_s": "roberto-salerno",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Amina Zghiche": [
+    {
+      "authIdHal_s": "amina-zghiche",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Ulrich Goerlach": [
+    {
+      "authIdHal_s": "ulrich-goerlach",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut Pluridisciplinaire Hubert Curien",
+      "labStructId_i": "93777"
+    }
+  ],
+  "Susan Gascon": [
+    {
+      "authIdHal_s": "susan-gascon",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Muriel Vander Donckt": [
+    {
+      "authIdHal_s": "muriel-vander-donckt",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Mehmet Özgür Sahin": [
+    {
+      "authIdHal_s": "mehmet-özgür-sahin",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "Eric Christian Chabert": [
+    {
+      "authIdHal_s": "eric-christian-chabert",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut Pluridisciplinaire Hubert Curien",
+      "labStructId_i": "93777"
+    }
+  ],
+  "Anne-Catherine Le Bihan": [
+    {
+      "authIdHal_s": "anne-catherine-le-bihan",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut Pluridisciplinaire Hubert Curien",
+      "labStructId_i": "93777"
+    }
+  ],
+  "Julie Malcles": [
+    {
+      "authIdHal_s": "julie-malcles",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "Yves Sirois": [
+    {
+      "authIdHal_s": "yves-sirois",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Jean-Marie Brom": [
+    {
+      "authIdHal_s": "jean-marie-brom",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut Pluridisciplinaire Hubert Curien",
+      "labStructId_i": "93777"
+    }
+  ],
+  "Daniel Bloch": [
+    {
+      "authIdHal_s": "daniel-bloch",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut Pluridisciplinaire Hubert Curien",
+      "labStructId_i": "93777"
+    }
+  ],
+  "Federico Ferri": [
+    {
+      "authIdHal_s": "federico-ferri",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "Gautier Hamel de Monchenault": [
+    {
+      "authIdHal_s": "gautier-hamel-de-monchenault",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "Gaelle Boudoul": [
+    {
+      "authIdHal_s": "gaelle-boudoul",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Bernard Ille": [
+    {
+      "authIdHal_s": "bernard-ille",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Jean-Baptiste Sauvan": [
+    {
+      "authIdHal_s": "jean-baptiste-sauvan",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Jean Fay": [
+    {
+      "authIdHal_s": "jean-fay",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Stephanie Beauceron": [
+    {
+      "authIdHal_s": "stephanie-beauceron",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Houmani El Mamouni": [
+    {
+      "authIdHal_s": "houmani-el-mamouni",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Laurent Mirabito": [
+    {
+      "authIdHal_s": "laurent-mirabito",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Morgan Lethuillier": [
+    {
+      "authIdHal_s": "morgan-lethuillier",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Aurore Savoy-Navarro": [
+    {
+      "authIdHal_s": "aurore-savoy-navarro",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "Olivier Davignon": [
+    {
+      "authIdHal_s": "olivier-davignon",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Philippe Busson": [
+    {
+      "authIdHal_s": "philippe-busson",
+      "authIdHal_i": "741166",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Imad Baptiste Laktineh": [
+    {
+      "authIdHal_s": "imad-baptiste-laktineh",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Caroline Collard": [
+    {
+      "authIdHal_s": "caroline-collard",
+      "authIdHal_i": "753602",
+      "labStructName_s": "Institut Pluridisciplinaire Hubert Curien",
+      "labStructId_i": "93777"
+    }
+  ],
+  "André Rosowsky": [
+    {
+      "authIdHal_s": "andré-rosowsky",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "Nicolas Chanon": [
+    {
+      "authIdHal_s": "nicolas-chanon",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Pierre van Hove": [
+    {
+      "authIdHal_s": "pierre-van-hove",
+      "authIdHal_i": "742701",
+      "labStructName_s": "Institut Pluridisciplinaire Hubert Curien",
+      "labStructId_i": "93777"
+    }
+  ],
+  "Catherine Adloff": [
+    {
+      "authIdHal_s": "catherine-adloff",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire d'Annecy de Physique des Particules",
+      "labStructId_i": "129"
+    }
+  ],
+  "Shamik Ghosh": [
+    {
+      "authIdHal_s": "shamik-ghosh",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Alexandre Hakimi": [
+    {
+      "authIdHal_s": "alexandre-hakimi",
+      "authIdHal_i": "1256980",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Stephane Perries": [
+    {
+      "authIdHal_s": "stephane-perries",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Didier Contardo": [
+    {
+      "authIdHal_s": "didier-contardo",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "John Rander": [
+    {
+      "authIdHal_s": "john-rander",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "Polina Simkina": [
+    {
+      "authIdHal_s": "polina-simkina",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "Alessandra Cappati": [
+    {
+      "authIdHal_s": "alessandra-cappati",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Clément Grimault": [
+    {
+      "authIdHal_s": "clément-grimault",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut Pluridisciplinaire Hubert Curien",
+      "labStructId_i": "93777"
+    }
+  ],
+  "Victor Lohezic": [
+    {
+      "authIdHal_s": "victor-lohezic",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "Dylan Apparu": [
+    {
+      "authIdHal_s": "dylan-apparu",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut Pluridisciplinaire Hubert Curien",
+      "labStructId_i": "93777"
+    }
+  ],
+  "Gérald Grenier": [
+    {
+      "authIdHal_s": "gérald-grenier",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Benjamin Blancon": [
+    {
+      "authIdHal_s": "benjamin-blancon",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Matthew Nguyen": [
+    {
+      "authIdHal_s": "matthew-nguyen",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    },
+    {
+      "authIdHal_s": "matthew-nguyen",
+      "authIdHal_i": "740682",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Guillaume Falmagne": [
+    {
+      "authIdHal_s": "guillaume-falmagne",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Bruno Afonso Fontana Santos Alves": [
+    {
+      "authIdHal_s": "bruno-afonso-fontana-santos-alves",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Axel Buchot Perraguin": [
+    {
+      "authIdHal_s": "axel-buchot-perraguin",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Candan Dozen": [
+    {
+      "authIdHal_s": "candan-dozen",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Florian Damas": [
+    {
+      "authIdHal_s": "florian-damas",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Christopher Greenberg": [
+    {
+      "authIdHal_s": "christopher-greenberg",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Jie Xiao": [
+    {
+      "authIdHal_s": "jie-xiao",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Saskia Falke": [
+    {
+      "authIdHal_s": "saskia-falke",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut Pluridisciplinaire Hubert Curien",
+      "labStructId_i": "93777"
+    }
+  ],
+  "Raphael Haeberle": [
+    {
+      "authIdHal_s": "raphael-haeberle",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut Pluridisciplinaire Hubert Curien",
+      "labStructId_i": "93777"
+    }
+  ],
+  "Lida Kalipoliti": [
+    {
+      "authIdHal_s": "lida-kalipoliti",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Maxime Gouzevitch": [
+    {
+      "authIdHal_s": "maxime-gouzevitch",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    },
+    {
+      "authIdHal_s": "maxime-gouzevitch",
+      "authIdHal_i": "741096",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Jieun Choi": [
+    {
+      "authIdHal_s": "jieun-choi",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Elena Vernazza": [
+    {
+      "authIdHal_s": "elena-vernazza",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Adinda de Wit": [
+    {
+      "authIdHal_s": "adinda-de-wit",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Batoul Diab": [
+    {
+      "authIdHal_s": "batoul-diab",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Bharadwaj Harikrishnan": [
+    {
+      "authIdHal_s": "bharadwaj-harikrishnan",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Geliang Liu": [
+    {
+      "authIdHal_s": "geliang-liu",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Patrice Verdier": [
+    {
+      "authIdHal_s": "patrice-verdier",
+      "authIdHal_i": "184664",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Sébastien Viret": [
+    {
+      "authIdHal_s": "sébastien-viret",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Aurélien Carle": [
+    {
+      "authIdHal_s": "aurélien-carle",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Guillaume Bourgatte": [
+    {
+      "authIdHal_s": "guillaume-bourgatte",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut Pluridisciplinaire Hubert Curien",
+      "labStructId_i": "93777"
+    }
+  ],
+  "Jelena Mijuskovic": [
+    {
+      "authIdHal_s": "jelena-mijuskovic",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "Arnab Purohit": [
+    {
+      "authIdHal_s": "arnab-purohit",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Marta Tornago": [
+    {
+      "authIdHal_s": "marta-tornago",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "Gourab Saha": [
+    {
+      "authIdHal_s": "gourab-saha",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut Pluridisciplinaire Hubert Curien",
+      "labStructId_i": "93777"
+    }
+  ],
+  "Lucas Torterotot": [
+    {
+      "authIdHal_s": "lucas-torterotot",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Patrick Jarry": [
+    {
+      "authIdHal_s": "patrick-jarry",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "Meena Meena": [
+    {
+      "authIdHal_s": "meena-meena",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut Pluridisciplinaire Hubert Curien",
+      "labStructId_i": "93777"
+    }
+  ],
+  "Colin Bernet": [
+    {
+      "authIdHal_s": "colin-bernet",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Marco Chiusi": [
+    {
+      "authIdHal_s": "marco-chiusi",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Chiara Amendola": [
+    {
+      "authIdHal_s": "chiara-amendola",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "Alessandro Tarabini": [
+    {
+      "authIdHal_s": "alessandro-tarabini",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Jona Motta": [
+    {
+      "authIdHal_s": "jona-motta",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Jonas Rembser": [
+    {
+      "authIdHal_s": "jonas-rembser",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Mario Antoine Sessini": [
+    {
+      "authIdHal_s": "mario-antoine-sessini",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut Pluridisciplinaire Hubert Curien",
+      "labStructId_i": "93777"
+    }
+  ],
+  "Isaac Telford Ehle": [
+    {
+      "authIdHal_s": "isaac-telford-ehle",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Camille Camen": [
+    {
+      "authIdHal_s": "camille-camen",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
     }
   ]
 }

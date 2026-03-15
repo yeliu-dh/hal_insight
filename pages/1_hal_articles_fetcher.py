@@ -46,15 +46,21 @@ def get_mappings_json(mapping_folder='external_data'):
         "DOMAIN_MAP": load_external_json(f"{mapping_folder}/domain_map.json"),
         "LANG_MAP": load_external_json(f"{mapping_folder}/lang_map.json"),
         "DOC_TYPE_MAP": load_external_json(f"{mapping_folder}/doctype_map.json"),
-        "AUTH_STRUCT_MAP":load_external_json(f"{mapping_folder}/auth_struct_map.json")
+        # "AUTH_STRUCT_MAP":load_external_json(f"{mapping_folder}/auth_struct_map.json")
     }
     
 maps = get_mappings_json()
 DOMAIN_MAP = maps["DOMAIN_MAP"]
 LANG_MAP = maps["LANG_MAP"]
 DOC_TYPE_MAP = maps["DOC_TYPE_MAP"]
-AUTH_STRUCT_MAP=maps['AUTH_STRUCT_MAP']
-# st.write(AUTH_STRUCT_MAP)
+
+
+# -----------------------------------------------------
+path_AUTH_STRUCT_MAP="external_data/auth_struct_map.json"
+
+
+# AUTH_STRUCT_MAP=maps['AUTH_STRUCT_MAP']# map_auth_struct不能缓存加载，不然update之后无法马上存入？
+# st.write(f"len map_auth_struct:{len(list(AUTH_STRUCT_MAP.keys()))}!")
 
 ## fnege 
 def get_mappings_csv(mapping_folder='external_data'):
@@ -128,7 +134,11 @@ if auth_names:
             if score >= cutoff:
                 return best_match
             return None
-    choices=list(AUTH_STRUCT_MAP.keys())
+    
+    with open(path_AUTH_STRUCT_MAP, 'r', encoding='utf-8')as f:
+        map_auth_struct=json.load(f)
+        
+    choices=list(map_auth_struct.keys())
     # st.write(f"len choices:{len(choices)}")
     auth_names_valid=[fuzzy_lookup(query=name, choices=choices, cutoff=80) for name in auth_names]
     # st.write(f"[check] authFullName_s: {auth_names_valid}")
@@ -212,6 +222,10 @@ st.divider()
 #     value=["Université Paris-Est Créteil Val-de-Marne"],
 #     maxtags=10
 # )
+
+
+
+
 # ==========================================(OUTPUT) FIELD LIST====================================================
 st.subheader("💾 Choisir les champs à exporter")
 st.markdown("<br>", unsafe_allow_html=True)
@@ -252,6 +266,7 @@ st.divider()
 
 # ============================================README=============================================
 st.subheader("📒 README")
+# st.markdown(f"HAL cherche des articles par publicationDateY_i")
 
 st.markdown(
     "**cl_fnege** : Classement FNEGE du journal de l'année de la publication  \n"
@@ -274,7 +289,7 @@ st.markdown(
     f"- L'info est structurée sous forme de *Nom complet de l'auteur_Identifiant de sa structure primaire_Nom de la structure  \n"
     f"- Par example, Anne-Claire Chêne_57129_Institut de Recherche en Gestion  \n\n"
     f"**authPrimaryStructure_hasIRG_bool**: si les identifiants *1004418* ou/et *57129* apparaît dans les structures primaires, cette colonne prend une valeur *True*  \n\n"    
-    "👉 Consulter [Dictionnaire des structures primarires des auteurs](https://github.com/yeliu-dh/hal_insight/blob/main/external_data/auth_struct_map.json)"
+    "👉 Consulter **le nom complet et l'ID des auteurs et leurs structure primaires** dans ce [Dictionnaire](https://github.com/yeliu-dh/hal_insight/blob/main/external_data/auth_struct_map.json)"
     # f"Les différentes institutions d’un même article sont concaténées avec un point-virgule ';'."
 )
 st.markdown("<br>", unsafe_allow_html=True)
@@ -324,10 +339,12 @@ if search_button:# and not invalid_date
     #================处理domain, axe, fnenge, primarystructure================ 
     try :
         df =process_df(df, DOMAIN_MAP, 
-               FNEGE_MAP, cutoff, active_fuzzylookup,
+            FNEGE_MAP, cutoff, active_fuzzylookup,
             #  start_year, start_month, end_year, end_month, filter_pubdate_by=None
-               AUTH_STRUCT_MAP
-               )#***
+            #   AUTH_STRUCT_MAP
+            path_map_auth_struct=path_AUTH_STRUCT_MAP,
+            
+       )#***
     
         # desired_order=[]
         st.success(f"✅ {len(df)} articles trouvés!\n\n"
