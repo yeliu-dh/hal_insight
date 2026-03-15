@@ -226,7 +226,7 @@ options_fields = ['halId_s','uri_s',"docType_s", "title_s", "subTitle_s", "authF
 ]
 
 # 默认输出字段
-default_fields=['halId_s','uri_s', "docType_s", "title_s", "subTitle_s", "authFullName_s","labStructName_s","labStructIdName_fs",
+default_fields=['halId_s','uri_s', "docType_s", "title_s", "subTitle_s", "authFullName_s","labStructName_s",
                 "domain_s","openAccess_bool",'volume_s',"page_s","classification_s",
                 "submittedDate_s","modifiedDate_s", "publicationDate_s","journalTitle_s","conferenceTitle_s","conferenceOrganizer_s","conferenceStartDate_s",
                 "country_s", "language_s",
@@ -321,9 +321,6 @@ if search_button:# and not invalid_date
             st.error(f"⚠️ ERROR in fetch_hal_articles: \n {e}")
             st.stop()#==break
 
-    # st.write("RAW DF")
-    # st.dataframe(df)
-
     #================处理domain, axe, fnenge, primarystructure================ 
     try :
         df =process_df(df, DOMAIN_MAP, 
@@ -391,6 +388,8 @@ if df is not None and not df.empty:
                     start_year, start_month, 
                     end_year, end_month, 
                     date_field_col=date_field_s)
+    # pub date在filter之前自动补全！没有月日的自动定位到01-01
+        
     st.info(f"**Résultat filtré : {len(df)} lignes => {len(df_filtered)} lignes**")#  {start_month}/{start_year} ~ {end_month}/{end_year} par {date_col}
     st.dataframe(df_filtered)
     st.markdown("<br>", unsafe_allow_html=True)

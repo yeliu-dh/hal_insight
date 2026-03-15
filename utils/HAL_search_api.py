@@ -83,7 +83,7 @@ def get_start_end_field(key_prefix):
     streamlit 输入模块：获得起、止，年、月，和筛选的日期列
     
     """
-
+    
     st.markdown(f"**📆 Période**.  \n")
     
     # ---start~end---
@@ -123,7 +123,7 @@ def get_start_end_field(key_prefix):
     )
         
     # ---check---
-    st.markdown(f"[check] chercher les articles pendant **{start_date} ~ {end_date}** par la date de **{date_field}**!")
+    st.markdown(f"[check] chercher les articles entre **{start_date} ~ {end_date}** par la date de **{date_field}**!")
     # st.markdown("<br>", unsafe_allow_html=True)
 
     return start_year, start_month, end_year, end_month, date_field
@@ -653,6 +653,10 @@ def add_classement_fnege(
 
 
 
+
+
+
+
 ##==========================================authPrimaryStructureIdName_s==================================================
 import urllib.parse
 import requests
@@ -810,12 +814,8 @@ def add_authPrimaryStructureIdName_s(df_input, map_auth_struct):
 
 
 
-
-
-
-
 def check_irgStructureID(df, list_structureid=["1004418","57129"]):
-    #
+    #    
     values=df['authPrimaryStructureIdName_s'].apply(lambda x : any(id_ in x for id_ in list_structureid))
    
     
@@ -998,7 +998,6 @@ def check_irgStructureID(df, list_structureid=["1004418","57129"]):
 #             df = df[df["pub_year"] <= int(end_year)]
        
 #     print(f'AFTER:{len(df)}')
-
 #     return df
  
 
