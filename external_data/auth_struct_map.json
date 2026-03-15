@@ -209,6 +209,12 @@
       "authIdHal_i": "3143",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "philippe-jourdan",
+      "authIdHal_i": "3143",
+      "labStructName_s": "IUT Creteil-Vitry",
+      "labStructId_i": "214848"
     }
   ],
   "Rémi Bourguignon": [
@@ -325,6 +331,18 @@
       "authIdHal_i": "3069",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "mathias-szpirglas",
+      "authIdHal_i": "3069",
+      "labStructName_s": "IAE Paris-Est-Université Gustave Eiffel",
+      "labStructId_i": "1152368"
+    },
+    {
+      "authIdHal_s": "mathias-szpirglas",
+      "authIdHal_i": "3069",
+      "labStructName_s": "Université Gustave Eiffel",
+      "labStructId_i": "580722"
     }
   ],
   "Romain Pierronnet": [
@@ -337,8 +355,8 @@
     {
       "authIdHal_s": "romain-pierronnet",
       "authIdHal_i": "8854",
-      "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
+      "labStructName_s": "Centre Européen de Recherche en Economie Financière et Gestion des Entreprises",
+      "labStructId_i": "221899"
     }
   ],
   "Mathias Béjean": [
@@ -1539,6 +1557,664 @@
       "authIdHal_i": "1544590",
       "labStructName_s": "Charte des Illustrateur·rices Ludiques",
       "labStructId_i": "1286022"
+    }
+  ],
+  "Julian Alvarez": [
+    {
+      "authIdHal_s": "julian-alvarez",
+      "authIdHal_i": "1228850",
+      "labStructName_s": "Groupe d'Études et de Recherche Interdisciplinaire en Information et COmmunication - ULR 4073",
+      "labStructId_i": "39707"
+    },
+    {
+      "authIdHal_s": "julian-alvarez",
+      "authIdHal_i": "1228850",
+      "labStructName_s": "Ludoscience : Studying Video Games",
+      "labStructId_i": "1207537"
+    },
+    {
+      "authIdHal_s": "julian-alvarez",
+      "authIdHal_i": "1228850",
+      "labStructName_s": "Institut national supérieur du professorat et de l'éducation - Académie de Lille - Hauts-de-France",
+      "labStructId_i": "1059535"
+    },
+    {
+      "authIdHal_s": "julian-alvarez",
+      "authIdHal_i": "1228850",
+      "labStructName_s": "Centre de Recherche en Informatique, Signal et Automatique de Lille - UMR 9189",
+      "labStructId_i": "410272"
+    },
+    {
+      "authIdHal_s": "julian-alvarez",
+      "authIdHal_i": "1228850",
+      "labStructName_s": "Immersive factory [France]",
+      "labStructId_i": "564453"
+    },
+    {
+      "authIdHal_s": "julian-alvarez",
+      "authIdHal_i": "1228850",
+      "labStructName_s": "École supérieure du professorat et de l'éducation - Lille Nord de France",
+      "labStructId_i": "268087"
+    },
+    {
+      "authIdHal_s": "julian-alvarez",
+      "authIdHal_i": "1228850",
+      "labStructName_s": "Laboratoire en Design Visuel et Urbain - EA 2445",
+      "labStructId_i": "109938"
+    },
+    {
+      "authIdHal_s": "julian-alvarez",
+      "authIdHal_i": "1228850",
+      "labStructName_s": "Play Research Lab",
+      "labStructId_i": "407892"
+    },
+    {
+      "authIdHal_s": "julian-alvarez",
+      "authIdHal_i": "1228850",
+      "labStructName_s": "Laboratoire de Recherche Sociétés & Humanités",
+      "labStructId_i": "1079112"
+    },
+    {
+      "authIdHal_s": "julian-alvarez",
+      "authIdHal_i": "1228850",
+      "labStructName_s": "Institut de recherche en informatique de Toulouse",
+      "labStructId_i": "34499"
+    },
+    {
+      "authIdHal_s": "julian-alvarez",
+      "authIdHal_i": "1228850",
+      "labStructName_s": "Université de Lille, Sciences et Technologies",
+      "labStructId_i": "92973"
+    }
+  ],
+  "Jean-Philippe Denis": [
+    {
+      "authIdHal_s": "jean-philippe-denis",
+      "authIdHal_i": "1268733",
+      "labStructName_s": "Université Paris-Saclay",
+      "labStructId_i": "419361"
+    },
+    {
+      "authIdHal_s": "jean-philippe-denis",
+      "authIdHal_i": "1268733",
+      "labStructName_s": "Réseaux Innovation Territoires et Mondialisation",
+      "labStructId_i": "1051119"
+    },
+    {
+      "authIdHal_s": "jean-philippe-denis",
+      "authIdHal_i": "1268733",
+      "labStructName_s": "Centre d'Etudes et de Recherches sur les Organisations et la Stratégie",
+      "labStructId_i": "109951"
+    }
+  ],
+  "Hugo Gaillard": [
+    {
+      "authIdHal_s": "hugo-gaillard",
+      "authIdHal_i": "181097",
+      "labStructName_s": "Laboratoire de recherche en gestion Le Mans Université",
+      "labStructId_i": "1091282"
+    },
+    {
+      "authIdHal_s": "hugo-gaillard",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire de recherche en gestion Le Mans Université",
+      "labStructId_i": "1091282"
+    },
+    {
+      "authIdHal_s": "hugo-gaillard",
+      "authIdHal_i": "181097",
+      "labStructName_s": "Atelier De Recherche En Gestion De L'université Du Mans",
+      "labStructId_i": "208530"
+    }
+  ],
+  "Damien Djaouti": [
+    {
+      "authIdHal_s": "damien-djaouti",
+      "authIdHal_i": "175779",
+      "labStructName_s": "Laboratoire Interdisciplinaire de Recherche en Didactique, Éducation et Formation",
+      "labStructId_i": "447107"
+    },
+    {
+      "authIdHal_s": "damien-djaouti",
+      "authIdHal_i": "175779",
+      "labStructName_s": "Laboratoire Interdisciplinaire de Recherche en Didactique, Éducation et Formation",
+      "labStructId_i": "1100748"
+    }
+  ],
+  "Olivier Rampnoux": [
+    {
+      "authIdHal_s": "olivier-rampnoux",
+      "authIdHal_i": "170803",
+      "labStructName_s": "Centre de recherche en gestion [EA 1722]",
+      "labStructId_i": "159255"
+    },
+    {
+      "authIdHal_s": "olivier-rampnoux",
+      "authIdHal_i": "170803",
+      "labStructName_s": "Centre de recherche en gestion [UR 13564]",
+      "labStructId_i": "1164957"
+    },
+    {
+      "authIdHal_s": "olivier-rampnoux",
+      "authIdHal_i": "170803",
+      "labStructName_s": "Université de Poitiers =  University of Poitiers",
+      "labStructId_i": "54493"
+    },
+    {
+      "authIdHal_s": "olivier-rampnoux",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre de recherche en gestion [EA 1722]",
+      "labStructId_i": "159255"
+    }
+  ],
+  "Jean Pierre Jessel": [
+    {
+      "authIdHal_s": "jean-pierre-jessel",
+      "authIdHal_i": "905903",
+      "labStructName_s": "Visual Objects from Reality To Expression",
+      "labStructId_i": "395058"
+    },
+    {
+      "authIdHal_s": "jean-pierre-jessel",
+      "authIdHal_i": "905903",
+      "labStructName_s": "Real Expression Artificial Life",
+      "labStructId_i": "1001832"
+    }
+  ],
+  "Emeline Martin": [
+    {
+      "authIdHal_s": "emeline-martin",
+      "authIdHal_i": "184858",
+      "labStructName_s": "Institut d'Administration des Entreprises (IAE) - Angers",
+      "labStructId_i": "1072402"
+    },
+    {
+      "authIdHal_s": "emeline-martin",
+      "authIdHal_i": "184858",
+      "labStructName_s": "Groupe de Recherche Angevin en Economie et Management",
+      "labStructId_i": "1096406"
+    },
+    {
+      "authIdHal_s": "emeline-martin",
+      "authIdHal_i": "184858",
+      "labStructName_s": "Université d'Angers",
+      "labStructId_i": "74911"
+    },
+    {
+      "authIdHal_s": "emeline-martin",
+      "authIdHal_i": "184858",
+      "labStructName_s": "Laboratoire de Recherche Magellan",
+      "labStructId_i": "171535"
+    },
+    {
+      "authIdHal_s": "emeline-martin",
+      "authIdHal_i": "184858",
+      "labStructName_s": "Centre de Recherche Clermontois en Gestion et Management",
+      "labStructId_i": "198870"
+    }
+  ],
+  "Florent Giordano": [
+    {
+      "authIdHal_s": "florent-giordano",
+      "authIdHal_i": "319",
+      "labStructName_s": "Centre de Recherche Interdisciplinaire Economie Gestion",
+      "labStructId_i": "1192497"
+    },
+    {
+      "authIdHal_s": "florent-giordano",
+      "authIdHal_i": "319",
+      "labStructName_s": "Recherches en Economie Gestion Agroressources Durabilité et Santé",
+      "labStructId_i": "1192498"
+    },
+    {
+      "authIdHal_s": "florent-giordano",
+      "authIdHal_i": "319",
+      "labStructName_s": "Recherches en Économie Gestion AgroRessources Durabilité Santé- EA 6292",
+      "labStructId_i": "451480"
+    },
+    {
+      "authIdHal_s": "florent-giordano",
+      "authIdHal_i": "319",
+      "labStructName_s": "Val de Loire Recherche en Management",
+      "labStructId_i": "190457"
+    }
+  ],
+  "Lucie Chartouny": [
+    {
+      "authIdHal_s": "lucie-chartouny",
+      "authIdHal_i": "1617245",
+      "labStructName_s": "Dauphine Recherches en Management",
+      "labStructId_i": "1032"
+    }
+  ],
+  "Jean-Claude Pacitto": [
+    {
+      "authIdHal_s": "jean-claude-pacitto",
+      "authIdHal_i": "995969",
+      "labStructName_s": "Université Paris-Est Créteil Val-de-Marne - Paris 12",
+      "labStructId_i": "420786"
+    },
+    {
+      "authIdHal_s": "jean-claude-pacitto",
+      "authIdHal_i": "995969",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "jean-claude-pacitto",
+      "authIdHal_i": "995969",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    },
+    {
+      "authIdHal_s": "jean-claude-pacitto",
+      "authIdHal_i": "995969",
+      "labStructName_s": "IUT Creteil-Vitry",
+      "labStructId_i": "214848"
+    }
+  ],
+  "Thierry Lafouge": [
+    {
+      "authIdHal_s": "thierry-lafouge",
+      "authIdHal_i": "832821",
+      "labStructName_s": "Equipe de recherche de Lyon en sciences de l'information et de la communication",
+      "labStructId_i": "70904"
+    }
+  ],
+  "Antoine Taly": [
+    {
+      "authIdHal_s": "antoine-taly",
+      "authIdHal_i": "20706",
+      "labStructName_s": "Laboratoire de biochimie théorique [Paris]",
+      "labStructId_i": "489"
+    }
+  ],
+  "Christophe Schmitt": [
+    {
+      "authIdHal_s": "christophe-schmitt",
+      "authIdHal_i": "738294",
+      "labStructName_s": "Centre Européen de Recherche en Economie Financière et Gestion des Entreprises",
+      "labStructId_i": "221899"
+    }
+  ],
+  "Katell Bellegarde": [
+    {
+      "authIdHal_s": "katell-bellegarde",
+      "authIdHal_i": "754492",
+      "labStructName_s": "Centre Interuniversitaire de Recherche en Education de Lille - ULR 4354",
+      "labStructId_i": "83767"
+    }
+  ],
+  "Gilles Méthel": [
+    {
+      "authIdHal_s": "gilles-méthel",
+      "authIdHal_i": "1414320",
+      "labStructName_s": "Université Toulouse - Jean Jaurès",
+      "labStructId_i": "116256"
+    },
+    {
+      "authIdHal_s": "gilles-méthel",
+      "authIdHal_i": "1414320",
+      "labStructName_s": "Laboratoire de Recherche en Audiovisuel",
+      "labStructId_i": "133016"
+    }
+  ],
+  "Tarik Chakor": [
+    {
+      "authIdHal_s": "tarik-chakor",
+      "authIdHal_i": "736609",
+      "labStructName_s": "Institut de Recherche en Gestion et en Economie",
+      "labStructId_i": "432899"
+    },
+    {
+      "authIdHal_s": "tarik-chakor",
+      "authIdHal_i": "736609",
+      "labStructName_s": "Laboratoire d'Economie et de Sociologie du Travail",
+      "labStructId_i": "839"
+    }
+  ],
+  "Emilie Ruiz": [
+    {
+      "authIdHal_s": "emilie-ruiz",
+      "authIdHal_i": "996518",
+      "labStructName_s": "Institut de Recherche en Gestion et en Economie",
+      "labStructId_i": "432899"
+    },
+    {
+      "authIdHal_s": "emilie-ruiz",
+      "authIdHal_i": "1259532",
+      "labStructName_s": "Démarche intégrée pour l'obtention d'aliments de qualité",
+      "labStructId_i": "1100833"
+    },
+    {
+      "authIdHal_s": "emilie-ruiz",
+      "authIdHal_i": "996518",
+      "labStructName_s": "Bureau d'Économie Théorique et Appliquée",
+      "labStructId_i": "1001961"
+    },
+    {
+      "authIdHal_s": "emilie-ruiz",
+      "authIdHal_i": "996518",
+      "labStructName_s": "Université Savoie Mont Blanc",
+      "labStructId_i": "432896"
+    }
+  ],
+  "Clotilde Coron": [
+    {
+      "authIdHal_s": "clotilde-coron",
+      "authIdHal_i": "13955",
+      "labStructName_s": "Réseaux Innovation Territoires et Mondialisation",
+      "labStructId_i": "1051119"
+    }
+  ],
+  "Pascal Corbel": [
+    {
+      "authIdHal_s": "pascal-corbel",
+      "authIdHal_i": "1212280",
+      "labStructName_s": "Université de Versailles Saint-Quentin-en-Yvelines",
+      "labStructId_i": "81173"
+    },
+    {
+      "authIdHal_s": "pascal-corbel",
+      "authIdHal_i": "1212280",
+      "labStructName_s": "Université Paris-Saclay",
+      "labStructId_i": "419361"
+    }
+  ],
+  "Lionel Honoré": [
+    {
+      "authIdHal_s": "lionel-honoré",
+      "authIdHal_i": "1134774",
+      "labStructName_s": "Laboratoire d'Economie et de Gestion de l'Ouest",
+      "labStructId_i": "489734"
+    }
+  ],
+  "Jean-Christophe Volia": [
+    {
+      "authIdHal_s": "jean-christophe-volia",
+      "authIdHal_i": "1396033",
+      "labStructName_s": "Centre de droit des affaires et de gestion",
+      "labStructId_i": "1004768"
+    }
+  ],
+  "Sonia Capelli": [
+    {
+      "authIdHal_s": "sonia-capelli",
+      "authIdHal_i": "3011",
+      "labStructName_s": "Laboratoire de Recherche Magellan",
+      "labStructId_i": "171535"
+    }
+  ],
+  "Julien Cloarec": [
+    {
+      "authIdHal_s": "julien-cloarec",
+      "authIdHal_i": "1288272",
+      "labStructName_s": "Laboratoire de Recherche Magellan",
+      "labStructId_i": "171535"
+    },
+    {
+      "authIdHal_s": "julien-cloarec",
+      "authIdHal_i": "1288272",
+      "labStructName_s": "Iaelyon School of Management",
+      "labStructId_i": "1089520"
+    },
+    {
+      "authIdHal_s": "julien-cloarec",
+      "authIdHal_i": "1288272",
+      "labStructName_s": "Université Jean Moulin - Lyon 3",
+      "labStructId_i": "118744"
+    }
+  ],
+  "Yvan Peter": [
+    {
+      "authIdHal_s": "yvan-peter",
+      "authIdHal_i": "5125",
+      "labStructName_s": "Centre de Recherche en Informatique, Signal et Automatique de Lille - UMR 9189",
+      "labStructId_i": "410272"
+    },
+    {
+      "authIdHal_s": "yvan-peter",
+      "authIdHal_i": "5125",
+      "labStructName_s": "Université de Lille",
+      "labStructId_i": "374570"
+    }
+  ],
+  "Gabriel Lomellini": [
+    {
+      "authIdHal_s": "gabriel-lomellini",
+      "authIdHal_i": "1291323",
+      "labStructName_s": "Centre Européen de Recherche en Economie Financière et Gestion des Entreprises",
+      "labStructId_i": "221899"
+    },
+    {
+      "authIdHal_s": "gabriel-lomellini",
+      "authIdHal_i": "1291323",
+      "labStructName_s": "ICN Business School",
+      "labStructId_i": "462936"
+    }
+  ],
+  "Nathalie Fabbe-Costes": [
+    {
+      "authIdHal_s": "nathalie-fabbe-costes",
+      "authIdHal_i": "13999",
+      "labStructName_s": "Centre d'Études et de Recherche en Gestion d'Aix-Marseille",
+      "labStructId_i": "108098"
+    },
+    {
+      "authIdHal_s": "nathalie-fabbe-costes",
+      "authIdHal_i": "13999",
+      "labStructName_s": "Aix-Marseille Université - Faculté d'économie et de gestion",
+      "labStructId_i": "412215"
+    }
+  ],
+  "Julien Husson": [
+    {
+      "authIdHal_s": "julien-husson",
+      "authIdHal_i": "738429",
+      "labStructName_s": "Centre Européen de Recherche en Economie Financière et Gestion des Entreprises",
+      "labStructId_i": "221899"
+    },
+    {
+      "authIdHal_s": "julien-husson",
+      "authIdHal_i": "738429",
+      "labStructName_s": "Institut d'Administration des Entreprises (IAE) - Metz",
+      "labStructId_i": "301757"
+    },
+    {
+      "authIdHal_s": "julien-husson",
+      "authIdHal_i": "738429",
+      "labStructName_s": "Université de Lorraine",
+      "labStructId_i": "413289"
+    }
+  ],
+  "Sophia Galiere": [
+    {
+      "authIdHal_s": "sophia-galiere",
+      "authIdHal_i": "748376",
+      "labStructName_s": "Groupe de Recherche en Droit, Economie et Gestion",
+      "labStructId_i": "185786"
+    }
+  ],
+  "Pierre-Yves Gomez": [
+    {
+      "authIdHal_s": "pierre-yves-gomez",
+      "authIdHal_i": "1437722",
+      "labStructName_s": "EMLyon Business School",
+      "labStructId_i": "301362"
+    }
+  ],
+  "Christophe Kolski": [
+    {
+      "authIdHal_s": "christophe-kolski",
+      "authIdHal_i": "746822",
+      "labStructName_s": "Laboratoire d'Automatique, de Mécanique et d'Informatique industrielles et Humaines - UMR 8201",
+      "labStructId_i": "1303"
+    }
+  ],
+  "Julie Boyaval": [
+    {
+      "authIdHal_s": "julie-boyaval",
+      "authIdHal_i": "1100232",
+      "labStructName_s": "Rectorat de l'académie de Lille",
+      "labStructId_i": "302116"
+    }
+  ],
+  "Sophie Lepreux": [
+    {
+      "authIdHal_s": "sophie-lepreux",
+      "authIdHal_i": "10208",
+      "labStructName_s": "Laboratoire d'Automatique, de Mécanique et d'Informatique industrielles et Humaines - UMR 8201",
+      "labStructId_i": "1303"
+    }
+  ],
+  "Louise Lecomte": [
+    {
+      "authIdHal_s": "louise-lecomte",
+      "authIdHal_i": "1640983",
+      "labStructName_s": "Dauphine Recherches en Management",
+      "labStructId_i": "1032"
+    }
+  ],
+  "Nicolas Balas": [
+    {
+      "authIdHal_s": "nicolas-balas",
+      "authIdHal_i": "1045803",
+      "labStructName_s": "Montpellier Research in Management",
+      "labStructId_i": "117385"
+    },
+    {
+      "authIdHal_s": "nicolas-balas",
+      "authIdHal_i": "1045803",
+      "labStructName_s": "Université Paris Dauphine-PSL",
+      "labStructId_i": "300302"
+    }
+  ],
+  "Hélène Delacour": [
+    {
+      "authIdHal_s": "hélène-delacour",
+      "authIdHal_i": "737957",
+      "labStructName_s": "Centre Européen de Recherche en Economie Financière et Gestion des Entreprises",
+      "labStructId_i": "221899"
+    }
+  ],
+  "Adeline Buton": [
+    {
+      "authIdHal_s": "adeline-buton",
+      "authIdHal_i": "1029766",
+      "labStructName_s": "Val de Loire Recherche en Management",
+      "labStructId_i": "190457"
+    }
+  ],
+  "Sylvain Haudegond": [
+    {
+      "authIdHal_s": "sylvain-haudegond",
+      "authIdHal_i": "1028553",
+      "labStructName_s": "Play Research Lab",
+      "labStructId_i": "407892"
+    }
+  ],
+  "Armand Hatchuel": [
+    {
+      "authIdHal_s": "armand-hatchuel",
+      "authIdHal_i": "3386",
+      "labStructName_s": "Centre de Gestion Scientifique i3",
+      "labStructId_i": "39111"
+    }
+  ],
+  "Anne Stévenot": [
+    {
+      "authIdHal_s": "anne-stévenot",
+      "authIdHal_i": "737958",
+      "labStructName_s": "Centre Européen de Recherche en Economie Financière et Gestion des Entreprises",
+      "labStructId_i": "221899"
+    }
+  ],
+  "Théo Haberbusch": [
+    {
+      "authIdHal_s": "théo-haberbusch",
+      "authIdHal_i": "1106648",
+      "labStructName_s": "News Tank éducation & recherche",
+      "labStructId_i": "1074131"
+    }
+  ],
+  "Aude Deville": [
+    {
+      "authIdHal_s": "aude-deville",
+      "authIdHal_i": "751704",
+      "labStructName_s": "Groupe de Recherche en Management - EA 4711",
+      "labStructId_i": "520677"
+    }
+  ],
+  "Marie Greil": [
+    {
+      "authIdHal_s": "marie-greil",
+      "authIdHal_i": "1643980",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Hélène Carrère": [
+    {
+      "authIdHal_s": "hélène-carrère",
+      "authIdHal_i": "735297",
+      "labStructName_s": "Laboratoire de Biotechnologie de l'Environnement [Narbonne]",
+      "labStructId_i": "1096433"
+    }
+  ],
+  "Eric Bidet": [
+    {
+      "authIdHal_s": "eric-bidet",
+      "authIdHal_i": "1141708",
+      "labStructName_s": "Laboratoire de recherche en gestion Le Mans Université",
+      "labStructId_i": "1091282"
+    }
+  ],
+  "Laurent Michaud": [
+    {
+      "authIdHal_s": "laurent-michaud",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de l'audiovisuel et des télécommunications en Europe (.)",
+      "labStructId_i": "450885"
+    }
+  ],
+  "Audrey Battimelli": [
+    {
+      "authIdHal_s": "audrey-battimelli",
+      "authIdHal_i": "1176914",
+      "labStructName_s": "Laboratoire de Biotechnologie de l'Environnement [Narbonne]",
+      "labStructId_i": "1096433"
+    }
+  ],
+  "Albane Grandazzi": [
+    {
+      "authIdHal_s": "albane-grandazzi",
+      "authIdHal_i": "0",
+      "labStructName_s": "Grenoble Ecole de Management",
+      "labStructId_i": "220014"
+    }
+  ],
+  "Albéric Tellier": [
+    {
+      "authIdHal_s": "albéric-tellier",
+      "authIdHal_i": "1036560",
+      "labStructName_s": "Université Paris Dauphine-PSL",
+      "labStructId_i": "300302"
+    }
+  ],
+  "Aziza Laguecir": [
+    {
+      "authIdHal_s": "aziza-laguecir",
+      "authIdHal_i": "1358452",
+      "labStructName_s": "Lille économie management - UMR 9221",
+      "labStructId_i": "413157"
+    }
+  ],
+  "Denis Malherbe": [
+    {
+      "authIdHal_s": "denis-malherbe",
+      "authIdHal_i": "0",
+      "labStructName_s": "France Business School",
+      "labStructId_i": "240959"
     }
   ]
 }

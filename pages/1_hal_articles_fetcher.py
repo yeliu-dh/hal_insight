@@ -77,8 +77,10 @@ st.title("Hal Articles Fetcher")
 st.subheader("🔢 Filtrer vos résultats")
 st.markdown("<br>", unsafe_allow_html=True)
 
+
+# ------------------------------------random text-----------------------------------------------
 text = st_tags(
-label="**Cherche un text dans tous les champs:**",
+label="**🗟 Cherche un text dans tous les champs:**",
 text="Tapez et 'Entrée' (chercher un texte dans tous les champs...)",
 value=[],
 suggestions=[],
@@ -87,21 +89,13 @@ maxtags=10
 st.markdown("<br>", unsafe_allow_html=True)
 
 
-# # 文档类型
-# select_all_doctypes = st.checkbox("(De)sélectionner tous les types de document")
-# doc_types = st.multiselect(
-#     "**📚 Type de document**",
-#     options=list(DOC_TYPE_MAP.keys()),
-#     format_func=lambda x: DOC_TYPE_MAP[x],
-#     default=list(DOC_TYPE_MAP.keys()) if select_all_doctypes else ["ART","OUV","COUV","COMM"]
-# )
-
+#---------------------------------------doctype------------------------------------------------
 # 控制初始化状态
 if "select_all_doctypes" not in st.session_state:
     st.session_state.select_all_doctypes = False
 
 doc_types = st.multiselect(
-    "**📚 Type de document**",
+    "**📚 Type de document:**",
     options=list(DOC_TYPE_MAP.keys()),
     format_func=lambda x: DOC_TYPE_MAP[x],
     default=list(DOC_TYPE_MAP.keys()) if st.session_state.select_all_doctypes else ["ART","OUV","COUV","COMM"]
@@ -110,16 +104,17 @@ st.checkbox(
     "(De)sélectionner tous les types de document",
     key="select_all_doctypes"
 )
+st.markdown("<br>", unsafe_allow_html=True)
 
 
-
+#----------------------------------authfullname-----------------------------------------------
 auth_names = st_tags(
-label="**Auteurs**",
+label="**👩‍🔬Nom complet des auteurs:**",
 text="Tapez et 'Entrée' (chercher un texte dans tous les champs...)",
 value=None,
 suggestions=[],
 maxtags=10,
-key="auth_names"
+key="auth_names",
 )
 
 # input names TO authFullName_s
@@ -140,27 +135,27 @@ if auth_names:
 else :
     auth_names_valid=None
     
+st.markdown("<br>", unsafe_allow_html=True)
 
-domains = st.multiselect(
-    "**Domaine**",
-    options=list(DOMAIN_MAP.keys()),
-    format_func=lambda x: DOMAIN_MAP[x],
-    default=[]
-)
 
-keywords = st_tags(
-    label="**Mots-clés**",
+
+# ----------------------------------------labsName/ID----------------------------------------------------
+labs = st_tags(
+    label="**🔬 Laboratoire**",
     text="Tapez et 'Entrée'",
-    value=[],
-    suggestions=[],
+    value=["Institut de Recherche en Gestion"],
     maxtags=10
 )
-
-
-
-
+labs_id=st_tags(
+    label="**ID de laboratoire**",
+    text="Tapez et 'Entrée'",
+    value=['57129',"1004418"],
+    maxtags=10
+)
 st.markdown("<br>", unsafe_allow_html=True)
-#===========================PEIODE DE REQUETE===================================
+
+
+#------------------------------------PEIODE DE REQUETE--------------------------------------------
 start_year, start_month, end_year, end_month, date_field=get_start_end_field(key_prefix="search")
 
 date_field_tdate_map={"soumission":"submittedDate_tdate", 
@@ -179,13 +174,30 @@ languages = st.multiselect(
     format_func=lambda x: LANG_MAP[x],
     default=[]
 )
+st.markdown("<br>", unsafe_allow_html=True)
 
-labs = st_tags(
-    label="**Laboratoire**",
+
+# ------------------------------------------other champs--------------------------------------------
+domains = st.multiselect(
+    "**Domaines**",
+    options=list(DOMAIN_MAP.keys()),
+    format_func=lambda x: DOMAIN_MAP[x],
+    default=[]
+)
+
+keywords = st_tags(
+    label="**Mots-clés**",
     text="Tapez et 'Entrée'",
-    value=["Institut de Recherche en Gestion"],
+    value=[],
+    suggestions=[],
     maxtags=10
 )
+
+rows_range = list(range(0, 5001))
+max_records = st.selectbox("**les premier X articles (valeur maximale:5000):**", rows_range, index=500)
+
+st.markdown("<br>", unsafe_allow_html=True)
+st.divider()
 
 # collcode = st_tags(
 #     label="Collection par code",
@@ -200,17 +212,18 @@ labs = st_tags(
 #     value=["Université Paris-Est Créteil Val-de-Marne"],
 #     maxtags=10
 # )
-
+# ==========================================(OUTPUT) FIELD LIST====================================================
+st.subheader("💾 Choisir les champs à exporter")
+st.markdown("<br>", unsafe_allow_html=True)
 
 # 可选输出字段
 options_fields = ['halId_s','uri_s',"docType_s", "title_s", "subTitle_s", "authFullName_s","labStructName_s","domain_s", 
                     "publicationDate_s","journalTitle_s","conferenceTitle_s","conferenceStartDate_s","country_s","city_s","audience_s",
                     "language_s", "keyword_s", "abstract_s","urlFulltextEsr_s","files_s",'page_s',"modifiedDate_s","submittedDate_s",
                      "openAccess_bool",'volume_s','conferenceStartDate_s',"conferenceOrganizer_s","classification_s","collName_s","collCode_s",
-                     "authIdHal_s","authLastNameFirstName_s","label_s","labStructIdName_fs"
-                     #"authIdHasPrimaryStructure_fs"                    
+                     "authIdHal_s","authLastNameFirstName_s","label_s","labStructIdName_fs",
+                     "authIdHasPrimaryStructure_fs"                    
 ]
-
 
 # 默认输出字段
 default_fields=['halId_s','uri_s', "docType_s", "title_s", "subTitle_s", "authFullName_s","labStructName_s","labStructIdName_fs",
@@ -220,32 +233,25 @@ default_fields=['halId_s','uri_s', "docType_s", "title_s", "subTitle_s", "authFu
                 "keyword_s", "abstract_s","files_s","urlFulltextEsr_s","label_s"
 ]
 
-
-#⭐ check champs :https://api.archives-ouvertes.fr/docs/search/?schema=fields#fields
 fields = st.multiselect(
     "**Info à exporter**",
     options=options_fields,
     default=default_fields
 )
 
-
+# ========================================champs param============================================
 st.markdown("<br>", unsafe_allow_html=True)
-active_fuzzylookup = st.checkbox("**Active la recherche floue de FNEGE ?**", value=False, key="active_fuzzylookup")#key用于储存在session state中
+active_fuzzylookup = st.checkbox("**Pour le champs 'cl_fnege', active la recherche floue ?**", value=False, key="active_fuzzylookup")#key用于储存在session state中
 cutoff_range= list(range(50, 101)) 
 cutoff = st.selectbox("si oui, définir un **Cutoff%**",cutoff_range , index=cutoff_range.index(95))
 
 st.markdown("<br>", unsafe_allow_html=True)
-
-
-
-rows_range = list(range(0, 5001))
-max_records = st.selectbox("**les premier X articles (valeur maximale:5000):**", rows_range, index=500)
-st.markdown("<br>", unsafe_allow_html=True)
 st.divider()
+    
 
 
+# ============================================README=============================================
 st.subheader("📒 README")
-
 
 st.markdown(
     "**cl_fnege** : Classement FNEGE du journal de l'année de la publication  \n"
@@ -258,10 +264,7 @@ st.markdown(
     "- Si le range n'est pas disponible, on note NaN, que ce soit en recherche exacte ou floue.  \n"
     "👉 Consulter [le classement FNEGE (2011-2025)](https://github.com/yeliu-dh/hal_insight/blob/main/external_data/fnege_final_hal.csv)"
 )
-
 st.markdown("<br>", unsafe_allow_html=True)
-
-## Pipeline – author_primarystructure_s
 
 
 st.markdown(
@@ -274,10 +277,14 @@ st.markdown(
     "👉 Consulter [Dictionnaire des structures primarires des auteurs](https://github.com/yeliu-dh/hal_insight/blob/main/external_data/auth_struct_map.json)"
     # f"Les différentes institutions d’un même article sont concaténées avec un point-virgule ';'."
 )
-
 st.markdown("<br>", unsafe_allow_html=True)
 
-# ----------------------- RESULT -----------------------
+
+
+
+
+
+# ======================================= GET RESULT=============================================
 
 cols=st.columns([4,1])
 with cols[1]:
@@ -301,8 +308,8 @@ if search_button:# and not invalid_date
                 keywords=keywords,
                 languages=languages,
                 labs=labs,
+                labs_id=labs_id,
                 text=text,
-            
                 fields=fields,
                 rows=100,
                 max_records=max_records

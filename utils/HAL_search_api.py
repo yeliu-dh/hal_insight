@@ -200,16 +200,17 @@ def filter_par_date(df,
 
 ##=====================================recherche des articles================================================
 def fetch_hal_articles(
-            # start_date=None, end_date=None,
+            text=None,
             start_year=None, start_month=None, end_year=None, end_month=None, 
             date_field_col="publicationDate_tdate", # 默认值
             doc_types=None, auth_names_valid=None,
             
-            domains=None,keywords=None, languages=None, labs=None, 
+            domains=None,keywords=None, languages=None, 
+            labs=None, labs_id=None,
                        
-            collcode=None, collname=None, authors=None, 
-            
-            text=None,
+            # collcode=None, collname=None, 
+            # authors=None, 
+    
             fields:list=None, rows=100, max_records=5000):
     """
     grammaire basique de requête:
@@ -271,33 +272,27 @@ def fetch_hal_articles(
             "country_s", "language_s",
             "keyword_s", "abstract_s","files_s","urlFulltextEsr_s","label_s"
         ]
-        # fields = ['halId_s', "title_s", "authFullName_s", "publicationDate_s",
-        #           "labStructName_s", "keyword_s", "abstract_s", "urlFulltextEsr_s"]
-    
 
 
     # -------------构建搜索条件v2 11/10/25--------------------
     fq = []
+    
     if doc_types:
         input = [f'"{t}"' for t in doc_types]
         fq.append(f'docType_s:({" OR ".join(input)})')
-
-    if labs:
-        input = [f'"{t}"' for t in labs]
-        fq.append(f'labStructName_s:({" OR ".join(input)})')
-    
     
     if auth_names_valid:
         input = [f'"{t}"' for t in auth_names_valid]
         fq.append(f'authFullName_s:({" OR ".join(input)})')
     
-    if collcode:
-        input = [f'"{t}"' for t in collcode]
-        fq.append(f'collCode_s:({" OR ".join(input)})')
+    if labs:
+        input = [f'"{t}"' for t in labs]
+        fq.append(f'labStructName_s:({" OR ".join(input)})')
     
-    if collname:
-        input = [f'"{t}"' for t in collname]
-        fq.append(f'collName_s:({" OR ".join(input)})')
+    if labs_id:
+        input = [f'"{t}"' for t in labs_id]
+        fq.append(f'labStructId_i:({" OR ".join(input)})')
+    
 
     if domains:
         input = [f'"{t}"' for t in domains]
@@ -311,9 +306,18 @@ def fetch_hal_articles(
         input = [f'"{t}"' for t in languages]
         fq.append(f'language_s:({" OR ".join(input)})')
         
-    if authors:
-        input = [f'"{t}"' for t in authors]
-        fq.append(f'authFullName_s:({" OR ".join(input)})')
+    # if authors:
+    #     input = [f'"{t}"' for t in authors]
+    #     fq.append(f'authFullName_s:({" OR ".join(input)})')
+        
+    # if collcode:
+    #     input = [f'"{t}"' for t in collcode]
+    #     fq.append(f'collCode_s:({" OR ".join(input)})')
+    
+    # if collname:
+    #     input = [f'"{t}"' for t in collname]
+    #     fq.append(f'collName_s:({" OR ".join(input)})')
+        
 
     #-------------------------------------period------------------------------------------    
     if start_year and start_month and end_year and end_month:
@@ -324,8 +328,7 @@ def fetch_hal_articles(
 
 
     # 8. 自由文本（全文搜索）
-    # q = " AND ".join(text) if text else "*:*"
-    q="*:*"
+    q = " AND ".join(text) if text else "*:*"
     
     """
     start-end:2026-01-01-NOW
@@ -651,7 +654,6 @@ def add_classement_fnege(
 
 
 ##==========================================authPrimaryStructureIdName_s==================================================
-##==========================================   ==================================================
 import urllib.parse
 import requests
 
@@ -731,10 +733,10 @@ import json
 import pandas as pd
 
 def update_map_auth_struct(map_auth_struct, list_new_fullnames,
-                           path_map_auth_struct='../external_data/auth_struct_map.json'
+                           path_map_auth_struct='external_data/auth_struct_map.json'
     ):
     if list_new_fullnames==[]:
-        st.write(' No updates in map_auth_struct!')
+        print(' No updates in map_auth_struct!')
         return map_auth_struct
     
     new_map_auth_struct=map_auth_struct.copy()
@@ -750,7 +752,7 @@ def update_map_auth_struct(map_auth_struct, list_new_fullnames,
     # save
     with open(path_map_auth_struct, 'w', encoding='utf-8')as f:
         json.dump(map_auth_struct, f, indent=2, ensure_ascii=False)
-        st.write(f'map_auth_struct updated and saved in {path_map_auth_struct}!')
+        print(f'map_auth_struct updated and saved in {path_map_auth_struct}!')
 
     # stat
     print(f"old map_auth_struct: {len(map_auth_struct)}; new:{len(new_map_auth_struct)}")
@@ -759,7 +761,6 @@ def update_map_auth_struct(map_auth_struct, list_new_fullnames,
 
 
 #------------------------------------------------------------------------------------------------------------------------
-
 
 def map_auth_struct_per_row(authFullName_s, map_auth_struct):
     list_authFullName_s=authFullName_s.split(';')
@@ -780,6 +781,10 @@ def map_auth_struct_per_row(authFullName_s, map_auth_struct):
 
 
 def add_authPrimaryStructureIdName_s(df_input, map_auth_struct):
+    """
+    ~= clean + organise 'authIdHasPrimaryStructure_fs'
+    """
+    
     df=df_input.copy()
     
     # ---list_new_fullnames---
@@ -790,7 +795,7 @@ def add_authPrimaryStructureIdName_s(df_input, map_auth_struct):
     
     # ---update map_auth_struct---
     new_map_auth_struct=update_map_auth_struct(map_auth_struct, list_new_fullnames=list_new_fullnames,
-                        path_map_auth_struct='../external_data/auth_struct_map.json'
+                        path_map_auth_struct='external_data/auth_struct_map.json'
     )
     
     # ---map ---   
@@ -804,7 +809,13 @@ def add_authPrimaryStructureIdName_s(df_input, map_auth_struct):
     return df
 
 
+
+
+
+
+
 def check_irgStructureID(df, list_structureid=["1004418","57129"]):
+    #
     values=df['authPrimaryStructureIdName_s'].apply(lambda x : any(id_ in x for id_ in list_structureid))
    
     
@@ -1038,10 +1049,9 @@ def process_df(df, DOMAIN_MAP,
 
     # -------------authPrimaryStructureIdName_s+authPrimaryStructure_IRG_bool----------------------
     if "authFullName_s" in df.columns and AUTH_STRUCT_MAP :  
-        st.write(f"✔ Structures primaires des auteurs mappées!")
-        
         df=add_authPrimaryStructureIdName_s(df, map_auth_struct=AUTH_STRUCT_MAP)
-        df=check_irgStructureID(df,list_structureid=["1004418","57129"])
+        # df=check_irgStructureID(df,list_structureid=["1004418","57129"])
+        st.write(f"✔ Structures primaires des auteurs mappées!")
 
 
     
