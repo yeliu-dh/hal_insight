@@ -691,7 +691,7 @@ def search_authIdHasPrimaryStructure_fs_by_authFullName_s(list_fullnames):
     # check url：
     query_string = urllib.parse.urlencode(params, doseq=True)
     full_url = BASE_URL + "?" + query_string
-    print(f'[authFullName_s] QUERY URL : {full_url} \n')
+    # print(f'[authFullName_s] QUERY URL : {full_url} \n')
 
     # parse
     resp = requests.get(BASE_URL, params=params, timeout=15)

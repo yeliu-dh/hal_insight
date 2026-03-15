@@ -289,7 +289,7 @@ st.markdown(
     f"- L'info est structurée sous forme de *Nom complet de l'auteur_Identifiant de sa structure primaire_Nom de la structure  \n"
     f"- Par example, Anne-Claire Chêne_57129_Institut de Recherche en Gestion  \n\n"
     f"**authPrimaryStructure_hasIRG_bool**: si les identifiants *1004418* ou/et *57129* apparaît dans les structures primaires, cette colonne prend une valeur *True*  \n\n"    
-    "👉 Consulter **le nom complet et l'ID des auteurs et leurs structure primaires** dans ce [Dictionnaire](https://github.com/yeliu-dh/hal_insight/blob/main/external_data/auth_struct_map.json)"
+    "👉 Consulter **le nom complet et l'ID des auteurs et leurs structure primaires** dans ce [Dictionnaire mis à jour en continu](https://github.com/yeliu-dh/hal_insight/blob/main/external_data/auth_struct_map.json)"
     # f"Les différentes institutions d’un même article sont concaténées avec un point-virgule ';'."
 )
 st.markdown("<br>", unsafe_allow_html=True)
