@@ -114,7 +114,7 @@ def get_start_end_field(key_prefix):
 
     # ---date field---
     date_field = st.radio(
-        "**Chercher les résultats selon la date de :**",
+        "**par la date de :**",
         ['soumission','modification','publication'],
         horizontal=True, 
         index=2,# default value!
