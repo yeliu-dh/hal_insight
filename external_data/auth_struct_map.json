@@ -221,6 +221,12 @@
       "authIdHal_i": "3143",
       "labStructName_s": "IUT Creteil-Vitry",
       "labStructId_i": "214848"
+    },
+    {
+      "authIdHal_s": "philippe-jourdan",
+      "authIdHal_i": "3143",
+      "labStructName_s": "Centre d'études et de recherches appliquées à la gestion",
+      "labStructId_i": "784"
     }
   ],
   "Rémi Bourguignon": [
@@ -498,12 +504,6 @@
     }
   ],
   "Julie Tixier": [
-    {
-      "authIdHal_s": "julie-tixier",
-      "authIdHal_i": "745468",
-      "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
-    },
     {
       "authIdHal_s": "julie-tixier",
       "authIdHal_i": "745468",
@@ -1545,8 +1545,8 @@
     {
       "authIdHal_s": "julian-alvarez",
       "authIdHal_i": "1228850",
-      "labStructName_s": "Groupe d'Études et de Recherche Interdisciplinaire en Information et COmmunication - ULR 4073",
-      "labStructId_i": "39707"
+      "labStructName_s": "Institut national supérieur du professorat et de l'éducation - Académie de Lille - Hauts-de-France",
+      "labStructId_i": "1059535"
     },
     {
       "authIdHal_s": "julian-alvarez",
@@ -1557,56 +1557,8 @@
     {
       "authIdHal_s": "julian-alvarez",
       "authIdHal_i": "1228850",
-      "labStructName_s": "Institut national supérieur du professorat et de l'éducation - Académie de Lille - Hauts-de-France",
-      "labStructId_i": "1059535"
-    },
-    {
-      "authIdHal_s": "julian-alvarez",
-      "authIdHal_i": "1228850",
-      "labStructName_s": "Centre de Recherche en Informatique, Signal et Automatique de Lille - UMR 9189",
-      "labStructId_i": "410272"
-    },
-    {
-      "authIdHal_s": "julian-alvarez",
-      "authIdHal_i": "1228850",
-      "labStructName_s": "Immersive factory [France]",
-      "labStructId_i": "564453"
-    },
-    {
-      "authIdHal_s": "julian-alvarez",
-      "authIdHal_i": "1228850",
-      "labStructName_s": "École supérieure du professorat et de l'éducation - Lille Nord de France",
-      "labStructId_i": "268087"
-    },
-    {
-      "authIdHal_s": "julian-alvarez",
-      "authIdHal_i": "1228850",
-      "labStructName_s": "Laboratoire en Design Visuel et Urbain - EA 2445",
-      "labStructId_i": "109938"
-    },
-    {
-      "authIdHal_s": "julian-alvarez",
-      "authIdHal_i": "1228850",
-      "labStructName_s": "Play Research Lab",
-      "labStructId_i": "407892"
-    },
-    {
-      "authIdHal_s": "julian-alvarez",
-      "authIdHal_i": "1228850",
-      "labStructName_s": "Laboratoire de Recherche Sociétés & Humanités",
-      "labStructId_i": "1079112"
-    },
-    {
-      "authIdHal_s": "julian-alvarez",
-      "authIdHal_i": "1228850",
-      "labStructName_s": "Institut de recherche en informatique de Toulouse",
-      "labStructId_i": "34499"
-    },
-    {
-      "authIdHal_s": "julian-alvarez",
-      "authIdHal_i": "1228850",
-      "labStructName_s": "Université de Lille, Sciences et Technologies",
-      "labStructId_i": "92973"
+      "labStructName_s": "Groupe d'Études et de Recherche Interdisciplinaire en Information et COmmunication - ULR 4073",
+      "labStructId_i": "39707"
     }
   ],
   "Jean-Philippe Denis": [
@@ -1775,18 +1727,6 @@
       "authIdHal_i": "995969",
       "labStructName_s": "Université Paris-Est Créteil Val-de-Marne - Paris 12",
       "labStructId_i": "420786"
-    },
-    {
-      "authIdHal_s": "jean-claude-pacitto",
-      "authIdHal_i": "995969",
-      "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "1004418"
-    },
-    {
-      "authIdHal_s": "jean-claude-pacitto",
-      "authIdHal_i": "995969",
-      "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
     },
     {
       "authIdHal_s": "jean-claude-pacitto",
@@ -4187,6 +4127,456 @@
       "authIdHal_i": "0",
       "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
       "labStructId_i": "572233"
+    }
+  ],
+  "Elodie Brûlé-Gapihan": [
+    {
+      "authIdHal_s": "elodie-brûlé-gapihan",
+      "authIdHal_i": "183470",
+      "labStructName_s": "Recherches en Économie Gestion AgroRessources Durabilité Santé- EA 6292",
+      "labStructId_i": "451480"
+    },
+    {
+      "authIdHal_s": "elodie-brûlé-gapihan",
+      "authIdHal_i": "183470",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "elodie-brûlé-gapihan",
+      "authIdHal_i": "183470",
+      "labStructName_s": "Université Paris-Est Créteil Val-de-Marne - Paris 12",
+      "labStructId_i": "420786"
+    },
+    {
+      "authIdHal_s": "elodie-brûlé-gapihan",
+      "authIdHal_i": "183470",
+      "labStructName_s": "Chaire Economie Sociale et Solidaire",
+      "labStructId_i": "1052642"
+    },
+    {
+      "authIdHal_s": "elodie-brûlé-gapihan",
+      "authIdHal_i": "183470",
+      "labStructName_s": "Université de Reims Champagne-Ardenne",
+      "labStructId_i": "7569"
+    }
+  ],
+  "Audrey Laude": [
+    {
+      "authIdHal_s": "audrey-laude",
+      "authIdHal_i": "173504",
+      "labStructName_s": "Recherches en Économie Gestion AgroRessources Durabilité Santé- EA 6292",
+      "labStructId_i": "451480"
+    },
+    {
+      "authIdHal_s": "audrey-laude",
+      "authIdHal_i": "173504",
+      "labStructName_s": "Université de Reims Champagne-Ardenne",
+      "labStructId_i": "7569"
+    }
+  ],
+  "Nathalie Lameta": [
+    {
+      "authIdHal_s": "nathalie-lameta",
+      "authIdHal_i": "1218408",
+      "labStructName_s": "Laboratoire « Lieux, Identités, eSpaces, Activités » (UMR CNRS 6240 LISA)",
+      "labStructId_i": "96484"
+    },
+    {
+      "authIdHal_s": "nathalie-lameta",
+      "authIdHal_i": "1218408",
+      "labStructName_s": "Università di Corsica Pasquale Paoli [Université de Corse Pascal Paoli]",
+      "labStructId_i": "1047963"
+    }
+  ],
+  "Mathieu Dunes": [
+    {
+      "authIdHal_s": "mathieu-dunes",
+      "authIdHal_i": "1153388",
+      "labStructName_s": "Centre de Recherche sur les Institutions, l'Industrie et les Systèmes Économiques d'Amiens - UR UPJV 3908",
+      "labStructId_i": "199527"
+    },
+    {
+      "authIdHal_s": "mathieu-dunes",
+      "authIdHal_i": "1153388",
+      "labStructName_s": "Laboratoire d’Économie, Finance, Management et Innovation - UR UPJV 4286",
+      "labStructId_i": "1072701"
+    },
+    {
+      "authIdHal_s": "mathieu-dunes",
+      "authIdHal_i": "1153388",
+      "labStructName_s": "Institut d'Administration des Entreprises",
+      "labStructId_i": "301758"
+    }
+  ],
+  "Najoua Boufaden": [
+    {
+      "authIdHal_s": "najoua-boufaden",
+      "authIdHal_i": "0",
+      "labStructName_s": "ISG International Business School [Paris]",
+      "labStructId_i": "426089"
+    }
+  ],
+  "Romain Debref": [
+    {
+      "authIdHal_s": "romain-debref",
+      "authIdHal_i": "184371",
+      "labStructName_s": "Recherches en Économie Gestion AgroRessources Durabilité Santé- EA 6292",
+      "labStructId_i": "451480"
+    }
+  ],
+  "Mélissa Boudes": [
+    {
+      "authIdHal_s": "mélissa-boudes",
+      "authIdHal_i": "180962",
+      "labStructName_s": "Neoma Business School",
+      "labStructId_i": "232915"
+    }
+  ],
+  "Etienne Maclouf": [
+    {
+      "authIdHal_s": "etienne-maclouf",
+      "authIdHal_i": "177621",
+      "labStructName_s": "Laboratoire de recherche en sciences de gestion Panthéon-Assas",
+      "labStructId_i": "99795"
+    },
+    {
+      "authIdHal_s": "etienne-maclouf",
+      "authIdHal_i": "177621",
+      "labStructName_s": "Centre d'Ecologie et des Sciences de la COnservation",
+      "labStructId_i": "237629"
+    }
+  ],
+  "Laure Rondi-Reig": [
+    {
+      "authIdHal_s": "laure-rondi-reig",
+      "authIdHal_i": "1081804",
+      "labStructName_s": "Neuroscience Paris Seine",
+      "labStructId_i": "542136"
+    },
+    {
+      "authIdHal_s": "laure-rondi-reig",
+      "authIdHal_i": "1081804",
+      "labStructName_s": "CeZaMe - Cervelet, navigation et mémoire = Memory, Navigation and Aging",
+      "labStructId_i": "542149"
+    }
+  ],
+  "Paola Duperray": [
+    {
+      "authIdHal_s": "paola-duperray",
+      "authIdHal_i": "1340302",
+      "labStructName_s": "Éthique et Gouvernance de l’Entreprise et des Institutions",
+      "labStructId_i": "1065850"
+    }
+  ],
+  "Valérie Jourdan": [
+    {
+      "authIdHal_s": "valérie-jourdan",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre d'études et de recherches appliquées à la gestion",
+      "labStructId_i": "784"
+    },
+    {
+      "authIdHal_s": "valérie-jourdan",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre d'études et de recherches appliquées à la gestion",
+      "labStructId_i": "1043181"
+    },
+    {
+      "authIdHal_s": "valérie-jourdan",
+      "authIdHal_i": "0",
+      "labStructName_s": "Promise consulting",
+      "labStructId_i": "1676295"
+    }
+  ],
+  "Bernard Pras": [
+    {
+      "authIdHal_s": "bernard-pras",
+      "authIdHal_i": "0",
+      "labStructName_s": "Dauphine Recherches en Management",
+      "labStructId_i": "1032"
+    }
+  ],
+  "Laurent Andrieu": [
+    {
+      "authIdHal_s": "laurent-andrieu",
+      "authIdHal_i": "0",
+      "labStructName_s": "Biostatistics & Programming Department, Non-Clinical Efficacy & Safety team",
+      "labStructId_i": "1056400"
+    }
+  ],
+  "Pascal Barnéoud": [
+    {
+      "authIdHal_s": "pascal-barnéoud",
+      "authIdHal_i": "0",
+      "labStructName_s": "Neurodegeneration Cluster, Rare & Neurologic Diseases Research",
+      "labStructId_i": "1056401"
+    }
+  ],
+  "Amélie Gabriagues": [
+    {
+      "authIdHal_s": "amélie-gabriagues",
+      "authIdHal_i": "1620423",
+      "labStructName_s": "Dauphine Recherches en Management",
+      "labStructId_i": "1032"
+    },
+    {
+      "authIdHal_s": "amélie-gabriagues",
+      "authIdHal_i": "1620423",
+      "labStructName_s": "Université Paris Dauphine-PSL",
+      "labStructId_i": "300302"
+    },
+    {
+      "authIdHal_s": "amélie-gabriagues",
+      "authIdHal_i": "1620423",
+      "labStructName_s": "Dauphine Recherches en Management - MLAB",
+      "labStructId_i": "39394"
+    }
+  ],
+  "Katia Richomme-Huet": [
+    {
+      "authIdHal_s": "katia-richomme-huet",
+      "authIdHal_i": "753714",
+      "labStructName_s": "KEDGE Business School [Marseille]",
+      "labStructId_i": "528732"
+    },
+    {
+      "authIdHal_s": "katia-richomme-huet",
+      "authIdHal_i": "0",
+      "labStructName_s": "Kedge Business School",
+      "labStructId_i": "426646"
+    }
+  ],
+  "Typhaine Lebègue": [
+    {
+      "authIdHal_s": "typhaine-lebègue",
+      "authIdHal_i": "751348",
+      "labStructName_s": "Val de Loire Recherche en Management",
+      "labStructId_i": "190457"
+    },
+    {
+      "authIdHal_s": "typhaine-lebègue",
+      "authIdHal_i": "751348",
+      "labStructName_s": "Institut d'Administration des Entreprises (IAE) - Tours Val de Loire",
+      "labStructId_i": "301568"
+    }
+  ],
+  "Julien Schmitt": [
+    {
+      "authIdHal_s": "julien-schmitt",
+      "authIdHal_i": "740947",
+      "labStructName_s": "Neurodegeneration Cluster, Rare & Neurologic Diseases Research",
+      "labStructId_i": "1056396"
+    },
+    {
+      "authIdHal_s": "julien-schmitt",
+      "authIdHal_i": "740947",
+      "labStructName_s": "Neuroscience Paris Seine",
+      "labStructId_i": "542136"
+    },
+    {
+      "authIdHal_s": "julien-schmitt",
+      "authIdHal_i": "740947",
+      "labStructName_s": "CeZaMe - Cervelet, navigation et mémoire = Memory, Navigation and Aging",
+      "labStructId_i": "542149"
+    }
+  ],
+  "Lionel Garreau": [
+    {
+      "authIdHal_s": "lionel-garreau",
+      "authIdHal_i": "0",
+      "labStructName_s": "Dauphine Recherches en Management",
+      "labStructId_i": "1032"
+    },
+    {
+      "authIdHal_s": "lionel-garreau",
+      "authIdHal_i": "5743",
+      "labStructName_s": "Dauphine Recherches en Management",
+      "labStructId_i": "1032"
+    },
+    {
+      "authIdHal_s": "lionel-garreau",
+      "authIdHal_i": "0",
+      "labStructName_s": "Université Paris Dauphine-PSL",
+      "labStructId_i": "300302"
+    },
+    {
+      "authIdHal_s": "lionel-garreau",
+      "authIdHal_i": "5743",
+      "labStructName_s": "Université Paris Dauphine-PSL",
+      "labStructId_i": "300302"
+    }
+  ],
+  "Anne-Lise Paradis": [
+    {
+      "authIdHal_s": "anne-lise-paradis",
+      "authIdHal_i": "176805",
+      "labStructName_s": "Neuroscience Paris Seine",
+      "labStructId_i": "542136"
+    },
+    {
+      "authIdHal_s": "anne-lise-paradis",
+      "authIdHal_i": "176805",
+      "labStructName_s": "CeZaMe - Cervelet, navigation et mémoire = Memory, Navigation and Aging",
+      "labStructId_i": "542149"
+    }
+  ],
+  "Mathieu Boucher": [
+    {
+      "authIdHal_s": "mathieu-boucher",
+      "authIdHal_i": "0",
+      "labStructName_s": "IT&M STATS",
+      "labStructId_i": "1056399"
+    },
+    {
+      "authIdHal_s": "mathieu-boucher",
+      "authIdHal_i": "0",
+      "labStructName_s": "Groupe de Recherche en Informatique, Image et Instrumentation de Caen",
+      "labStructId_i": "150"
+    },
+    {
+      "authIdHal_s": "mathieu-boucher",
+      "authIdHal_i": "0",
+      "labStructName_s": "Equipe Hultech - Laboratoire GREYC - UMR6072",
+      "labStructId_i": "388300"
+    }
+  ],
+  "Martino Nieddu": [
+    {
+      "authIdHal_s": "martino-nieddu",
+      "authIdHal_i": "967085",
+      "labStructName_s": "Recherches en Économie Gestion AgroRessources Durabilité Santé- EA 6292",
+      "labStructId_i": "451480"
+    }
+  ],
+  "Charlotte Lamotte": [
+    {
+      "authIdHal_s": "charlotte-lamotte",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Interdisciplinaire Solidarités, Sociétés, Territoires",
+      "labStructId_i": "44429"
+    }
+  ],
+  "Damien de Ponthaud": [
+    {
+      "authIdHal_s": "damien-de-ponthaud",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre d'études et de recherches appliquées à la gestion",
+      "labStructId_i": "784"
+    }
+  ],
+  "Gaëlle Doualan": [
+    {
+      "authIdHal_s": "gaëlle-doualan",
+      "authIdHal_i": "8825",
+      "labStructName_s": "Groupe de Recherche en Informatique, Image et Instrumentation de Caen",
+      "labStructId_i": "150"
+    },
+    {
+      "authIdHal_s": "gaëlle-doualan",
+      "authIdHal_i": "8825",
+      "labStructName_s": "Equipe Hultech - Laboratoire GREYC - UMR6072",
+      "labStructId_i": "388300"
+    }
+  ],
+  "Gaël Dias": [
+    {
+      "authIdHal_s": "gaël-dias",
+      "authIdHal_i": "3735",
+      "labStructName_s": "Groupe de Recherche en Informatique, Image et Instrumentation de Caen",
+      "labStructId_i": "150"
+    },
+    {
+      "authIdHal_s": "gaël-dias",
+      "authIdHal_i": "3735",
+      "labStructName_s": "Equipe Hultech - Laboratoire GREYC - UMR6072",
+      "labStructId_i": "388300"
+    }
+  ],
+  "Rose Marie Viedma": [
+    {
+      "authIdHal_s": "rose-marie-viedma",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire d’Économie, Finance, Management et Innovation - UR UPJV 4286",
+      "labStructId_i": "1072701"
+    }
+  ],
+  "Gaël Lejeune": [
+    {
+      "authIdHal_s": "gaël-lejeune",
+      "authIdHal_i": "734695",
+      "labStructName_s": "Groupe de Recherche en Informatique, Image et Instrumentation de Caen",
+      "labStructId_i": "150"
+    },
+    {
+      "authIdHal_s": "gaël-lejeune",
+      "authIdHal_i": "734695",
+      "labStructName_s": "Equipe Hultech - Laboratoire GREYC - UMR6072",
+      "labStructId_i": "388300"
+    }
+  ],
+  "Eric Delattre": [
+    {
+      "authIdHal_s": "eric-delattre",
+      "authIdHal_i": "1210904",
+      "labStructName_s": "Lille University Management Lab - ULR 4999",
+      "labStructId_i": "1071874"
+    }
+  ],
+  "Ramonjy Dimbi": [
+    {
+      "authIdHal_s": "ramonjy-dimbi",
+      "authIdHal_i": "175542",
+      "labStructName_s": "Centre de recherche en gestion [EA 1722]",
+      "labStructId_i": "159255"
+    }
+  ],
+  "Renaud Redien-Collot": [
+    {
+      "authIdHal_s": "renaud-redien-collot",
+      "authIdHal_i": "0",
+      "labStructName_s": "ESCE PARIS",
+      "labStructId_i": "247346"
+    },
+    {
+      "authIdHal_s": "renaud-redien-collot",
+      "authIdHal_i": "942828",
+      "labStructName_s": "Institut Supérieur du Commerce de Paris",
+      "labStructId_i": "207211"
+    },
+    {
+      "authIdHal_s": "renaud-redien-collot",
+      "authIdHal_i": "942828",
+      "labStructName_s": "Novancia",
+      "labStructId_i": "394727"
+    }
+  ],
+  "Romain Brixtel": [
+    {
+      "authIdHal_s": "romain-brixtel",
+      "authIdHal_i": "960216",
+      "labStructName_s": "Groupe de Recherche en Informatique, Image et Instrumentation de Caen",
+      "labStructId_i": "150"
+    },
+    {
+      "authIdHal_s": "romain-brixtel",
+      "authIdHal_i": "960216",
+      "labStructName_s": "Equipe Hultech - Laboratoire GREYC - UMR6072",
+      "labStructId_i": "388300"
+    }
+  ],
+  "Estelle Garnier": [
+    {
+      "authIdHal_s": "estelle-garnier",
+      "authIdHal_i": "0",
+      "labStructName_s": "ESSAI-OMI Etudes sur les Systèmes et Structures Agro-Industrielles-Organisations, Marchés, Institutions",
+      "labStructId_i": "432217"
+    },
+    {
+      "authIdHal_s": "estelle-garnier",
+      "authIdHal_i": "0",
+      "labStructName_s": "Recherches en Économie Gestion AgroRessources Durabilité Santé- EA 6292",
+      "labStructId_i": "451480"
     }
   ]
 }

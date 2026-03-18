@@ -236,15 +236,16 @@ options_fields = ['halId_s','uri_s',"docType_s", "title_s", "subTitle_s", "authF
                     "language_s", "keyword_s", "abstract_s","urlFulltextEsr_s","files_s",'page_s',"modifiedDate_s","submittedDate_s",
                      "openAccess_bool",'volume_s','conferenceStartDate_s',"conferenceOrganizer_s","classification_s","collName_s","collCode_s",
                      "authIdHal_s","authLastNameFirstName_s","label_s","labStructIdName_fs",
-                     "authIdHasPrimaryStructure_fs"                    
+                     "authIdHasPrimaryStructure_fs","inPress_bool","publicationDateY_i"     
 ]
 
 # 默认输出字段
 default_fields=['halId_s','uri_s', "docType_s", "title_s", "subTitle_s", "authFullName_s","labStructName_s",
                 "domain_s","openAccess_bool",'volume_s',"page_s","classification_s",
-                "submittedDate_s","modifiedDate_s", "publicationDate_s","journalTitle_s","conferenceTitle_s","conferenceOrganizer_s","conferenceStartDate_s",
+                "submittedDate_s","modifiedDate_s", "publicationDate_s","publicationDateY_i",
+                "journalTitle_s","conferenceTitle_s","conferenceOrganizer_s","conferenceStartDate_s",
                 "country_s", "language_s",
-                "keyword_s", "abstract_s","files_s","urlFulltextEsr_s","label_s"
+                "keyword_s", "abstract_s","files_s","urlFulltextEsr_s","label_s", "inPress_bool",
 ]
 
 fields = st.multiselect(
@@ -329,6 +330,7 @@ if search_button:# and not invalid_date
                 rows=100,
                 max_records=max_records
             )
+            print(f"[RAW RESULT] {len(df)}")
             if df.empty:
                 st.warning("Aucun résultat trouvé.")
                 st.stop()    
@@ -345,7 +347,8 @@ if search_button:# and not invalid_date
             path_map_auth_struct=path_AUTH_STRUCT_MAP,
             
        )#***
-    
+        print(f"[PROCESSED RESULT] {len(df)}")
+
         # desired_order=[]
         st.success(f"✅ {len(df)} articles trouvés!\n\n"
                     f"💾 Résultat sauvegardé, vous pouvez l'utiliser directement dans les pages d'analyse!")    

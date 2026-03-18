@@ -306,26 +306,15 @@ def fetch_hal_articles(
         input = [f'"{t}"' for t in languages]
         fq.append(f'language_s:({" OR ".join(input)})')
         
-    # if authors:
-    #     input = [f'"{t}"' for t in authors]
-    #     fq.append(f'authFullName_s:({" OR ".join(input)})')
-        
-    # if collcode:
-    #     input = [f'"{t}"' for t in collcode]
-    #     fq.append(f'collCode_s:({" OR ".join(input)})')
-    
-    # if collname:
-    #     input = [f'"{t}"' for t in collname]
-    #     fq.append(f'collName_s:({" OR ".join(input)})')
-        
+
 
     #-------------------------------------period------------------------------------------    
     if start_year and start_month and end_year and end_month:
         start_date, end_date=build_period(start_year, start_month,end_year, end_month)
         fq.append(f"{date_field_col}:[{start_date} TO {end_date}]")
         start_date_s=start_date if start_date!="*" else 'BEFORE'
-        st.write(f"[INFO] Période de recherche selon '{date_field_col}' : \n {start_date_s} ~ {end_date}  \n")
-
+        st.write(f"[INFO] Période de recherche selon '{date_field_col}' : \n '[{start_date} TO {end_date}]' \n")
+        #  {start_date_s} ~ {end_date} 
 
     # 8. 自由文本（全文搜索）
     q = " AND ".join(text) if text else "*:*"
@@ -353,7 +342,7 @@ def fetch_hal_articles(
         ("rows", rows),
         ("wt", "json"),
         ("start", start),
-        ("sort", "submittedDate_tdate desc")#"submittedDate_tdate desc"
+        ("sort", f"{date_field_col} desc")#"submittedDate_tdate desc"
     ]
         for f in fq:
             params.append(("fq", f))
