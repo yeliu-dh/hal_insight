@@ -42,7 +42,8 @@ def build_period(start_year=None, start_month=None,
         
         2.检查结束年月不早于开始年月
         
-        3.check：输出start_date, end_date(带时间戳)
+        输出：* 或者带时间戳的start_date, end_date的string！！！
+        
         """
         
 
@@ -79,7 +80,7 @@ def build_period(start_year=None, start_month=None,
             
         
         # --- END ---
-        # 包括包括指定日期/今天
+        ## 包括包括指定日期/今天
         if isinstance(end_year, int) and isinstance(end_month, int):
             last_day = calendar.monthrange(end_year, end_month)[1]
             end_date = f"{end_year}-{end_month:02d}-{last_day:02d}T23:59:59Z"
@@ -92,8 +93,6 @@ def build_period(start_year=None, start_month=None,
         else:
             end_date="*"
     
-            # today = datetime.utcnow()
-            # end_date = today.strftime("%Y-%m-%dT23:59:59Z")
             
         return start_date, end_date
 
@@ -147,76 +146,131 @@ def get_start_end_field(key_prefix):
         key=f"{key_prefix}_date_field",
         help="HAL cherche les articles par l'année de la publication (publicationDateY_i)."
     )
-        
-    # ---check---
-    st.markdown(f"[check] chercher les articles entre **{start_date} ~ {end_date}** par la date de **{date_field}**!")
+    
+    # ---check---    
+    if start_date=="*":
+        check_str=f"avant {end_date}"
+    elif end_date=="*":
+        check_str=f"après {start_date}"
+    else :
+        check_str=f"entre {start_date} ~ {end_date}"
+    st.markdown(f"[check] chercher les articles  **{check_str}**  par la date de **{date_field}**!")
 
     return start_year, start_month, end_year, end_month, date_field
 
 
 
-def complete_pub_date(df):
-    """
-    补全publicationDate_s为YYYY/MM/DD 格式
+# def complete_pub_date(df):
+#     """
+#     补全publicationDate_s为YYYY/MM/DD 格式
     
-    """
-    if "publicationDate_s" not in df.columns:
-        # st.write("[warning] 'publicationDate_s' not in df!!!")
-        return df
-    else :
-        df["publicationDate_s"] = df["publicationDate_s"].astype(str)
+#     """
+#     if "publicationDate_s" not in df.columns:
+#         # st.write("[warning] 'publicationDate_s' not in df!!!")
+#         return df
+#     else :
+#         df["publicationDate_s"] = df["publicationDate_s"].astype(str)
 
-        # 年 → 补成 01-01
-        df["publicationDate_s"] = df["publicationDate_s"].str.replace(
-            r"^\d{4}$",
-            lambda x: x.group(0) + "-01-01",
-            regex=True
-        )
-        # 年月 → 补成 -01
-        df["publicationDate_s"] = df["publicationDate_s"].str.replace(
-            r"^\d{4}-\d{2}$",
-            lambda x: x.group(0) + "-01",
-            regex=True
-        )
-        # ## 统一变成时间戳格式
-        # df["publicationDate_s"]=pd.to_datetime(df["publicationDate_s"], errors="coerce")
+#         # 年 → 补成 01-01
+#         df["publicationDate_s"] = df["publicationDate_s"].str.replace(
+#             r"^\d{4}$",
+#             lambda x: x.group(0) + "-01-01",
+#             regex=True
+#         )
+#         # 年月 → 补成 -01
+#         df["publicationDate_s"] = df["publicationDate_s"].str.replace(
+#             r"^\d{4}-\d{2}$",
+#             lambda x: x.group(0) + "-01",
+#             regex=True
+#         )
+#         # ## 统一变成时间戳格式
+#         # df["publicationDate_s"]=pd.to_datetime(df["publicationDate_s"], errors="coerce")
         
-    return df
+#     return df
 
 
-def filter_par_date(df, 
+# def filter_par_date(df, 
+#                     start_year, start_month, 
+#                     end_year, end_month, 
+#                     date_field_col="publicationDate_tdate"):
+#     """       
+#     _s可能不完整！
+    
+#     输入：起、止，年、月，筛选列
+#     生成带时间戳的start_date, end_date
+#     如果按照pub date筛选，则先清洗格式为YY/MM/DD
+#     """
+    
+#     # --- complete---
+#     # df=complete_pub_date(df)
+    
+#     df_filtered=df.copy()
+    
+#     # ---satrt-end---        
+#     start_date, end_date=build_period(start_year=start_year, start_month=start_month,
+#                                       end_year=end_year,end_month=end_month)
+    
+    
+    
+#     # # correct for pub date
+#     # if date_field_col =="publicationDate_s":
+#     #     start_date=start_date.split('T')[0]
+#     #     end_date=end_date.split('T')[0]
+#     # # print(f"START :{start_date}; END: {end_date}\n")
+    
+    
+#     # ---filter---
+#     if start_date !="*" and start_date is not None :
+#         df_filtered=df_filtered[df_filtered[date_field_col] >= start_date]
+#     if end_date is not None:
+#         df_filtered=df_filtered[df_filtered[date_field_col] < end_date]
+
+#     return df_filtered
+
+
+
+def filter_par_tdate(df, 
                     start_year, start_month, 
                     end_year, end_month, 
-                    date_field_col="submittedDate_s"):
-    """
-    用_s列进行筛选！(why?)
-        
-    输入：起、止，年、月，筛选列
-    生成带时间戳的start_date, end_date
-    如果按照pub date筛选，则先清洗格式为YY/MM/DD
-    
-    """
-    
-    # --- complete---
-    df=complete_pub_date(df)
-    df_filtered=df.copy()
-    
-    # ---satrt-end---        
-    start_date, end_date=build_period(start_year=start_year, start_month=start_month,
-                                      end_year=end_year,end_month=end_month)
-    
-    # correct for pub date
-    if date_field_col =="publicationDate_s":
-        start_date=start_date.split('T')[0]
-        end_date=end_date.split('T')[0]
-    # print(f"START :{start_date}; END: {end_date}\n")
-    
-    
+                    date_field_col="publicationDate_tdate"):
+    """Filter dataframe by a datetime column within a given period."""
+
+    df_filtered = df.copy()
+
+    # --check--- 
+    if date_field_col not in df_filtered.columns:
+        st.write(f"[warning] from 'filter_by_tdate':'{date_field_col}' not in df!")
+        return df_filtered
+    df_filtered[date_field_col] = pd.to_datetime(
+        df_filtered[date_field_col],
+        utc=True,
+        errors='coerce'
+    )
+
+    # ---satrt/end---
+    start_date, end_date = build_period(
+        start_year=start_year,
+        start_month=start_month,
+        end_year=end_year,
+        end_month=end_month
+    )
+    # 输出是带时间戳的string！！
+
     # ---filter---
-    if start_date !="*" and start_date is not None :
-        df_filtered=df_filtered[df_filtered[date_field_col] >= start_date]
-    if end_date is not None:
-        df_filtered=df_filtered[df_filtered[date_field_col] < end_date]
+    
+    if start_date != "*" and start_date is not None:
+        start_date = pd.to_datetime(start_date, utc=True, errors='coerce')
+        df_filtered = df_filtered[
+            df_filtered[date_field_col].notna() &
+            (df_filtered[date_field_col] >= start_date)
+        ]
+
+    if end_date != "*" and end_date is not None:
+        end_date = pd.to_datetime(end_date, utc=True, errors='coerce')
+        df_filtered = df_filtered[
+            df_filtered[date_field_col].notna() &
+            (df_filtered[date_field_col] < end_date)
+        ]
 
     return df_filtered
 
@@ -335,7 +389,8 @@ def fetch_hal_articles(
         start_date, end_date=build_period(start_year, start_month,end_year, end_month)
         fq.append(f"{date_field_col}:[{start_date} TO {end_date}]")
         start_date_s=start_date if start_date!="*" else 'BEFORE'
-        st.write(f"[INFO] Période de recherche selon '{date_field_col}' : \n '[{start_date} TO {end_date}]' \n")
+        st.write(f"[info] ('fq', '{date_field_col}:[{start_date} TO {end_date}]')  \n")
+        
         #  {start_date_s} ~ {end_date} 
 
     # 8. 自由文本（全文搜索）
@@ -1026,9 +1081,16 @@ def add_authPrimaryStructureIdName_s(df_input, path_map_auth_struct):
  
 
 ## =================================Date future('isPublished_bool')=====================================
-def add_isPublished_bool(df_input, date_col="publicationDate_tdate"):
+def add_isPublished_bool(df_input, date_col="publicationDate_s"):
+    """
+    和today（tdate）作比较，判断是否已经发布
+    
+    NB.先 to_datetime + utc=True, 才能比较
+    
+    
+    """
+    
     df=df_input.copy()
-
     if not date_col in df.columns :
         print(f"[warning] '{date_col}' not in df!")
         return df  
@@ -1047,7 +1109,7 @@ def add_isPublished_bool(df_input, date_col="publicationDate_tdate"):
         # NaT < today → False
         
         # save
-        if "isPublished_bool" in df:
+        if "isPublished_bool" in df.columns:
             df["isPublished_bool"]=values #刷新
         else:
             idx_pub_date=df.columns.get_loc(date_col)
@@ -1111,10 +1173,12 @@ def process_df(df, DOMAIN_MAP,
 
     # --------------published?---------------
     if "publicationDate_s" in df.columns :
-        df=add_isPublished_bool(df)
-        st.write(f"✔ Vérifié la date de publication.")
+        df=add_isPublished_bool(df, date_col="publicationDate_s")
+        
+        if "isPublished_bool" in df.columns:
+            st.write(f"✔ Vérifié la date de publication future.")
 
-      
+
     
     # #----------处理author_primarystructure-----------
     # # st.write(os.getcwd())

@@ -23,7 +23,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 # my utils
 # from utils.log import setup_logging 
 from utils.upload import load_external_json
-from utils.HAL_search_api import build_period, get_start_end_field, filter_par_date
+from utils.HAL_search_api import build_period, get_start_end_field, filter_par_tdate
 from utils.HAL_search_api import fetch_hal_articles, process_df
 from utils.HAL_search_api import generate_ref_apa, preview_and_download_references
 from utils.download import save_file_csv_xlsx
@@ -236,17 +236,25 @@ options_fields = ['halId_s','uri_s',"docType_s", "title_s", "subTitle_s", "authF
                     "language_s", "keyword_s", "abstract_s","urlFulltextEsr_s","files_s",'page_s',"modifiedDate_s","submittedDate_s",
                      "openAccess_bool",'volume_s','conferenceStartDate_s',"conferenceOrganizer_s","classification_s","collName_s","collCode_s",
                      "authIdHal_s","authLastNameFirstName_s","label_s","labStructIdName_fs",
-                     "authIdHasPrimaryStructure_fs","inPress_bool","publicationDateY_i", "publicationDate_tdate"     
+                     "authIdHasPrimaryStructure_fs","inPress_bool","publicationDateY_i", 
+                     "submittedDate_tdate","modifiedDate_tdate","publicationDate_tdate", 
+     
 ]
 
 # 默认输出字段
 default_fields=['halId_s','uri_s', "docType_s", "title_s", "subTitle_s", "authFullName_s","labStructName_s",
+                "submittedDate_tdate","modifiedDate_tdate","publicationDate_tdate", 
                 "domain_s","openAccess_bool",'volume_s',"page_s","classification_s",
-                "submittedDate_s","modifiedDate_s", "publicationDate_s","publicationDate_tdate","publicationDateY_i","inPress_bool",
+                
+                # "submittedDate_s","modifiedDate_s", "publicationDate_s",
+                #"publicationDateY_i",
                 "journalTitle_s","conferenceTitle_s","conferenceOrganizer_s","conferenceStartDate_s",
                 "country_s", "language_s",
                 "keyword_s", "abstract_s","files_s","urlFulltextEsr_s","label_s", 
 ]
+# excel无法保存tdate格式
+# filter_by_date也使用_s进行筛选！
+
 
 fields = st.multiselect(
     "**Info à exporter**",
@@ -277,8 +285,9 @@ st.markdown(
     f"**Règles de recherche par date:**  \n"
     f"- a) pour ne pas définir une date de début, sélectionnez '*' dans l'année de début' *ou/et* 'mois de début';  \n"
     f"- b) pour chercher les articles jusqu'à aujourd'hui, sélectionnez 'aujourd'hui' dans 'années de fin' *ou/et* 'mois de fin'.  \n"
-    f"- c) certains articles ont une date publication future, pour les inclure, sélectionnez '*'dans 'années de fin' *ou/et* 'mois de fin'. Les articles déjà publiés setront indiqué dans la colonne de 'inPress_bool'!"
+    f"- c) certains articles ont une date publication future, pour les inclure, sélectionnez '*'dans 'années de fin' *ou/et* 'mois de fin'. Les articles déjà publiés setront indiqué dans la colonne de **'isPublished_bool'**!"
 )
+st.markdown("<br>", unsafe_allow_html=True)
 
     
 st.markdown(
@@ -410,13 +419,13 @@ if df is not None and not df.empty:
     st.markdown("### Filtrer le résultat par la date")
     start_year, start_month, end_year, end_month, date_field=get_start_end_field(key_prefix='filter')
         
-    date_field_s_map={"soumission":"submittedDate_s", 
-                        "modification":"modifiedDate_s",
-                        "publication":"publicationDate_s"
+    date_field_s_map={"soumission":"submittedDate_tdate", 
+                        "modification":"modifiedDate_tdate",
+                        "publication":"publicationDate_tdate"
                         }
     date_field_s=date_field_s_map.get(date_field,None)
 
-    df_filtered=filter_par_date(df, 
+    df_filtered=filter_par_tdate(df, 
                     start_year, start_month, 
                     end_year, end_month, 
                     date_field_col=date_field_s)

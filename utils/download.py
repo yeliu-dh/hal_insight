@@ -88,14 +88,23 @@ def save_file_csv_xlsx(df,start_year, start_month, end_year, end_month, key_file
                     key=f"download_{key_filename}_csv"      
                 )
                 
+                
+            
             #---------------as XLSX------------------- 
+            # xlsx不接受tdate!
+            
             with cols[3]:
                 st.markdown("<br>", unsafe_allow_html=True)
+                
+                # ---clean tdate---
+                df_export=df.copy()
+                for col in df_export.select_dtypes(include=["datetimetz"]).columns:
+                    df_export[col] = df_export[col].dt.tz_localize(None)
                 
                 # XLSX → 需要用 io.BytesIO() 来缓存二进制数据，再传给 download_button。
                 xlsx_buffer = io.BytesIO()
                 with pd.ExcelWriter(xlsx_buffer, engine="xlsxwriter") as writer:
-                    df.to_excel(writer, index=False, sheet_name="Articles")
+                    df_export.to_excel(writer, index=False, sheet_name="Articles")
                 xlsx_data = xlsx_buffer.getvalue()
 
                 st.download_button(
