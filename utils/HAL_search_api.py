@@ -19,60 +19,81 @@ from utils.upload import missing_data_warning
 from datetime import datetime, timezone, date
 
 utc_today = datetime.now(timezone.utc).date()
+"""
+UTC = 世界统一时间（全球标准时间）
+不受时区影响
+
+所有时间计算的基准
+
+类似“时间的原点”
+
+
+"""
 
 def build_period(start_year=None, start_month=None,
                     end_year=None, end_month=None):
         
         """
-        根据输入生成合法的起止时间
-        如果开始年月任一为*，则不指定开始时间，
-        如果结束年任一以为“aujourd'hui”，自动替换成当下年月
+        1.根据输入生成合法的起止时间
         
-        检查结束年月不早于开始年月
+        a)如果开始年月任一为*，则不指定开始时间，
+        b)如果结束年任一以为“aujourd'hui”，自动替换成当下年月
+        c) [存在未来出版时间!] 如果不指定结束时间，则仅显示开始时间！
         
-        输出start_date, end_date(带时间戳)
+        2.检查结束年月不早于开始年月
+        
+        3.check：输出start_date, end_date(带时间戳)
         """
         
 
-        # --- 强化逻辑：如果 start_year 或 start_month 任一s为 "*"，则都视为无限制 ---
+        # --- 强化逻辑 ---
         if start_year == "" or start_month == "*":
             start_year = start_month = "*"
 
-        # --- 强化逻辑：如果 end_year 或 end_month 任一为 aujourd'hui，则都视为今天 ---
         if end_year == "aujourd'hui" or end_month == "aujourd'hui":
             end_year = end_month = "aujourd'hui"
+            end_year, end_month=datetime.now().year, datetime.now().month
+            
+        if end_year == "*" or end_month == "*":
+                    end_year = end_month = "*"
 
 
-        # --- 日期合法性检查 ---
+        # --- 如果起止年月是数值，检查合法性 ---
         if isinstance(start_year, int) and isinstance(start_month, int) and \
         isinstance(end_year, int) and isinstance(end_month, int):
 
             # 比较年月元组（保证稳定）
             if (end_year, end_month) < (start_year, start_month):
                 st.error("Période invalide : la fin est antérieure au début!")
-                return []  # 返回空过滤，避免继续运行
-            
+                return None, None  # 返回空过滤，避免继续运行
 
-        # --- 构建开始日期 --如果非数值，则表示无限制
+
+            
+        # NB. HAL 的 `_tdate` 字段是 Solr Date 类型:它 不接受纯 YYYY-MM-DD,必须加上时间区域T23:59:59Z
+
+        # --- START---
         if isinstance(start_year, int) and isinstance(start_month, int):
             start_date = f"{start_year}-{start_month:02d}-01T00:00:00Z"
         else:
             start_date = "*"
             
-        # NB. HAL 的 _tdate 字段是 Solr Date 类型:它 不接受纯 YYYY-MM-DD,必须加上时间区域T23:59:59Z
-        # --- 构建结束日期 ---如果非数值，则表示截止至今天
+        
+        # --- END ---
+        # 包括包括指定日期/今天
         if isinstance(end_year, int) and isinstance(end_month, int):
             last_day = calendar.monthrange(end_year, end_month)[1]
             end_date = f"{end_year}-{end_month:02d}-{last_day:02d}T23:59:59Z"
             
-        elif end_year == "aujourd'hui":# 不要用NOW，其他筛选的时候需要具体日期？
-            today = datetime.utcnow()
-            end_date = today.strftime("%Y-%m-%dT23:59:59Z")
+        # elif end_year == "aujourd'hui":# 不要用NOW，其他筛选的时候需要具体日期？
+        #     today = datetime.utcnow()
+        #     end_date = today.strftime("%Y-%m-%dT23:59:59Z")
             
-        # --- # 理论上不会进入这里，但作为安全兜底
+        # 理论上不会进入这里，但作为安全兜底
         else:
-            today = datetime.utcnow()
-            end_date = today.strftime("%Y-%m-%dT23:59:59Z")
+            end_date="*"
+    
+            # today = datetime.utcnow()
+            # end_date = today.strftime("%Y-%m-%dT23:59:59Z")
             
         return start_date, end_date
 
@@ -86,31 +107,36 @@ def get_start_end_field(key_prefix):
     
     st.markdown(f"**📆 Période**.  \n")
     
-    # ---start~end---
-    st.markdown(f"- si vous ne voulez pas définir la date de début, choisisssez '*' dans l'année de début' *ou/et* 'mois de début';  \n"
-                f"- si vous ne voulez pas définir la date de fin, choisisssez 'aujourd'hui' dans 'années de fin' *ou/et* 'mois de fin'.")
+    # # ---rules---
+    # st.markdown(f"- a) pour ne pas définir une date de début, sélectionnez '*' dans l'année de début' *ou/et* 'mois de début';  \n"
+    #             f"- b) pour chercher les articles jusqu'à aujourd'hui, sélectionnez 'aujourd'hui' dans 'années de fin' *ou/et* 'mois de fin'.  \n"
+    #             f"- c) certains articles ont une date publication future, pour les inclure, sélectionnez '*'dans 'années de fin' *ou/et* 'mois de fin'. Ils setront indiqué dans la colonne de 'a_paraitre_bool'"
+    #             )
+        
+    # --- input---
     now = datetime.now()
     current_year, current_month = now.year, now.month
 
     start_years = ["*"] + list(range(current_year, 1901, -1))
     start_months= ["*"] + list(range(1, 13)) 
-    end_years = ["aujourd'hui"] + list(range(current_year, 1901, -1))
-    end_months = ["aujourd'hui"] + list(range(1, 13))
+    end_years = ["*","aujourd'hui"] + list(range(current_year, 1901, -1))
+    end_months = ["*","aujourd'hui"] + list(range(1, 13))
 
     col1, col2 = st.columns(2)
     with col1:
-        start_year = st.selectbox("Année de début", start_years, index=start_years.index(current_year),key=f"{key_prefix}_start_year")
+        start_year = st.selectbox("**Année de début:**", start_years, index=start_years.index(current_year),key=f"{key_prefix}_start_year")
     with col2:
-        start_month = st.selectbox("Mois de début", start_months, index=start_months.index(current_month), key=f"{key_prefix}_start_month")#JAN!
+        start_month = st.selectbox("**Mois de début:**", start_months, index=start_months.index(current_month), key=f"{key_prefix}_start_month")#JAN!
         
     col3, col4 = st.columns(2)
     with col3:
-        end_year = st.selectbox("Année de fin", end_years, index=end_years.index(current_year),key=f"{key_prefix}_end_year")
+        end_year = st.selectbox("**Année de fin:**", end_years, index=end_years.index(current_year),key=f"{key_prefix}_end_year")
     with col4:
-        end_month = st.selectbox("Mois de fin", end_months, index=end_months.index("aujourd'hui"), key=f"{key_prefix}_end_month")
+        end_month = st.selectbox("**Mois de fin:**", end_months, index=end_months.index("aujourd'hui"), key=f"{key_prefix}_end_month")
         
     start_date, end_date=build_period(start_year=start_year, start_month=start_month,
                         end_year=end_year, end_month=end_month)
+    st.markdown("<br>", unsafe_allow_html=True)
 
     # ---date field---
     date_field = st.radio(
@@ -124,10 +150,8 @@ def get_start_end_field(key_prefix):
         
     # ---check---
     st.markdown(f"[check] chercher les articles entre **{start_date} ~ {end_date}** par la date de **{date_field}**!")
-    # st.markdown("<br>", unsafe_allow_html=True)
 
     return start_year, start_month, end_year, end_month, date_field
-
 
 
 
@@ -165,6 +189,8 @@ def filter_par_date(df,
                     end_year, end_month, 
                     date_field_col="submittedDate_s"):
     """
+    用_s列进行筛选！(why?)
+        
     输入：起、止，年、月，筛选列
     生成带时间戳的start_date, end_date
     如果按照pub date筛选，则先清洗格式为YY/MM/DD
@@ -207,9 +233,6 @@ def fetch_hal_articles(
             
             domains=None,keywords=None, languages=None, 
             labs=None, labs_id=None,
-                       
-            # collcode=None, collname=None, 
-            # authors=None, 
     
             fields:list=None, rows=100, max_records=5000):
     """
@@ -232,8 +255,7 @@ def fetch_hal_articles(
     fq:field query
     
     wt:writer type
-    
-    
+
     """
         
     """
@@ -437,7 +459,7 @@ def map_domains(codes_str:str=None, map:dict=None):
 
 
 
-#========================================AXE===========================================================#
+#====================================================AXE===========================================================#
 def extract_irg_axes(text):
     """
     把 classification_s 字段中的值:
@@ -1003,8 +1025,40 @@ def add_authPrimaryStructureIdName_s(df_input, path_map_auth_struct):
 #     return df
  
 
-## =================================filtrer par date =====================================
+## =================================Date future('isPublished_bool')=====================================
+def add_isPublished_bool(df_input, date_col="publicationDate_tdate"):
+    df=df_input.copy()
 
+    if not date_col in df.columns :
+        print(f"[warning] '{date_col}' not in df!")
+        return df  
+    
+    else :    
+        # tdate 
+        df[date_col] = pd.to_datetime(
+            df[date_col],
+            utc=True,
+            errors='coerce'
+        )
+        
+        # 判断
+        today = pd.Timestamp.now(tz="UTC")
+        values = df[date_col].notna() & (df[date_col] < today)
+        # NaT < today → False
+        
+        # save
+        if "isPublished_bool" in df:
+            df["isPublished_bool"]=values #刷新
+        else:
+            idx_pub_date=df.columns.get_loc(date_col)
+            df.insert(loc=idx_pub_date+1, column="isPublished_bool",value=values)
+
+    return df    
+    
+    
+    
+    
+    
 
 ##集合处理：
 def process_df(df, DOMAIN_MAP, 
@@ -1014,16 +1068,16 @@ def process_df(df, DOMAIN_MAP,
         ):
     
     """
-    todo：增加methodologie！
+   
 
     """
-    # -------------domaines----------------
+    # -------------domaines------------
     if "domain_s" in df.columns:   
         df["domain_s"] = df["domain_s"].apply(lambda x : map_domains(x, map=DOMAIN_MAP))
     st.write(f"✔ Domaines mappés!")
     # st.markdown("<br>", unsafe_allow_html=True)
 
-    #-------------axe----------------------
+    #-------------axe------------------
     if "classification_s" in df.columns:
         df=clean_axe_from_classification(df)
     st.write(f"✔ Axes nettoyés!")
@@ -1055,7 +1109,12 @@ def process_df(df, DOMAIN_MAP,
         # df=check_irgStructureID(df,list_structureid=["1004418","57129"])
         st.write(f"✔ Structures primaires des auteurs mappées!")
 
+    # --------------published?---------------
+    if "publicationDate_s" in df.columns :
+        df=add_isPublished_bool(df)
+        st.write(f"✔ Vérifié la date de publication.")
 
+      
     
     # #----------处理author_primarystructure-----------
     # # st.write(os.getcwd())

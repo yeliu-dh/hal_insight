@@ -42,13 +42,19 @@
       "authIdHal_s": "florence-allard-poesi",
       "authIdHal_i": "2437",
       "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "1004418"
+      "labStructId_i": "57129"
     },
     {
       "authIdHal_s": "florence-allard-poesi",
       "authIdHal_i": "2437",
       "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "florence-allard-poesi",
+      "authIdHal_i": "2437",
+      "labStructName_s": "Université Paris-Est Créteil Val-de-Marne - Paris 12",
+      "labStructId_i": "420786"
     }
   ],
   "Claire Edey Gamassou": [
@@ -207,6 +213,18 @@
       "authIdHal_i": "5445",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "57129"
+    },
+    {
+      "authIdHal_s": "alain-debenedetti",
+      "authIdHal_i": "5445",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "alain-debenedetti",
+      "authIdHal_i": "5445",
+      "labStructName_s": "Université Gustave Eiffel",
+      "labStructId_i": "580722"
     }
   ],
   "Philippe Jourdan": [
@@ -380,7 +398,13 @@
       "authIdHal_s": "justine-arnoud",
       "authIdHal_i": "743490",
       "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "justine-arnoud",
+      "authIdHal_i": "743490",
+      "labStructName_s": "Institut d'Administration des Entreprises - Paris-Est",
+      "labStructId_i": "176728"
     }
   ],
   "Elisa Monnot": [
@@ -475,8 +499,8 @@
     {
       "authIdHal_s": "jérôme-baray",
       "authIdHal_i": "1273552",
-      "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
+      "labStructName_s": "Laboratoire de recherche en gestion Le Mans Université",
+      "labStructId_i": "1091282"
     }
   ],
   "Samuel Sponem": [
@@ -4577,6 +4601,614 @@
       "authIdHal_i": "0",
       "labStructName_s": "Recherches en Économie Gestion AgroRessources Durabilité Santé- EA 6292",
       "labStructId_i": "451480"
+    }
+  ],
+  "David Zajtmann": [
+    {
+      "authIdHal_s": "david-zajtmann",
+      "authIdHal_i": "1255854",
+      "labStructName_s": "Institut français de la mode",
+      "labStructId_i": "341726"
+    }
+  ],
+  "Léna Masson": [
+    {
+      "authIdHal_s": "léna-masson",
+      "authIdHal_i": "18884",
+      "labStructName_s": "Lille University Management Lab - ULR 4999",
+      "labStructId_i": "1071874"
+    },
+    {
+      "authIdHal_s": "léna-masson",
+      "authIdHal_i": "18884",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Pauline de Becdelièvre": [
+    {
+      "authIdHal_s": "pauline-de-becdelièvre",
+      "authIdHal_i": "9150",
+      "labStructName_s": "Institutions et Dynamiques Historiques de l'Économie et de la Société",
+      "labStructId_i": "243735"
+    },
+    {
+      "authIdHal_s": "pauline-de-becdelièvre",
+      "authIdHal_i": "9150",
+      "labStructName_s": "Université Paris-Saclay",
+      "labStructId_i": "419361"
+    },
+    {
+      "authIdHal_s": "pauline-de-becdelièvre",
+      "authIdHal_i": "9150",
+      "labStructName_s": "Réseaux Innovation Territoires et Mondialisation",
+      "labStructId_i": "1051119"
+    },
+    {
+      "authIdHal_s": "pauline-de-becdelièvre",
+      "authIdHal_i": "9150",
+      "labStructName_s": "Laboratoire de recherche en sciences de gestion Panthéon-Assas",
+      "labStructId_i": "99795"
+    },
+    {
+      "authIdHal_s": "pauline-de-becdelièvre",
+      "authIdHal_i": "9150",
+      "labStructName_s": "Ecole Normale Supérieure  Paris-Saclay",
+      "labStructId_i": "523723"
+    }
+  ],
+  "Tugce Ataci": [
+    {
+      "authIdHal_s": "tugce-ataci",
+      "authIdHal_i": "1615207",
+      "labStructName_s": "Université Paris-Est Créteil Val-de-Marne - Paris 12",
+      "labStructId_i": "420786"
+    },
+    {
+      "authIdHal_s": "tugce-ataci",
+      "authIdHal_i": "1615207",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "tugce-ataci",
+      "authIdHal_i": "1615207",
+      "labStructName_s": "Universitat Pompeu Fabra [Barcelona]",
+      "labStructId_i": "128785"
+    }
+  ],
+  "Déborah Philippe": [
+    {
+      "authIdHal_s": "déborah-philippe",
+      "authIdHal_i": "20563",
+      "labStructName_s": "Faculté des Hautes Etudes Commerciales (HEC Lausanne)",
+      "labStructId_i": "325014"
+    },
+    {
+      "authIdHal_s": "déborah-philippe",
+      "authIdHal_i": "20563",
+      "labStructName_s": "Université de Lausanne = University of Lausanne",
+      "labStructId_i": "97916"
+    }
+  ],
+  "Paul Tainturier": [
+    {
+      "authIdHal_s": "paul-tainturier",
+      "authIdHal_i": "1388349",
+      "labStructName_s": "LAB IAE Paris - Sorbonne",
+      "labStructId_i": "1154480"
+    }
+  ],
+  "Anne Dietrich": [
+    {
+      "authIdHal_s": "anne-dietrich",
+      "authIdHal_i": "1113878",
+      "labStructName_s": "Lille University Management Lab - ULR 4999",
+      "labStructId_i": "1071874"
+    },
+    {
+      "authIdHal_s": "anne-dietrich",
+      "authIdHal_i": "0",
+      "labStructName_s": "IAE Lille University School of Management - Lille",
+      "labStructId_i": "151921"
+    },
+    {
+      "authIdHal_s": "anne-dietrich",
+      "authIdHal_i": "1113878",
+      "labStructName_s": "IAE Lille University School of Management - Lille",
+      "labStructId_i": "151921"
+    }
+  ],
+  "Heather Connolly": [
+    {
+      "authIdHal_s": "heather-connolly",
+      "authIdHal_i": "0",
+      "labStructName_s": "GEM Recherche",
+      "labStructId_i": "264544"
+    },
+    {
+      "authIdHal_s": "heather-connolly",
+      "authIdHal_i": "0",
+      "labStructName_s": "Grenoble Ecole de Management",
+      "labStructId_i": "220014"
+    }
+  ],
+  "Huiping Xian": [
+    {
+      "authIdHal_s": "huiping-xian",
+      "authIdHal_i": "0",
+      "labStructName_s": "University of Leicester",
+      "labStructId_i": "300751"
+    }
+  ],
+  "Meriem Agrebi": [
+    {
+      "authIdHal_s": "meriem-agrebi",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Jean-Louis Chandon": [
+    {
+      "authIdHal_s": "jean-louis-chandon",
+      "authIdHal_i": "899007",
+      "labStructName_s": "Centre d'Études et de Recherche en Gestion d'Aix-Marseille",
+      "labStructId_i": "108098"
+    }
+  ],
+  "Laurent Flores": [
+    {
+      "authIdHal_s": "laurent-flores",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire de recherche en sciences de gestion Panthéon-Assas",
+      "labStructId_i": "99795"
+    },
+    {
+      "authIdHal_s": "laurent-flores",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut des hautes études économiques et commerciales | School of Business and Economics",
+      "labStructId_i": "458547"
+    },
+    {
+      "authIdHal_s": "laurent-flores",
+      "authIdHal_i": "862150",
+      "labStructName_s": "Dauphine Recherches en Management",
+      "labStructId_i": "1032"
+    },
+    {
+      "authIdHal_s": "laurent-flores",
+      "authIdHal_i": "862150",
+      "labStructName_s": "Laboratoire de recherche en sciences de gestion Panthéon-Assas",
+      "labStructId_i": "99795"
+    }
+  ],
+  "Jérôme Méric": [
+    {
+      "authIdHal_s": "jérôme-méric",
+      "authIdHal_i": "21673",
+      "labStructName_s": "Centre de recherche en gestion [UR 13564]",
+      "labStructId_i": "1164957"
+    },
+    {
+      "authIdHal_s": "jérôme-méric",
+      "authIdHal_i": "21673",
+      "labStructName_s": "Centre de recherche en gestion [EA 1722]",
+      "labStructId_i": "159255"
+    }
+  ],
+  "Mihaela Kelemen": [
+    {
+      "authIdHal_s": "mihaela-kelemen",
+      "authIdHal_i": "0",
+      "labStructName_s": "Keele University [Keele]",
+      "labStructId_i": "204551"
+    },
+    {
+      "authIdHal_s": "mihaela-kelemen",
+      "authIdHal_i": "0",
+      "labStructName_s": "Nottingham University Business School [Nottingham]",
+      "labStructId_i": "485173"
+    }
+  ],
+  "Bill Lee": [
+    {
+      "authIdHal_s": "bill-lee",
+      "authIdHal_i": "0",
+      "labStructName_s": "University of Sheffield [Sheffield]",
+      "labStructId_i": "153591"
+    }
+  ],
+  "Francesca Sanna": [
+    {
+      "authIdHal_s": "francesca-sanna",
+      "authIdHal_i": "1321559",
+      "labStructName_s": "France, Amériques, Espagne, Sociétés, Pouvoirs, Acteurs",
+      "labStructId_i": "620"
+    }
+  ],
+  "Damien Chaney": [
+    {
+      "authIdHal_s": "damien-chaney",
+      "authIdHal_i": "183820",
+      "labStructName_s": "Recherches en Économie Gestion AgroRessources Durabilité Santé- EA 6292",
+      "labStructId_i": "451480"
+    },
+    {
+      "authIdHal_s": "damien-chaney",
+      "authIdHal_i": "183820",
+      "labStructName_s": "Groupe ESC Troyes en Champagne",
+      "labStructId_i": "303579"
+    }
+  ],
+  "Matteo Cristofaro": [
+    {
+      "authIdHal_s": "matteo-cristofaro",
+      "authIdHal_i": "1523579",
+      "labStructName_s": "Università degli Studi di Roma Tor Vergata [Roma, Italia] = University of Rome Tor Vergata [Rome, Italy] = Université de Rome Tor Vergata [Rome, Italie]",
+      "labStructId_i": "302760"
+    },
+    {
+      "authIdHal_s": "matteo-cristofaro",
+      "authIdHal_i": "0",
+      "labStructName_s": "Università degli Studi di Roma Tor Vergata [Roma, Italia] = University of Rome Tor Vergata [Rome, Italy] = Université de Rome Tor Vergata [Rome, Italie]",
+      "labStructId_i": "302760"
+    }
+  ],
+  "Jessica Missongo": [
+    {
+      "authIdHal_s": "jessica-missongo",
+      "authIdHal_i": "1659562",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "jessica-missongo",
+      "authIdHal_i": "1659562",
+      "labStructName_s": "Université Paris-Est Créteil Val-de-Marne - Paris 12",
+      "labStructId_i": "420786"
+    }
+  ],
+  "Emmanuel Abord de Chatillon": [
+    {
+      "authIdHal_s": "emmanuel-abord-de-chatillon",
+      "authIdHal_i": "1366065",
+      "labStructName_s": "Université Grenoble Alpes - Institut d'Administration des Entreprises",
+      "labStructId_i": "127817"
+    }
+  ],
+  "Brigitte Muller": [
+    {
+      "authIdHal_s": "brigitte-muller",
+      "authIdHal_i": "11492",
+      "labStructName_s": "Centre d'Études et de Recherche en Gestion d'Aix-Marseille/Equipe de recherche de Toulon",
+      "labStructId_i": "520682"
+    }
+  ],
+  "Renaud Defiebre-Muller": [
+    {
+      "authIdHal_s": "renaud-defiebre-muller",
+      "authIdHal_i": "1003839",
+      "labStructName_s": "Université de Haute-Alsace (UHA) Mulhouse - Colmar",
+      "labStructId_i": "237692"
+    },
+    {
+      "authIdHal_s": "renaud-defiebre-muller",
+      "authIdHal_i": "1003839",
+      "labStructName_s": "Centre de Recherche en Gestion des Organisations (EA 7317)",
+      "labStructId_i": "496955"
+    }
+  ],
+  "Linh-Chi Vo": [
+    {
+      "authIdHal_s": "linh-chi-vo",
+      "authIdHal_i": "1258891",
+      "labStructName_s": "Métis Lab EM Normandie",
+      "labStructId_i": "150910"
+    }
+  ],
+  "Federico Ignacio Viola": [
+    {
+      "authIdHal_s": "federico-ignacio-viola",
+      "authIdHal_i": "1015155",
+      "labStructName_s": "Universidad Católica de Santa Fe",
+      "labStructId_i": "505141"
+    }
+  ],
+  "Fanny Poujol": [
+    {
+      "authIdHal_s": "fanny-poujol",
+      "authIdHal_i": "1030085",
+      "labStructName_s": "Centre d'Etudes et de Recherches sur les Organisations et la Stratégie",
+      "labStructId_i": "109951"
+    }
+  ],
+  "Guy Christian Tubreoumya": [
+    {
+      "authIdHal_s": "guy-christian-tubreoumya",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratory of Environmental Physics and Chemistry (LPCE), University Joseph KI-ZERBO, Ouagadougou 01 BP: 4560, Burkina Faso.",
+      "labStructId_i": "1324609"
+    }
+  ],
+  "Alfa Oumar Dissa": [
+    {
+      "authIdHal_s": "alfa-oumar-dissa",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratory of Environmental Physics and Chemistry (LPCE), University Joseph KI-ZERBO, Ouagadougou 01 BP: 4560, Burkina Faso.",
+      "labStructId_i": "1324609"
+    }
+  ],
+  "Eloi Salmwendé Tiendrebeogo": [
+    {
+      "authIdHal_s": "eloi-salmwendé-tiendrebeogo",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratory of Environmental Physics and Chemistry (LPCE), University Joseph KI-ZERBO, Ouagadougou 01 BP: 4560, Burkina Faso.",
+      "labStructId_i": "1324609"
+    }
+  ],
+  "Delphine Dion": [
+    {
+      "authIdHal_s": "delphine-dion",
+      "authIdHal_i": "1387086",
+      "labStructName_s": "ESSEC Business School",
+      "labStructId_i": "301020"
+    }
+  ],
+  "Ludovic Taphanel": [
+    {
+      "authIdHal_s": "ludovic-taphanel",
+      "authIdHal_i": "1552732",
+      "labStructName_s": "Groupe IGS",
+      "labStructId_i": "489807"
+    }
+  ],
+  "Adrien Laurent": [
+    {
+      "authIdHal_s": "adrien-laurent",
+      "authIdHal_i": "0",
+      "labStructName_s": "Dauphine Recherches en Management",
+      "labStructId_i": "1032"
+    }
+  ],
+  "Ashlee Humphreys": [
+    {
+      "authIdHal_s": "ashlee-humphreys",
+      "authIdHal_i": "0",
+      "labStructName_s": "Northwestern University [Evanston]",
+      "labStructId_i": "133711"
+    }
+  ],
+  "Nick Rumens": [
+    {
+      "authIdHal_s": "nick-rumens",
+      "authIdHal_i": "0",
+      "labStructName_s": "University of Portsmouth",
+      "labStructId_i": "68170"
+    }
+  ],
+  "Elodie Béthoux": [
+    {
+      "authIdHal_s": "elodie-béthoux",
+      "authIdHal_i": "1360505",
+      "labStructName_s": "Professions, institutions, temporalités",
+      "labStructId_i": "1236"
+    },
+    {
+      "authIdHal_s": "elodie-béthoux",
+      "authIdHal_i": "1360505",
+      "labStructName_s": "Centre Max Weber",
+      "labStructId_i": "136794"
+    },
+    {
+      "authIdHal_s": "elodie-béthoux",
+      "authIdHal_i": "1360505",
+      "labStructName_s": "Institutions et Dynamiques Historiques de l'Économie et de la Société",
+      "labStructId_i": "243735"
+    }
+  ],
+  "Doris Buu-Sao": [
+    {
+      "authIdHal_s": "doris-buu-sao",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre d'Etudes et de Recherches Administratives, Politiques et Sociales - UMR 8026",
+      "labStructId_i": "1192"
+    }
+  ],
+  "François Collet": [
+    {
+      "authIdHal_s": "françois-collet",
+      "authIdHal_i": "0",
+      "labStructName_s": "École supérieure d'administration et de direction d'entreprises = Escola Superior d'Administració i Direcció d'Empreses [Ramon Llull University]",
+      "labStructId_i": "1161696"
+    }
+  ],
+  "Sinda Agrebi": [
+    {
+      "authIdHal_s": "sinda-agrebi",
+      "authIdHal_i": "1593062",
+      "labStructName_s": "Centre d'Etudes et de Recherches sur les Organisations et la Stratégie",
+      "labStructId_i": "109951"
+    }
+  ],
+  "Roland Bessenay": [
+    {
+      "authIdHal_s": "roland-bessenay",
+      "authIdHal_i": "1343456",
+      "labStructName_s": "Lille University Management Lab - ULR 4999",
+      "labStructId_i": "1071874"
+    }
+  ],
+  "Oumaima Omari": [
+    {
+      "authIdHal_s": "oumaima-omari",
+      "authIdHal_i": "1170580",
+      "labStructName_s": "Centre de recherche en gestion [UR 13564]",
+      "labStructId_i": "1164957"
+    }
+  ],
+  "Andréa Mestre": [
+    {
+      "authIdHal_s": "andréa-mestre",
+      "authIdHal_i": "1390229",
+      "labStructName_s": "Centre de recherche en gestion [UR 13564]",
+      "labStructId_i": "1164957"
+    }
+  ],
+  "Pierre Lescoat": [
+    {
+      "authIdHal_s": "pierre-lescoat",
+      "authIdHal_i": "0",
+      "labStructName_s": "Neoma Business School",
+      "labStructId_i": "232915"
+    }
+  ],
+  "Rajoelison Eddy": [
+    {
+      "authIdHal_s": "rajoelison-eddy",
+      "authIdHal_i": "1404985",
+      "labStructName_s": "Centre d'Etudes et de Recherches sur les Organisations et la Stratégie",
+      "labStructId_i": "109951"
+    }
+  ],
+  "Abdoulaye Kabore": [
+    {
+      "authIdHal_s": "abdoulaye-kabore",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "abdoulaye-kabore",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratory of Environmental Physics and Chemistry (LPCE), University Joseph KI-ZERBO, Ouagadougou 01 BP: 4560, Burkina Faso.",
+      "labStructId_i": "1324609"
+    },
+    {
+      "authIdHal_s": "abdoulaye-kabore",
+      "authIdHal_i": "1411611",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Oskar Kosch": [
+    {
+      "authIdHal_s": "oskar-kosch",
+      "authIdHal_i": "0",
+      "labStructName_s": "Krakow University of Economics",
+      "labStructId_i": "1209420"
+    },
+    {
+      "authIdHal_s": "oskar-kosch",
+      "authIdHal_i": "1523576",
+      "labStructName_s": "Krakow University of Economics (Poland, Krakow) - CUE",
+      "labStructId_i": "1775367"
+    },
+    {
+      "authIdHal_s": "oskar-kosch",
+      "authIdHal_i": "1523576",
+      "labStructName_s": "Université de Krakovie",
+      "labStructId_i": "322141"
+    }
+  ],
+  "Marek Szarucki": [
+    {
+      "authIdHal_s": "marek-szarucki",
+      "authIdHal_i": "0",
+      "labStructName_s": "Krakow University of Economics",
+      "labStructId_i": "1209420"
+    },
+    {
+      "authIdHal_s": "marek-szarucki",
+      "authIdHal_i": "1523577",
+      "labStructName_s": "Krakow University of Economics (Poland, Krakow) - CUE",
+      "labStructId_i": "1775367"
+    },
+    {
+      "authIdHal_s": "marek-szarucki",
+      "authIdHal_i": "1523577",
+      "labStructName_s": "Université de Krakovie",
+      "labStructId_i": "322141"
+    }
+  ],
+  "Gianpaolo Abatecola": [
+    {
+      "authIdHal_s": "gianpaolo-abatecola",
+      "authIdHal_i": "0",
+      "labStructName_s": "Università degli Studi di Roma Tor Vergata [Roma, Italia] = University of Rome Tor Vergata [Rome, Italy] = Université de Rome Tor Vergata [Rome, Italie]",
+      "labStructId_i": "302760"
+    },
+    {
+      "authIdHal_s": "gianpaolo-abatecola",
+      "authIdHal_i": "1523578",
+      "labStructName_s": "Università degli Studi di Roma Tor Vergata [Roma, Italia] = University of Rome Tor Vergata [Rome, Italy] = Université de Rome Tor Vergata [Rome, Italie]",
+      "labStructId_i": "302760"
+    }
+  ],
+  "Michael Schlaile": [
+    {
+      "authIdHal_s": "michael-schlaile",
+      "authIdHal_i": "1523580",
+      "labStructName_s": "Leibniz-Zentrum für Agrarlandschaftsforschung = Leibniz Centre for Agricultural Landscape Research",
+      "labStructId_i": "303023"
+    },
+    {
+      "authIdHal_s": "michael-schlaile",
+      "authIdHal_i": "1659046",
+      "labStructName_s": "Universität Hohenheim = University of Hohenheim",
+      "labStructId_i": "306614"
+    }
+  ],
+  "Davide Secchi": [
+    {
+      "authIdHal_s": "davide-secchi",
+      "authIdHal_i": "0",
+      "labStructName_s": "University of Southern Denmark = Syddansk Universitet",
+      "labStructId_i": "50786"
+    },
+    {
+      "authIdHal_s": "davide-secchi",
+      "authIdHal_i": "1523581",
+      "labStructName_s": "University of Southern Denmark = Syddansk Universitet",
+      "labStructId_i": "50786"
+    },
+    {
+      "authIdHal_s": "davide-secchi",
+      "authIdHal_i": "1523581",
+      "labStructName_s": "Paris School of Business",
+      "labStructId_i": "531465"
+    }
+  ],
+  "Michael P Schlaile": [
+    {
+      "authIdHal_s": "michael-p-schlaile",
+      "authIdHal_i": "0",
+      "labStructName_s": "Leibniz Centre for Agricultural Landscape Research (ZALF)",
+      "labStructId_i": "1236891"
+    }
+  ],
+  "Ousmane Guiro": [
+    {
+      "authIdHal_s": "ousmane-guiro",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratory of Environmental Physics and Chemistry (LPCE), University Joseph KI-ZERBO, Ouagadougou 01 BP: 4560, Burkina Faso.",
+      "labStructId_i": "1324609"
+    }
+  ],
+  "Marianna Gyapay": [
+    {
+      "authIdHal_s": "marianna-gyapay",
+      "authIdHal_i": "1553063",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Zeynepnaz Dag": [
+    {
+      "authIdHal_s": "zeynepnaz-dag",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut d'Administration des Entreprises - Paris-Est",
+      "labStructId_i": "176728"
     }
   ]
 }

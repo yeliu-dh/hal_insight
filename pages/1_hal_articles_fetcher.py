@@ -236,16 +236,16 @@ options_fields = ['halId_s','uri_s',"docType_s", "title_s", "subTitle_s", "authF
                     "language_s", "keyword_s", "abstract_s","urlFulltextEsr_s","files_s",'page_s',"modifiedDate_s","submittedDate_s",
                      "openAccess_bool",'volume_s','conferenceStartDate_s',"conferenceOrganizer_s","classification_s","collName_s","collCode_s",
                      "authIdHal_s","authLastNameFirstName_s","label_s","labStructIdName_fs",
-                     "authIdHasPrimaryStructure_fs","inPress_bool","publicationDateY_i"     
+                     "authIdHasPrimaryStructure_fs","inPress_bool","publicationDateY_i", "publicationDate_tdate"     
 ]
 
 # 默认输出字段
 default_fields=['halId_s','uri_s', "docType_s", "title_s", "subTitle_s", "authFullName_s","labStructName_s",
                 "domain_s","openAccess_bool",'volume_s',"page_s","classification_s",
-                "submittedDate_s","modifiedDate_s", "publicationDate_s","publicationDateY_i",
+                "submittedDate_s","modifiedDate_s", "publicationDate_s","publicationDate_tdate","publicationDateY_i","inPress_bool",
                 "journalTitle_s","conferenceTitle_s","conferenceOrganizer_s","conferenceStartDate_s",
                 "country_s", "language_s",
-                "keyword_s", "abstract_s","files_s","urlFulltextEsr_s","label_s", "inPress_bool",
+                "keyword_s", "abstract_s","files_s","urlFulltextEsr_s","label_s", 
 ]
 
 fields = st.multiselect(
@@ -267,10 +267,22 @@ st.divider()
 
 # ============================================README=============================================
 st.subheader("📒 README")
+
+# st.markdown(f"**Recherche sur HAL:**  \n")
+
 # st.markdown(f"HAL cherche des articles par publicationDateY_i")
 
+# ---rules---
 st.markdown(
-    "**cl_fnege** : Classement FNEGE du journal de l'année de la publication  \n"
+    f"**Règles de recherche par date:**  \n"
+    f"- a) pour ne pas définir une date de début, sélectionnez '*' dans l'année de début' *ou/et* 'mois de début';  \n"
+    f"- b) pour chercher les articles jusqu'à aujourd'hui, sélectionnez 'aujourd'hui' dans 'années de fin' *ou/et* 'mois de fin'.  \n"
+    f"- c) certains articles ont une date publication future, pour les inclure, sélectionnez '*'dans 'années de fin' *ou/et* 'mois de fin'. Les articles déjà publiés setront indiqué dans la colonne de 'inPress_bool'!"
+)
+
+    
+st.markdown(
+    "**'cl_fnege'** : Classement FNEGE du journal de l'année de la publication  \n"
     "Pour chaque article, nous déterminons automatiquement le classement FNEGE du *journalTitle_s* correspondant à son année de *publicationDate_s*.  \n"
     "Le nom de la revue est comparé aux listes FNEGE pour trouver le classement :  \n"
     "- la recherche flou désactivée (par défault):  \n"
@@ -284,7 +296,7 @@ st.markdown("<br>", unsafe_allow_html=True)
 
 
 st.markdown(
-    f"**authPrimaryStructureIdName_s** : les structures primaires des auteurs de chaque article  \n"
+    f"**'authPrimaryStructureIdName_s'** : les structures primaires des auteurs de chaque article  \n"
     # f"**Structure primaire de l'auteur => author_primarystructure_s**:  \n"
     f"- Pour chaque article, nous identifions automatiquement l’institution principale de chaque auteur en utilisant la colonne *authFullName_s* pour retrouver les structures via *authIdHasPrimaryStructure_fs*.  \n"
     f"- L'info est structurée sous forme de *Nom complet de l'auteur_Identifiant de sa structure primaire_Nom de la structure  \n"
