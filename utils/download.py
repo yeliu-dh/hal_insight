@@ -25,21 +25,35 @@ def get_default_filename(df,start_year=None, start_month=None, end_year=None, en
     if start_year and start_month and end_year and end_month:
         start_date, end_date=build_period(start_year=start_year, start_month=start_month,
                                         end_year=end_year, end_month=end_month)
+        # 已经统一*
         
-        if start_year =="*" or start_month=="*":
-            start_date="avant"
-            
-        if end_year=="aujourd'hui" or end_month=="aujourd'hui":
-            now = datetime.now()
-            current_year, current_month = now.year, now.month
-            end_year, end_month=current_year, current_month
+        if start_date =="*" :
+            date_s=f"before_{end_date.split('T')[0]}"
+        elif end_date=="*":
+            date_s=f"after_{start_date.split('T')[0]}"
+        elif start_year =="*" and end_year =="*":
+            date_s=""             
+        else :
+            date_s=f"{start_year}{start_month}-{end_year}{end_month}"
 
-        # 去掉时间戳：
-        if 'T' in start_date:
-            start_date=start_date.split('T')[0]
-        if 'T' in end_date:    
-            end_date=end_date.split('T')[0]
-        return f"{today_s}-ProductionScientifiqueIRG-{start_year}{start_month}-{end_year}{end_month}_{len(df)}art"
+        if date_s.strip():
+            filename=f"{today_s}-ProductionScientifiqueIRG-{date_s}_{len(df)}art"
+        else :
+            filename= f"{today_s}-ProductionScientifiqueIRG_{len(df)}art"
+            
+            
+        # if end_year=="aujourd'hui" or end_month=="aujourd'hui":
+        #     now = datetime.now()
+        #     current_year, current_month = now.year, now.month
+        #     end_year, end_month=current_year, current_month
+        
+        # # 去掉时间戳：
+        # if 'T' in start_date:
+        #     start_date=start_date.split('T')[0]
+        # if 'T' in end_date:    
+        #     end_date=end_date.split('T')[0]
+            
+        return f"{today_s}-ProductionScientifiqueIRG-{date_s}_{len(df)}art"
     
     else :
         return f"{today_s}-ProductionScientifiqueIRG_{len(df)}art"

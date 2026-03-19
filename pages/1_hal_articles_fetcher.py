@@ -276,7 +276,8 @@ st.divider()
 # ============================================README=============================================
 st.subheader("📒 README")
 
-# st.markdown(f"**Recherche sur HAL:**  \n")
+# st.markdown(f"**Règle de recherche sur HAL:**  \n"
+#             f"")
 
 # st.markdown(f"HAL cherche des articles par publicationDateY_i")
 
