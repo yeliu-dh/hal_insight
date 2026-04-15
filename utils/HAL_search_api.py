@@ -100,11 +100,13 @@ def build_period(start_year=None, start_month=None,
 def get_start_end_field(key_prefix):
 
     """
+    key_prefix是筛选年月的identifiant，避免不同的年月混淆
     streamlit 输入模块：获得起、止，年、月，和筛选的日期列
-    
+    结果输入到filter_by_tdate中得到df_filtered
+     
     """
     
-    st.markdown(f"**📆 Période**.  \n")
+    st.markdown(f"**📆 Période**  \n")
     
     # # ---rules---
     # st.markdown(f"- a) pour ne pas définir une date de début, sélectionnez '*' dans l'année de début' *ou/et* 'mois de début';  \n"
@@ -154,7 +156,7 @@ def get_start_end_field(key_prefix):
         check_str=f"après {start_date}"
     else :
         check_str=f"entre {start_date} ~ {end_date}"
-    st.markdown(f"[check] chercher les articles  **{check_str}**  par la date de **{date_field}**!")
+    st.markdown(f"💡 chercher les articles  **{check_str}**  par la date de **{date_field}**!")
 
     return start_year, start_month, end_year, end_month, date_field
 
@@ -241,12 +243,13 @@ def filter_par_tdate(df,
     if date_field_col not in df_filtered.columns:
         st.write(f"[warning] from 'filter_by_tdate':'{date_field_col}' not in df!")
         return df_filtered
+    
     df_filtered[date_field_col] = pd.to_datetime(
         df_filtered[date_field_col],
         utc=True,
         errors='coerce'
     )
-
+        
     # ---satrt/end---
     start_date, end_date = build_period(
         start_year=start_year,
@@ -389,7 +392,7 @@ def fetch_hal_articles(
         start_date, end_date=build_period(start_year, start_month,end_year, end_month)
         fq.append(f"{date_field_col}:[{start_date} TO {end_date}]")
         start_date_s=start_date if start_date!="*" else 'BEFORE'
-        st.write(f"[info] ('fq', '{date_field_col}:[{start_date} TO {end_date}]')  \n")
+        # st.write(f"[info] ('fq', '{date_field_col}:[{start_date} TO {end_date}]')  \n")
         
         #  {start_date_s} ~ {end_date} 
 
@@ -1165,7 +1168,6 @@ def process_df(df, DOMAIN_MAP,
     st.markdown("<br>", unsafe_allow_html=True)
 
     # -------------authPrimaryStructureIdName_s+authPrimaryStructure_IRG_bool----------------------
-    
     if "authFullName_s" in df.columns and path_map_auth_struct :  
         df=add_authPrimaryStructureIdName_s(df, path_map_auth_struct=path_map_auth_struct)
         # df=check_irgStructureID(df,list_structureid=["1004418","57129"])

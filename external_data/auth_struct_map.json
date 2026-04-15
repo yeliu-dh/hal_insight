@@ -251,6 +251,12 @@
     {
       "authIdHal_s": "rémi-bourguignon",
       "authIdHal_i": "172683",
+      "labStructName_s": "IAE Paris - Sorbonne Business School",
+      "labStructId_i": "300334"
+    },
+    {
+      "authIdHal_s": "rémi-bourguignon",
+      "authIdHal_i": "172683",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "1004418"
     }
@@ -5209,6 +5215,476 @@
       "authIdHal_i": "0",
       "labStructName_s": "Institut d'Administration des Entreprises - Paris-Est",
       "labStructId_i": "176728"
+    }
+  ],
+  "Mathieu Floquet": [
+    {
+      "authIdHal_s": "mathieu-floquet",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre Européen de Recherche en Economie Financière et Gestion des Entreprises",
+      "labStructId_i": "221899"
+    },
+    {
+      "authIdHal_s": "mathieu-floquet",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Orléanais de Gestion (1998-2011)",
+      "labStructId_i": "22098"
+    },
+    {
+      "authIdHal_s": "mathieu-floquet",
+      "authIdHal_i": "0",
+      "labStructName_s": "IAE de l'Université Nancy 2",
+      "labStructId_i": "220791"
+    }
+  ],
+  "Patrice Laroche": [
+    {
+      "authIdHal_s": "patrice-laroche",
+      "authIdHal_i": "175355",
+      "labStructName_s": "Centre Européen de Recherche en Economie Financière et Gestion des Entreprises",
+      "labStructId_i": "221899"
+    }
+  ],
+  "Loris Guery": [
+    {
+      "authIdHal_s": "loris-guery",
+      "authIdHal_i": "182891",
+      "labStructName_s": "Centre Européen de Recherche en Economie Financière et Gestion des Entreprises",
+      "labStructId_i": "221899"
+    }
+  ],
+  "Pierre Labardin": [
+    {
+      "authIdHal_s": "pierre-labardin",
+      "authIdHal_i": "915759",
+      "labStructName_s": "DRM MOST",
+      "labStructId_i": "400534"
+    },
+    {
+      "authIdHal_s": "pierre-labardin",
+      "authIdHal_i": "0",
+      "labStructName_s": "Dauphine Recherches en Management",
+      "labStructId_i": "1032"
+    },
+    {
+      "authIdHal_s": "pierre-labardin",
+      "authIdHal_i": "915759",
+      "labStructName_s": "Dauphine Recherches en Management",
+      "labStructId_i": "1032"
+    }
+  ],
+  "Chloé Guillot-Soulez": [
+    {
+      "authIdHal_s": "chloé-guillot-soulez",
+      "authIdHal_i": "47",
+      "labStructName_s": "Laboratoire de Recherche Magellan",
+      "labStructId_i": "171535"
+    },
+    {
+      "authIdHal_s": "chloé-guillot-soulez",
+      "authIdHal_i": "47",
+      "labStructName_s": "Centre Européen de Recherche en Economie Financière et Gestion des Entreprises",
+      "labStructId_i": "221899"
+    }
+  ],
+  "Emmanuel Gautier": [
+    {
+      "authIdHal_s": "emmanuel-gautier",
+      "authIdHal_i": "771947",
+      "labStructName_s": "Unité de Recherche sur les Maladies Cardiovasculaires, du Métabolisme et de la Nutrition = Research Unit on Cardiovascular and Metabolic Diseases",
+      "labStructId_i": "542105"
+    }
+  ],
+  "Stephanie Vargas Aguilar": [
+    {
+      "authIdHal_s": "stephanie-vargas-aguilar",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre d'Immunologie de Marseille - Luminy",
+      "labStructId_i": "182245"
+    }
+  ],
+  "Nadia Cohen": [
+    {
+      "authIdHal_s": "nadia-cohen",
+      "authIdHal_i": "0",
+      "labStructName_s": "Korian [Paris]",
+      "labStructId_i": "535163"
+    }
+  ],
+  "Marie Malissen": [
+    {
+      "authIdHal_s": "marie-malissen",
+      "authIdHal_i": "757812",
+      "labStructName_s": "Centre d'Immunologie de Marseille - Luminy",
+      "labStructId_i": "182245"
+    }
+  ],
+  "Mounia Hocine": [
+    {
+      "authIdHal_s": "mounia-hocine",
+      "authIdHal_i": "173621",
+      "labStructName_s": "Laboratoire Modélisation, épidémiologie et surveillance des risques sanitaires",
+      "labStructId_i": "266752"
+    },
+    {
+      "authIdHal_s": "mounia-hocine",
+      "authIdHal_i": "173621",
+      "labStructName_s": "Pasteur-Cnam Risques infectieux et émergents",
+      "labStructId_i": "507187"
+    }
+  ],
+  "Laura Temime": [
+    {
+      "authIdHal_s": "laura-temime",
+      "authIdHal_i": "740236",
+      "labStructName_s": "Laboratoire Modélisation, épidémiologie et surveillance des risques sanitaires",
+      "labStructId_i": "266752"
+    },
+    {
+      "authIdHal_s": "laura-temime",
+      "authIdHal_i": "740236",
+      "labStructName_s": "Pasteur-Cnam Risques infectieux et émergents",
+      "labStructId_i": "507187"
+    }
+  ],
+  "Stéphane Lefrancq": [
+    {
+      "authIdHal_s": "stéphane-lefrancq",
+      "authIdHal_i": "744120",
+      "labStructName_s": "Centre d'enseignement Cnam Paris",
+      "labStructId_i": "93516"
+    }
+  ],
+  "Karine Crozat": [
+    {
+      "authIdHal_s": "karine-crozat",
+      "authIdHal_i": "174402",
+      "labStructName_s": "Centre d'Immunologie de Marseille - Luminy",
+      "labStructId_i": "182245"
+    },
+    {
+      "authIdHal_s": "karine-crozat",
+      "authIdHal_i": "174402",
+      "labStructName_s": "Microenvironment, Cell Differentiation, Immunology and Cancer",
+      "labStructId_i": "480724"
+    }
+  ],
+  "Philippe Denormandie": [
+    {
+      "authIdHal_s": "philippe-denormandie",
+      "authIdHal_i": "0",
+      "labStructName_s": "Service d'Imagerie Médicale [Raymond-Poincaré]",
+      "labStructId_i": "236732"
+    },
+    {
+      "authIdHal_s": "philippe-denormandie",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut du Bien Vieillir [Paris]",
+      "labStructId_i": "535167"
+    }
+  ],
+  "Angelique Bellemare-Pelletier": [
+    {
+      "authIdHal_s": "angelique-bellemare-pelletier",
+      "authIdHal_i": "0",
+      "labStructName_s": "Genentech, Inc.",
+      "labStructId_i": "98288"
+    }
+  ],
+  "Sébastien This": [
+    {
+      "authIdHal_s": "sébastien-this",
+      "authIdHal_i": "0",
+      "labStructName_s": "Cellules B normales et pathogéniques - Normal and pathogenic B cell responses [CIRI]",
+      "labStructId_i": "1073349"
+    },
+    {
+      "authIdHal_s": "sébastien-this",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre International de Recherche en Infectiologie",
+      "labStructId_i": "222995"
+    }
+  ],
+  "Helena Paidassi": [
+    {
+      "authIdHal_s": "helena-paidassi",
+      "authIdHal_i": "739515",
+      "labStructName_s": "Cellules B normales et pathogéniques - Normal and pathogenic B cell responses [CIRI]",
+      "labStructId_i": "1073349"
+    },
+    {
+      "authIdHal_s": "helena-paidassi",
+      "authIdHal_i": "739515",
+      "labStructName_s": "Centre International de Recherche en Infectiologie",
+      "labStructId_i": "222995"
+    }
+  ],
+  "Scott Davis": [
+    {
+      "authIdHal_s": "scott-davis",
+      "authIdHal_i": "0",
+      "labStructName_s": "Harvard Medical School [Boston]",
+      "labStructId_i": "130467"
+    }
+  ],
+  "Karim Ait-Bouziad": [
+    {
+      "authIdHal_s": "karim-ait-bouziad",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Modélisation, épidémiologie et surveillance des risques sanitaires",
+      "labStructId_i": "266752"
+    },
+    {
+      "authIdHal_s": "karim-ait-bouziad",
+      "authIdHal_i": "0",
+      "labStructName_s": "Pasteur-Cnam Risques infectieux et émergents",
+      "labStructId_i": "507187"
+    }
+  ],
+  "Michael Brenner": [
+    {
+      "authIdHal_s": "michael-brenner",
+      "authIdHal_i": "0",
+      "labStructName_s": "Harvard Medical School [Boston]",
+      "labStructId_i": "130467"
+    }
+  ],
+  "Nora Barrett": [
+    {
+      "authIdHal_s": "nora-barrett",
+      "authIdHal_i": "0",
+      "labStructName_s": "Brigham & Women’s Hospital [Boston]",
+      "labStructId_i": "538529"
+    }
+  ],
+  "Oscar Aguilar": [
+    {
+      "authIdHal_s": "oscar-aguilar",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre d'Immunologie de Marseille - Luminy",
+      "labStructId_i": "182245"
+    }
+  ],
+  "Rhys Allan": [
+    {
+      "authIdHal_s": "rhys-allan",
+      "authIdHal_i": "0",
+      "labStructName_s": "The Walter and Eliza Hall Institute of Medical Research",
+      "labStructId_i": "98122"
+    }
+  ],
+  "El Ad David Amir": [
+    {
+      "authIdHal_s": "el-ad-david-amir",
+      "authIdHal_i": "0",
+      "labStructName_s": "Icahn School of Medicine at Mount Sinai [New York]",
+      "labStructId_i": "354552"
+    }
+  ],
+  "Natasha Asinovski": [
+    {
+      "authIdHal_s": "natasha-asinovski",
+      "authIdHal_i": "0",
+      "labStructName_s": "Harvard Medical School [Boston]",
+      "labStructId_i": "130467"
+    }
+  ],
+  "Jilian Astarita": [
+    {
+      "authIdHal_s": "jilian-astarita",
+      "authIdHal_i": "0",
+      "labStructName_s": "Genentech, Inc.",
+      "labStructId_i": "98288"
+    }
+  ],
+  "K. Frank Austen": [
+    {
+      "authIdHal_s": "k.-frank-austen",
+      "authIdHal_i": "0",
+      "labStructName_s": "Brigham & Women’s Hospital [Boston]",
+      "labStructId_i": "538529"
+    }
+  ],
+  "Geetika Bajpai": [
+    {
+      "authIdHal_s": "geetika-bajpai",
+      "authIdHal_i": "0",
+      "labStructName_s": "Washington University School of Medicine in St. Louis",
+      "labStructId_i": "577065"
+    }
+  ],
+  "Alev Baysoy": [
+    {
+      "authIdHal_s": "alev-baysoy",
+      "authIdHal_i": "0",
+      "labStructName_s": "Harvard Medical School [Boston]",
+      "labStructId_i": "130467"
+    }
+  ],
+  "Daniela Cipoletta": [
+    {
+      "authIdHal_s": "daniela-cipoletta",
+      "authIdHal_i": "0",
+      "labStructName_s": "Harvard Medical School [Boston]",
+      "labStructId_i": "130467"
+    }
+  ],
+  "Richard Cruse": [
+    {
+      "authIdHal_s": "richard-cruse",
+      "authIdHal_i": "0",
+      "labStructName_s": "Harvard Medical School [Boston]",
+      "labStructId_i": "130467"
+    }
+  ],
+  "Graeme Doran": [
+    {
+      "authIdHal_s": "graeme-doran",
+      "authIdHal_i": "0",
+      "labStructName_s": "Harvard Medical School [Boston]",
+      "labStructId_i": "130467"
+    }
+  ],
+  "Ayla Ergun": [
+    {
+      "authIdHal_s": "ayla-ergun",
+      "authIdHal_i": "0",
+      "labStructName_s": "Harvard Medical School [Boston]",
+      "labStructId_i": "130467"
+    }
+  ],
+  "Joonsoo Kang": [
+    {
+      "authIdHal_s": "joonsoo-kang",
+      "authIdHal_i": "0",
+      "labStructName_s": "University of Massachusetts Medical School [Worcester]",
+      "labStructId_i": "308059"
+    }
+  ],
+  "Michael Sieweke": [
+    {
+      "authIdHal_s": "michael-sieweke",
+      "authIdHal_i": "804252",
+      "labStructName_s": "Centre d'Immunologie de Marseille - Luminy",
+      "labStructId_i": "182245"
+    },
+    {
+      "authIdHal_s": "michael-sieweke",
+      "authIdHal_i": "804252",
+      "labStructName_s": "Technische Universität Dresden = Dresden University of Technology",
+      "labStructId_i": "96520"
+    }
+  ],
+  "Caroline Ziemkiewicz": [
+    {
+      "authIdHal_s": "caroline-ziemkiewicz",
+      "authIdHal_i": "0",
+      "labStructName_s": "Brown University",
+      "labStructId_i": "236317"
+    }
+  ],
+  "Maxim Artyomov": [
+    {
+      "authIdHal_s": "maxim-artyomov",
+      "authIdHal_i": "806041",
+      "labStructName_s": "Washington University School of Medicine in St. Louis",
+      "labStructId_i": "577065"
+    }
+  ],
+  "Elena Tomasello": [
+    {
+      "authIdHal_s": "elena-tomasello",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre d'Immunologie de Marseille - Luminy",
+      "labStructId_i": "182245"
+    }
+  ],
+  "Jeff Ericson": [
+    {
+      "authIdHal_s": "jeff-ericson",
+      "authIdHal_i": "0",
+      "labStructName_s": "Harvard Medical School [Boston]",
+      "labStructId_i": "130467"
+    }
+  ],
+  "Christophe Benoist": [
+    {
+      "authIdHal_s": "christophe-benoist",
+      "authIdHal_i": "1519341",
+      "labStructName_s": "Harvard Medical School [Boston]",
+      "labStructId_i": "130467"
+    }
+  ],
+  "Marc Nikitin": [
+    {
+      "authIdHal_s": "marc-nikitin",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Orléanais de Gestion (1998-2011)",
+      "labStructId_i": "22098"
+    },
+    {
+      "authIdHal_s": "marc-nikitin",
+      "authIdHal_i": "872361",
+      "labStructName_s": "Laboratoire d'Économie d'Orleans [UMR7322]",
+      "labStructId_i": "199945"
+    },
+    {
+      "authIdHal_s": "marc-nikitin",
+      "authIdHal_i": "872361",
+      "labStructName_s": "Laboratoire d'Économie d'Orleans [FRE2014]",
+      "labStructId_i": "554177"
+    }
+  ],
+  "Marc Dalod": [
+    {
+      "authIdHal_s": "marc-dalod",
+      "authIdHal_i": "17179",
+      "labStructName_s": "Centre d'Immunologie de Marseille - Luminy",
+      "labStructId_i": "182245"
+    }
+  ],
+  "William Dab": [
+    {
+      "authIdHal_s": "william-dab",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Modélisation, épidémiologie et surveillance des risques sanitaires",
+      "labStructId_i": "266752"
+    },
+    {
+      "authIdHal_s": "william-dab",
+      "authIdHal_i": "0",
+      "labStructName_s": "Pasteur-Cnam Risques infectieux et émergents",
+      "labStructId_i": "507187"
+    },
+    {
+      "authIdHal_s": "william-dab",
+      "authIdHal_i": "947395",
+      "labStructName_s": "Laboratoire Modélisation, épidémiologie et surveillance des risques sanitaires",
+      "labStructId_i": "266752"
+    }
+  ],
+  "Herve Luche": [
+    {
+      "authIdHal_s": "herve-luche",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre d'Immunologie de Marseille - Luminy",
+      "labStructId_i": "182245"
+    }
+  ],
+  "Veronique Angeli": [
+    {
+      "authIdHal_s": "veronique-angeli",
+      "authIdHal_i": "0",
+      "labStructName_s": "National University of Singapore",
+      "labStructId_i": "301111"
+    }
+  ],
+  "Alison Cook": [
+    {
+      "authIdHal_s": "alison-cook",
+      "authIdHal_i": "0",
+      "labStructName_s": "Harvard Medical School [Boston]",
+      "labStructId_i": "130467"
     }
   ]
 }

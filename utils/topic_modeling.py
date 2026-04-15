@@ -34,6 +34,10 @@ def parse_axes(x):
 
 # text
 def build_text(row):
+    """
+    collect title, keywords, absatract
+    
+    """
     parts = []
     if pd.notna(row['title_s']):
         parts.append(row['title_s'])
@@ -92,26 +96,29 @@ def combine_embeddings(row, w_title=1.0, w_kw=1.2, w_abs=1.5):
 
 
         
-def preprocess_df_for_topic_modeling(df):
-    df = df.copy()
-
-    # 处理axe
-    if 'final_axe' in df.columns:
-        col_axe = 'final_axe'
-    elif 'axe' in df.columns:
-        col_axe = 'axe'
-    else:
-        raise ValueError("Neither 'final_axe' nor 'axe' column found in dataframe")
-    df['axe_list'] = df[col_axe].apply(parse_axes)
+def preprocess_df_for_topic_modeling(df_input, col_axe):
+    ## FOR generate_topics_keywords_scatterplot
+       
+    df = df_input.copy()
     
-    #    
-    df['true_axe_list'] = df["axe"].apply(parse_axes)
-    df['predicted_axe_list'] = df["predicted_axe"].apply(parse_axes)
-
+    if col_axe in df.columns:
+        st.write(f"[info] procéder topic modeling selon {col_axe}!")
+        df=df[df[col_axe].notna()]
+        print(f"{len(df_input)} => {len(df)}")
+    else :
+        st.write(f"[info] {col_axe} not found in df\nprocéder topic modeling selon 'axe'!")
+        col_axe="axe"
+    
+    
+    df['axe_list'] = df[col_axe].apply(parse_axes)    
+    df['true_axe_list'] = df["axe"].apply(parse_axes)#必然存在
+    
+    if 'predicted_axe' in df.columns:
+        df['predicted_axe_list'] = df["predicted_axe"].apply(parse_axes)
 
     # 处理text
-    df['text'] = df.apply(build_text, axis=1)
-    df['clean_text'] = df['text'].apply(preprocess_text)
+    df['text'] = df.apply(build_text, axis=1)# collect text
+    df['clean_text'] = df['text'].apply(preprocess_text)# clean it
     
     #处理emb
     emb_cols=["emb_title_s","emb_keyword_s","emb_abstract_s"]
@@ -153,6 +160,9 @@ def preprocess_df_for_topic_modeling(df):
         
 
 def generate_force_scatterplot(df):
+    
+    ## PAGE555555
+    
     df_plot=df.copy()
     
     # init
@@ -389,8 +399,12 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.patches import Circle
 
-def generate_topics_keywords_scatterplot(topic_model, df, col_text="clean_text", axe_id="1",N_WORDS = 5):
-
+def generate_topics_keywords_scatterplot(
+        topic_model, df, col_text="clean_text", 
+        axe_id="1",N_WORDS = 5, date_field=None):
+    
+    # PAGE66666666666666666666666
+    
     cmap = plt.get_cmap("tab20")  #Set2, tab20
     
     # 文本保持一致？
@@ -418,6 +432,10 @@ def generate_topics_keywords_scatterplot(topic_model, df, col_text="clean_text",
         "y": coords[:, 1],
         "topic": topics
     })
+    #加上predicted_axe的信息
+    df_vis["true_axe_list"] = df["true_axe_list"].values
+    if "predicted_axe_list" in df.columns:
+        df_vis["predicted_axe_list"] = df["predicted_axe_list"].values
 
     ## ==================topics中心点
     topic_centers = (
@@ -435,9 +453,12 @@ def generate_topics_keywords_scatterplot(topic_model, df, col_text="clean_text",
     def get_topic_words_with_weights(topic_id, n=8):
         return topic_model.get_topic(topic_id)[:n]
 
+
+    # vis
     fig, ax = plt.subplots(figsize=(10, 8))
     ## ====================坐标点颜色
     # 1️⃣ outliers (-1)：灰色
+    
     mask_outlier = df_vis.topic == -1
     ax.scatter(
         df_vis.loc[mask_outlier, "x"],
@@ -459,7 +480,30 @@ def generate_topics_keywords_scatterplot(topic_model, df, col_text="clean_text",
         s=10
     )
 
-
+    if "predicted_axe_list" in df_vis.columns:
+        for i, row in df_vis.iterrows():
+            # if row["topic"] == -1:
+            #     continue
+            
+            preds = row["predicted_axe_list"]
+            if not preds:
+                continue
+            # 👉 你可以选择显示第一个预测 or 全部
+            label = ",".join(map(str, preds)) #str(preds[0]) # 或仅显示第一个 
+            ax.text(
+                row["x"],
+                row["y"],
+                label,
+                fontsize=6,
+                alpha=0.6,
+                color='black',
+                ha='center',
+                va='center',
+                # bbox=dict(facecolor='white', alpha=0.6, edgecolor='none')
+            )
+            
+        
+        
     # ===== 参数=====
     # CIRCLE_RADIUS = 1      # ⭐ 固定半径（UMAP 空间）
     MIN_RADIUS = 0.5
@@ -563,7 +607,12 @@ def generate_topics_keywords_scatterplot(topic_model, df, col_text="clean_text",
     axe_title=""
     if len(axe_id)>0:
         axe_title= "sous Axe "+", ".join(axe_id) if len(axe_id)>=1 else axe_id[0]
-    date_min,date_max = df["submittedDate_s"].min(), df["submittedDate_s"].max()
+    df[date_field] = pd.to_datetime(
+            df[date_field],
+            utc=True,
+            errors='coerce'
+        )
+    date_min,date_max = df[date_field].min(), df[date_field].max()
     date_title=f"{date_min.strftime('%Y/%m')} - {date_max.strftime('%Y/%m')}"
 
     plt.title(f"Sujets et Mots clés {axe_title} entre {date_title}")

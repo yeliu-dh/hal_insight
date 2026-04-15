@@ -116,7 +116,7 @@ st.markdown("<br>", unsafe_allow_html=True)
 #----------------------------------authfullname-----------------------------------------------
 auth_names = st_tags(
 label="**👩‍🔬Nom complet des auteurs:**",
-text="Tapez et 'Entrée' (chercher un texte dans tous les champs...)",
+text="ex. philippe-lépinard",
 value=None,
 suggestions=[],
 maxtags=10,
@@ -286,7 +286,7 @@ st.markdown(
     f"**Règles de recherche par date:**  \n"
     f"- a) pour ne pas définir une date de début, sélectionnez '*' dans l'année de début' *ou/et* 'mois de début';  \n"
     f"- b) pour chercher les articles jusqu'à aujourd'hui, sélectionnez 'aujourd'hui' dans 'années de fin' *ou/et* 'mois de fin'.  \n"
-    f"- c) certains articles ont une date publication future, pour les inclure, sélectionnez '*'dans 'années de fin' *ou/et* 'mois de fin'. Les articles déjà publiés setront indiqué dans la colonne de **'isPublished_bool'**!"
+    f"- c) certains articles ont une date publication future, pour les inclure, sélectionnez '*'dans 'années de fin' *ou/et* 'mois de fin'.  \n Les articles déjà publiés setront indiqué dans la colonne de **'isPublished_bool'**!"
 )
 st.markdown("<br>", unsafe_allow_html=True)
 

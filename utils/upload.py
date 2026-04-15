@@ -78,7 +78,7 @@ def data_uploader(key="uploaded_df"):
 
         source_label = {
             "search": " résultats de recherche",
-            "upload": " fichier uploadé",
+            "upload": " fichier téléchargé",
             "unknown": "source"
         }.get(source, "source")
 

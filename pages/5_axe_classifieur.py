@@ -17,7 +17,7 @@ from PIL import Image
 
 #my utils:
 from utils.upload import data_uploader
-from utils.HAL_search_api import save_file_csv_xlsx_by_filename
+from utils.download import save_file_csv_xlsx_by_filename
 
 
 ## axe
@@ -29,9 +29,6 @@ from utils.axe_classification import gather_predicted_axes, merge_axes
 
 
 # topics
-
-
-
 
 
 # @st.cache_resource  # ✅ 缓存模型
@@ -76,7 +73,16 @@ st.markdown("""
 | IRG_AXE2 | Société de services et services à la société |
 | IRG_AXE3 | Innovations, transformations et résistances organisationnelles et sociétales |
 | IRG_AXE4 | Ouvrages pédagogiques |
-""")
+"""
+)
+
+# st.subheader("Pipeline")
+# st.markdown("<br>", unsafe_allow_html=True)
+# st.markdown("""
+# 1. Le modèle de classification est entrainé sur les titres, les mots-clés, les résumés (s'ils sont disponible) des articles axés
+            
+# """)
+
 
 st.markdown("👉Consulter [Entraînement du modèle MLP+LR  (notebook)](https://github.com/yeliu-dh/hal_insight/blob/main/notebooks/test_trainclf.ipynb)")
 
@@ -117,8 +123,7 @@ st.markdown("👉Consulter [Entraînement du modèle MLP+LR  (notebook)](https:/
 # matrix_image = Image.open("external_data\clf_classification_matrix.png")
 # st.image(matrix_image, caption="matrice de confusion du classifieur")
 
-st.divider()
-
+st.divider() 
 if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None:
     # 若df存在则视为开始
     st.session_state.started=True
@@ -143,8 +148,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     df_noaxe = df_all[(df_all['axe'].isna())|(df_all['axe']=="nan")]
     df_hasaxe = df_all[~df_all['halId_s'].isin(df_noaxe['halId_s'])]
 
-    # st.write(f"- len df_all: {len(df_all)}")
-    # st.write(f"- len df_noaxe: {len(df_noaxe)}")
+    st.write(f"- nombre total: {len(df_all)}| axé : {len(df_hasaxe)} | sans axe: {len(df_noaxe)} |  ")
+    # st.write(f"- df_noaxe: {len(df_noaxe)}")
     # st.write(f"- len df_hasaxe: {len(df_hasaxe)}")
     # st.text(f"[INFO] Répartition: {df_all.axe.value_counts(dropna=False)}\n")
     
@@ -275,7 +280,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             "Les articles qui n'ont pas d'axe se présentent comme **des points gris, labelisés par l'axe prédit**!  \n"
             "S'un article est multi-axé, les points de couleurs correspondantes se superpose dans un même endroit.  \n"
             "\n"
-            "La position des articles sont influencée par **deux force d'attraction**:  \n"
+            "La position des articles sont influencée par **deux forces d'attraction**:  \n"
             "a) la similarité d'embeddings entre eux; b) l'appartenance à un axe."
         )
             
