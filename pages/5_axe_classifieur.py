@@ -251,7 +251,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         st.divider()    
     
     #------------------check/show-------------------
-    st.write(f"**[CHECK] vérification manuelle**")
+    st.markdown(f"#### Vérification manuelle")
     cols_kept = st.multiselect(
         "Colonnes à afficher",
         options=df_all.columns.to_list(),
@@ -270,11 +270,11 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     
     #------------------vis-------------------
     if "df_all_pred" in st.session_state:                
-        st.subheader("🔢 Visualisation")
+        st.subheader("✳️ Visualisation")
         
         st.markdown("<br>", unsafe_allow_html=True)
                 
-        st.markdown("### 📒 README")
+        st.markdown("### README")
         st.markdown(
             "Chaque article est représenté par un point, **coloré selon leur vrai axe thématique**.  \n"
             "Les articles qui n'ont pas d'axe se présentent comme **des points gris, labelisés par l'axe prédit**!  \n"
@@ -283,6 +283,26 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             "La position des articles sont influencée par **deux forces d'attraction**:  \n"
             "a) la similarité d'embeddings entre eux; b) l'appartenance à un axe."
         )
+        
+        
+    #     date_field = st.radio(
+    #     "**par la date de :**",
+    #     ['soumission','modification','publication'],
+    #     horizontal=True, 
+    #     index=2,# default value!
+    #     key=f"{key_prefix}_date_field",
+    #     help="HAL cherche les articles par l'année de la publication (publicationDateY_i)."
+    # )       
+    
+        st.markdown("### Paramètres")
+        col_axe=st.radio(
+            "**Choisir l'axe pour la visualisaiton:**",
+            ['axe','final_axe'],
+            horizontal=True,
+            index=1,
+            key='col_axe'           
+        )
+        
             
         
         cols=st.columns([4,1])
@@ -299,7 +319,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             emb=df_all_emb[df_all_emb["halId_s"].isin(df_predicted['halId_s'].to_list())][["halId_s","emb_title_s","emb_keyword_s","emb_abstract_s"]]
             df_predicted_emb=df_predicted.merge(emb, on='halId_s', how='left') 
             
-            df_plot=preprocess_df_for_topic_modeling(df_predicted_emb)
+            df_plot=preprocess_df_for_topic_modeling(df_predicted_emb, col_axe=col_axe)
             # st.dataframe(df_plot)
             
             with st.spinner("🔄 Génération de la visualisation..."):

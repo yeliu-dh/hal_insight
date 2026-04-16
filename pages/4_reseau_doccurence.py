@@ -56,10 +56,10 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         - Chaque nœud représente soit un auteur, soit un mot-clé.
         - Les nœuds auteurs sont colorés selon leur structure primaire, ceux affiliés à l'IRG sont en rouge, les autres sont en blue.
         - L'arête entre un auteur et un mot est **pondéré par la fréquence d'utilisation d'un mot par cet auteur**. 
-        - Dans l'annotation des nœuds, on indique: pour l'auteur, **le nombre total d'utilisations des mots fréquents**; pour le mot fréquent, **le nombre total d'utilisation par des auteurs**.
+        - Dans l'annotation des nœuds, on indique: pour l'auteur, sa structure primaire et **le nombre total d'utilisations des mots fréquents**; pour le mot fréquent, **le nombre total d'utilisation par des auteurs**.
 
         Afin d’améliorer la lisibilité du réseau :
-        - seules les associations auteur–mot-clé dont la fréquence dépasse un seuil minimal (min_freq) sont conservées ;
+        - seules les associations auteur–mot-clé dont la fréquence dépasse un seuil minimal sont conservées ;
         - pour chaque auteur, seuls les n mots-clés les plus fréquents sont retenus.
         """
     )

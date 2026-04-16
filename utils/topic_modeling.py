@@ -102,12 +102,15 @@ def preprocess_df_for_topic_modeling(df_input, col_axe):
     df = df_input.copy()
     
     if col_axe in df.columns:
-        st.write(f"[info] procéder topic modeling selon {col_axe}!")
-        df=df[df[col_axe].notna()]
-        print(f"{len(df_input)} => {len(df)}")
+        st.write(f"[info] procéder selon {col_axe}!")
+
     else :
-        st.write(f"[info] {col_axe} not found in df\nprocéder topic modeling selon 'axe'!")
+        st.write(f"[info] {col_axe} not found in df\nprocéder selon 'axe'!")
         col_axe="axe"
+    
+    df=df[df[col_axe].notna()]
+    st.write(f"[info] filtrer les données par l'axe: {len(df_input)} => {len(df)}")
+    # df=df[df[col_axe].notna()]
     
     
     df['axe_list'] = df[col_axe].apply(parse_axes)    
@@ -440,6 +443,7 @@ def generate_topics_keywords_scatterplot(
     ## ==================topics中心点
     topic_centers = (
         df_vis[df_vis.topic != -1]
+        # df_vis
         .groupby("topic")[["x", "y"]]
         .mean()
     )
@@ -476,19 +480,18 @@ def generate_topics_keywords_scatterplot(
         df_vis.loc[mask_topic, "y"],
         c=df_vis.loc[mask_topic, "topic"],
         cmap=cmap,#"Set2",#tab20
-        alpha=0.6,
+        alpha=0.7,
         s=10
     )
 
     if "predicted_axe_list" in df_vis.columns:
         for i, row in df_vis.iterrows():
-            # if row["topic"] == -1:
-            #     continue
+            if row["topic"] == -1:
+                continue
             
             preds = row["predicted_axe_list"]
             if not preds:
                 continue
-            # 👉 你可以选择显示第一个预测 or 全部
             label = ",".join(map(str, preds)) #str(preds[0]) # 或仅显示第一个 
             ax.text(
                 row["x"],
@@ -503,13 +506,13 @@ def generate_topics_keywords_scatterplot(
             )
             
         
-        
+
     # ===== 参数=====
     # CIRCLE_RADIUS = 1      # ⭐ 固定半径（UMAP 空间）
     MIN_RADIUS = 0.5
     MAX_RADIUS = 2.0
 
-    BASE_FONT = 8
+    BASE_FONT = 10
     MAX_FONT = 25
     FONT_SCALE = 50          # 控制权重 → 字体大小
 
@@ -543,11 +546,11 @@ def generate_topics_keywords_scatterplot(
         circle = Circle(
             (cx, cy),
             radius=radius,
-            edgecolor="black",
+            edgecolor='black',
             facecolor="none",
             linestyle="--",
             linewidth=1,
-            alpha=0.6
+            alpha=0.6,
         )
         plt.gca().add_patch(circle)
 
@@ -600,13 +603,14 @@ def generate_topics_keywords_scatterplot(
                 fontsize=fontsize,
                 ha="center",
                 va="center",
-                alpha=0.9
+                alpha=0.9,
+                # color='gray' if topic_id == -1 else 'black' 
             )
             
     #============================================================================
     axe_title=""
     if len(axe_id)>0:
-        axe_title= "sous Axe "+", ".join(axe_id) if len(axe_id)>=1 else axe_id[0]
+        axe_title= "sous axe "+", ".join(axe_id) if len(axe_id)>=1 else axe_id[0]
     df[date_field] = pd.to_datetime(
             df[date_field],
             utc=True,

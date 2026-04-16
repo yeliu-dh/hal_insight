@@ -92,7 +92,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     date_max = df_predicted[date_field_col].max()
 
     st.write(
-        f"[INFO] Date de *{date_field}* entre : "
+        f"[info] Date de *{date_field}* entre : "
         f"**{date_min.strftime('%Y/%m/%d')} → {date_max.strftime('%Y/%m/%d')}**"
     )
 
@@ -138,17 +138,19 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             format_func=lambda x: AXE_COL_MAP[x],
             key=f"col_axe")#JAN!
 
+    missing_data_warning(df=df_predicted, col=col_axe, show_count=True)
+
     # col_axe = st.multiselect(
     #     "Sur quels axes ?",
     #     options=AXE_COL_MAP.keys(),#["Axe original","Axe prédit","Axe original + prédit"],
     #     format_func=lambda x: AXE_COL_MAP[x],
     #     default=["final_axe"]
-    # )
-    for col in ["axe",'final_axe']:
+    # )    
+    # for col in [col_axe]:
         # col_en_question="final_axe" if 'final_axe' in df_predicted.columns else 'axe'
         # show_count= st.checkbox("Afficher le compte des classes ?", value=True, key="show_count")#key用于储存在session state中
-        show_count=True
-        missing_data_warning(df=df_predicted, col=col, show_count=show_count)
+        # show_count=True
+        # missing_data_warning(df=df_predicted, col=col, show_count=show_count)
     st.markdown("<br>", unsafe_allow_html=True)
     
     
@@ -164,7 +166,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     
     #-------------------topic size----------------------
     range_topic_size = list(range(0,100))
-    min_topic_size = st.selectbox("**Définir la taille minimale d'articles pour former un sujet:**", range_topic_size, index=30)#整除
+    min_topic_size = st.selectbox("**Définir la taille minimale d'articles pour former un sujet:**", range_topic_size, index=20)#整除
     # st.markdown("Moins de nombre d'articles à analyse!")
         
     #------------------top n keywords-------------------
