@@ -50,12 +50,19 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     st.subheader("📒 README")
 
     # ---rules---
-    # st.markdown(
-    #     f"**Cette page produit un réseaux entre les auteurs et les mots clés:**  \n"
-    #     f"- a) les pointspour ne pas définir une date de début, sélectionnez '*' dans l'année de début' *ou/et* 'mois de début';  \n"
-    #     f"- b) pour chercher les articles jusqu'à aujourd'hui, sélectionnez 'aujourd'hui' dans 'années de fin' *ou/et* 'mois de fin'.  \n"
-    #     f"- c) certains articles ont une date publication future, pour les inclure, sélectionnez '*'dans 'années de fin' *ou/et* 'mois de fin'.  \n Les articles déjà publiés setront indiqué dans la colonne de **'isPublished_bool'**!"
-    # )
+    st.markdown("""                
+        Nous construisons un réseau bipartite reliant les auteurs aux mots les plus fréquents qu'il utilisent dans les textes au choix (mots-cles, résumé, texte intégral)
+        
+        - Chaque nœud représente soit un auteur, soit un mot-clé.
+        - Les nœuds auteurs sont colorés selon leur structure primaire, ceux affiliés à l'IRG sont en rouge, les autres sont en blue.
+        - L'arête entre un auteur et un mot est **pondéré par la fréquence d'utilisation d'un mot par cet auteur**. 
+        - Dans l'annotation des nœuds, on indique: pour l'auteur, **le nombre total d'utilisations des mots fréquents**; pour le mot fréquent, **le nombre total d'utilisation par des auteurs**.
+
+        Afin d’améliorer la lisibilité du réseau :
+        - seules les associations auteur–mot-clé dont la fréquence dépasse un seuil minimal (min_freq) sont conservées ;
+        - pour chaque auteur, seuls les n mots-clés les plus fréquents sont retenus.
+        """
+    )
     st.markdown("<br>", unsafe_allow_html=True)
 
     #=============================================PARAMS==========================================#
@@ -68,19 +75,17 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     options = st.multiselect(
     "📑 Choisir le texte:",
     options=["keyword_s", "abstract_s","full_text"],
-    default=["keyword_s","abstract_s"],  # 默认选择
+    default=["keyword_s"],  # 默认选择
     format_func=lambda x: WC_MAP[x]#只改变显示
     )
-    st.write("**[README]** Les textes sélectionnés sont nettoyés :  \n"
-        "- suppression des espaces superflus et de la ponctuation,  \n"
-        "- suppression des mots grammaticaux courants et de ceux que vous avez ajoutés,  \n"
-        "- mise en minuscules,  \n"
-        "- lemmatisation.")
-
     for col in options:
         missing_data_warning(df, col=col, map=WC_MAP,show_distribution=False)
     st.markdown("<br>", unsafe_allow_html=True)#不容易被 Markdown 渲染压缩掉
-
+    st.write("**[README]** Les textes sélectionnés sont nettoyés :  \n"
+            "- suppression des espaces superflus et de la ponctuation,  \n"
+            "- suppression des mots grammaticaux courants et de ceux que vous avez ajoutés,  \n"
+            "- mise en minuscules,  \n"
+            "- lemmatisation.")
 
     # # --------------- only_irg_authors ------------------
     # only_irg_authors = st.checkbox("Afficher que les auteurs d'IRG ? ", value=False, key="only_irg_authors")
@@ -130,7 +135,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     if button:    
         with st.spinner("Générer..."):
-            st.write(f"[TIPS] Déplacez les mots avec le souri pour une visualisation plus claire.  \n"
+            st.write(f"💡 Déplacez les mots avec le souri pour une visualisation plus claire.  \n"
                     f"- la taille des textes représente leur fréquence dans le texte,  \n"
                     f"- la largeur de ligne représente leur fréquence."
             )

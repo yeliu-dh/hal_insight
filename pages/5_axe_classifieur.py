@@ -148,7 +148,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     df_noaxe = df_all[(df_all['axe'].isna())|(df_all['axe']=="nan")]
     df_hasaxe = df_all[~df_all['halId_s'].isin(df_noaxe['halId_s'])]
 
-    st.write(f"- nombre total: {len(df_all)}| axé : {len(df_hasaxe)} | sans axe: {len(df_noaxe)} |  ")
+    st.write(f"- nombre total: {len(df_all)} | articles axés : {len(df_hasaxe)} | articles sans axe: {len(df_noaxe)}")
     # st.write(f"- df_noaxe: {len(df_noaxe)}")
     # st.write(f"- len df_hasaxe: {len(df_hasaxe)}")
     # st.text(f"[INFO] Répartition: {df_all.axe.value_counts(dropna=False)}\n")

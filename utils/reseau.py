@@ -88,21 +88,9 @@ def generate_network(df, options, stopwords, author_structure, n=10, min_freq=2)
 
     # 清洗options列上的值    
     for opt in options:
-        # if opt =="keyword_s":#关键词不清洗？
-        #     df['keyword_s'] = df['keyword_s'].fillna('nan').apply(lambda x: [k.strip().lower() for k in x.split(';') if k.strip() and str(x).lower() not in ['nan',"none"]])
-        #     #NaN 会被转换成str
-
-        # elif opt=='abstract_s':
-        #     df["abstract_s"]=df.apply(lambda row: preprocess_text(text=row["abstract_s"], stopwords=stopwords, lang=row["language_s"]),
-        #                             axis=1
-        #                               )
-        #     #需保证x是str
-        #     df["abstract_s"]=df['abstract_s'].apply(lambda x: [k.strip() for k in x.split() if k.strip()])
-
         df[opt]=df.apply(lambda row: preprocess_text(text=row[opt], user_stopwords=stopwords, lang=row.get("language_s", "fr")),
                                     axis=1
         ) #nan只返回""
-
         df[opt]=df[opt].apply(lambda x: [k.strip() for k in x.split() if k.strip()])
 
 
@@ -150,26 +138,6 @@ def generate_network(df, options, stopwords, author_structure, n=10, min_freq=2)
             filtered_edges.append((author, k))
             filtered_edge_weights[(author, k)] = w
 
-    # valid_keywords = {kw for _, kw in filtered_edges}
-
-    # for (a, k), w in filtered_edge_weights.items():
-    #     st.write(f"author:{a}")#Philippe Lépinard
-    #     st.write(f"keyword:{k}")#ludopédagogie
-    #     st.write(f"weight:{w}")#11
-    #     break 
-
-    # st.write(filtered_edge_weights[0].items())
-    # [
-    #     0:[
-    #         0:[
-    #         0:"Philippe Lépinard"
-    #         1:"ludopédagogie"
-    #         ]
-    #     1:11
-    #     ],
-    # ...
-    # ]
-
 
     #==============================构建 NetworkX 图==================================
     # etworkX Graph 重复添加边会覆盖权重
@@ -180,6 +148,7 @@ def generate_network(df, options, stopwords, author_structure, n=10, min_freq=2)
     # for (a, k), w in filtered_edge_weights.items():  # ⚠ 用筛选后的权重
     #     G.add_edge(a, k, weight=w)
 
+
     G = nx.Graph() # NetworkX.Graph() 是无向图（undirected graph），所以 (a, b) 和 (b, a) 是同一条边。
     for (a, k), w in filtered_edge_weights.items():
         if G.has_edge(a, k):#之后增加w
@@ -188,21 +157,9 @@ def generate_network(df, options, stopwords, author_structure, n=10, min_freq=2)
             G.add_edge(a, k, weight=w)
 
 
-    # 移除孤立节点（没有任何连接）
-    isolated_nodes = list(nx.isolates(G))
-    G.remove_nodes_from(isolated_nodes)
-  
-
-    #==============================设置节点样式=======================================
-    # # 统计作者节点总权重，用于字体大小
-    # all_authors = {a for authors in df['authFullName_s'] for a in authors}
-    # author_freq = Counter()
-    # for u, v, data in G.edges(data=True):
-    #     w = data.get('weight', 1)
-    #     if u in all_authors:
-    #         author_freq[u] += w
-    #     if v in all_authors:
-    #         author_freq[v] += w
+    # # 移除孤立节点（没有任何连接）
+    # isolated_nodes = list(nx.isolates(G))
+    # G.remove_nodes_from(isolated_nodes)
 
     # ------------------ 创建 PyVis 图 ------------------
     net = Network(
@@ -220,11 +177,18 @@ def generate_network(df, options, stopwords, author_structure, n=10, min_freq=2)
     # ------------------ 动态归一化 ------------------
     node_freq = Counter()
 
-    # 遍历边，统计每个节点的总连接权重
-    for u, v, data in G.edges(data=True):
-        w = data.get("weight", 1)
+    # 遍历边，统计每个节点（作者/高频词）的总连接权重
+    # freq = 一个节点所有连接边的权重之和
+    for i,(u, v, data) in enumerate(G.edges(data=True)):
+        
+            
+        w = data.get("width", 1)# weight!
         node_freq[u] += w
         node_freq[v] += w
+        # if i==0:
+            # print("\n", u, node_freq[u], v, node_freq[v])
+    # print('\n node freq:',node_freq)
+
 
     # ------------------ 节点大小动态归一化 ------------------
     # min_size, max_size = 20, 80
@@ -240,24 +204,6 @@ def generate_network(df, options, stopwords, author_structure, n=10, min_freq=2)
         return min_size + (freq - min_freq_val) * (max_size - min_size) / (max_freq_val - min_freq_val)
     
     ## ------------------ 设置作者和关键词节点样式 ------------------
-    # all_authors = {a for authors in df['authFullName_s'] for a in authors}
-
-    # for node in net.nodes:
-    #     node_id = node['id']
-    #     freq = node_freq.get(node_id, 1)
-    #     scaled = scale_size(freq, min_freq_val, max_freq_val) 
-
-    #     if node_id in all_authors:
-    #         node['shape'] = 'text'
-    #         node['font'] = {'size': scaled, 'color': 'black'}
-    #         node['title'] = f"Auteur : {node_id},Connexions : {freq}"
-    #     else:
-    #         node['shape'] = 'text'
-    #         node['font'] = {'size': scaled, 'color': 'royalblue'}
-    #         node['title'] = f"Mot-clé : {node_id}, Connexions : {freq}"
-    
-    
-    # -------------- 参数设置 --------------
     IRG_IDS = {"1004418", "57129"}   # IRG 的两个 ID
 
     # -------------- 取出所有作者 --------------
@@ -277,16 +223,13 @@ def generate_network(df, options, stopwords, author_structure, n=10, min_freq=2)
         if node_id not in all_authors:
             node["shape"] = "text"
             node["font"] = {"size": scaled, "color": "black"}
-            node["title"] = f"Mot-clé : {node_id} \n Fréquences : {freq}"
+            node["title"] = f"Fréquence totale d'utilisation : {freq}"
+            # Mot-clé : {node_id} \n 
             continue
 
         # =============================
         # CASE 2: 作者节点（需要根据机构染色）
         # =============================
-        
-        # struct_raw = author_structure.get(node_id, "")
-        # # 提取结构 ID（以 "_" 前部分为 ID）
-        # struct_id = struct_raw.split("_")[0] if "_" in struct_raw else ""
         elif node_id in author_structure.keys():
             
             auth_info=author_structure[node_id]
@@ -296,23 +239,19 @@ def generate_network(df, options, stopwords, author_structure, n=10, min_freq=2)
             struct_ids=[info["labStructId_i"] for info in auth_info]
             struct_s=[info["labStructName_s"] for info in auth_info]
             color="red" if any(struct_id in IRG_IDS for struct_id in struct_ids) else "royalblue"
-            # if i==0:
-            #     print(f"node id:{node_id},\n struct_ids:{struct_ids}, \nsturct_s:{struct_s}")
-                
-                
-
-
+           
         node["shape"] = "text"
         node["font"] = {"size": scaled, "color": color}
         node["title"] = (
-            f"Auteur : {node_id}\n"
+            # f"Auteur : {node_id}\n"
             f"Institutions primaires: {','.join(struct_s) if len(struct_s)>1 else struct_s[0]}\n"
-            f"Fréquences : {freq}"
+            f"Fréquence totale des mots fréquents : {freq}"
         )
 
 
     # ------------------ 设置边样式 ------------------
     all_weights = filtered_edge_weights.values()
+    # print("\nfiltered_edge_weights:",filtered_edge_weights)
     min_w = min(all_weights) if all_weights else 1
     max_w = max(all_weights) if all_weights else 1
 
@@ -330,7 +269,7 @@ def generate_network(df, options, stopwords, author_structure, n=10, min_freq=2)
 
         edge['width'] = scale_size(w, min_w, max_w, min_size=2, max_size=20)
         edge['color'] = 'lightgray'
-        edge['title'] = f"Cooccurrence : {int(w)}"
+        edge['title'] = f"Cooccurrences : {int(w)}"
 
 
 
