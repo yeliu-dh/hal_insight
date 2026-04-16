@@ -31,7 +31,7 @@ def generate_wc(text, max_words, stopwords, title="Nuage de mots"):
     return fig
 
 
-def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words, stopwords):
+def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words, stopwords, date_field_col):
     #1. collect:
     text_groups=collect_clean_texts_by_col(df, options, stopwords, exclude_nan, col=group_by, lang_col="language_s")
     # text_groups={
@@ -46,13 +46,15 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
         # "Cl. FNEGE": "par classe FNEGE"#去除
     }    
     group_by_readable=COL_MAP.get(group_by, group_by)
+    
+    
     # 2.b date
-    if "submittedDate_s" in df.columns:
-        df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
-        latest_date = df["submittedDate_s"].max()
+    if date_field_col in df.columns:
+        # df[date_field_col] = pd.to_datetime(df[date_field_col], errors="coerce")
+        latest_date = df[date_field_col].max()
         latest_y = latest_date.strftime("%Y") if pd.notnull(latest_date) else "Aucune date valide"
 
-        earliest_date=df["submittedDate_s"].min()
+        earliest_date=df[date_field_col].min()
         earliest_y = earliest_date.strftime("%Y") if pd.notnull(latest_date) else "Aucune date valide"
         period_y=f"{earliest_y}~{latest_y}"#图标题
 
@@ -118,7 +120,7 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
                     text = langs.get(lang, "").strip()
                     if text:
                         fig = generate_wc(text, max_words, stopwords, title=title)
-                        st.pyplot(fig) #*
+                        # st.pyplot(fig) #*
                     
                     else :
                         st.warning(f"Texte invalide dans la catégorie {cat}-{lang}!")
@@ -133,30 +135,30 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
 #==========================================================================================#
 #==========================================================================================#
 
-def create_time_slices(df, granularity):
+def create_time_slices(df, granularity, date_field_col):
     """
     根据颗粒度生成时间切片
     granularity: "month" | "quarter" | "year" | "3year" | "5year"
     """
     df = df.copy()
-    df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
+    # df[date_field_col] = pd.to_datetime(df[date_field_col], errors="coerce")
 
     # 提取年月
-    df["year"] = df["submittedDate_s"].dt.year
-    df["month"] = df["submittedDate_s"].dt.month
+    df["year"] = df[date_field_col].dt.year
+    df["month"] = df[date_field_col].dt.month
 
     start_year, end_year = df["year"].min(), df["year"].max()
 
     if granularity == "Mensuel":
         # 逐月
-        months = pd.period_range(df["submittedDate_s"].min().to_period("M"),
-                                 df["submittedDate_s"].max().to_period("M"), freq="M")
+        months = pd.period_range(df[date_field_col].min().to_period("M"),
+                                 df[date_field_col].max().to_period("M"), freq="M")
         time_slices = [(p.start_time, p.end_time) for p in months]
 
     elif granularity == "Trimestriel":
         # 逐季度
-        quarters = pd.period_range(df["submittedDate_s"].min().to_period("Q"),
-                                   df["submittedDate_s"].max().to_period("Q"), freq="Q")
+        quarters = pd.period_range(df[date_field_col].min().to_period("Q"),
+                                   df[date_field_col].max().to_period("Q"), freq="Q")
         time_slices = [(p.start_time, p.end_time) for p in quarters]
 
     elif granularity == "Annuel":
@@ -224,15 +226,19 @@ def compute_keyness(freq_slice, global_freq, method="llr"):
 
 
 
-def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val=None, max_words=100, stopwords=None, method="llr"):
+def generate_keyness_wc(df, options, exclude_nan, group_by, 
+                        time_slices, col_val=None, 
+                        max_words=100, stopwords=None, method="llr", 
+                        date_field_col="publicationDate_tdate"):
     """
     根据时间片生成 keyness 演变词云+小图
     stopwords==user_stopwords
     """
     # 规范日期格式
     df = df.copy()
-    df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
-    df["year"] = df["submittedDate_s"].dt.year #筛选用
+    # encore
+    # df[date_field_col] = pd.to_datetime(df[date_field_col], utc=True errors="coerce")
+    df["year"] = df[date_field_col].dt.year #筛选用
        
     
     #-----------time_slices-------------:
@@ -267,7 +273,7 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
     for idx, t in enumerate(time_slices):#不变
         # 时间切片可为 (start_date, end_date) 或 (start_year, end_year)
         if isinstance(t[0], pd.Timestamp):  # 月/季度模式
-            mask = (df["submittedDate_s"] >= t[0]) & (df["submittedDate_s"] <= t[1])
+            mask = (df[date_field_col] >= t[0]) & (df[date_field_col] <= t[1])
             label = t[0].strftime("%Y-%m")
         else:
             y_start, y_end = t
@@ -292,7 +298,6 @@ def generate_keyness_wc(df, options, exclude_nan, group_by, time_slices, col_val
 
         # stopwords_nltk=load_external_json("external_data/stopwords_nltk.json")
         stopwords_nltk=read_json("external_data/stopwords_nltk.json")
-
         
         if text:
             freq_slice = pd.Series(text.split()).value_counts()

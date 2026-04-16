@@ -11,17 +11,15 @@ import streamlit as st
 #my utils:
 from utils.preprocess import preprocess_text, assign_time_unit, explode_by_col, wrap_text
 
-def keywords_trendline(df, options, keywords):
+def keywords_trendline(df, options, keywords, date_field_col):
     fig_title = "Évolution des mots clés"
-
-    if "submittedDate_s" in df.columns:    
-        min_date = df["submittedDate_s"].min()
-        max_date = df["submittedDate_s"].max()
+    if date_field_col in df.columns:    
+        min_date = df[date_field_col].min()
+        max_date = df[date_field_col].max()
         if pd.notnull(min_date) and pd.notnull(max_date):
             min_label = min_date.strftime("%b %Y")
             max_label = max_date.strftime("%b %Y")
             fig_title = f"Évolution des mots clés ({min_label} – {max_label})"
-
 
     # 清洗，合并文本
     for opt in options:
@@ -33,19 +31,18 @@ def keywords_trendline(df, options, keywords):
     )        
 
     #打时间标签
-    df = assign_time_unit(df)
-
+    df = assign_time_unit(df, date_col=date_field_col)
+    
     # 初始化 trend_data
     trend_data = {
             kw: df.groupby('time_unit')['text_clean'].apply(lambda texts: sum(kw in t for t in texts))
             for kw in keywords
             if any(df["text_clean"].str.contains(kw, na=False))
         }
-       
 
     # 画图
     colors = cm.viridis(np.linspace(0,1,len(keywords)))
-
+    
     fig, ax = plt.subplots(figsize=(10,5))
     for i, kw in enumerate(trend_data.keys()):
         series = trend_data[kw]
@@ -57,8 +54,8 @@ def keywords_trendline(df, options, keywords):
     ax.set_title(fig_title)
     ax.grid(True)
     ax.legend()
-    # plt.title(fig_title)
     plt.xticks(rotation=45)
+
     return fig
 
 

@@ -33,8 +33,20 @@
     {
       "authIdHal_s": "amina-béji-bécheur",
       "authIdHal_i": "2644",
+      "labStructName_s": "IAE Paris-Est-Université Gustave Eiffel",
+      "labStructId_i": "1152368"
+    },
+    {
+      "authIdHal_s": "amina-béji-bécheur",
+      "authIdHal_i": "2644",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "57129"
+    },
+    {
+      "authIdHal_s": "amina-béji-bécheur",
+      "authIdHal_i": "2644",
+      "labStructName_s": "Université Gustave Eiffel",
+      "labStructId_i": "580722"
     }
   ],
   "Florence Allard-Poesi": [
@@ -42,19 +54,7 @@
       "authIdHal_s": "florence-allard-poesi",
       "authIdHal_i": "2437",
       "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
-    },
-    {
-      "authIdHal_s": "florence-allard-poesi",
-      "authIdHal_i": "2437",
-      "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "1004418"
-    },
-    {
-      "authIdHal_s": "florence-allard-poesi",
-      "authIdHal_i": "2437",
-      "labStructName_s": "Université Paris-Est Créteil Val-de-Marne - Paris 12",
-      "labStructId_i": "420786"
     }
   ],
   "Claire Edey Gamassou": [
@@ -80,12 +80,6 @@
     }
   ],
   "Abdelmajid Amine": [
-    {
-      "authIdHal_s": "abdelmajid-amine",
-      "authIdHal_i": "754019",
-      "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
-    },
     {
       "authIdHal_s": "abdelmajid-amine",
       "authIdHal_i": "754019",
@@ -159,6 +153,12 @@
       "authIdHal_i": "15033",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "57129"
+    },
+    {
+      "authIdHal_s": "faten-ben-slimane",
+      "authIdHal_i": "15033",
+      "labStructName_s": "Université Paris-Est",
+      "labStructId_i": "303005"
     }
   ],
   "Éric Gautier": [
@@ -212,19 +212,7 @@
       "authIdHal_s": "alain-debenedetti",
       "authIdHal_i": "5445",
       "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
-    },
-    {
-      "authIdHal_s": "alain-debenedetti",
-      "authIdHal_i": "5445",
-      "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "1004418"
-    },
-    {
-      "authIdHal_s": "alain-debenedetti",
-      "authIdHal_i": "5445",
-      "labStructName_s": "Université Gustave Eiffel",
-      "labStructId_i": "580722"
     }
   ],
   "Philippe Jourdan": [
@@ -291,6 +279,12 @@
       "authIdHal_i": "9606",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "57129"
+    },
+    {
+      "authIdHal_s": "pauline-de-pechpeyrou",
+      "authIdHal_i": "9606",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
     }
   ],
   "Mahaut Fanchini": [
@@ -530,7 +524,7 @@
       "authIdHal_s": "alix-poels",
       "authIdHal_i": "9596",
       "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "1004418"
+      "labStructId_i": "57129"
     }
   ],
   "Julie Tixier": [
@@ -568,7 +562,7 @@
       "authIdHal_s": "marianne-abramovici",
       "authIdHal_i": "3249",
       "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
+      "labStructId_i": "1004418"
     }
   ],
   "Lucas Boucaud": [
@@ -661,12 +655,6 @@
       "authIdHal_i": "7317",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "1004418"
-    },
-    {
-      "authIdHal_s": "margaret-josion-portail",
-      "authIdHal_i": "7317",
-      "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
     }
   ],
   "Amina Djedidi": [
@@ -691,6 +679,12 @@
       "authIdHal_i": "754911",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "céleste-fournier",
+      "authIdHal_i": "754911",
+      "labStructName_s": "Institut d'Administration des Entreprises - Paris-Est",
+      "labStructId_i": "176728"
     }
   ],
   "Evelyne Rousselet": [
@@ -2366,19 +2360,7 @@
       "authIdHal_s": "radu-burlacu",
       "authIdHal_i": "1198376",
       "labStructName_s": "Centre d'études et de recherches appliquées à la gestion",
-      "labStructId_i": "784"
-    },
-    {
-      "authIdHal_s": "radu-burlacu",
-      "authIdHal_i": "1198376",
-      "labStructName_s": "Centre d'études et de recherches appliquées à la gestion",
       "labStructId_i": "1043181"
-    },
-    {
-      "authIdHal_s": "radu-burlacu",
-      "authIdHal_i": "1198376",
-      "labStructName_s": "Centre d'études et de recherches appliquées à la gestion",
-      "labStructId_i": "1041636"
     }
   ],
   "Sandrine Costa": [
@@ -2578,9 +2560,9 @@
   "Marine Agogué": [
     {
       "authIdHal_s": "marine-agogué",
-      "authIdHal_i": "925071",
-      "labStructName_s": "Centre de Gestion Scientifique i3",
-      "labStructId_i": "39111"
+      "authIdHal_i": "961042",
+      "labStructName_s": "HEC Montréal",
+      "labStructId_i": "304765"
     }
   ],
   "Mahmoud Hassan": [
@@ -2734,9 +2716,15 @@
   "Aurélien Acquier": [
     {
       "authIdHal_s": "aurélien-acquier",
-      "authIdHal_i": "880716",
-      "labStructName_s": "ESCP-EAP",
-      "labStructId_i": "59542"
+      "authIdHal_i": "1589893",
+      "labStructName_s": "ESCP Business School",
+      "labStructId_i": "1144068"
+    },
+    {
+      "authIdHal_s": "aurélien-acquier",
+      "authIdHal_i": "1589893",
+      "labStructName_s": "Ecole Supérieure de Commerce de Paris",
+      "labStructId_i": "327869"
     }
   ],
   "Céline Gallen": [
@@ -2812,15 +2800,15 @@
   "Valentina Carbone": [
     {
       "authIdHal_s": "valentina-carbone",
-      "authIdHal_i": "0",
-      "labStructName_s": "Ecole Supérieure de Commerce de Paris",
-      "labStructId_i": "327869"
+      "authIdHal_i": "1589892",
+      "labStructName_s": "ESCP Business School",
+      "labStructId_i": "1144068"
     },
     {
       "authIdHal_s": "valentina-carbone",
-      "authIdHal_i": "831812",
-      "labStructName_s": "Systèmes productifs, logistique, organisation des transports",
-      "labStructId_i": "245596"
+      "authIdHal_i": "1589892",
+      "labStructName_s": "Ecole Supérieure de Commerce de Paris",
+      "labStructId_i": "327869"
     }
   ],
   "Nesrine Bentemessek Kahia": [
@@ -2881,8 +2869,8 @@
     {
       "authIdHal_s": "philippe-mérigot",
       "authIdHal_i": "15529",
-      "labStructName_s": "Institut des hautes études économiques et commerciales | School of Business and Economics",
-      "labStructId_i": "458547"
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
     }
   ],
   "Lorena Bezerra de Souza Matos": [
@@ -2891,18 +2879,6 @@
       "authIdHal_i": "742103",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "1004418"
-    },
-    {
-      "authIdHal_s": "lorena-bezerra-de-souza-matos",
-      "authIdHal_i": "742103",
-      "labStructName_s": "Universidade Estadual do Ceará [Brasil] = State University of Ceará [Brazil]",
-      "labStructId_i": "496046"
-    },
-    {
-      "authIdHal_s": "lorena-bezerra-de-souza-matos",
-      "authIdHal_i": "742103",
-      "labStructName_s": "Fundação Getúlio Vargas - Escola de Administração de Empresas de São Paulo = Fundação Getulio Vargas’s Sao Paulo School of Business Administration",
-      "labStructId_i": "173027"
     }
   ],
   "Yves Rannou": [
@@ -2969,6 +2945,12 @@
       "authIdHal_i": "737377",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "chikako-oka",
+      "authIdHal_i": "737377",
+      "labStructName_s": "Université Paris-Est Créteil Val-de-Marne - Paris 12",
+      "labStructId_i": "420786"
     }
   ],
   "Marc Kouzez": [
@@ -2996,45 +2978,9 @@
   "Olivier Meier": [
     {
       "authIdHal_s": "olivier-meier",
-      "authIdHal_i": "0",
-      "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
-    },
-    {
-      "authIdHal_s": "olivier-meier",
-      "authIdHal_i": "3007",
-      "labStructName_s": "Université Paris-Est",
-      "labStructId_i": "303005"
-    },
-    {
-      "authIdHal_s": "olivier-meier",
       "authIdHal_i": "3007",
       "labStructName_s": "Fondation Nationale pour l'Enseignement de la Gestion des Entreprises",
       "labStructId_i": "1032072"
-    },
-    {
-      "authIdHal_s": "olivier-meier",
-      "authIdHal_i": "3007",
-      "labStructName_s": "Conseil national des universités",
-      "labStructId_i": "1078832"
-    },
-    {
-      "authIdHal_s": "olivier-meier",
-      "authIdHal_i": "3007",
-      "labStructName_s": "Université Paris Dauphine-PSL",
-      "labStructId_i": "300302"
-    },
-    {
-      "authIdHal_s": "olivier-meier",
-      "authIdHal_i": "3007",
-      "labStructName_s": "Laboratoire Interdisciplinaire d'Etude du Politique Hannah Arendt Paris-Est",
-      "labStructId_i": "416300"
-    },
-    {
-      "authIdHal_s": "olivier-meier",
-      "authIdHal_i": "3007",
-      "labStructName_s": "Université Paris-Est Créteil Val-de-Marne - Paris 12",
-      "labStructId_i": "420786"
     }
   ],
   "Michel Barabel": [
@@ -3111,6 +3057,12 @@
       "authIdHal_i": "15478",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "jale-minibas-poussard",
+      "authIdHal_i": "15478",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
     }
   ],
   "Philippe Robert-Tanguy": [
@@ -3163,6 +3115,12 @@
       "authIdHal_i": "178417",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "salomon-bernier-khedache",
+      "authIdHal_i": "178417",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
     }
   ],
   "Gurvan Branellec": [
@@ -3215,6 +3173,12 @@
       "authIdHal_i": "7539",
       "labStructName_s": "MOCS",
       "labStructId_i": "389915"
+    },
+    {
+      "authIdHal_s": "pascal-berruet",
+      "authIdHal_i": "7539",
+      "labStructName_s": "Laboratoire des sciences et techniques de l'information, de la communication et de la connaissance",
+      "labStructId_i": "486345"
     }
   ],
   "Gaël Le Boulch": [
@@ -3239,6 +3203,18 @@
       "authIdHal_i": "13040",
       "labStructName_s": "Institut des Mondes Anglophone, Germanique et Roman - EA 3958",
       "labStructId_i": "533711"
+    },
+    {
+      "authIdHal_s": "patricia-fournier-noel",
+      "authIdHal_i": "13040",
+      "labStructName_s": "Institut d'Administration des Entreprises - Paris-Est",
+      "labStructId_i": "176728"
+    },
+    {
+      "authIdHal_s": "patricia-fournier-noel",
+      "authIdHal_i": "13040",
+      "labStructName_s": "Université Paris-Est Créteil Val-de-Marne - Paris 12",
+      "labStructId_i": "420786"
     }
   ],
   "Corinne Blanquart": [
@@ -4667,20 +4643,8 @@
     {
       "authIdHal_s": "tugce-ataci",
       "authIdHal_i": "1615207",
-      "labStructName_s": "Université Paris-Est Créteil Val-de-Marne - Paris 12",
-      "labStructId_i": "420786"
-    },
-    {
-      "authIdHal_s": "tugce-ataci",
-      "authIdHal_i": "1615207",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "1004418"
-    },
-    {
-      "authIdHal_s": "tugce-ataci",
-      "authIdHal_i": "1615207",
-      "labStructName_s": "Universitat Pompeu Fabra [Barcelona]",
-      "labStructId_i": "128785"
     }
   ],
   "Déborah Philippe": [
@@ -5685,6 +5649,1488 @@
       "authIdHal_i": "0",
       "labStructName_s": "Harvard Medical School [Boston]",
       "labStructId_i": "130467"
+    }
+  ],
+  "Louis Portales": [
+    {
+      "authIdHal_s": "louis-portales",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "Manel Laroum": [
+    {
+      "authIdHal_s": "manel-laroum",
+      "authIdHal_i": "1241219",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "manel-laroum",
+      "authIdHal_i": "1241219",
+      "labStructName_s": "Université Gustave Eiffel",
+      "labStructId_i": "580722"
+    }
+  ],
+  "Samuel Guillemot": [
+    {
+      "authIdHal_s": "samuel-guillemot",
+      "authIdHal_i": "177028",
+      "labStructName_s": "Laboratoire d'Economie et de Gestion de l'Ouest",
+      "labStructId_i": "489734"
+    }
+  ],
+  "Hamidou Sawadogo": [
+    {
+      "authIdHal_s": "hamidou-sawadogo",
+      "authIdHal_i": "1298274",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Kamilia Aouaa": [
+    {
+      "authIdHal_s": "kamilia-aouaa",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Gilbert Giacomoni": [
+    {
+      "authIdHal_s": "gilbert-giacomoni",
+      "authIdHal_i": "1136",
+      "labStructName_s": "Paris-Saclay Applied Economics",
+      "labStructId_i": "1084553"
+    },
+    {
+      "authIdHal_s": "gilbert-giacomoni",
+      "authIdHal_i": "1136",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Juliette Frédy": [
+    {
+      "authIdHal_s": "juliette-frédy",
+      "authIdHal_i": "1258790",
+      "labStructName_s": "Centre d'Études et de Recherche en Gestion d'Aix-Marseille",
+      "labStructId_i": "108098"
+    },
+    {
+      "authIdHal_s": "juliette-frédy",
+      "authIdHal_i": "1555897",
+      "labStructName_s": "Centre d'Études et de Recherche en Gestion d'Aix-Marseille",
+      "labStructId_i": "108098"
+    }
+  ],
+  "Éric Gautier Laurent": [
+    {
+      "authIdHal_s": "éric-gautier-laurent",
+      "authIdHal_i": "754413",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Anis Jounaid": [
+    {
+      "authIdHal_s": "anis-jounaid",
+      "authIdHal_i": "736813",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Jean-Claude Sardas": [
+    {
+      "authIdHal_s": "jean-claude-sardas",
+      "authIdHal_i": "12906",
+      "labStructName_s": "Centre de Gestion Scientifique i3",
+      "labStructId_i": "39111"
+    }
+  ],
+  "Emilie Reinhold": [
+    {
+      "authIdHal_s": "emilie-reinhold",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Joël Ntsondé": [
+    {
+      "authIdHal_s": "joël-ntsondé",
+      "authIdHal_i": "13153",
+      "labStructName_s": "Centre de Gestion Scientifique i3",
+      "labStructId_i": "39111"
+    }
+  ],
+  "Stefan Meisiek": [
+    {
+      "authIdHal_s": "stefan-meisiek",
+      "authIdHal_i": "1145671",
+      "labStructName_s": "The University of Sydney Business School",
+      "labStructId_i": "468785"
+    }
+  ],
+  "Badreddine Msolli": [
+    {
+      "authIdHal_s": "badreddine-msolli",
+      "authIdHal_i": "0",
+      "labStructName_s": "ESSCA – École supérieure des sciences commerciales d'Angers = ESSCA Business School",
+      "labStructId_i": "73960"
+    }
+  ],
+  "Sacha Bensahel-Mercier": [
+    {
+      "authIdHal_s": "sacha-bensahel-mercier",
+      "authIdHal_i": "1262858",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Corentin Mariette": [
+    {
+      "authIdHal_s": "corentin-mariette",
+      "authIdHal_i": "1364449",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Nabila Benmostefa": [
+    {
+      "authIdHal_s": "nabila-benmostefa",
+      "authIdHal_i": "10700",
+      "labStructName_s": "Laboratoire d'Economie et de Sociologie du Travail",
+      "labStructId_i": "839"
+    }
+  ],
+  "Juliette Magniere": [
+    {
+      "authIdHal_s": "juliette-magniere",
+      "authIdHal_i": "1613489",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Frédéric Demerens": [
+    {
+      "authIdHal_s": "frédéric-demerens",
+      "authIdHal_i": "915776",
+      "labStructName_s": "Advencia-Negocia",
+      "labStructId_i": "176720"
+    },
+    {
+      "authIdHal_s": "frédéric-demerens",
+      "authIdHal_i": "0",
+      "labStructName_s": "Ecole Supérieure de Commerce de Paris",
+      "labStructId_i": "327869"
+    }
+  ],
+  "Willy Allègre": [
+    {
+      "authIdHal_s": "willy-allègre",
+      "authIdHal_i": "1320798",
+      "labStructName_s": "Centre Mutualiste de Rééducation et de Réadaptation Fonctionnelles de KERPAPE [Ploemeur]",
+      "labStructId_i": "250867"
+    },
+    {
+      "authIdHal_s": "willy-allègre",
+      "authIdHal_i": "874392",
+      "labStructName_s": "MOCS",
+      "labStructId_i": "389915"
+    },
+    {
+      "authIdHal_s": "willy-allègre",
+      "authIdHal_i": "874392",
+      "labStructName_s": "Laboratoire des sciences et techniques de l'information, de la communication et de la connaissance (UMR 3192)",
+      "labStructId_i": "81533"
+    }
+  ],
+  "Jean-Louis Paré": [
+    {
+      "authIdHal_s": "jean-louis-paré",
+      "authIdHal_i": "915775",
+      "labStructName_s": "Advancia-Negocia",
+      "labStructId_i": "176719"
+    }
+  ],
+  "Manon Domingues dos Santos": [
+    {
+      "authIdHal_s": "manon-domingues-dos-santos",
+      "authIdHal_i": "8024",
+      "labStructName_s": "Centre de Recherche en Économie et Statistique",
+      "labStructId_i": "2579"
+    }
+  ],
+  "Stéphane Deschaintre": [
+    {
+      "authIdHal_s": "stéphane-deschaintre",
+      "authIdHal_i": "1436881",
+      "labStructName_s": "Val de Loire Recherche en Management",
+      "labStructId_i": "190457"
+    },
+    {
+      "authIdHal_s": "stéphane-deschaintre",
+      "authIdHal_i": "1436881",
+      "labStructName_s": "ISG International Business School [Paris]",
+      "labStructId_i": "426089"
+    }
+  ],
+  "Laura Padilla Angulo": [
+    {
+      "authIdHal_s": "laura-padilla-angulo",
+      "authIdHal_i": "1015979",
+      "labStructName_s": "Universidad Loyola Andalucía = Loyola University Andalucía",
+      "labStructId_i": "506221"
+    },
+    {
+      "authIdHal_s": "laura-padilla-angulo",
+      "authIdHal_i": "995342",
+      "labStructName_s": "Universidad Loyola Andalucía = Loyola University Andalucía",
+      "labStructId_i": "506221"
+    }
+  ],
+  "Marouene Mbarek": [
+    {
+      "authIdHal_s": "marouene-mbarek",
+      "authIdHal_i": "1393502",
+      "labStructName_s": "Laboratoire ESPI2R Research in Real Estate [Nantes]",
+      "labStructId_i": "1081492"
+    },
+    {
+      "authIdHal_s": "marouene-mbarek",
+      "authIdHal_i": "1393502",
+      "labStructName_s": "Laboratoire d'économie et de management de Nantes Atlantique",
+      "labStructId_i": "1088598"
+    }
+  ],
+  "Catherine Lande": [
+    {
+      "authIdHal_s": "catherine-lande",
+      "authIdHal_i": "1384438",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Adel Aloui": [
+    {
+      "authIdHal_s": "adel-aloui",
+      "authIdHal_i": "1036272",
+      "labStructName_s": "Institut supérieur des Sciences, Techniques et Economie Commerciales",
+      "labStructId_i": "82616"
+    }
+  ],
+  "Catherine Voynnet-Fourboul": [
+    {
+      "authIdHal_s": "catherine-voynnet-fourboul",
+      "authIdHal_i": "1235065",
+      "labStructName_s": "Laboratoire de recherche en sciences de gestion Panthéon-Assas",
+      "labStructId_i": "99795"
+    },
+    {
+      "authIdHal_s": "catherine-voynnet-fourboul",
+      "authIdHal_i": "1235065",
+      "labStructName_s": "Laboratoire de recherche en sciences de gestion Panthéon-Assas",
+      "labStructId_i": "1096497"
+    }
+  ],
+  "Hatem Rjiba": [
+    {
+      "authIdHal_s": "hatem-rjiba",
+      "authIdHal_i": "4135",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Myriam Bazdah": [
+    {
+      "authIdHal_s": "myriam-bazdah",
+      "authIdHal_i": "1208621",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Eric Gautier Laurent": [
+    {
+      "authIdHal_s": "eric-gautier-laurent",
+      "authIdHal_i": "754413",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Louïa Efongo Besise": [
+    {
+      "authIdHal_s": "louïa-efongo-besise",
+      "authIdHal_i": "1523123",
+      "labStructName_s": "Institut d'Administration des Entreprises - Paris-Est",
+      "labStructId_i": "176728"
+    }
+  ],
+  "Marine Dagorn": [
+    {
+      "authIdHal_s": "marine-dagorn",
+      "authIdHal_i": "1604920",
+      "labStructName_s": "Université de Rennes",
+      "labStructId_i": "105160"
+    },
+    {
+      "authIdHal_s": "marine-dagorn",
+      "authIdHal_i": "1604920",
+      "labStructName_s": "Recherche sur les services et le management en santé",
+      "labStructId_i": "1084052"
+    },
+    {
+      "authIdHal_s": "marine-dagorn",
+      "authIdHal_i": "1604920",
+      "labStructName_s": "Arènes: politique, santé publique, environnement, médias",
+      "labStructId_i": "2577"
+    },
+    {
+      "authIdHal_s": "marine-dagorn",
+      "authIdHal_i": "1604920",
+      "labStructName_s": "École des Hautes Études en Santé Publique",
+      "labStructId_i": "301986"
+    },
+    {
+      "authIdHal_s": "marine-dagorn",
+      "authIdHal_i": "1604920",
+      "labStructName_s": "Institut du Management",
+      "labStructId_i": "460326"
+    }
+  ],
+  "Alexis Lauferon": [
+    {
+      "authIdHal_s": "alexis-lauferon",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherche Interdisciplinaire en Sciences Sociales",
+      "labStructId_i": "1008489"
+    },
+    {
+      "authIdHal_s": "alexis-lauferon",
+      "authIdHal_i": "754317",
+      "labStructName_s": "Institut de Recherche Interdisciplinaire en Sciences Sociales",
+      "labStructId_i": "1008489"
+    }
+  ],
+  "Magdalena Godek-Brunel": [
+    {
+      "authIdHal_s": "magdalena-godek-brunel",
+      "authIdHal_i": "1283842",
+      "labStructName_s": "Laboratoire de Recherche Magellan",
+      "labStructId_i": "171535"
+    }
+  ],
+  "Franck Aggeri": [
+    {
+      "authIdHal_s": "franck-aggeri",
+      "authIdHal_i": "7881",
+      "labStructName_s": "Centre de Gestion Scientifique i3",
+      "labStructId_i": "39111"
+    }
+  ],
+  "Olga Epitropaki": [
+    {
+      "authIdHal_s": "olga-epitropaki",
+      "authIdHal_i": "0",
+      "labStructName_s": "Durham University",
+      "labStructId_i": "1155062"
+    }
+  ],
+  "Diego Rinallo": [
+    {
+      "authIdHal_s": "diego-rinallo",
+      "authIdHal_i": "0",
+      "labStructName_s": "EMLyon Business School",
+      "labStructId_i": "301362"
+    }
+  ],
+  "Guylène Aurore": [
+    {
+      "authIdHal_s": "guylène-aurore",
+      "authIdHal_i": "0",
+      "labStructName_s": "Qualité des Produits Végétaux Tropicaux",
+      "labStructId_i": "467342"
+    }
+  ],
+  "Nathalie Julien": [
+    {
+      "authIdHal_s": "nathalie-julien",
+      "authIdHal_i": "743392",
+      "labStructName_s": "Equipe Software/HArdware and unKnown Environment inteRactions",
+      "labStructId_i": "1067625"
+    }
+  ],
+  "Amira Hammouda": [
+    {
+      "authIdHal_s": "amira-hammouda",
+      "authIdHal_i": "1599019",
+      "labStructName_s": "École Nationale Supérieure d'Arts et Métiers",
+      "labStructId_i": "301320"
+    }
+  ],
+  "Kitty Dumont": [
+    {
+      "authIdHal_s": "kitty-dumont",
+      "authIdHal_i": "0",
+      "labStructName_s": "University of South Africa [Pretoria]",
+      "labStructId_i": "301491"
+    }
+  ],
+  "Muriel Sylvestre": [
+    {
+      "authIdHal_s": "muriel-sylvestre",
+      "authIdHal_i": "0",
+      "labStructName_s": "Université des Antilles et de la Guyane",
+      "labStructId_i": "93016"
+    }
+  ],
+  "Rana Challah": [
+    {
+      "authIdHal_s": "rana-challah",
+      "authIdHal_i": "1244505",
+      "labStructName_s": "Centre d'Innovation Pédagogique et Numérique",
+      "labStructId_i": "1088987"
+    },
+    {
+      "authIdHal_s": "rana-challah",
+      "authIdHal_i": "1244505",
+      "labStructName_s": "Centre de Recherche sur l'Education, les apprentissages et la didactique",
+      "labStructId_i": "238177"
+    }
+  ],
+  "Elise Alfieri": [
+    {
+      "authIdHal_s": "elise-alfieri",
+      "authIdHal_i": "737366",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Émilie Frenkiel": [
+    {
+      "authIdHal_s": "émilie-frenkiel",
+      "authIdHal_i": "1529911",
+      "labStructName_s": "Laboratoire Interdisciplinaire d'étude du Politique Hannah Arendt Paris-Est",
+      "labStructId_i": "1004417"
+    }
+  ],
+  "Philippe Maurin": [
+    {
+      "authIdHal_s": "philippe-maurin",
+      "authIdHal_i": "737951",
+      "labStructName_s": "Laboratoire de Chimie - UMR5182",
+      "labStructId_i": "663"
+    }
+  ],
+  "Maria Carolina Zanette": [
+    {
+      "authIdHal_s": "maria-carolina-zanette",
+      "authIdHal_i": "0",
+      "labStructName_s": "Neoma Business School",
+      "labStructId_i": "232915"
+    }
+  ],
+  "Antoine Rieu": [
+    {
+      "authIdHal_s": "antoine-rieu",
+      "authIdHal_i": "1491732",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Laurence Scialom": [
+    {
+      "authIdHal_s": "laurence-scialom",
+      "authIdHal_i": "1016640",
+      "labStructName_s": "EconomiX",
+      "labStructId_i": "2564"
+    }
+  ],
+  "Thomas Des Grottes": [
+    {
+      "authIdHal_s": "thomas-des-grottes",
+      "authIdHal_i": "1345346",
+      "labStructName_s": "Institut d'Administration des Entreprises - Paris-Est",
+      "labStructId_i": "176728"
+    }
+  ],
+  "Doudou SIDIBE": [
+    {
+      "authIdHal_s": "doudou-sidibe",
+      "authIdHal_i": "1195337",
+      "labStructName_s": "ESIEE Paris",
+      "labStructId_i": "302035"
+    }
+  ],
+  "Minyoung Choi": [
+    {
+      "authIdHal_s": "minyoung-choi",
+      "authIdHal_i": "1477795",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Adel Horrig": [
+    {
+      "authIdHal_s": "adel-horrig",
+      "authIdHal_i": "1564101",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Ainur Camber-Rougé": [
+    {
+      "authIdHal_s": "ainur-camber-rougé",
+      "authIdHal_i": "1612247",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "René Díaz-Pichardo": [
+    {
+      "authIdHal_s": "rené-díaz-pichardo",
+      "authIdHal_i": "737244",
+      "labStructName_s": "Groupe ESC Troyes en Champagne",
+      "labStructId_i": "303579"
+    }
+  ],
+  "Christine Roland-Lévy": [
+    {
+      "authIdHal_s": "christine-roland-lévy",
+      "authIdHal_i": "1315038",
+      "labStructName_s": "Université de Reims Champagne-Ardenne",
+      "labStructId_i": "7569"
+    }
+  ],
+  "Gábor Orosz": [
+    {
+      "authIdHal_s": "gábor-orosz",
+      "authIdHal_i": "1369165",
+      "labStructName_s": "Sociologie, Histoire, Education, Représentations, Pratiques et Activités Sportives - URePSSS",
+      "labStructId_i": "90451"
+    }
+  ],
+  "Paul Bourgeois": [
+    {
+      "authIdHal_s": "paul-bourgeois",
+      "authIdHal_i": "0",
+      "labStructName_s": "École nationale des ponts et chaussées",
+      "labStructId_i": "301545"
+    },
+    {
+      "authIdHal_s": "paul-bourgeois",
+      "authIdHal_i": "0",
+      "labStructName_s": "Université des Antilles",
+      "labStructId_i": "524399"
+    },
+    {
+      "authIdHal_s": "paul-bourgeois",
+      "authIdHal_i": "0",
+      "labStructName_s": "Université des Antilles et de la Guyane",
+      "labStructId_i": "93016"
+    }
+  ],
+  "Louis Fahrasmane": [
+    {
+      "authIdHal_s": "louis-fahrasmane",
+      "authIdHal_i": "0",
+      "labStructName_s": "Station de Technologie des Produits Végétaux",
+      "labStructId_i": "37698"
+    },
+    {
+      "authIdHal_s": "louis-fahrasmane",
+      "authIdHal_i": "0",
+      "labStructName_s": "Unité de Recherches Zootechniques",
+      "labStructId_i": "37699"
+    }
+  ],
+  "Elias Gebrayel": [
+    {
+      "authIdHal_s": "elias-gebrayel",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre Européen de Recherche en Economie Financière et Gestion des Entreprises",
+      "labStructId_i": "221899"
+    }
+  ],
+  "Sylvain Delouvée": [
+    {
+      "authIdHal_s": "sylvain-delouvée",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre de Recherches en Psychologie Cognition et Communication",
+      "labStructId_i": "2295"
+    }
+  ],
+  "Pierre-Alain Muller": [
+    {
+      "authIdHal_s": "pierre-alain-muller",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherche en Informatique Mathématiques Automatique Signal",
+      "labStructId_i": "529779"
+    }
+  ],
+  "Martin Ebinger": [
+    {
+      "authIdHal_s": "martin-ebinger",
+      "authIdHal_i": "0",
+      "labStructName_s": "Tübingen University Hospital [Germany]",
+      "labStructId_i": "474956"
+    }
+  ],
+  "Sébastien Thibaud": [
+    {
+      "authIdHal_s": "sébastien-thibaud",
+      "authIdHal_i": "0",
+      "labStructName_s": "Franche-Comté Électronique Mécanique, Thermique et Optique - Sciences et Technologies (UMR 6174)",
+      "labStructId_i": "866"
+    }
+  ],
+  "Florent Boutitie": [
+    {
+      "authIdHal_s": "florent-boutitie",
+      "authIdHal_i": "0",
+      "labStructName_s": "Biostatistiques santé [LBBE]",
+      "labStructId_i": "543539"
+    }
+  ],
+  "Keith Muir": [
+    {
+      "authIdHal_s": "keith-muir",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institute of Neurosciences and Psychology [Glasgow]",
+      "labStructId_i": "455498"
+    }
+  ],
+  "Götz Thomalla": [
+    {
+      "authIdHal_s": "götz-thomalla",
+      "authIdHal_i": "0",
+      "labStructName_s": "Universitaetsklinikum Hamburg-Eppendorf = University Medical Center Hamburg-Eppendorf  [Hamburg]",
+      "labStructId_i": "30151"
+    }
+  ],
+  "Magnus Rueping": [
+    {
+      "authIdHal_s": "magnus-rueping",
+      "authIdHal_i": "0",
+      "labStructName_s": "RWTH Aachen University = Rheinisch-Westfälische Technische Hochschule Aachen",
+      "labStructId_i": "303510"
+    }
+  ],
+  "Emmanuel Ramasso": [
+    {
+      "authIdHal_s": "emmanuel-ramasso",
+      "authIdHal_i": "0",
+      "labStructName_s": "Franche-Comté Électronique Mécanique, Thermique et Optique - Sciences et Technologies (UMR 6174)",
+      "labStructId_i": "866"
+    }
+  ],
+  "Ibrahim Ghalayini": [
+    {
+      "authIdHal_s": "ibrahim-ghalayini",
+      "authIdHal_i": "0",
+      "labStructName_s": "École nationale des ponts et chaussées",
+      "labStructId_i": "301545"
+    }
+  ],
+  "Simon Karleskind": [
+    {
+      "authIdHal_s": "simon-karleskind",
+      "authIdHal_i": "0",
+      "labStructName_s": "École nationale des ponts et chaussées",
+      "labStructId_i": "301545"
+    }
+  ],
+  "Igor Sguario": [
+    {
+      "authIdHal_s": "igor-sguario",
+      "authIdHal_i": "0",
+      "labStructName_s": "École nationale des ponts et chaussées",
+      "labStructId_i": "301545"
+    }
+  ],
+  "Jonathan Weber": [
+    {
+      "authIdHal_s": "jonathan-weber",
+      "authIdHal_i": "7063",
+      "labStructName_s": "Institut de Recherche en Informatique Mathématiques Automatique Signal",
+      "labStructId_i": "529779"
+    }
+  ],
+  "Patrick Ecollan": [
+    {
+      "authIdHal_s": "patrick-ecollan",
+      "authIdHal_i": "0",
+      "labStructName_s": "CHU Pitié-Salpêtrière [AP-HP]",
+      "labStructId_i": "353778"
+    }
+  ],
+  "Gladys Nuissier": [
+    {
+      "authIdHal_s": "gladys-nuissier",
+      "authIdHal_i": "0",
+      "labStructName_s": "Université des Antilles",
+      "labStructId_i": "524399"
+    }
+  ],
+  "Boualem Sendid": [
+    {
+      "authIdHal_s": "boualem-sendid",
+      "authIdHal_i": "0",
+      "labStructName_s": "Physiopathologie des Candidoses",
+      "labStructId_i": "2688"
+    }
+  ],
+  "Nadine François": [
+    {
+      "authIdHal_s": "nadine-françois",
+      "authIdHal_i": "0",
+      "labStructName_s": "Physiopathologie des Candidoses",
+      "labStructId_i": "2688"
+    }
+  ],
+  "Yoann Bazin": [
+    {
+      "authIdHal_s": "yoann-bazin",
+      "authIdHal_i": "174548",
+      "labStructName_s": "Métis Lab EM Normandie",
+      "labStructId_i": "150910"
+    }
+  ],
+  "Robin Lemmens": [
+    {
+      "authIdHal_s": "robin-lemmens",
+      "authIdHal_i": "0",
+      "labStructName_s": "Catholic University of Leuven = Katholieke Universiteit Leuven",
+      "labStructId_i": "300656"
+    },
+    {
+      "authIdHal_s": "robin-lemmens",
+      "authIdHal_i": "0",
+      "labStructName_s": "Universitair Ziekenhuis Leuven = University Hospital of Leuven = Hopital universitaire de Louvain",
+      "labStructId_i": "327452"
+    },
+    {
+      "authIdHal_s": "robin-lemmens",
+      "authIdHal_i": "0",
+      "labStructName_s": "VIB-KU Leuven Center for Cancer Biology",
+      "labStructId_i": "572490"
+    }
+  ],
+  "Hajer Jarrar": [
+    {
+      "authIdHal_s": "hajer-jarrar",
+      "authIdHal_i": "0",
+      "labStructName_s": "Holy-Spirit University of Kaslik [Jounieh] / Université Saint-Esprit de Kaslik",
+      "labStructId_i": "203397"
+    }
+  ],
+  "Neha Chandarana": [
+    {
+      "authIdHal_s": "neha-chandarana",
+      "authIdHal_i": "0",
+      "labStructName_s": "University of Bristol [Bristol]",
+      "labStructId_i": "220393"
+    }
+  ],
+  "Antonin Pottier": [
+    {
+      "authIdHal_s": "antonin-pottier",
+      "authIdHal_i": "1251",
+      "labStructName_s": "Centre d'économie industrielle i3",
+      "labStructId_i": "73831"
+    }
+  ],
+  "Jochen Fiebach": [
+    {
+      "authIdHal_s": "jochen-fiebach",
+      "authIdHal_i": "0",
+      "labStructName_s": "Charité - UniversitätsMedizin = Berlin University Medicine",
+      "labStructId_i": "1062372"
+    }
+  ],
+  "Christian Gerloff": [
+    {
+      "authIdHal_s": "christian-gerloff",
+      "authIdHal_i": "0",
+      "labStructName_s": "Universitaetsklinikum Hamburg-Eppendorf = University Medical Center Hamburg-Eppendorf  [Hamburg]",
+      "labStructId_i": "30151"
+    }
+  ],
+  "Patrice Le Moal": [
+    {
+      "authIdHal_s": "patrice-le-moal",
+      "authIdHal_i": "0",
+      "labStructName_s": "Franche-Comté Électronique Mécanique, Thermique et Optique - Sciences et Technologies (UMR 6174)",
+      "labStructId_i": "866"
+    }
+  ],
+  "Léa Thomas": [
+    {
+      "authIdHal_s": "léa-thomas",
+      "authIdHal_i": "0",
+      "labStructName_s": "École nationale vétérinaire d'Alfort",
+      "labStructId_i": "34256"
+    },
+    {
+      "authIdHal_s": "léa-thomas",
+      "authIdHal_i": "0",
+      "labStructName_s": "Hôpital d'Instruction des Armées Begin [Saint-Mandé, France]",
+      "labStructId_i": "37970"
+    },
+    {
+      "authIdHal_s": "léa-thomas",
+      "authIdHal_i": "0",
+      "labStructName_s": "École supérieure du professorat et de l'éducation - Académie de Nantes",
+      "labStructId_i": "409525"
+    },
+    {
+      "authIdHal_s": "léa-thomas",
+      "authIdHal_i": "0",
+      "labStructName_s": "Université Paris-Est Créteil Val-de-Marne - Faculté de médecine",
+      "labStructId_i": "494881"
+    }
+  ],
+  "Odile Solnik": [
+    {
+      "authIdHal_s": "odile-solnik",
+      "authIdHal_i": "1069165",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "odile-solnik",
+      "authIdHal_i": "1069165",
+      "labStructName_s": "Institut d'Administration des Entreprises - Paris-Est",
+      "labStructId_i": "176728"
+    }
+  ],
+  "Emmanuel Bloch-Laine": [
+    {
+      "authIdHal_s": "emmanuel-bloch-laine",
+      "authIdHal_i": "0",
+      "labStructName_s": "Hôpital Cochin [AP-HP]",
+      "labStructId_i": "300123"
+    },
+    {
+      "authIdHal_s": "emmanuel-bloch-laine",
+      "authIdHal_i": "0",
+      "labStructName_s": "Hôpital Hôtel-Dieu [Paris]",
+      "labStructId_i": "306007"
+    }
+  ],
+  "Vinh-Trung Luu": [
+    {
+      "authIdHal_s": "vinh-trung-luu",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherche en Informatique Mathématiques Automatique Signal",
+      "labStructId_i": "529779"
+    }
+  ],
+  "Germain Forestier": [
+    {
+      "authIdHal_s": "germain-forestier",
+      "authIdHal_i": "4902",
+      "labStructName_s": "Institut de Recherche en Informatique Mathématiques Automatique Signal",
+      "labStructId_i": "529779"
+    }
+  ],
+  "M. Grignon-Dubois": [
+    {
+      "authIdHal_s": "m.-grignon-dubois",
+      "authIdHal_i": "0",
+      "labStructName_s": "Université Sciences et Technologies - Bordeaux 1",
+      "labStructId_i": "92972"
+    }
+  ],
+  "Anne Janand": [
+    {
+      "authIdHal_s": "anne-janand",
+      "authIdHal_i": "753393",
+      "labStructName_s": "Réseaux Innovation Territoires et Mondialisation",
+      "labStructId_i": "1051119"
+    }
+  ],
+  "Tutku Seckin-Celik": [
+    {
+      "authIdHal_s": "tutku-seckin-celik",
+      "authIdHal_i": "0",
+      "labStructName_s": "Istanbul Medeniyet University",
+      "labStructId_i": "1049414"
+    }
+  ],
+  "Luc Bouganim": [
+    {
+      "authIdHal_s": "luc-bouganim",
+      "authIdHal_i": "16400",
+      "labStructName_s": "Secured and Mobile Information Systems",
+      "labStructId_i": "2440"
+    }
+  ],
+  "Jens Hasserodt": [
+    {
+      "authIdHal_s": "jens-hasserodt",
+      "authIdHal_i": "840093",
+      "labStructName_s": "Laboratoire de Chimie - UMR5182",
+      "labStructId_i": "663"
+    }
+  ],
+  "Basile Gilbert": [
+    {
+      "authIdHal_s": "basile-gilbert",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre Hospitalier Universitaire de Toulouse",
+      "labStructId_i": "300075"
+    }
+  ],
+  "Josiane Boularan": [
+    {
+      "authIdHal_s": "josiane-boularan",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre Hospitalier Intercommunal Castres-Mazamet",
+      "labStructId_i": "1056022"
+    }
+  ],
+  "Bastian Cheng": [
+    {
+      "authIdHal_s": "bastian-cheng",
+      "authIdHal_i": "0",
+      "labStructName_s": "Universitaetsklinikum Hamburg-Eppendorf = University Medical Center Hamburg-Eppendorf  [Hamburg]",
+      "labStructId_i": "30151"
+    }
+  ],
+  "Sophie Nivoix": [
+    {
+      "authIdHal_s": "sophie-nivoix",
+      "authIdHal_i": "175512",
+      "labStructName_s": "Centre de recherche sur l'intégration économique et financière [EA 2249]",
+      "labStructId_i": "108640"
+    },
+    {
+      "authIdHal_s": "sophie-nivoix",
+      "authIdHal_i": "175512",
+      "labStructName_s": "Centre de recherche en gestion [EA 1722]",
+      "labStructId_i": "159255"
+    }
+  ],
+  "Laura Padilla-Angulo": [
+    {
+      "authIdHal_s": "laura-padilla-angulo",
+      "authIdHal_i": "0",
+      "labStructName_s": "Universidad Loyola Andalucía = Loyola University Andalucía",
+      "labStructId_i": "506221"
+    }
+  ],
+  "John Jamir Benzon R. Aruta": [
+    {
+      "authIdHal_s": "john-jamir-benzon-r.-aruta",
+      "authIdHal_i": "0",
+      "labStructName_s": "De La Salle University [Manila]",
+      "labStructId_i": "506822"
+    }
+  ],
+  "Antonio Luis Leal Rodríguez": [
+    {
+      "authIdHal_s": "antonio-luis-leal-rodríguez",
+      "authIdHal_i": "1103181",
+      "labStructName_s": "Universidad de Sevilla = University of Seville",
+      "labStructId_i": "254694"
+    }
+  ],
+  "Frédéric Avenier": [
+    {
+      "authIdHal_s": "frédéric-avenier",
+      "authIdHal_i": "1086802",
+      "labStructName_s": "Laboratoire de Chimie - UMR5182",
+      "labStructId_i": "663"
+    }
+  ],
+  "Martial Personeni": [
+    {
+      "authIdHal_s": "martial-personeni",
+      "authIdHal_i": "0",
+      "labStructName_s": "Franche-Comté Électronique Mécanique, Thermique et Optique - Sciences et Technologies (UMR 6174)",
+      "labStructId_i": "866"
+    }
+  ],
+  "Nicolas Anciaux": [
+    {
+      "authIdHal_s": "nicolas-anciaux",
+      "authIdHal_i": "21943",
+      "labStructName_s": "Secured and Mobile Information Systems",
+      "labStructId_i": "2440"
+    }
+  ],
+  "Dominique Bencherqui": [
+    {
+      "authIdHal_s": "dominique-bencherqui",
+      "authIdHal_i": "0",
+      "labStructName_s": "Pôle de recherche interdisciplinaire en sciences du management",
+      "labStructId_i": "244930"
+    },
+    {
+      "authIdHal_s": "dominique-bencherqui",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut supérieur des Sciences, Techniques et Economie Commerciales",
+      "labStructId_i": "82616"
+    }
+  ],
+  "Élise Alfieri": [
+    {
+      "authIdHal_s": "élise-alfieri",
+      "authIdHal_i": "737366",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Erkin Diyarbakirlioglu": [
+    {
+      "authIdHal_s": "erkin-diyarbakirlioglu",
+      "authIdHal_i": "2977",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Emna Bouladi": [
+    {
+      "authIdHal_s": "emna-bouladi",
+      "authIdHal_i": "0",
+      "labStructName_s": "Université Paris-Saclay",
+      "labStructId_i": "419361"
+    },
+    {
+      "authIdHal_s": "emna-bouladi",
+      "authIdHal_i": "1480950",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Martin Mbarga Nkogo": [
+    {
+      "authIdHal_s": "martin-mbarga-nkogo",
+      "authIdHal_i": "0",
+      "labStructName_s": "Franche-Comté Électronique Mécanique, Thermique et Optique - Sciences et Technologies (UMR 6174)",
+      "labStructId_i": "866"
+    }
+  ],
+  "Alice LE FLANCHEC": [
+    {
+      "authIdHal_s": "alice-le-flanchec",
+      "authIdHal_i": "1209742",
+      "labStructName_s": "Pôle de recherche interdisciplinaire en sciences du management",
+      "labStructId_i": "244930"
+    },
+    {
+      "authIdHal_s": "alice-le-flanchec",
+      "authIdHal_i": "1209742",
+      "labStructName_s": "Université Paris 1 Panthéon-Sorbonne",
+      "labStructId_i": "7550"
+    }
+  ],
+  "Jale Minibas Poussard": [
+    {
+      "authIdHal_s": "jale-minibas-poussard",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "M. Al Sayah": [
+    {
+      "authIdHal_s": "m.-al-sayah",
+      "authIdHal_i": "0",
+      "labStructName_s": "Holy-Spirit University of Kaslik [Jounieh] / Université Saint-Esprit de Kaslik",
+      "labStructId_i": "203397"
+    }
+  ],
+  "Norbert Hoffmann": [
+    {
+      "authIdHal_s": "norbert-hoffmann",
+      "authIdHal_i": "738723",
+      "labStructName_s": "Institut de Chimie Moléculaire de Reims - UMR 7312",
+      "labStructId_i": "199929"
+    }
+  ],
+  "Diala Kabbara": [
+    {
+      "authIdHal_s": "diala-kabbara",
+      "authIdHal_i": "0",
+      "labStructName_s": "Università degli Studi di Pavia [Italia] = University of Pavia [Italy] = Université de Pavie [Italie]",
+      "labStructId_i": "303140"
+    }
+  ],
+  "Haluk Baran Bingol": [
+    {
+      "authIdHal_s": "haluk-baran-bingol",
+      "authIdHal_i": "1315036",
+      "labStructName_s": "Global South Research Consortium",
+      "labStructId_i": "1766181"
+    }
+  ],
+  "Feyza Ak Akyol": [
+    {
+      "authIdHal_s": "feyza-ak-akyol",
+      "authIdHal_i": "1315037",
+      "labStructName_s": "Galatasaray University",
+      "labStructId_i": "308315"
+    }
+  ],
+  "Christine Roland-Levy": [
+    {
+      "authIdHal_s": "christine-roland-levy",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre de Recherche en Gestion",
+      "labStructId_i": "1172"
+    },
+    {
+      "authIdHal_s": "christine-roland-levy",
+      "authIdHal_i": "0",
+      "labStructName_s": "Université de Reims Champagne-Ardenne",
+      "labStructId_i": "7569"
+    }
+  ],
+  "Jessica Sasso Lopes": [
+    {
+      "authIdHal_s": "jessica-sasso-lopes",
+      "authIdHal_i": "0",
+      "labStructName_s": "EMLyon Business School",
+      "labStructId_i": "301362"
+    },
+    {
+      "authIdHal_s": "jessica-sasso-lopes",
+      "authIdHal_i": "1363176",
+      "labStructName_s": "EMLyon Business School",
+      "labStructId_i": "301362"
+    }
+  ],
+  "Christine Jeanneaux": [
+    {
+      "authIdHal_s": "christine-jeanneaux",
+      "authIdHal_i": "1412598",
+      "labStructName_s": "Centre d'études et de recherches appliquées à la gestion",
+      "labStructId_i": "1043181"
+    }
+  ],
+  "Hafsa Saadane": [
+    {
+      "authIdHal_s": "hafsa-saadane",
+      "authIdHal_i": "1524069",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "William Vicente": [
+    {
+      "authIdHal_s": "william-vicente",
+      "authIdHal_i": "1525820",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Hajar Ibnelhaj": [
+    {
+      "authIdHal_s": "hajar-ibnelhaj",
+      "authIdHal_i": "1525821",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Flavie Rousseaud": [
+    {
+      "authIdHal_s": "flavie-rousseaud",
+      "authIdHal_i": "1525822",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Amelie Hohweiller": [
+    {
+      "authIdHal_s": "amelie-hohweiller",
+      "authIdHal_i": "1540504",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Anna Deroyan": [
+    {
+      "authIdHal_s": "anna-deroyan",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut d'Administration des Entreprises - Paris-Est",
+      "labStructId_i": "176728"
+    },
+    {
+      "authIdHal_s": "anna-deroyan",
+      "authIdHal_i": "1541949",
+      "labStructName_s": "Institut d'Administration des Entreprises - Paris-Est",
+      "labStructId_i": "176728"
+    }
+  ],
+  "Astrid Servayre Mullenbach": [
+    {
+      "authIdHal_s": "astrid-servayre-mullenbach",
+      "authIdHal_i": "1552543",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    }
+  ],
+  "Cyrille Sardais": [
+    {
+      "authIdHal_s": "cyrille-sardais",
+      "authIdHal_i": "0",
+      "labStructName_s": "HEC Montréal",
+      "labStructId_i": "304765"
+    }
+  ],
+  "Prabpreet Singh": [
+    {
+      "authIdHal_s": "prabpreet-singh",
+      "authIdHal_i": "1589838",
+      "labStructName_s": "Institut d'Administration des Entreprises - Paris-Est",
+      "labStructId_i": "176728"
+    }
+  ],
+  "Tra‐my T. Le": [
+    {
+      "authIdHal_s": "tra‐my-t.-le",
+      "authIdHal_i": "1589891",
+      "labStructName_s": "Ecole Supérieure de Commerce de Paris",
+      "labStructId_i": "327869"
+    }
+  ],
+  "Tra-My T Le": [
+    {
+      "authIdHal_s": "tra-my-t-le",
+      "authIdHal_i": "1590222",
+      "labStructName_s": "ESCP Business School",
+      "labStructId_i": "1144068"
+    }
+  ],
+  "Milana Krasnoplakhtova": [
+    {
+      "authIdHal_s": "milana-krasnoplakhtova",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut d'Administration des Entreprises - Paris-Est",
+      "labStructId_i": "176728"
+    }
+  ],
+  "Laura Saint-Louis": [
+    {
+      "authIdHal_s": "laura-saint-louis",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut d'Administration des Entreprises - Paris-Est",
+      "labStructId_i": "176728"
+    }
+  ],
+  "Mactar Camara": [
+    {
+      "authIdHal_s": "mactar-camara",
+      "authIdHal_i": "1608345",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "mactar-camara",
+      "authIdHal_i": "1608345",
+      "labStructName_s": "IUT Sénart-Fontainebleau",
+      "labStructId_i": "1162539"
+    }
+  ],
+  "Júlia Vilasís-Pamos": [
+    {
+      "authIdHal_s": "júlia-vilasís-pamos",
+      "authIdHal_i": "1612264",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Tutku Seckin": [
+    {
+      "authIdHal_s": "tutku-seckin",
+      "authIdHal_i": "1623537",
+      "labStructName_s": "Istanbul Medeniyet University [Istanbul, Turquie]",
+      "labStructId_i": "569226"
+    }
+  ],
+  "Victoire Ternant": [
+    {
+      "authIdHal_s": "victoire-ternant",
+      "authIdHal_i": "1644161",
+      "labStructName_s": "Institut d'Administration des Entreprises - Paris-Est",
+      "labStructId_i": "176728"
+    }
+  ],
+  "Sam Parizot": [
+    {
+      "authIdHal_s": "sam-parizot",
+      "authIdHal_i": "1644162",
+      "labStructName_s": "Institut d'Administration des Entreprises - Paris-Est",
+      "labStructId_i": "176728"
+    }
+  ],
+  "Voynnet-Fourboul Catherine": [
+    {
+      "authIdHal_s": "voynnet-fourboul-catherine",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire de recherche en sciences de gestion Panthéon-Assas",
+      "labStructId_i": "1096497"
+    }
+  ],
+  "Audrey Prat": [
+    {
+      "authIdHal_s": "audrey-prat",
+      "authIdHal_i": "0",
+      "labStructName_s": "BIOMinspi",
+      "labStructId_i": "1814140"
+    }
+  ],
+  "Sonia Jimenez-Garcès": [
+    {
+      "authIdHal_s": "sonia-jimenez-garcès",
+      "authIdHal_i": "1198377",
+      "labStructName_s": "Centre d'études et de recherches appliquées à la gestion",
+      "labStructId_i": "1043181"
+    }
+  ],
+  "Gilles Bourbon": [
+    {
+      "authIdHal_s": "gilles-bourbon",
+      "authIdHal_i": "0",
+      "labStructName_s": "Franche-Comté Électronique Mécanique, Thermique et Optique - Sciences et Technologies (UMR 6174)",
+      "labStructId_i": "866"
+    }
+  ],
+  "Constantinos Soutis": [
+    {
+      "authIdHal_s": "constantinos-soutis",
+      "authIdHal_i": "0",
+      "labStructName_s": "University of Bristol [Bristol]",
+      "labStructId_i": "220393"
+    }
+  ],
+  "Philippe Pucheral": [
+    {
+      "authIdHal_s": "philippe-pucheral",
+      "authIdHal_i": "22063",
+      "labStructName_s": "Secured and Mobile Information Systems",
+      "labStructId_i": "2440"
+    }
+  ],
+  "Astrid Mullenbach Servayre": [
+    {
+      "authIdHal_s": "astrid-mullenbach-servayre",
+      "authIdHal_i": "0",
+      "labStructName_s": "Université Paris-Est Créteil Val-de-Marne - Paris 12",
+      "labStructId_i": "420786"
+    }
+  ],
+  "Shaoyi Yin": [
+    {
+      "authIdHal_s": "shaoyi-yin",
+      "authIdHal_i": "184832",
+      "labStructName_s": "Secured and Mobile Information Systems",
+      "labStructId_i": "2440"
+    }
+  ],
+  "Matthieu Gresil": [
+    {
+      "authIdHal_s": "matthieu-gresil",
+      "authIdHal_i": "0",
+      "labStructName_s": "University of Bristol [Bristol]",
+      "labStructId_i": "220393"
+    }
+  ],
+  "Faycal Touti": [
+    {
+      "authIdHal_s": "faycal-touti",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire de Chimie - UMR5182",
+      "labStructId_i": "663"
+    }
+  ],
+  "Quentin Lefebvre": [
+    {
+      "authIdHal_s": "quentin-lefebvre",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut Agro Rennes Angers",
+      "labStructId_i": "1091012"
+    },
+    {
+      "authIdHal_s": "quentin-lefebvre",
+      "authIdHal_i": "0",
+      "labStructName_s": "Université Paris-Panthéon-Assas",
+      "labStructId_i": "1091427"
+    },
+    {
+      "authIdHal_s": "quentin-lefebvre",
+      "authIdHal_i": "0",
+      "labStructName_s": "Secured and Mobile Information Systems",
+      "labStructId_i": "2440"
+    },
+    {
+      "authIdHal_s": "quentin-lefebvre",
+      "authIdHal_i": "0",
+      "labStructName_s": "RWTH Aachen University = Rheinisch-Westfälische Technische Hochschule Aachen",
+      "labStructId_i": "303510"
+    },
+    {
+      "authIdHal_s": "quentin-lefebvre",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire de Chimie - UMR5182",
+      "labStructId_i": "663"
+    },
+    {
+      "authIdHal_s": "quentin-lefebvre",
+      "authIdHal_i": "0",
+      "labStructName_s": "Franche-Comté Électronique Mécanique, Thermique et Optique - Sciences et Technologies (UMR 6174)",
+      "labStructId_i": "866"
+    },
+    {
+      "authIdHal_s": "quentin-lefebvre",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire de recherche en sciences de gestion Panthéon-Assas",
+      "labStructId_i": "99795"
+    },
+    {
+      "authIdHal_s": "quentin-lefebvre",
+      "authIdHal_i": "1258658",
+      "labStructName_s": "Franche-Comté Électronique Mécanique, Thermique et Optique - Sciences et Technologies (UMR 6174)",
+      "labStructId_i": "866"
+    },
+    {
+      "authIdHal_s": "quentin-lefebvre",
+      "authIdHal_i": "1665369",
+      "labStructName_s": "Laboratoire de recherche en sciences de gestion Panthéon-Assas",
+      "labStructId_i": "1096497"
+    }
+  ],
+  "Aydoğan Ersöz": [
+    {
+      "authIdHal_s": "aydoğan-ersöz",
+      "authIdHal_i": "0",
+      "labStructName_s": "Secured and Mobile Information Systems",
+      "labStructId_i": "2440"
+    }
+  ],
+  "Alexei Troussov": [
+    {
+      "authIdHal_s": "alexei-troussov",
+      "authIdHal_i": "0",
+      "labStructName_s": "Secured and Mobile Information Systems",
+      "labStructId_i": "2440"
+    }
+  ],
+  "Charbel Salloum": [
+    {
+      "authIdHal_s": "charbel-salloum",
+      "authIdHal_i": "1160906",
+      "labStructName_s": "Métis Lab EM Normandie",
+      "labStructId_i": "150910"
+    },
+    {
+      "authIdHal_s": "charbel-salloum",
+      "authIdHal_i": "1160906",
+      "labStructName_s": "Holy-Spirit University of Kaslik [Jounieh] / Université Saint-Esprit de Kaslik",
+      "labStructId_i": "203397"
     }
   ]
 }

@@ -63,6 +63,7 @@ path_AUTH_STRUCT_MAP="external_data/auth_struct_map.json"
 # st.write(f"len map_auth_struct:{len(list(AUTH_STRUCT_MAP.keys()))}!")
 
 ## fnege 
+
 def get_mappings_csv(mapping_folder='external_data'):
     data=pd.read_csv(f"{mapping_folder}/fnege_final_hal.csv")
     return data
@@ -415,7 +416,6 @@ if df is not None and not df.empty:
     # missing_data_warning(df, col=col_en_question, show_distribution=show_distribution, show_count=show_count)
 
     st.divider()
-
     
     st.markdown("### Filtrer le résultat par la date")
     start_year, start_month, end_year, end_month, date_field=get_start_end_field(key_prefix='filter')
@@ -423,7 +423,7 @@ if df is not None and not df.empty:
     date_field_s_map={"soumission":"submittedDate_tdate", 
                         "modification":"modifiedDate_tdate",
                         "publication":"publicationDate_tdate"
-                        }
+                    }
     date_field_s=date_field_s_map.get(date_field,None)
 
     df_filtered=filter_par_tdate(df, 

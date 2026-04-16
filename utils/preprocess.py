@@ -61,7 +61,7 @@ def explode_by_col(df, col="axe"):
 
 
 
-def assign_time_unit(df, date_col="submittedDate_s"):
+def assign_time_unit(df, date_col):
     """
     给 DataFrame 增加一个 'time_unit' 列，根据整个 df 的时间范围自动选择粒度：
     - <=12个月：按月

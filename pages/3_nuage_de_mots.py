@@ -57,13 +57,53 @@ st.markdown("<br>", unsafe_allow_html=True)
 st.divider() 
 
 
+
+
+
 if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None:
     # 若df存在则视为开始
     st.session_state.started=True
     df = st.session_state.uploaded_df.copy()
-   
+    
     
     st.subheader("🔢 Modifier les paramètres")
+    
+    
+    # ------date field col------
+    date_field_t_map={"soumission":"submittedDate_tdate", 
+            "modification":"modifiedDate_tdate",
+            "publication":"publicationDate_tdate"
+            }
+    date_field_s_map={"soumission":"submittedDate_s", 
+            "modification":"modifiedDate_s",
+            "publication":"publicationDate_s"
+            }
+    
+    # 选择日期列：
+    key_prefix="wordcloud"
+    date_field = st.radio(
+            "**Choisir la date pour l'analyse :**",
+            ['soumission','modification','publication'],
+            horizontal=True, 
+            index=2,# default value!
+            key=f"{key_prefix}_date_field",
+            help="HAL cherche les articles par l'année de la publication (publicationDateY_i)."
+        )
+    
+    # 日期列映射到df中的列：
+    if "submittedDate_tdate" in df.columns:
+        date_field_col=date_field_t_map.get(date_field, '')
+    elif "submittedDate_s" in df.columns:
+        date_field_col=date_field_s_map.get(date_field, '')
+
+    #确保日期格式：
+    df[date_field_col] = pd.to_datetime(
+            df[date_field_col],
+            utc=True,
+            errors='coerce'
+        )
+    st.markdown("<br>", unsafe_allow_html=True)#不容易被 Markdown 渲染压缩掉
+    
     # ---------------文本范围-------------------
     WC_MAP={"keyword_s":"mots clés",
             "abstract_s":'résumés',
@@ -76,7 +116,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     format_func=lambda x: WC_MAP[x]#只改变显示
     )
     # st.write("ps.Les textes sélectionnés sont nettoyés (suppression des espaces, ponctuations et mots grammaticaux courants), mis en minuscules et lemmatisés.")
-    st.write(f"**[README] Les textes sélectionnés sont nettoyés** :  \n"
+    st.write(f"**💡 Les textes sélectionnés sont nettoyés** :  \n"
             "- suppression des espaces superflus et de la ponctuation,  \n"
             "- suppression des mots grammaticaux courants et de ceux que vous avez ajoutés,  \n"
             "- mise en minuscules,  \n"
@@ -107,13 +147,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
 
 
+
   # ------------gourpby-------------------
-    #radio多选,checkbox单选
-    # COL_MAP = {
-    #     "Global": "global",
-    #     "Axe": "par axe",
-    #     "Cl. FNEGE": "par classe FNEGE"
-    # }
+    
     COL_MAP = {
         "Global": "global",
         "axe": "par axe",
@@ -126,11 +162,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         format_func=lambda x: COL_MAP.get(x, x), 
         horizontal=True
     )
-    
-    # if group_by == "Axe":
-    #     axe_counts = df["Axe"].value_counts(dropna=False)
-    #     formatted = "\n".join([f"Axe {str(k)} : {v}" for k, v in axe_counts.items()])
-    #     st.info(f"📊 Répartition d'axe dans le corpus :\n\n{formatted}")
 
     st.markdown("<br>", unsafe_allow_html=True)
 
@@ -144,12 +175,12 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
     else : #==wcType=="wcEvolutif"
         # ----------------生成时间颗粒----------------
-        if "submittedDate_s" in df.columns:
-            df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
-            latest_date = df["submittedDate_s"].max()
+        if date_field_col in df.columns:
+            # df[date_field_col] = pd.to_datetime(df[date_field_col], errors="coerce")
+            latest_date = df[date_field_col].max()
             latest_ym = latest_date.strftime("%Y-%m") if pd.notnull(latest_date) else "Aucune date valide"
 
-            earliest_date=df["submittedDate_s"].min()
+            earliest_date=df[date_field_col].min()
             earliest_ym = earliest_date.strftime("%Y-%m") if pd.notnull(latest_date) else "Aucune date valide"
         
             #time period in month 
@@ -182,7 +213,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 index=default_index,
                 horizontal=True,
             )  
-            time_slices=create_time_slices(df, granularity=granularity)
+            time_slices=create_time_slices(df, granularity=granularity, date_field_col=date_field_col)
     
             st.info(f"Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).  \n"
                     f"Granularité recommandée pour le nuage de mots évolutif: **{suggestion}**.  \n"
@@ -230,28 +261,32 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         if wcType=="wcGlobal":
             with st.spinner("Générer le nuage de mots global..."):
                 #group_by (par axe)已嵌入函数
-                try :
-                    wc=generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words, user_stopwords)                    
-                except Exception as e:
-                    st.write(f"ERROR dans le nuage de mots global: {e}")
+                # try :
+                wc=generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, 
+                            max_words, user_stopwords, date_field_col)
+                st.pyplot(wc)           
+                # except Exception as e:
+                #     st.warning(f"ERROR dans le nuage de mots global: {e}")
 
                     
         #====================================================================================================================
         elif generate_button and time_slices is not None:# and wcType=="wcEvolutif"
             with st.spinner("Générer le nuage de mots évolutif..."):
                 if group_by=="Global":
-                    try:
-                        evolutif_wc= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices=time_slices, max_words=max_words, stopwords=user_stopwords, method="llr")
-                        st.pyplot(evolutif_wc)
-                    except Exception as e:
-                        st.write(f"ERROR dans le nuage de mots évolutif [global] : {e}")
+                    # try:
+                    evolutif_wc= generate_keyness_wc(df, options, exclude_nan, group_by, time_slices=time_slices, 
+                                    max_words=max_words, stopwords=user_stopwords, method="llr",
+                                    date_field_col=date_field_col)
+                    st.pyplot(evolutif_wc)
+                    # except Exception as e:
+                        # st.warning(f"ERROR dans le nuage de mots évolutif [global] : {e}")
 
                 # elif group_by=="Axe" :
                 else:
                     #-----居中显示所有演变图的大标题------
-                    df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
-                    start_ym=df["submittedDate_s"].min().strftime("%Y-%m")
-                    end_ym=df["submittedDate_s"].max().strftime("%Y-%m")  
+                    # df[date_field_col] = pd.to_datetime(df[date_field_col], errors="coerce")
+                    start_ym=df[date_field_col].min().strftime("%Y-%m")
+                    end_ym=df[date_field_col].max().strftime("%Y-%m")  
                     
                     st.markdown(
                         f"<h3 style='text-align: center;'>Évolution du nuage de mots ({start_ym} ~ {end_ym})</h3>",
@@ -266,10 +301,12 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
                     for col_val in ctg :
                         df_slice=exploded_df[exploded_df[group_by]==col_val]
-                        try :
-                            evolutif_wc_by_axe=generate_keyness_wc(df_slice, options, exclude_nan, group_by, time_slices=time_slices, col_val=col_val, max_words=max_words, stopwords=user_stopwords, method="llr")                                
-                            st.pyplot(evolutif_wc_by_axe)
-                        except Exception as e:
-                            st.write(f"ERROR dans le nuage évolutif [par axe]: {e}")    
+                        # try :
+                        evolutif_wc_by_axe=generate_keyness_wc(df_slice, options, exclude_nan, group_by, time_slices=time_slices, col_val=col_val, 
+                                        max_words=max_words, stopwords=user_stopwords, method="llr",
+                                        date_field_col=date_field_col)                                
+                        st.pyplot(evolutif_wc_by_axe)
+                        # except Exception as e:
+                        #     st.warning(f"ERROR dans le nuage évolutif [par axe]: {e}")    
 
 

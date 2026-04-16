@@ -48,8 +48,30 @@ if "started" not in st.session_state:
 # -------------------------------
 st.markdown("<br>", unsafe_allow_html=True)#不容易被 Markdown 渲染压缩掉
 data_uploader()# 调用上传器（会自动处理已有/新上传）
-st.divider() 
+st.divider()
 
+
+
+##================date field col====================
+
+date_field_t_map={"soumission":"submittedDate_tdate", 
+        "modification":"modifiedDate_tdate",
+        "publication":"publicationDate_tdate"
+        }
+date_field_s_map={"soumission":"submittedDate_s", 
+        "modification":"modifiedDate_s",
+        "publication":"publicationDate_s"
+        }
+
+key_prefix="analyse"
+date_field = st.radio(
+        "**Choisir la date pour l'analyse :**",
+        ['soumission','modification','publication'],
+        horizontal=True, 
+        index=2,# default value!
+        key=f"{key_prefix}_date_field",
+        help="HAL cherche les articles par l'année de la publication (publicationDateY_i)."
+    )
 
 
 if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not None: # df存在且不为空
@@ -71,11 +93,25 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     if st.session_state.started:#分析开始df不会再刷新
         df = st.session_state.uploaded_df.copy()
 
-        #-----------  global-----------------
-        #----------- période ----------------
-        if "submittedDate_s" in df.columns:
-            df["submittedDate_s"] = pd.to_datetime(df["submittedDate_s"], errors="coerce")
-            latest_date = df["submittedDate_s"].max()
+        # ---date field col---
+        if "submittedDate_tdate" in df.columns:
+            date_field_col=date_field_t_map.get(date_field, '')
+            
+        elif "submittedDate_s" in df.columns:
+            date_field_col=date_field_s_map.get(date_field, '')
+        
+        df[date_field_col] = pd.to_datetime(
+                df[date_field_col],
+                utc=True,
+                errors='coerce'
+            )
+        # st.write(f"date field col: **{date_field_col}**, {type(df[date_field_col])}!!")  
+
+
+        #----------------------------------
+        if date_field_col  in df.columns:
+            # df[date_field_col] = pd.to_datetime(df[date_field_col], errors="coerce")
+            latest_date = df[date_field_col].max()
             latest_ym = latest_date.strftime("%Y-%m") if pd.notnull(latest_date) else "Aucune date valide"
         else:
             latest_ym = "Colonne manquante"
@@ -111,8 +147,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 col.metric(label, value, suffix)
 
         col1, col2, col3, col4 = st.columns(4)
-        display_metric(col1, "Nombre total d’articles", total_articles, f" jusqu’à {latest_ym}")
-        display_metric(col2, "Nombre total d’auteurs", total_authors)  # , f"Moyenne par auteur: {avg_per_author:.2f}"
+        display_metric(col1, "Nombre total d'articles", total_articles, f" jusqu’à {latest_ym}")
+        display_metric(col2, "Nombre total d'auteurs", total_authors)  # , f"Moyenne par auteur: {avg_per_author:.2f}"
         display_metric(col3, "Nombre total de revues", total_journals)
         display_metric(col4, "Nombre total de domaines", total_domains)
 
@@ -125,52 +161,30 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         st.markdown("<br>", unsafe_allow_html=True)
         
 
-
         # # -------------------- 增强版 趋势折线图 --------------------
         st.header("📈 Tendance de production scientifique")
 
-        if "submittedDate_s" not in df.columns:
-                st.error("la colonne 'submittedDate_s' manque dans CSV")
+        if date_field_col not in df.columns:
+                st.error(f"la colonne '{date_field_col}' manque dans CSV")
         else:
             # 转换日期
-            st.info(f"⚠️ La date est manquante dans {df.submittedDate_s.isna().sum()} ({df.submittedDate_s.isna().sum()*100/len(df):.2f}%) articles!")
-
-            # # -------------------------------
-            # # 4a. 选择时间范围
-            # # -------------------------------
-            # 输入具体数值（无法选择years=none）
-            # years = st.number_input(
-            #     "Afficher les X dernières années ",
-            #     min_value=1,
+            # st.info(f"⚠️ La date est manquante dans {df[date_field_col].isna().sum()} ({df[date_field_col].isna().sum()*100/len(df):.2f}%) articles!")
+            # years = st.slider(
+            #     "Afficher les X dernières années",
+            #     min_value=0,
             #     max_value=100,
-            #     value=10,  # 默认值
-            #     step=1
+            #     value=10,
+            #     step=1,
+            #     help="Déplacez le curseur. 0 = toutes les années"
             # )
-            # if not years:
-            #     years = None
-
-            # if years is not None:
+            # if years == 0:
+            #     # 不限制时间范围
+            # df_filtered = df.copy()
+            # else:
             #     cutoff = pd.Timestamp.today() - pd.DateOffset(years=years)
-            #     df = df[df["submittedDate_s"] >= cutoff]
+            #     st.write('cutoff:', cutoff)
+            #     df= df[df[date_field_col] >= cutoff]
 
-            # -------------------------------
-            # 4a. 选择时间范围 (横向滑块)
-            # -------------------------------
-            years = st.slider(
-                "Afficher les X dernières années",
-                min_value=0,
-                max_value=100,
-                value=10,
-                step=1,
-                help="Déplacez le curseur. 0 = toutes les années"
-            )
-
-            if years == 0:
-                # 不限制时间范围
-                df_filtered = df.copy()
-            else:
-                cutoff = pd.Timestamp.today() - pd.DateOffset(years=years)
-                df= df[df["submittedDate_s"] >= cutoff]
 
             # -------------------------------
             # 4b. 选择时间颗粒
@@ -180,24 +194,22 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 ["Par mois", "Par an"],
                 horizontal=True
             )
-
             if period_option == "Par mois":
-                df["Period"] = df["submittedDate_s"].dt.to_period("M").astype(str)
+                df["Period"] = df[date_field_col].dt.to_period("M").astype(str)
             else:
-                df["Period"] = df["submittedDate_s"].dt.to_period("Y").astype(str)
+                df["Period"] = df[date_field_col].dt.to_period("Y").astype(str)
 
             # -------------------------------
             # 4c. 聚合统计
             # -------------------------------
-
             trend = df.groupby("Period").size().reset_index(name="count")
             trend["cumulative"] = trend["count"].cumsum()
 
             # -------------------------------
             # 4d. 标题：显示起止年月
             # -------------------------------
-            min_date = df["submittedDate_s"].min()
-            max_date = df["submittedDate_s"].max()
+            min_date = df[date_field_col].min()
+            max_date = df[date_field_col].max()
             if pd.notnull(min_date) and pd.notnull(max_date):
                 min_label = min_date.strftime("%b %Y")
                 max_label = max_date.strftime("%b %Y")
@@ -209,7 +221,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             # 4e. 双折线趋势图（当期 + 累计）
             # Q:quantitative连续变量，O:ordinal 序数型,T:temporal, N:nominal
             # -------------------------------
-           
             base = alt.Chart(trend).encode(x="Period:O")
             line_count = base.mark_line(point=True, color="#440154").encode(
                 y=alt.Y("count:Q", axis=alt.Axis(title="Articles (période)")),
@@ -228,7 +239,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             ).configure_axis(
                 labelAngle=-30
             )
-
             st.altair_chart(chart, use_container_width=True)
         st.divider()
         st.markdown("<br>", unsafe_allow_html=True)
@@ -261,11 +271,10 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         )
         st.markdown("<br>", unsafe_allow_html=True)
 
-
         #--------------画图----------------------
         # def keywords_trendline(df, options, keywords):
-
-        fig=keywords_trendline(df, options, keywords)
+        fig=keywords_trendline(df, options, keywords, date_field_col)
+        
         st.pyplot(fig)
         st.divider()
         st.markdown("<br>", unsafe_allow_html=True)
@@ -274,7 +283,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 ### ------------------------PIE OR BAR-------------------------------- 
 
         # ------------------- 示例应用 -------------------
-
         st.header("📊 Répartition statistique")
         st.info(
             "ℹ️ Remarques :\n"
@@ -285,7 +293,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             "- Seules les top N premières catégories sont affichées, les autres sont regroupées sous « Autres ».\n"
             "- Note qu'un document peut appartenir à plusieurs domaines scientifiques.\n"
         )
-
+        
         for col, title in {
             "docType_s": "Répartition par type de document",
             "domain_s": "Répartition par domaine scientifique",

@@ -113,7 +113,7 @@ def get_start_end_field(key_prefix):
     #             f"- b) pour chercher les articles jusqu'à aujourd'hui, sélectionnez 'aujourd'hui' dans 'années de fin' *ou/et* 'mois de fin'.  \n"
     #             f"- c) certains articles ont une date publication future, pour les inclure, sélectionnez '*'dans 'années de fin' *ou/et* 'mois de fin'. Ils setront indiqué dans la colonne de 'a_paraitre_bool'"
     #             )
-        
+
     # --- input---
     now = datetime.now()
     current_year, current_month = now.year, now.month
@@ -260,7 +260,6 @@ def filter_par_tdate(df,
     # 输出是带时间戳的string！！
 
     # ---filter---
-    
     if start_date != "*" and start_date is not None:
         start_date = pd.to_datetime(start_date, utc=True, errors='coerce')
         df_filtered = df_filtered[
@@ -674,7 +673,7 @@ def add_classement_fnege(
     df: pd.DataFrame,
     fnege_map: pd.DataFrame,
     journal_col: str = "journalTitle_s",
-    year_col: str = "publicationDate_s",
+    year_col: str = "publicationDate_tdate", ##!!!
     fnege_col_name: str = 'cl_fnege',
     cutoff: int = 90, 
     active_fuzzylookup=False
@@ -721,6 +720,7 @@ def add_classement_fnege(
     df.insert(loc=idx + 1, column=fnege_col_name, value=classement_list)
 
     return df
+
 
 
 
@@ -864,6 +864,9 @@ def map_auth_struct_per_row(authFullName_s, map_auth_struct):
     # print(authPrimaryStructureIdName_s)
     
     return authPrimaryStructureIdName_s
+
+
+
 
 
 def add_authPrimaryStructureIdName_s(df_input, path_map_auth_struct):
@@ -1151,22 +1154,24 @@ def process_df(df, DOMAIN_MAP,
 
 
     #------------fnege----------------
-    if "journalTitle_s" in df.columns and "publicationDate_s" in df.columns :       
-        #先精确，再模糊
+    if "journalTitle_s" in df.columns and "publicationDate_tdate" in df.columns :       
+        #先精确，再模糊        
         df=add_classement_fnege(
             df=df,
             fnege_map=FNEGE_MAP,
             journal_col = "journalTitle_s",
-            year_col = "publicationDate_s",
+            year_col = "publicationDate_tdate",
             fnege_col_name='cl_fnege',
             cutoff= cutoff, 
             active_fuzzylookup=active_fuzzylookup
         )
+        
         st.write(f"✔ Classements FNEGE selon la date de publication mappés dans la colonne 'cl_fnege'!")
         missing_data_warning(df, col="journalTitle_s", show_distribution=False)
         missing_data_warning(df, col='cl_fnege', show_distribution=True)
-    st.markdown("<br>", unsafe_allow_html=True)
-
+    st.markdown("<br>", unsafe_allow_html=True)        
+        
+        
     # -------------authPrimaryStructureIdName_s+authPrimaryStructure_IRG_bool----------------------
     if "authFullName_s" in df.columns and path_map_auth_struct :  
         df=add_authPrimaryStructureIdName_s(df, path_map_auth_struct=path_map_auth_struct)

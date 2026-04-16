@@ -237,10 +237,3 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                     )
                 
                 
-                
-                
-                
-                
-                
-                
-                
