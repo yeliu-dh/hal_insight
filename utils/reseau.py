@@ -25,7 +25,20 @@ def generate_network(df, options, stopwords, author_structure, n=10, min_freq=2)
 
     MAPPING DICT : author_structure :
     {authFullName_s:'id_authorprimarystructure'}
-
+    
+    example:
+    {
+    "Philippe Lépinard": [
+        {
+        "authIdHal_s": "philippe-lépinard",
+        "authIdHal_i": "5412",
+        "labStructName_s": "Institut de Recherche en Gestion",
+        "labStructId_i": "1004418"
+        }
+    ],
+    ...
+    }    
+    
     """
 
     #=======================================1️⃣ texte==========================================
@@ -36,8 +49,11 @@ def generate_network(df, options, stopwords, author_structure, n=10, min_freq=2)
              }
     
     # 把col中的值变成list
-    ## authors列填nan，按；拆成list，要求authors不为“nan”
+
     def clean_authors(x):
+        """
+        authors列填nan，按；拆成list，要求authors不为“nan”
+        """        
         if isinstance(x, str) and x.strip().lower() not in ['nan', 'none', '']:
             return [a.strip() for a in x.split(';') if a.strip()]
         return []  # 返回空 list
@@ -248,7 +264,9 @@ def generate_network(df, options, stopwords, author_structure, n=10, min_freq=2)
     all_authors = {a for authors in df['authFullName_s'] for a in authors}
 
     # -------------- 设置节点样式 --------------
-    for node in net.nodes:
+    for i, node in enumerate(net.nodes):
+        # node_id==authFullName_s OR
+        
         node_id = node["id"]
         freq = node_freq.get(node_id, 1)
         scaled = scale_size(freq, min_freq_val, max_freq_val)
@@ -259,29 +277,37 @@ def generate_network(df, options, stopwords, author_structure, n=10, min_freq=2)
         if node_id not in all_authors:
             node["shape"] = "text"
             node["font"] = {"size": scaled, "color": "black"}
-            node["title"] = f"Mot-clé : {node_id}<br>Connexions : {freq}"
+            node["title"] = f"Mot-clé : {node_id} \n Fréquences : {freq}"
             continue
 
         # =============================
         # CASE 2: 作者节点（需要根据机构染色）
         # =============================
-        struct_raw = author_structure.get(node_id, "")
+        
+        # struct_raw = author_structure.get(node_id, "")
+        # # 提取结构 ID（以 "_" 前部分为 ID）
+        # struct_id = struct_raw.split("_")[0] if "_" in struct_raw else ""
+        elif node_id in author_structure.keys():
+            
+            auth_info=author_structure[node_id]
+            # if i==0: 
+                # print(f'type auth info: {type(auth_info)}')
+                
+            struct_ids=[info["labStructId_i"] for info in auth_info]
+            struct_s=[info["labStructName_s"] for info in auth_info]
+            color="red" if any(struct_id in IRG_IDS for struct_id in struct_ids) else "royalblue"
+            # if i==0:
+            #     print(f"node id:{node_id},\n struct_ids:{struct_ids}, \nsturct_s:{struct_s}")
+                
+                
 
-        # 提取结构 ID（以 "_" 前部分为 ID）
-        struct_id = struct_raw.split("_")[0] if "_" in struct_raw else ""
-
-        # ———— 根据结构 ID 判断颜色 ————
-        if struct_id in IRG_IDS:
-            color = "red"          # IRG 作者
-        else:
-            color = "royalblue"    # 其他机构作者
 
         node["shape"] = "text"
         node["font"] = {"size": scaled, "color": color}
         node["title"] = (
-            f"Auteur : {node_id}<br>"
-            f"Institution : {struct_raw}<br>"
-            f"Connexions : {freq}"
+            f"Auteur : {node_id}\n"
+            f"Institutions primaires: {','.join(struct_s) if len(struct_s)>1 else struct_s[0]}\n"
+            f"Fréquences : {freq}"
         )
 
 

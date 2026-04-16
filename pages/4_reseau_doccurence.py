@@ -4,6 +4,7 @@ import numpy as np
 # import igraph as ig #非纯py，不适合安装在st cloud
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+import os
 
 
 #my utils
@@ -13,13 +14,14 @@ from utils.reseau import generate_network
 st.set_page_config(page_title="HAL insight", page_icon="🛸",layout="wide")
 st.title("🌐Réseau d'occurences ")
 
+# external_data_dir="../external_data"
 
 @st.cache_data 
-def get_mappings(mapping_folder='external_data'):
+def get_mappings():
     return {
-        "AUTHOR_STRUCTURE": load_external_json(f"{mapping_folder}/author_primarystructure_s_map.json")    }
+        "AUTHOR_STRUCTURE": load_external_json(file_path=r"external_data\auth_struct_map.json")}
 
-maps= get_mappings(mapping_folder='external_data')
+maps= get_mappings()
 author_structure=maps["AUTHOR_STRUCTURE"]
 
 # -------------------------------
@@ -42,9 +44,21 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     # 若df存在则视为开始
     st.session_state.started=True
     df = st.session_state.uploaded_df.copy()
-        
+    
+    
+    #=============================================README==========================================#
+    st.subheader("📒 README")
 
-#=======================================================================================#
+    # ---rules---
+    # st.markdown(
+    #     f"**Cette page produit un réseaux entre les auteurs et les mots clés:**  \n"
+    #     f"- a) les pointspour ne pas définir une date de début, sélectionnez '*' dans l'année de début' *ou/et* 'mois de début';  \n"
+    #     f"- b) pour chercher les articles jusqu'à aujourd'hui, sélectionnez 'aujourd'hui' dans 'années de fin' *ou/et* 'mois de fin'.  \n"
+    #     f"- c) certains articles ont une date publication future, pour les inclure, sélectionnez '*'dans 'années de fin' *ou/et* 'mois de fin'.  \n Les articles déjà publiés setront indiqué dans la colonne de **'isPublished_bool'**!"
+    # )
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    #=============================================PARAMS==========================================#
     st.subheader("🔢 Modifier les paramètres")
     # ---------------文本范围-------------------
     WC_MAP={"keyword_s":"mots clés",
