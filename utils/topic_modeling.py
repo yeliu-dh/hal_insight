@@ -100,10 +100,16 @@ def preprocess_df_for_topic_modeling(df_input, col_axe):
        
     df = df_input.copy()
     
+    AXE_COL_MAP={
+        "axe":"Axe original",
+        "predicted_axe":"Axe prédit",
+        "final_axe":"Axe original + prédit"
+    } 
+    
     if col_axe in df.columns:
-        st.write(f"[info] procéder selon {col_axe}!")
+        st.write(f"[info] procéder selon **{AXE_COL_MAP.get(col_axe)}**!")
     else :
-        st.write(f"[info] {col_axe} not found in df\nprocéder selon 'axe'!")
+        st.write(f"[info] {AXE_COL_MAP.get(col_axe)} not found in df\nprocéder selon 'Axe original'!")
         col_axe="axe"
     
     df=df[df[col_axe].notna()]
@@ -619,6 +625,7 @@ def generate_topics_keywords_scatterplot(
     date_min = df[date_field].min()
     date_max = df[date_field].max()
     date_title+=f"{date_min.strftime('%Y/%m')} et {date_max.strftime('%Y/%m')}"
+    
 
     plt.title(f"Sujets et Mots clés {axe_title} {date_title}")
     
