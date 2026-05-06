@@ -56,14 +56,12 @@ DOC_TYPE_MAP = maps["DOC_TYPE_MAP"]
 
 
 # -----------------------------------------------------
-path_AUTH_STRUCT_MAP="external_data/auth_struct_map.json"
-
+path_AUTH_STRUCT_MAP="external_data/auth_struct_map.json"# from home.py
 
 # AUTH_STRUCT_MAP=maps['AUTH_STRUCT_MAP']# map_auth_struct不能缓存加载，不然update之后无法马上存入？
 # st.write(f"len map_auth_struct:{len(list(AUTH_STRUCT_MAP.keys()))}!")
 
 ## fnege 
-
 def get_mappings_csv(mapping_folder='external_data'):
     data=pd.read_csv(f"{mapping_folder}/fnege_final_hal.csv")
     return data
