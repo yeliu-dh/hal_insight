@@ -108,7 +108,7 @@ def preprocess_df_for_topic_modeling(df_input, col_axe):
     df=df[df[col_axe].notna()]
     st.write(f"[info] filtrer les données sans axe: {len(df_input)} => {len(df)}")
     
-    st.info(df['axe'].value_counts(dropna=False))
+    # st.info(df['axe'].value_counts(dropna=False))
     
         
     def parse_axes(x):
@@ -122,8 +122,7 @@ def preprocess_df_for_topic_modeling(df_input, col_axe):
     
     df['axe_list'] = df[col_axe].apply(parse_axes)    
     df['true_axe_list'] = df["axe"].apply(parse_axes)#必然存在
-    st.info(df['axe_list'].value_counts(dropna=False))
-
+    # st.info(df['axe_list'].value_counts(dropna=False))
 
     
     if 'predicted_axe' in df.columns:
