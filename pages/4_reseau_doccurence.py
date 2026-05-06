@@ -17,19 +17,37 @@ st.title("🌐Réseau d'occurences ")
 
 # external_data_dir="../external_data"
 
-@st.cache_data 
-def get_auth_struct_map():
-    path_AUTH_STRUCT_MAP="external_data/auth_struct_map.json"
-    with open(path_AUTH_STRUCT_MAP, 'r', encoding='utf-8')as f:
-        map_auth_struct=json.load(f)
-    return map_auth_struct
+# @st.cache_data 
+# def get_auth_struct_map():
+#     path_AUTH_STRUCT_MAP="external_data/auth_struct_map.json"
+#     with open(path_AUTH_STRUCT_MAP, 'r', encoding='utf-8')as f:
+#         map_auth_struct=json.load(f)
+#     return map_auth_struct
 
 # def get_mappings():
 #     return {
 #         "AUTHOR_STRUCTURE": load_external_json(file_path=r"external_data\auth_struct_map.json")}
 
-author_structure= get_auth_struct_map()
+# author_structure= get_auth_struct_map()
 # author_structure=maps["AUTHOR_STRUCTURE"]
+
+
+
+
+
+
+## fnege 
+def load_auth_struct_map(mapping_folder='external_data'):
+    import json
+    path_json=os.path.join(mapping_folder, "auth_struct_map.json")
+    if not os.path.exists(path_json):
+        st.warning(f"not the right path!!!\n {path_json}")
+    else :
+        with open(path_json, 'r', encoding='utf-8') as f:
+            data=json.load(f)
+    return data
+author_structure=load_auth_struct_map()
+
 
 # -------------------------------
 # 1️⃣ 初始化 Session State
