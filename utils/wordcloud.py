@@ -98,8 +98,9 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
             ###
             fig.tight_layout(rect=[0, 0, 1, 0.95])  # 顶部留 5% 给 suptitle
             # fig.suptitle(suptitle, fontsize=10, ha="center")#每张图又加上一个大标题XXX
-            st.pyplot(fig)
-            ###不能输出显示，否则只能输出一个!
+            st.pyplot(fig)#***
+            
+            ###不能输出显示，否则只能输出一个!?
             
 
     else: # 分语言 → EN/FR 左右列显示，每个类别单独一行
@@ -120,7 +121,7 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
                     text = langs.get(lang, "").strip()
                     if text:
                         fig = generate_wc(text, max_words, stopwords, title=title)
-                        # st.pyplot(fig) #*
+                        st.pyplot(fig) #*?????
                     
                     else :
                         st.warning(f"Texte invalide dans la catégorie {cat}-{lang}!")
@@ -135,53 +136,161 @@ def generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, max_words
 #==========================================================================================#
 #==========================================================================================#
 
-def create_time_slices(df, granularity, date_field_col):
-    """
-    根据颗粒度生成时间切片
-    granularity: "month" | "quarter" | "year" | "3year" | "5year"
-    """
-    df = df.copy()
-    # df[date_field_col] = pd.to_datetime(df[date_field_col], errors="coerce")
+# def create_time_slices(df, granularity, date_field_col):
+#     """
+#     根据颗粒度生成时间切片
+#     granularity: "month" | "quarter" | "year" | "3year" | "5year"
+#     """
+#     df = df.copy()
+#     # df[date_field_col] = pd.to_datetime(df[date_field_col], errors="coerce")
 
-    # 提取年月
+#     # 提取年月
+#     df["year"] = df[date_field_col].dt.year
+#     df["month"] = df[date_field_col].dt.month
+
+#     start_year, end_year = df["year"].min(), df["year"].max()
+
+#     if granularity == "Mensuel":
+#         # 逐月
+#         months = pd.period_range(df[date_field_col].min().to_period("M"),
+#                                  df[date_field_col].max().to_period("M"), freq="M")
+#         # time_slices = [
+#         #     (p.start_time.tz_localize("UTC"), p.end_time.tz_localize("UTC"))
+#         #     for p in months
+#         # ]
+#         time_slices = [(p.start_time, p.end_time) for p in months]
+
+#     elif granularity == "Trimestriel":
+#         # 逐季度
+#         quarters = pd.period_range(df[date_field_col].min().to_period("Q"),
+#                                    df[date_field_col].max().to_period("Q"), freq="Q")
+#         time_slices = [(p.start_time, p.end_time) for p in quarters]
+#         # time_slices = [
+#         #     (p.start_time.tz_localize("UTC"), p.end_time.tz_localize("UTC"))
+#         #     for p in quarters
+#         # ]
+        
+        
+#     elif granularity == "Annuel":
+#         step_year = 1
+#         time_slices = [(y, min(y + step_year - 1, end_year))
+#                        for y in range(start_year, end_year + 1, step_year)]
+
+#     elif granularity == "Tous les 3 ans":
+#         step_year = 3
+#         time_slices = [(y, min(y + step_year - 1, end_year))
+#                        for y in range(start_year, end_year + 1, step_year)]
+
+#     elif granularity == "Tous les 5 ans":
+#         step_year = 5
+#         time_slices = [(y, min(y + step_year - 1, end_year))
+#                        for y in range(start_year, end_year + 1, step_year)]
+#     else:
+#         time_slices=None
+
+#     # else:  # 默认年度
+#     #     time_slices = [(y, y) for y in range(start_year, end_year + 1)]
+#     # st.info(f"Granularité {granularity}:{time_slices}")    
+    
+#     return time_slices
+
+import pandas as pd
+
+def create_time_slices(df, granularity, date_field_col, force_utc=False):
+    """
+    根据颗粒度生成时间切片，并保证 df 和 time_slices 时区一致
+
+    参数：
+    - df: DataFrame
+    - granularity: "Mensuel" | "Trimestriel" | "Annuel" | "Tous les 3 ans" | "Tous les 5 ans"
+    - date_field_col: 日期列名
+    - force_utc: 是否强制转换为 UTC（推荐 True）
+
+    返回：
+    - time_slices: list of (start, end)
+    """
+
+    df = df.copy()
+
+    # ---------- 1. 统一 datetime ----------
+    df[date_field_col] = pd.to_datetime(df[date_field_col], errors="coerce")
+
+    # ---------- 2. 处理时区 ----------
+    tz = df[date_field_col].dt.tz
+
+    if tz is None:
+        # 没有时区 → 加 UTC
+        df[date_field_col] = df[date_field_col].dt.tz_localize("UTC")
+        tz = "UTC"
+    else:
+        if force_utc:
+            # 已有时区 → 转 UTC
+            df[date_field_col] = df[date_field_col].dt.tz_convert("UTC")
+            tz = "UTC"
+
+    # ---------- 3. 提取时间字段 ----------
     df["year"] = df[date_field_col].dt.year
     df["month"] = df[date_field_col].dt.month
 
-    start_year, end_year = df["year"].min(), df["year"].max()
+    start_year = int(df["year"].min())
+    end_year = int(df["year"].max())
 
+    # ---------- 4. 构建 time_slices ----------
     if granularity == "Mensuel":
-        # 逐月
-        months = pd.period_range(df[date_field_col].min().to_period("M"),
-                                 df[date_field_col].max().to_period("M"), freq="M")
-        time_slices = [(p.start_time, p.end_time) for p in months]
+        periods = pd.period_range(
+            df[date_field_col].min().to_period("M"),
+            df[date_field_col].max().to_period("M"),
+            freq="M"
+        )
+        time_slices = [
+            (
+                p.start_time.tz_localize(tz),
+                p.end_time.tz_localize(tz)
+            )
+            for p in periods
+        ]
 
     elif granularity == "Trimestriel":
-        # 逐季度
-        quarters = pd.period_range(df[date_field_col].min().to_period("Q"),
-                                   df[date_field_col].max().to_period("Q"), freq="Q")
-        time_slices = [(p.start_time, p.end_time) for p in quarters]
+        periods = pd.period_range(
+            df[date_field_col].min().to_period("Q"),
+            df[date_field_col].max().to_period("Q"),
+            freq="Q"
+        )
+        time_slices = [
+            (
+                p.start_time.tz_localize(tz),
+                p.end_time.tz_localize(tz)
+            )
+            for p in periods
+        ]
 
     elif granularity == "Annuel":
-        step_year = 1
-        time_slices = [(y, min(y + step_year - 1, end_year))
-                       for y in range(start_year, end_year + 1, step_year)]
+        step = 1
+        time_slices = [
+            (y, min(y + step - 1, end_year))
+            for y in range(start_year, end_year + 1, step)
+        ]
 
     elif granularity == "Tous les 3 ans":
-        step_year = 3
-        time_slices = [(y, min(y + step_year - 1, end_year))
-                       for y in range(start_year, end_year + 1, step_year)]
+        step = 3
+        time_slices = [
+            (y, min(y + step - 1, end_year))
+            for y in range(start_year, end_year + 1, step)
+        ]
 
     elif granularity == "Tous les 5 ans":
-        step_year = 5
-        time_slices = [(y, min(y + step_year - 1, end_year))
-                       for y in range(start_year, end_year + 1, step_year)]
-    else:
-        time_slices=None
+        step = 5
+        time_slices = [
+            (y, min(y + step - 1, end_year))
+            for y in range(start_year, end_year + 1, step)
+        ]
 
-    # else:  # 默认年度
-    #     time_slices = [(y, y) for y in range(start_year, end_year + 1)]
-    # st.info(f"Granularité {granularity}:{time_slices}")    
+    else:
+        return None
+
     return time_slices
+
+
 
 
 
@@ -295,7 +404,6 @@ def generate_keyness_wc(df, options, exclude_nan, group_by,
 
 
         # --- 局部词频 ---
-
         # stopwords_nltk=load_external_json("external_data/stopwords_nltk.json")
         stopwords_nltk=read_json("external_data/stopwords_nltk.json")
         

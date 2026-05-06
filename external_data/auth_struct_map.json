@@ -28,25 +28,7 @@
       "authIdHal_s": "amina-béji-bécheur",
       "authIdHal_i": "2644",
       "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "1004418"
-    },
-    {
-      "authIdHal_s": "amina-béji-bécheur",
-      "authIdHal_i": "2644",
-      "labStructName_s": "IAE Paris-Est-Université Gustave Eiffel",
-      "labStructId_i": "1152368"
-    },
-    {
-      "authIdHal_s": "amina-béji-bécheur",
-      "authIdHal_i": "2644",
-      "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "57129"
-    },
-    {
-      "authIdHal_s": "amina-béji-bécheur",
-      "authIdHal_i": "2644",
-      "labStructName_s": "Université Gustave Eiffel",
-      "labStructId_i": "580722"
     }
   ],
   "Florence Allard-Poesi": [
@@ -515,8 +497,8 @@
     {
       "authIdHal_s": "dominique-roux",
       "authIdHal_i": "172717",
-      "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
+      "labStructName_s": "Recherches en Économie Gestion AgroRessources Durabilité Santé- EA 6292",
+      "labStructId_i": "451480"
     }
   ],
   "Alix Poels": [
@@ -2494,6 +2476,12 @@
   "Emmanuelle Kesse-Guyot": [
     {
       "authIdHal_s": "emmanuelle-kesse-guyot",
+      "authIdHal_i": "0",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    },
+    {
+      "authIdHal_s": "emmanuelle-kesse-guyot",
       "authIdHal_i": "736379",
       "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
       "labStructId_i": "1001914"
@@ -2786,15 +2774,15 @@
   "Mathilde Touvier": [
     {
       "authIdHal_s": "mathilde-touvier",
-      "authIdHal_i": "0",
+      "authIdHal_i": "1136541",
       "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
       "labStructId_i": "1001914"
     },
     {
       "authIdHal_s": "mathilde-touvier",
-      "authIdHal_i": "757411",
-      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
-      "labStructId_i": "1001914"
+      "authIdHal_i": "1136541",
+      "labStructName_s": "Collège de France - Chaire annuelle Santé publique",
+      "labStructId_i": "1226965"
     }
   ],
   "Valentina Carbone": [
@@ -2869,8 +2857,8 @@
     {
       "authIdHal_s": "philippe-mérigot",
       "authIdHal_i": "15529",
-      "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "1004418"
+      "labStructName_s": "Institut des hautes études économiques et commerciales | School of Business and Economics",
+      "labStructId_i": "458547"
     }
   ],
   "Lorena Bezerra de Souza Matos": [
@@ -7131,6 +7119,628 @@
       "authIdHal_i": "1160906",
       "labStructName_s": "Holy-Spirit University of Kaslik [Jounieh] / Université Saint-Esprit de Kaslik",
       "labStructId_i": "203397"
+    }
+  ],
+  "Lydiane Nabec": [
+    {
+      "authIdHal_s": "lydiane-nabec",
+      "authIdHal_i": "1285757",
+      "labStructName_s": "Réseaux Innovation Territoires et Mondialisation",
+      "labStructId_i": "1051119"
+    },
+    {
+      "authIdHal_s": "lydiane-nabec",
+      "authIdHal_i": "1285757",
+      "labStructName_s": "Réseaux Innovation Territoires et Mondialisation",
+      "labStructId_i": "243551"
+    },
+    {
+      "authIdHal_s": "lydiane-nabec",
+      "authIdHal_i": "1285757",
+      "labStructName_s": "Université Paris-Saclay",
+      "labStructId_i": "419361"
+    },
+    {
+      "authIdHal_s": "lydiane-nabec",
+      "authIdHal_i": "0",
+      "labStructName_s": "Réseaux Innovation Territoires et Mondialisation",
+      "labStructId_i": "1051119"
+    },
+    {
+      "authIdHal_s": "lydiane-nabec",
+      "authIdHal_i": "1270255",
+      "labStructName_s": "Réseaux Innovation Territoires et Mondialisation",
+      "labStructId_i": "1051119"
+    },
+    {
+      "authIdHal_s": "lydiane-nabec",
+      "authIdHal_i": "1270255",
+      "labStructName_s": "Université Paris-Saclay",
+      "labStructId_i": "419361"
+    },
+    {
+      "authIdHal_s": "lydiane-nabec",
+      "authIdHal_i": "1285757",
+      "labStructName_s": "Université Paris-Sud - Paris 11",
+      "labStructId_i": "92966"
+    }
+  ],
+  "Virginie Rodriguez": [
+    {
+      "authIdHal_s": "virginie-rodriguez",
+      "authIdHal_i": "1231529",
+      "labStructName_s": "Val de Loire Recherche en Management",
+      "labStructId_i": "190457"
+    },
+    {
+      "authIdHal_s": "virginie-rodriguez",
+      "authIdHal_i": "1231529",
+      "labStructName_s": "Université d'Orléans",
+      "labStructId_i": "300297"
+    },
+    {
+      "authIdHal_s": "virginie-rodriguez",
+      "authIdHal_i": "0",
+      "labStructName_s": "Val de Loire Recherche en Management",
+      "labStructId_i": "190457"
+    },
+    {
+      "authIdHal_s": "virginie-rodriguez",
+      "authIdHal_i": "0",
+      "labStructName_s": "Université d'Orléans",
+      "labStructId_i": "300297"
+    }
+  ],
+  "Nil Özçağlar-Toulouse": [
+    {
+      "authIdHal_s": "nil-özçağlar-toulouse",
+      "authIdHal_i": "0",
+      "labStructName_s": "SKEMA Business School",
+      "labStructId_i": "344663"
+    },
+    {
+      "authIdHal_s": "nil-özçağlar-toulouse",
+      "authIdHal_i": "0",
+      "labStructName_s": "Université de Lille",
+      "labStructId_i": "374570"
+    },
+    {
+      "authIdHal_s": "nil-özçağlar-toulouse",
+      "authIdHal_i": "851776",
+      "labStructName_s": "Lille School of Management Research Center - ULR 4112",
+      "labStructId_i": "109040"
+    },
+    {
+      "authIdHal_s": "nil-özçağlar-toulouse",
+      "authIdHal_i": "1309890",
+      "labStructName_s": "Lille University Management Lab - ULR 4999",
+      "labStructId_i": "1071874"
+    },
+    {
+      "authIdHal_s": "nil-özçağlar-toulouse",
+      "authIdHal_i": "0",
+      "labStructName_s": "Lille School of Management Research Center - ULR 4112",
+      "labStructId_i": "109040"
+    }
+  ],
+  "Hélène Gorge": [
+    {
+      "authIdHal_s": "hélène-gorge",
+      "authIdHal_i": "1245675",
+      "labStructName_s": "Lille University Management Lab - ULR 4999",
+      "labStructId_i": "1071874"
+    }
+  ],
+  "Pierre Buffaz": [
+    {
+      "authIdHal_s": "pierre-buffaz",
+      "authIdHal_i": "0",
+      "labStructName_s": "EDC Paris Business School",
+      "labStructId_i": "1005679"
+    },
+    {
+      "authIdHal_s": "pierre-buffaz",
+      "authIdHal_i": "0",
+      "labStructName_s": "Observatoire et Centre de Recherche en Entrepreneuriat",
+      "labStructId_i": "1051348"
+    },
+    {
+      "authIdHal_s": "pierre-buffaz",
+      "authIdHal_i": "1483080",
+      "labStructName_s": "EDC Paris Business School",
+      "labStructId_i": "1005679"
+    },
+    {
+      "authIdHal_s": "pierre-buffaz",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire de recherche en sciences de gestion Panthéon-Assas",
+      "labStructId_i": "1096497"
+    },
+    {
+      "authIdHal_s": "pierre-buffaz",
+      "authIdHal_i": "1483080",
+      "labStructName_s": "Observatoire et Centre de Recherche en Entrepreneuriat",
+      "labStructId_i": "1051348"
+    }
+  ],
+  "Jérémy Legardeur": [
+    {
+      "authIdHal_s": "jérémy-legardeur",
+      "authIdHal_i": "1715",
+      "labStructName_s": "ESTIA - Institute of technology",
+      "labStructId_i": "39415"
+    },
+    {
+      "authIdHal_s": "jérémy-legardeur",
+      "authIdHal_i": "1715",
+      "labStructName_s": "Université de Bordeaux",
+      "labStructId_i": "259761"
+    }
+  ],
+  "Sarah Richard": [
+    {
+      "authIdHal_s": "sarah-richard",
+      "authIdHal_i": "0",
+      "labStructName_s": "École de Management de Strasbourg = EM Strasbourg Business School",
+      "labStructId_i": "325876"
+    },
+    {
+      "authIdHal_s": "sarah-richard",
+      "authIdHal_i": "1090189",
+      "labStructName_s": "École de Management de Strasbourg = EM Strasbourg Business School",
+      "labStructId_i": "325876"
+    },
+    {
+      "authIdHal_s": "sarah-richard",
+      "authIdHal_i": "0",
+      "labStructName_s": "Audencia Business School",
+      "labStructId_i": "456031"
+    },
+    {
+      "authIdHal_s": "sarah-richard",
+      "authIdHal_i": "1537466",
+      "labStructName_s": "Audencia Business School",
+      "labStructId_i": "456031"
+    }
+  ],
+  "Emmanouela Mandalaki": [
+    {
+      "authIdHal_s": "emmanouela-mandalaki",
+      "authIdHal_i": "0",
+      "labStructName_s": "Neoma Business School",
+      "labStructId_i": "232915"
+    }
+  ],
+  "Monica C. Scarano": [
+    {
+      "authIdHal_s": "monica-c.-scarano",
+      "authIdHal_i": "1309886",
+      "labStructName_s": "Laboratoire Interdisciplinaire des transitions de Lille",
+      "labStructId_i": "1174586"
+    }
+  ],
+  "Laure Perraud": [
+    {
+      "authIdHal_s": "laure-perraud",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre de Recherche en Gestion des Organisations",
+      "labStructId_i": "1064035"
+    },
+    {
+      "authIdHal_s": "laure-perraud",
+      "authIdHal_i": "0",
+      "labStructName_s": "Université de Bourgogne",
+      "labStructId_i": "300270"
+    },
+    {
+      "authIdHal_s": "laure-perraud",
+      "authIdHal_i": "12515",
+      "labStructName_s": "Centre de Recherche en Gestion des Organisations",
+      "labStructId_i": "1229404"
+    },
+    {
+      "authIdHal_s": "laure-perraud",
+      "authIdHal_i": "12515",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "57129"
+    },
+    {
+      "authIdHal_s": "laure-perraud",
+      "authIdHal_i": "12515",
+      "labStructName_s": "Laboratoire d'Economie et de Gestion",
+      "labStructId_i": "607"
+    }
+  ],
+  "Corinne Chevalier": [
+    {
+      "authIdHal_s": "corinne-chevalier",
+      "authIdHal_i": "1290138",
+      "labStructName_s": "Réseaux Innovation Territoires et Mondialisation",
+      "labStructId_i": "243551"
+    }
+  ],
+  "Chantal Julia": [
+    {
+      "authIdHal_s": "chantal-julia",
+      "authIdHal_i": "801128",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    },
+    {
+      "authIdHal_s": "chantal-julia",
+      "authIdHal_i": "0",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Morgane Fialon": [
+    {
+      "authIdHal_s": "morgane-fialon",
+      "authIdHal_i": "1130109",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    },
+    {
+      "authIdHal_s": "morgane-fialon",
+      "authIdHal_i": "0",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    },
+    {
+      "authIdHal_s": "morgane-fialon",
+      "authIdHal_i": "1130109",
+      "labStructName_s": "Centre for Research in Epidemiology and Statistics | Centre de Recherche Épidémiologie et Statistiques",
+      "labStructId_i": "1002409"
+    }
+  ],
+  "Pilar Galan": [
+    {
+      "authIdHal_s": "pilar-galan",
+      "authIdHal_i": "756893",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Brice Isséki": [
+    {
+      "authIdHal_s": "brice-isséki",
+      "authIdHal_i": "1264680",
+      "labStructName_s": "Centre de droit des affaires et de gestion",
+      "labStructId_i": "1004768"
+    },
+    {
+      "authIdHal_s": "brice-isséki",
+      "authIdHal_i": "1264680",
+      "labStructName_s": "UFR droit, économie et gestion [Sociétés et Humanités] - Université Paris Cité",
+      "labStructId_i": "1004773"
+    }
+  ],
+  "Barthélémy Sarda": [
+    {
+      "authIdHal_s": "barthélémy-sarda",
+      "authIdHal_i": "1347827",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Marie-Eve Laporte": [
+    {
+      "authIdHal_s": "marie-eve-laporte",
+      "authIdHal_i": "172883",
+      "labStructName_s": "IAE Paris - Sorbonne Business School",
+      "labStructId_i": "300334"
+    }
+  ],
+  "Dongfang Li": [
+    {
+      "authIdHal_s": "dongfang-li",
+      "authIdHal_i": "1291728",
+      "labStructName_s": "Réseaux Innovation Territoires et Mondialisation",
+      "labStructId_i": "1051119"
+    },
+    {
+      "authIdHal_s": "dongfang-li",
+      "authIdHal_i": "1291728",
+      "labStructName_s": "Université Paris-Saclay",
+      "labStructId_i": "419361"
+    }
+  ],
+  "Serge Hercberg": [
+    {
+      "authIdHal_s": "serge-hercberg",
+      "authIdHal_i": "0",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Mar Pérezts": [
+    {
+      "authIdHal_s": "mar-pérezts",
+      "authIdHal_i": "744700",
+      "labStructName_s": "EMLyon Business School",
+      "labStructId_i": "301362"
+    }
+  ],
+  "Lucie Wiart": [
+    {
+      "authIdHal_s": "lucie-wiart",
+      "authIdHal_i": "1475990",
+      "labStructName_s": "Neoma Business School",
+      "labStructId_i": "232915"
+    }
+  ],
+  "Marion Sangle-Ferriere": [
+    {
+      "authIdHal_s": "marion-sangle-ferriere",
+      "authIdHal_i": "1132280",
+      "labStructName_s": "Théorie économique, modélisation et applications",
+      "labStructId_i": "1003463"
+    }
+  ],
+  "Nicole Sofia Rohsig Lopez": [
+    {
+      "authIdHal_s": "nicole-sofia-rohsig-lopez",
+      "authIdHal_i": "1277426",
+      "labStructName_s": "ESTIA - Institute of technology",
+      "labStructId_i": "39415"
+    },
+    {
+      "authIdHal_s": "nicole-sofia-rohsig-lopez",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Georges Friedel",
+      "labStructId_i": "209650"
+    },
+    {
+      "authIdHal_s": "nicole-sofia-rohsig-lopez",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre Science des Matériaux et des Structures",
+      "labStructId_i": "22126"
+    },
+    {
+      "authIdHal_s": "nicole-sofia-rohsig-lopez",
+      "authIdHal_i": "0",
+      "labStructName_s": "ESTIA - Institute of technology",
+      "labStructId_i": "39415"
+    },
+    {
+      "authIdHal_s": "nicole-sofia-rohsig-lopez",
+      "authIdHal_i": "1277426",
+      "labStructName_s": "Université de Bordeaux",
+      "labStructId_i": "259761"
+    }
+  ],
+  "Jenny Faucheu": [
+    {
+      "authIdHal_s": "jenny-faucheu",
+      "authIdHal_i": "1448174",
+      "labStructName_s": "Laboratoire Georges Friedel",
+      "labStructId_i": "209650"
+    },
+    {
+      "authIdHal_s": "jenny-faucheu",
+      "authIdHal_i": "1448174",
+      "labStructName_s": "Centre Science des Matériaux et des Structures",
+      "labStructId_i": "22126"
+    },
+    {
+      "authIdHal_s": "jenny-faucheu",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Georges Friedel",
+      "labStructId_i": "209650"
+    },
+    {
+      "authIdHal_s": "jenny-faucheu",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre Science des Matériaux et des Structures",
+      "labStructId_i": "22126"
+    }
+  ],
+  "Mélanie Deschasaux-Tanguy": [
+    {
+      "authIdHal_s": "mélanie-deschasaux-tanguy",
+      "authIdHal_i": "183648",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Arnaud Hélias": [
+    {
+      "authIdHal_s": "arnaud-hélias",
+      "authIdHal_i": "180736",
+      "labStructName_s": "Technologies et Méthodes pour les Agricultures de demain",
+      "labStructId_i": "1096427"
+    }
+  ],
+  "Sylvain Pellerin": [
+    {
+      "authIdHal_s": "sylvain-pellerin",
+      "authIdHal_i": "1320920",
+      "labStructName_s": "Interactions Sol Plante Atmosphère",
+      "labStructId_i": "1002425"
+    }
+  ],
+  "Ahmed Benmecheddal": [
+    {
+      "authIdHal_s": "ahmed-benmecheddal",
+      "authIdHal_i": "0",
+      "labStructName_s": "Lille School of Management Research Center - ULR 4112",
+      "labStructId_i": "109040"
+    }
+  ],
+  "Florence Durieux": [
+    {
+      "authIdHal_s": "florence-durieux",
+      "authIdHal_i": "0",
+      "labStructName_s": "Réseaux Innovation Territoires et Mondialisation",
+      "labStructId_i": "1051119"
+    }
+  ],
+  "Sophie Hennekam": [
+    {
+      "authIdHal_s": "sophie-hennekam",
+      "authIdHal_i": "0",
+      "labStructName_s": "Audencia Business School",
+      "labStructId_i": "456031"
+    },
+    {
+      "authIdHal_s": "sophie-hennekam",
+      "authIdHal_i": "1076487",
+      "labStructName_s": "Audencia Business School",
+      "labStructId_i": "456031"
+    }
+  ],
+  "Marie-Christine Lichtlé": [
+    {
+      "authIdHal_s": "marie-christine-lichtlé",
+      "authIdHal_i": "753771",
+      "labStructName_s": "Montpellier Research in Management",
+      "labStructId_i": "1087123"
+    }
+  ],
+  "Nathalie Fleck": [
+    {
+      "authIdHal_s": "nathalie-fleck",
+      "authIdHal_i": "177407",
+      "labStructName_s": "Université de Cergy Pontoise",
+      "labStructId_i": "300305"
+    }
+  ],
+  "Marine Moyon": [
+    {
+      "authIdHal_s": "marine-moyon",
+      "authIdHal_i": "1236739",
+      "labStructName_s": "Institut Villebon – Georges Charpak",
+      "labStructId_i": "551766"
+    }
+  ],
+  "Fatima Regany": [
+    {
+      "authIdHal_s": "fatima-regany",
+      "authIdHal_i": "1314879",
+      "labStructName_s": "Lille University Management Lab - ULR 4999",
+      "labStructId_i": "1071874"
+    }
+  ],
+  "Valérie Hémar-Nicolas": [
+    {
+      "authIdHal_s": "valérie-hémar-nicolas",
+      "authIdHal_i": "1158675",
+      "labStructName_s": "Réseaux Innovation Territoires et Mondialisation",
+      "labStructId_i": "1051119"
+    }
+  ],
+  "Jordi Salas-Salvadó": [
+    {
+      "authIdHal_s": "jordi-salas-salvadó",
+      "authIdHal_i": "0",
+      "labStructName_s": "Instituto de Salud Carlos III [Madrid]",
+      "labStructId_i": "308343"
+    },
+    {
+      "authIdHal_s": "jordi-salas-salvadó",
+      "authIdHal_i": "0",
+      "labStructName_s": "University Rovira i virgili = Universidad Rovira y Virgili = Universitat Rovira i Virgili",
+      "labStructId_i": "550111"
+    }
+  ],
+  "Nathalie Guichard": [
+    {
+      "authIdHal_s": "nathalie-guichard",
+      "authIdHal_i": "1063568",
+      "labStructName_s": "Réseaux Innovation Territoires et Mondialisation",
+      "labStructId_i": "1051119"
+    }
+  ],
+  "Bernard Ruffieux": [
+    {
+      "authIdHal_s": "bernard-ruffieux",
+      "authIdHal_i": "845286",
+      "labStructName_s": "Laboratoire d'Economie Appliquée de Grenoble",
+      "labStructId_i": "1043256"
+    }
+  ],
+  "Jean-Yves Dourmad": [
+    {
+      "authIdHal_s": "jean-yves-dourmad",
+      "authIdHal_i": "744921",
+      "labStructName_s": "Physiologie, Environnement et Génétique pour l'Animal et les Systèmes d'Elevage [Rennes]",
+      "labStructId_i": "1096415"
+    }
+  ],
+  "Brice Isseki": [
+    {
+      "authIdHal_s": "brice-isseki",
+      "authIdHal_i": "1211885",
+      "labStructName_s": "Centre de droit des affaires et de gestion",
+      "labStructId_i": "1004768"
+    }
+  ],
+  "Rami Alkhudary": [
+    {
+      "authIdHal_s": "rami-alkhudary",
+      "authIdHal_i": "1238682",
+      "labStructName_s": "Laboratoire de recherche en sciences de gestion Panthéon-Assas",
+      "labStructId_i": "1096497"
+    }
+  ],
+  "Nadine Khoury": [
+    {
+      "authIdHal_s": "nadine-khoury",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut d'Investigació Sanitària Pere Virgili [Tarragona]",
+      "labStructId_i": "1073808"
+    },
+    {
+      "authIdHal_s": "nadine-khoury",
+      "authIdHal_i": "0",
+      "labStructName_s": "University Rovira i virgili = Universidad Rovira y Virgili = Universitat Rovira i Virgili",
+      "labStructId_i": "550111"
+    }
+  ],
+  "Jeanne Parmentier": [
+    {
+      "authIdHal_s": "jeanne-parmentier",
+      "authIdHal_i": "977194",
+      "labStructName_s": "Institut Villebon – Georges Charpak",
+      "labStructId_i": "551766"
+    }
+  ],
+  "Aurore Ingarao": [
+    {
+      "authIdHal_s": "aurore-ingarao",
+      "authIdHal_i": "183810",
+      "labStructName_s": "Val de Loire Recherche en Management",
+      "labStructId_i": "190457"
+    },
+    {
+      "authIdHal_s": "aurore-ingarao",
+      "authIdHal_i": "183810",
+      "labStructName_s": "Université d'Orléans",
+      "labStructId_i": "300297"
+    }
+  ],
+  "Isabelle Robert": [
+    {
+      "authIdHal_s": "isabelle-robert",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut du Marketing et du Management de la Distribution",
+      "labStructId_i": "1052676"
+    }
+  ],
+  "Marie Schill": [
+    {
+      "authIdHal_s": "marie-schill",
+      "authIdHal_i": "173060",
+      "labStructName_s": "Recherches en Économie Gestion AgroRessources Durabilité Santé- EA 6292",
+      "labStructId_i": "451480"
+    }
+  ],
+  "Louis-Georges Soler": [
+    {
+      "authIdHal_s": "louis-georges-soler",
+      "authIdHal_i": "748321",
+      "labStructName_s": "Paris-Saclay Applied Economics",
+      "labStructId_i": "1084553"
     }
   ]
 }

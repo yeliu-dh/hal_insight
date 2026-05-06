@@ -188,7 +188,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 period_m = (latest_date.year - earliest_date.year) * 12 + (latest_date.month - earliest_date.month)
             else:
                 period_m = 0
-
                     
             # # ---- 自动推荐时间粒度并设置 radio 默认选项 ----
             if period_m <= 12:#一年内，按月度或者季度显示
@@ -201,7 +200,6 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 suggestion = "Tous les 3 ou 5 ans"
                 default_index = 3
 
-
             # else: # 其他默认全局
             # if wc_par_lang :#若按照语言分，则选择全时间段
             #     default_index=0
@@ -212,8 +210,17 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 ["Mensuel","Trimestriel", "Annuel", "Tous les 3 ans","Tous les 5 ans"],
                 index=default_index,
                 horizontal=True,
-            )  
-            time_slices=create_time_slices(df, granularity=granularity, date_field_col=date_field_col)
+            ) 
+            
+            # time slice with time-zone UTC:
+            time_slices = create_time_slices(
+                df,
+                granularity=granularity,
+                date_field_col=date_field_col,
+                force_utc=True 
+            )
+            
+            # time_slices=create_time_slices(df, granularity=granularity, date_field_col=date_field_col)
     
             st.info(f"Période couverte : {earliest_ym} → {latest_ym}  ({period_m} mois).  \n"
                     f"Granularité recommandée pour le nuage de mots évolutif: **{suggestion}**.  \n"
@@ -264,7 +271,9 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 # try :
                 wc=generate_wc_param(df, options, group_by, wc_par_lang, exclude_nan, 
                             max_words, user_stopwords, date_field_col)
-                st.pyplot(wc)           
+                
+                
+                # st.pyplot(wc)           
                 # except Exception as e:
                 #     st.warning(f"ERROR dans le nuage de mots global: {e}")
 
@@ -280,6 +289,8 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                     st.pyplot(evolutif_wc)
                     # except Exception as e:
                         # st.warning(f"ERROR dans le nuage de mots évolutif [global] : {e}")
+
+
 
                 # elif group_by=="Axe" :
                 else:
