@@ -19,18 +19,11 @@ import streamlit as st
 from utils.preprocess import preprocess_text
 
 
-# # axe
-def parse_axes(x):
-    if pd.isna(x):
-        return []
-    return [a.strip() for a in str(x).split(';')]
-
 
 # def parse_axes(x):
 #     if pd.isna(x):
 #         return []
-#     return [int(float(a.strip())) for a in str(x).split(';')]
-
+#     return [str(a).strip() for a in str(x).split(';') if str(a).strip()]
 
 # text
 def build_text(row):
@@ -113,12 +106,25 @@ def preprocess_df_for_topic_modeling(df_input, col_axe):
         col_axe="axe"
     
     df=df[df[col_axe].notna()]
-    st.write(f"[info] filtrer les données par l'axe: {len(df_input)} => {len(df)}")
-    # df=df[df[col_axe].notna()]
+    st.write(f"[info] filtrer les données sans axe: {len(df_input)} => {len(df)}")
     
+    st.info(df['axe'].value_counts(dropna=False))
+    
+        
+    def parse_axes(x):
+        if pd.isna(x):
+            return []
+        return [
+            str(int(float(a))).strip()
+            for a in str(x).split(';')
+            if str(a).strip()
+        ]    
     
     df['axe_list'] = df[col_axe].apply(parse_axes)    
     df['true_axe_list'] = df["axe"].apply(parse_axes)#必然存在
+    st.info(df['axe_list'].value_counts(dropna=False))
+
+
     
     if 'predicted_axe' in df.columns:
         df['predicted_axe_list'] = df["predicted_axe"].apply(parse_axes)
@@ -322,26 +328,7 @@ def generate_force_scatterplot(df):
     
     return fig
 
-# def filter_by_axe(df, axe_id=None, col="axe_list"):
-#     if axe_id is None:
-#         return df.copy()
 
-#     # 统一 axe_id
-#     if not isinstance(axe_id, (list, set, tuple)):
-#         axe_id = [str(axe_id)]
-#     else:
-#         axe_id = [str(a) for a in axe_id]
-
-#     def match(axes):
-#         if pd.isna(axes):
-#             return False
-
-#         axes_str = str(axes)
-
-#         return any(a in axes_str for a in axe_id)
-
-#     return df[df[col].apply(match)].copy()
-    
     
 def filter_by_axe(df, axe_id=None, col="axe_list"):
     """   
@@ -356,7 +343,7 @@ def filter_by_axe(df, axe_id=None, col="axe_list"):
     if axe_id is None:
         return df.copy()
 
-    # 统一成 list
+    # 统一成 list de str,
     if not isinstance(axe_id, (list, set, tuple)):
         axe_id = [str(axe_id)]
     else:
@@ -367,6 +354,27 @@ def filter_by_axe(df, axe_id=None, col="axe_list"):
     )].copy()
         
     return df_filtered
+
+
+# def filter_by_axe(df, axe_id=None, col="axe_list"):
+
+#     if axe_id is None:
+#         return df.copy()
+
+#     if not isinstance(axe_id, (list, set, tuple)):
+#         axe_id = [str(axe_id)]
+#     else:
+#         axe_id = [str(a) for a in axe_id]
+
+#     axe_set = set(axe_id)
+
+#     df_filtered = df[
+#         df[col].apply(
+#             lambda axes: bool(set(axes) & axe_set) if isinstance(axes, list) else False
+#         )
+#     ].copy()
+
+#     return df_filtered
 
 
 

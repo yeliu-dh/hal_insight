@@ -232,14 +232,17 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 #------- preprocess+filter by axe--------
                 
                 df=preprocess_df_for_topic_modeling(df_filtered, col_axe=col_axe)#get 'axe_list'
+                
                 df_axe= filter_by_axe(df, axe_id=axe_id, col="axe_list")
                 
                 st.write(f"[INFO] filtrer selon {col_axe} {','.join(axe_id)}: {len(df_filtered)}=>{len(df_axe)} lignes restent.  \n")    
                 
                 if len(df_axe)==0:
-                    st.warning(f"Aucun article de l'axe {axe_id[0]}!")
+                    st.warning(f"Aucun article contient l'axe {axe_id[0]}! Choisir un autre axe.")
                 elif len(df_axe)<min_topic_size:
                     st.warning(f"La taille minimale de cluster dépasse le nombre total d'articles sur l'axe {axe_id[0]}!")
+                elif min_topic_size==1:
+                    st.warning(f"La taille minimale de cluster doit être supérieure à 1.")
                 else :                   
                     st.session_state[df_axe_key]=df_axe
                 
