@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import os
+import json
 
 
 #my utils
@@ -17,12 +18,18 @@ st.title("🌐Réseau d'occurences ")
 # external_data_dir="../external_data"
 
 @st.cache_data 
-def get_mappings():
-    return {
-        "AUTHOR_STRUCTURE": load_external_json(file_path=r"external_data\auth_struct_map.json")}
+def get_auth_struct_map():
+    path_AUTH_STRUCT_MAP="external_data/auth_struct_map.json"
+    with open(path_AUTH_STRUCT_MAP, 'r', encoding='utf-8')as f:
+        map_auth_struct=json.load(f)
+    return map_auth_struct
 
-maps= get_mappings()
-author_structure=maps["AUTHOR_STRUCTURE"]
+# def get_mappings():
+#     return {
+#         "AUTHOR_STRUCTURE": load_external_json(file_path=r"external_data\auth_struct_map.json")}
+
+author_structure= get_auth_struct_map()
+# author_structure=maps["AUTHOR_STRUCTURE"]
 
 # -------------------------------
 # 1️⃣ 初始化 Session State

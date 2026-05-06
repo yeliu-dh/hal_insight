@@ -438,7 +438,7 @@ if df is not None and not df.empty:
 
 
     #--------------------save filtered df?----------------------
-    save_file_csv_xlsx(df=df,start_year=None, start_month=None, 
+    save_file_csv_xlsx(df=df_filtered,start_year=None, start_month=None, 
                        end_year=None, end_month=None, key_filename="filtered_result")
     
     # -------------------update uploaded_df?-------------------

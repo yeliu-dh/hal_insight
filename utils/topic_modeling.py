@@ -36,7 +36,6 @@ def parse_axes(x):
 def build_text(row):
     """
     collect title, keywords, absatract
-    
     """
     parts = []
     if pd.notna(row['title_s']):
@@ -103,7 +102,6 @@ def preprocess_df_for_topic_modeling(df_input, col_axe):
     
     if col_axe in df.columns:
         st.write(f"[info] procéder selon {col_axe}!")
-
     else :
         st.write(f"[info] {col_axe} not found in df\nprocéder selon 'axe'!")
         col_axe="axe"
