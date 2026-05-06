@@ -237,7 +237,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 st.write(f"[INFO] filtrer selon {col_axe} {','.join(axe_id)}: {len(df_filtered)}=>{len(df_axe)} lignes restent.  \n")    
                 
                 if len(df_axe)==0:
-                    st.warning(f"Auncun article de l'axe {axe_id}!")
+                    st.warning(f"Aucun article de l'axe {axe_id[0]}!")
                 elif len(df_axe)<min_topic_size:
                     st.warning(f"La taille minimale de cluster dépasse le nombre total d'articles sur l'axe {axe_id[0]}!")
                 else :                   

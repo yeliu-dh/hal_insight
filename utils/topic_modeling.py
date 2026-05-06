@@ -322,9 +322,29 @@ def generate_force_scatterplot(df):
     
     return fig
 
+# def filter_by_axe(df, axe_id=None, col="axe_list"):
+#     if axe_id is None:
+#         return df.copy()
 
+#     # 统一 axe_id
+#     if not isinstance(axe_id, (list, set, tuple)):
+#         axe_id = [str(axe_id)]
+#     else:
+#         axe_id = [str(a) for a in axe_id]
+
+#     def match(axes):
+#         if pd.isna(axes):
+#             return False
+
+#         axes_str = str(axes)
+
+#         return any(a in axes_str for a in axe_id)
+
+#     return df[df[col].apply(match)].copy()
+    
+    
 def filter_by_axe(df, axe_id=None, col="axe_list"):
-    """
+    """   
     根据 axe_id 过滤 dataframe
 
     axe_id:
@@ -332,6 +352,7 @@ def filter_by_axe(df, axe_id=None, col="axe_list"):
         - str / int   → 单个 axe
         - list / set  → 多个 axe
     """
+    
     if axe_id is None:
         return df.copy()
 
