@@ -402,7 +402,7 @@ from matplotlib.patches import Circle
 
 def generate_topics_keywords_scatterplot(
         topic_model, df, col_text="clean_text", 
-        axe_id="1",N_WORDS = 5, date_field=None):
+        axe_id="1", N_WORDS = 5, date_field=None):
     
     # PAGE66666666666666666666666
     
@@ -606,18 +606,37 @@ def generate_topics_keywords_scatterplot(
             )
             
     #============================================================================
+    # ---axe---
     axe_title=""
     if len(axe_id)>0:
         axe_title= "sous axe "+", ".join(axe_id) if len(axe_id)>=1 else axe_id[0]
-    df[date_field] = pd.to_datetime(
-            df[date_field],
-            utc=True,
-            errors='coerce'
-        )
-    date_min,date_max = df[date_field].min(), df[date_field].max()
-    date_title=f"{date_min.strftime('%Y/%m')} - {date_max.strftime('%Y/%m')}"
+    
+    
+    
+    # ---date rang---
+    date_title="entre "
+    # st.warning(date_field)
+    # st.warning(f'date_field in df.columns? :{date_field in df.columns}')
+    df[date_field] = pd.to_datetime(df[date_field] , errors="coerce")
+    date_min = df[date_field].min()
+    date_max = df[date_field].max()
+    date_title+=f"{date_min.strftime('%Y/%m')} et {date_max.strftime('%Y/%m')}"
+    
+    # st.write(
+    #     f"{date_title}"
+    #     # f"[info] Date de *{date_field}* entre "
+    #     # f"**{date_min.strftime('%Y/%m/%d')} et {date_max.strftime('%Y/%m/%d')}**"
+    # )
 
-    plt.title(f"Sujets et Mots clés {axe_title} entre {date_title}")
+    # df[date_field] = pd.to_datetime(
+    #         df[date_field],
+    #         utc=True,
+    #         errors='coerce'
+    #     )
+    # date_min,date_max = df[date_field].min(), df[date_field].max()
+    # date_title=f"{date_min.strftime('%Y/%m')} - {date_max.strftime('%Y/%m')}"
+
+    plt.title(f"Sujets et Mots clés {axe_title} {date_title}")
     
     # SHOW topics legend
     topics_sorted = sorted(df_vis.topic.unique())

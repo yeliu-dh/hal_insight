@@ -37,8 +37,28 @@ st.markdown("<br>", unsafe_allow_html=True)
 st.divider() 
 
 st.subheader("📒 README")
-st.write(f"**Model de topic modeling:** BERTopic")
-st.write(f"**Model de réduction de dimension:** UMAP")
+st.write(
+    """
+    **Model de topic modeling:** BERTopic
+    
+    **Model de réduction de dimension:** UMAP
+    
+    Recommandation de paramètres pour BERTopic :
+
+    - Nombre de documents :\n
+        • 200–500 : possible, mais résultats exploratoires (topics moins stables)\n
+        • 500–1000 : acceptable pour une analyse initiale\n        
+        • 2000+ : recommandé pour des topics plus stables et interprétables\n
+
+    - min_topic_size :\n
+        • 3–10 : petits corpus (200–500 documents) / topics très fins\n
+        • 10–30 : usage exploratoire ou corpus moyen\n
+        • 30–50+ : topics plus robustes et généraux (grands corpus)\n
+
+    ps. Les textes en entrée sont construits à partir du **titre, des mots-clés et du résumé** (si disponibles), puis **prétraités et normalisés** (nettoyage, suppression des stopwords, mise en minuscules et lemmatisation).
+    
+    """          
+    )
 
 st.divider() 
 
@@ -50,9 +70,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
   
     # 给输入df加上对应 emb ？
     df_predicted = st.session_state.uploaded_df.copy()
-    
-    
-    
+   
     
     # 重新生成emb？不需要原来的emb
     # df_all_emb_path="external_data/embeddings_all/df_all_3emb.parquet"
@@ -81,19 +99,21 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                         "publication":"publicationDate_tdate"
                         }
     date_field_col=date_field_col_map.get(date_field,None)
+    # ex.publicationDate_s
     if date_field_col not in df_predicted.columns:
         date_field_col=date_field_col.split('_')[0]+"_s"
-
+    # st.info(f"{date_field_col} in df_predicted!")
+    
+    
     # ---date rang---
     df_predicted[date_field_col] = pd.to_datetime(
         df_predicted[date_field_col], errors="coerce"
     )
     date_min = df_predicted[date_field_col].min()
     date_max = df_predicted[date_field_col].max()
-
     st.write(
-        f"[info] Date de *{date_field}* entre : "
-        f"**{date_min.strftime('%Y/%m/%d')} → {date_max.strftime('%Y/%m/%d')}**"
+        f"[info] Date de *{date_field}* entre "
+        f"**{date_min.strftime('%Y/%m/%d')} et {date_max.strftime('%Y/%m/%d')}**"
     )
 
 
@@ -166,7 +186,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     
     #-------------------topic size----------------------
     range_topic_size = list(range(0,100))
-    min_topic_size = st.selectbox("**Définir la taille minimale d'articles pour former un sujet:**", range_topic_size, index=10)#整除
+    min_topic_size = st.selectbox("**Définir la taille minimale d'articles pour former un sujet:**", range_topic_size, index=5)#整除
     # st.markdown("Moins de nombre d'articles à analyse!")
         
     #------------------top n keywords-------------------
@@ -190,7 +210,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             # col_axe='final_axe' if 'final_axe' in df_predicted.columns else 'axe'
             df_axe_key=f"df_{col_axe}_{'_'.join(axe_id)}"
             date_key=f"{start_year}_{start_month}-{end_year}_{end_month}"
-            topic_model_key=f"topic_model_{date_key}-axe{'_'.join(axe_id)}-{min_topic_size}"
+            topic_model_key=f"topic_model_{date_key}-{len(df_predicted)}arts-axe{'_'.join(axe_id)}-{min_topic_size}"
             # st.write(f"[KEYS] {topic_model_key}")
             
             if not topic_model_key in st.session_state:
@@ -204,7 +224,10 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 else :
                     df_filtered=df_predicted.copy()
                     st.write(f'[INFO] pas de filtrage de date appliqué!')
-                    
+                
+                
+                st.warning(f"{date_field_col}in df_filtered? {date_field_col in df_filtered.columns}")
+
                     
                 #------- preprocess+filter by axe--------
                 
@@ -212,6 +235,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 df_axe= filter_by_axe(df, axe_id=axe_id, col="axe_list")
                 
                 st.write(f"[INFO] filtrer selon {col_axe} {','.join(axe_id)}: {len(df_filtered)}=>{len(df_axe)} lignes restent.  \n")    
+                
                 if len(df_axe)==0:
                     st.warning(f"Auncun article de l'axe {axe_id}!")
                 elif len(df_axe)<min_topic_size:
@@ -220,6 +244,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                     st.session_state[df_axe_key]=df_axe
                 
                 # topic modeling
+                
                 topic_model=get_topics_per_axe(df=df_axe, col_text='clean_text', min_topic_size=min_topic_size)
                 st.session_state[topic_model_key]=topic_model
             else :   
