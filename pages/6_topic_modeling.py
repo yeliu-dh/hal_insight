@@ -134,7 +134,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     
     col_axe = st.selectbox("**Sur quels axes ?**", 
             options=AXE_COL_MAP.keys(), 
-            index=list(AXE_COL_MAP.keys()).index('final_axe'), 
+            index=list(AXE_COL_MAP.keys()).index('axe'),# final_axe 
             format_func=lambda x: AXE_COL_MAP[x],
             key=f"col_axe")#JAN!
 
@@ -158,7 +158,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     axe_id = st.multiselect(
         "**Choisir l'axe thématique:**",
         options=["1","2","3","4"],
-        default=["1"]
+        default=["3"]
     )
     st.divider()
     # # 按照axe，predicted_axe, final_axe？
@@ -166,7 +166,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     
     #-------------------topic size----------------------
     range_topic_size = list(range(0,100))
-    min_topic_size = st.selectbox("**Définir la taille minimale d'articles pour former un sujet:**", range_topic_size, index=20)#整除
+    min_topic_size = st.selectbox("**Définir la taille minimale d'articles pour former un sujet:**", range_topic_size, index=10)#整除
     # st.markdown("Moins de nombre d'articles à analyse!")
         
     #------------------top n keywords-------------------
@@ -210,8 +210,14 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 
                 df=preprocess_df_for_topic_modeling(df_filtered, col_axe=col_axe)#get 'axe_list'
                 df_axe= filter_by_axe(df, axe_id=axe_id, col="axe_list")
+                
                 st.write(f"[INFO] filtrer selon {col_axe} {','.join(axe_id)}: {len(df_filtered)}=>{len(df_axe)} lignes restent.  \n")    
-                st.session_state[df_axe_key]=df_axe
+                if len(df_axe)==0:
+                    st.warning(f"Auncun article de l'axe {axe_id}!")
+                elif len(df_axe)<min_topic_size:
+                    st.warning(f"La taille minimale de cluster dépasse le nombre total d'articles sur l'axe {axe_id[0]}!")
+                else :                   
+                    st.session_state[df_axe_key]=df_axe
                 
                 # topic modeling
                 topic_model=get_topics_per_axe(df=df_axe, col_text='clean_text', min_topic_size=min_topic_size)
