@@ -615,26 +615,10 @@ def generate_topics_keywords_scatterplot(
     
     # ---date rang---
     date_title="entre "
-    # st.warning(date_field)
-    # st.warning(f'date_field in df.columns? :{date_field in df.columns}')
     df[date_field] = pd.to_datetime(df[date_field] , errors="coerce")
     date_min = df[date_field].min()
     date_max = df[date_field].max()
     date_title+=f"{date_min.strftime('%Y/%m')} et {date_max.strftime('%Y/%m')}"
-    
-    # st.write(
-    #     f"{date_title}"
-    #     # f"[info] Date de *{date_field}* entre "
-    #     # f"**{date_min.strftime('%Y/%m/%d')} et {date_max.strftime('%Y/%m/%d')}**"
-    # )
-
-    # df[date_field] = pd.to_datetime(
-    #         df[date_field],
-    #         utc=True,
-    #         errors='coerce'
-    #     )
-    # date_min,date_max = df[date_field].min(), df[date_field].max()
-    # date_title=f"{date_min.strftime('%Y/%m')} - {date_max.strftime('%Y/%m')}"
 
     plt.title(f"Sujets et Mots clés {axe_title} {date_title}")
     

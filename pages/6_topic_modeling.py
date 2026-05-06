@@ -102,6 +102,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     # ex.publicationDate_s
     if date_field_col not in df_predicted.columns:
         date_field_col=date_field_col.split('_')[0]+"_s"
+    
     # st.info(f"{date_field_col} in df_predicted!")
     
     
@@ -225,8 +226,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                     df_filtered=df_predicted.copy()
                     st.write(f'[INFO] pas de filtrage de date appliqué!')
                 
-                
-                st.warning(f"{date_field_col}in df_filtered? {date_field_col in df_filtered.columns}")
+                # st.warning(f"{date_field_col} in df_filtered? {date_field_col in df_filtered.columns}")
 
                     
                 #------- preprocess+filter by axe--------
