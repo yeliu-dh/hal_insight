@@ -29,6 +29,12 @@
       "authIdHal_i": "2644",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "57129"
+    },
+    {
+      "authIdHal_s": "amina-béji-bécheur",
+      "authIdHal_i": "2644",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
     }
   ],
   "Florence Allard-Poesi": [
@@ -425,18 +431,6 @@
       "authIdHal_i": "8339",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "1004418"
-    },
-    {
-      "authIdHal_s": "hajar-el-karmouni",
-      "authIdHal_i": "8339",
-      "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
-    },
-    {
-      "authIdHal_s": "hajar-el-karmouni",
-      "authIdHal_i": "0",
-      "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "1004418"
     }
   ],
   "Cécile Fonrouge": [
@@ -506,7 +500,7 @@
       "authIdHal_s": "alix-poels",
       "authIdHal_i": "9596",
       "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
+      "labStructId_i": "1004418"
     }
   ],
   "Julie Tixier": [
@@ -969,18 +963,6 @@
       "authIdHal_i": "8491",
       "labStructName_s": "Centre de Recherche sur les Institutions, l'Industrie et les Systèmes Économiques d'Amiens - UR UPJV 3908",
       "labStructId_i": "199527"
-    },
-    {
-      "authIdHal_s": "marion-maignan",
-      "authIdHal_i": "8491",
-      "labStructName_s": "Université Paris-Est",
-      "labStructId_i": "303005"
-    },
-    {
-      "authIdHal_s": "marion-maignan",
-      "authIdHal_i": "8491",
-      "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
     }
   ],
   "Laurent Gardin": [
@@ -1722,9 +1704,15 @@
   "Lucie Chartouny": [
     {
       "authIdHal_s": "lucie-chartouny",
-      "authIdHal_i": "1617245",
-      "labStructName_s": "Dauphine Recherches en Management",
-      "labStructId_i": "1032"
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "lucie-chartouny",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut d'Administration des Entreprises - Paris-Est",
+      "labStructId_i": "176728"
     }
   ],
   "Jean-Claude Pacitto": [
@@ -2476,6 +2464,30 @@
   "Emmanuelle Kesse-Guyot": [
     {
       "authIdHal_s": "emmanuelle-kesse-guyot",
+      "authIdHal_i": "736379",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    },
+    {
+      "authIdHal_s": "emmanuelle-kesse-guyot",
+      "authIdHal_i": "736379",
+      "labStructName_s": "Centre de Recherche Épidémiologie et Statistique Sorbonne Paris Cité",
+      "labStructId_i": "446175"
+    },
+    {
+      "authIdHal_s": "emmanuelle-kesse-guyot",
+      "authIdHal_i": "736379",
+      "labStructName_s": "Equipe 3: EREN- Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "516244"
+    },
+    {
+      "authIdHal_s": "emmanuelle-kesse-guyot",
+      "authIdHal_i": "736379",
+      "labStructName_s": "Centre for Research in Epidemiology and Statistics | Centre de Recherche Épidémiologie et Statistiques",
+      "labStructId_i": "1002409"
+    },
+    {
+      "authIdHal_s": "emmanuelle-kesse-guyot",
       "authIdHal_i": "0",
       "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
       "labStructId_i": "1001914"
@@ -2483,8 +2495,8 @@
     {
       "authIdHal_s": "emmanuelle-kesse-guyot",
       "authIdHal_i": "736379",
-      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
-      "labStructId_i": "1001914"
+      "labStructName_s": "Réseau Nutrition Activité Physique Cancer Recherche (Réseau NACRe)",
+      "labStructId_i": "1549164"
     }
   ],
   "Céline Vial": [
@@ -2511,6 +2523,24 @@
     {
       "authIdHal_s": "sandrine-péneau",
       "authIdHal_i": "754586",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    },
+    {
+      "authIdHal_s": "sandrine-péneau",
+      "authIdHal_i": "754586",
+      "labStructName_s": "Centre de Recherche Épidémiologie et Statistique Sorbonne Paris Cité",
+      "labStructId_i": "446175"
+    },
+    {
+      "authIdHal_s": "sandrine-péneau",
+      "authIdHal_i": "754586",
+      "labStructName_s": "Equipe 3: EREN- Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "516244"
+    },
+    {
+      "authIdHal_s": "sandrine-péneau",
+      "authIdHal_i": "0",
       "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
       "labStructId_i": "1001914"
     }
@@ -2745,6 +2775,18 @@
       "authIdHal_i": "1284322",
       "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
       "labStructId_i": "1001914"
+    },
+    {
+      "authIdHal_s": "bernard-srour",
+      "authIdHal_i": "1284322",
+      "labStructName_s": "Réseau Nutrition Activité Physique Cancer Recherche (Réseau NACRe)",
+      "labStructId_i": "1549164"
+    },
+    {
+      "authIdHal_s": "bernard-srour",
+      "authIdHal_i": "1284322",
+      "labStructName_s": "Equipe 3: EREN- Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "516244"
     }
   ],
   "Mohamed Akil": [
@@ -2781,8 +2823,26 @@
     {
       "authIdHal_s": "mathilde-touvier",
       "authIdHal_i": "1136541",
-      "labStructName_s": "Collège de France - Chaire annuelle Santé publique",
-      "labStructId_i": "1226965"
+      "labStructName_s": "Centre de Recherche Épidémiologie et Statistique Sorbonne Paris Cité",
+      "labStructId_i": "446175"
+    },
+    {
+      "authIdHal_s": "mathilde-touvier",
+      "authIdHal_i": "1136541",
+      "labStructName_s": "Equipe 3: EREN- Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "516244"
+    },
+    {
+      "authIdHal_s": "mathilde-touvier",
+      "authIdHal_i": "1136541",
+      "labStructName_s": "Centre for Research in Epidemiology and Statistics | Centre de Recherche Épidémiologie et Statistiques",
+      "labStructId_i": "1002409"
+    },
+    {
+      "authIdHal_s": "mathilde-touvier",
+      "authIdHal_i": "1136541",
+      "labStructName_s": "Réseau Nutrition Activité Physique Cancer Recherche (Réseau NACRe)",
+      "labStructId_i": "1549164"
     }
   ],
   "Valentina Carbone": [
@@ -3396,13 +3456,13 @@
   "Jean-Laurent Agram": [
     {
       "authIdHal_s": "jean-laurent-agram",
-      "authIdHal_i": "0",
+      "authIdHal_i": "1147753",
       "labStructName_s": "Institut Pluridisciplinaire Hubert Curien",
       "labStructId_i": "93777"
     },
     {
       "authIdHal_s": "jean-laurent-agram",
-      "authIdHal_i": "0",
+      "authIdHal_i": "1147753",
       "labStructName_s": "Université de Haute-Alsace (UHA) Mulhouse - Colmar",
       "labStructId_i": "237692"
     }
@@ -3546,7 +3606,7 @@
   "Jean-Marie Brom": [
     {
       "authIdHal_s": "jean-marie-brom",
-      "authIdHal_i": "0",
+      "authIdHal_i": "860823",
       "labStructName_s": "Institut Pluridisciplinaire Hubert Curien",
       "labStructId_i": "93777"
     }
@@ -3786,7 +3846,7 @@
   "Dylan Apparu": [
     {
       "authIdHal_s": "dylan-apparu",
-      "authIdHal_i": "0",
+      "authIdHal_i": "1351996",
       "labStructName_s": "Institut Pluridisciplinaire Hubert Curien",
       "labStructId_i": "93777"
     }
@@ -3811,12 +3871,6 @@
     {
       "authIdHal_s": "matthew-nguyen",
       "authIdHal_i": "0",
-      "labStructName_s": "Laboratoire Leprince-Ringuet",
-      "labStructId_i": "127"
-    },
-    {
-      "authIdHal_s": "matthew-nguyen",
-      "authIdHal_i": "740682",
       "labStructName_s": "Laboratoire Leprince-Ringuet",
       "labStructId_i": "127"
     }
@@ -4358,21 +4412,9 @@
   "Julien Schmitt": [
     {
       "authIdHal_s": "julien-schmitt",
-      "authIdHal_i": "740947",
-      "labStructName_s": "Neurodegeneration Cluster, Rare & Neurologic Diseases Research",
-      "labStructId_i": "1056396"
-    },
-    {
-      "authIdHal_s": "julien-schmitt",
-      "authIdHal_i": "740947",
-      "labStructName_s": "Neuroscience Paris Seine",
-      "labStructId_i": "542136"
-    },
-    {
-      "authIdHal_s": "julien-schmitt",
-      "authIdHal_i": "740947",
-      "labStructName_s": "CeZaMe - Cervelet, navigation et mémoire = Memory, Navigation and Aging",
-      "labStructId_i": "542149"
+      "authIdHal_i": "0",
+      "labStructName_s": "Ecole Supérieure de Commerce de Paris",
+      "labStructId_i": "327869"
     }
   ],
   "Lionel Garreau": [
@@ -7127,42 +7169,6 @@
       "authIdHal_i": "1285757",
       "labStructName_s": "Réseaux Innovation Territoires et Mondialisation",
       "labStructId_i": "1051119"
-    },
-    {
-      "authIdHal_s": "lydiane-nabec",
-      "authIdHal_i": "1285757",
-      "labStructName_s": "Réseaux Innovation Territoires et Mondialisation",
-      "labStructId_i": "243551"
-    },
-    {
-      "authIdHal_s": "lydiane-nabec",
-      "authIdHal_i": "1285757",
-      "labStructName_s": "Université Paris-Saclay",
-      "labStructId_i": "419361"
-    },
-    {
-      "authIdHal_s": "lydiane-nabec",
-      "authIdHal_i": "0",
-      "labStructName_s": "Réseaux Innovation Territoires et Mondialisation",
-      "labStructId_i": "1051119"
-    },
-    {
-      "authIdHal_s": "lydiane-nabec",
-      "authIdHal_i": "1270255",
-      "labStructName_s": "Réseaux Innovation Territoires et Mondialisation",
-      "labStructId_i": "1051119"
-    },
-    {
-      "authIdHal_s": "lydiane-nabec",
-      "authIdHal_i": "1270255",
-      "labStructName_s": "Université Paris-Saclay",
-      "labStructId_i": "419361"
-    },
-    {
-      "authIdHal_s": "lydiane-nabec",
-      "authIdHal_i": "1285757",
-      "labStructName_s": "Université Paris-Sud - Paris 11",
-      "labStructId_i": "92966"
     }
   ],
   "Virginie Rodriguez": [
@@ -7194,33 +7200,9 @@
   "Nil Özçağlar-Toulouse": [
     {
       "authIdHal_s": "nil-özçağlar-toulouse",
-      "authIdHal_i": "0",
-      "labStructName_s": "SKEMA Business School",
-      "labStructId_i": "344663"
-    },
-    {
-      "authIdHal_s": "nil-özçağlar-toulouse",
-      "authIdHal_i": "0",
+      "authIdHal_i": "851776",
       "labStructName_s": "Université de Lille",
       "labStructId_i": "374570"
-    },
-    {
-      "authIdHal_s": "nil-özçağlar-toulouse",
-      "authIdHal_i": "851776",
-      "labStructName_s": "Lille School of Management Research Center - ULR 4112",
-      "labStructId_i": "109040"
-    },
-    {
-      "authIdHal_s": "nil-özçağlar-toulouse",
-      "authIdHal_i": "1309890",
-      "labStructName_s": "Lille University Management Lab - ULR 4999",
-      "labStructId_i": "1071874"
-    },
-    {
-      "authIdHal_s": "nil-özçağlar-toulouse",
-      "authIdHal_i": "0",
-      "labStructName_s": "Lille School of Management Research Center - ULR 4112",
-      "labStructId_i": "109040"
     }
   ],
   "Hélène Gorge": [
@@ -7362,6 +7344,12 @@
   "Chantal Julia": [
     {
       "authIdHal_s": "chantal-julia",
+      "authIdHal_i": "0",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    },
+    {
+      "authIdHal_s": "chantal-julia",
       "authIdHal_i": "801128",
       "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
       "labStructId_i": "1001914"
@@ -7369,8 +7357,14 @@
     {
       "authIdHal_s": "chantal-julia",
       "authIdHal_i": "0",
-      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
-      "labStructId_i": "1001914"
+      "labStructName_s": "Hôpital Avicenne [AP-HP]",
+      "labStructId_i": "300210"
+    },
+    {
+      "authIdHal_s": "chantal-julia",
+      "authIdHal_i": "801128",
+      "labStructName_s": "Centre de Recherche Épidémiologie et Statistique Sorbonne Paris Cité",
+      "labStructId_i": "446175"
     }
   ],
   "Morgane Fialon": [
@@ -7399,6 +7393,18 @@
       "authIdHal_i": "756893",
       "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
       "labStructId_i": "1001914"
+    },
+    {
+      "authIdHal_s": "pilar-galan",
+      "authIdHal_i": "756893",
+      "labStructName_s": "Equipe 3: EREN- Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "516244"
+    },
+    {
+      "authIdHal_s": "pilar-galan",
+      "authIdHal_i": "756893",
+      "labStructName_s": "Centre de Recherche Épidémiologie et Statistique Sorbonne Paris Cité",
+      "labStructId_i": "446175"
     }
   ],
   "Brice Isséki": [
@@ -7448,9 +7454,45 @@
   "Serge Hercberg": [
     {
       "authIdHal_s": "serge-hercberg",
+      "authIdHal_i": "1136672",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    },
+    {
+      "authIdHal_s": "serge-hercberg",
+      "authIdHal_i": "1136672",
+      "labStructName_s": "Hôpital Avicenne [AP-HP]",
+      "labStructId_i": "300210"
+    },
+    {
+      "authIdHal_s": "serge-hercberg",
+      "authIdHal_i": "1136672",
+      "labStructName_s": "Centre de Recherche Épidémiologie et Statistique Sorbonne Paris Cité",
+      "labStructId_i": "446175"
+    },
+    {
+      "authIdHal_s": "serge-hercberg",
+      "authIdHal_i": "1136672",
+      "labStructName_s": "Equipe 3: EREN- Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "516244"
+    },
+    {
+      "authIdHal_s": "serge-hercberg",
       "authIdHal_i": "0",
       "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
       "labStructId_i": "1001914"
+    },
+    {
+      "authIdHal_s": "serge-hercberg",
+      "authIdHal_i": "1136672",
+      "labStructName_s": "Département de Santé Publique [Avicenne]",
+      "labStructId_i": "1003713"
+    },
+    {
+      "authIdHal_s": "serge-hercberg",
+      "authIdHal_i": "1136672",
+      "labStructName_s": "Département de Santé Publique",
+      "labStructId_i": "428170"
     }
   ],
   "Mar Pérezts": [
@@ -7541,6 +7583,12 @@
       "authIdHal_i": "183648",
       "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
       "labStructId_i": "1001914"
+    },
+    {
+      "authIdHal_s": "mélanie-deschasaux-tanguy",
+      "authIdHal_i": "183648",
+      "labStructName_s": "Réseau Nutrition Activité Physique Cancer Recherche (Réseau NACRe)",
+      "labStructId_i": "1549164"
     }
   ],
   "Arnaud Hélias": [
@@ -7741,6 +7789,768 @@
       "authIdHal_i": "748321",
       "labStructName_s": "Paris-Saclay Applied Economics",
       "labStructId_i": "1084553"
+    }
+  ],
+  "Charlotte Leduc": [
+    {
+      "authIdHal_s": "charlotte-leduc",
+      "authIdHal_i": "1028520",
+      "labStructName_s": "Institut national de recherches archéologiques préventives - Centre de recherches archéologiques de Metz",
+      "labStructId_i": "406093"
+    }
+  ],
+  "Cécile Foucher": [
+    {
+      "authIdHal_s": "cécile-foucher",
+      "authIdHal_i": "0",
+      "labStructName_s": "Bibliothèque nationale de France, Département des Métadonnées",
+      "labStructId_i": "474645"
+    }
+  ],
+  "Anne Gebhardt-Even": [
+    {
+      "authIdHal_s": "anne-gebhardt-even",
+      "authIdHal_i": "751763",
+      "labStructName_s": "Laboratoire Image, Ville, Environnement",
+      "labStructId_i": "441830"
+    }
+  ],
+  "Hélène Beraud": [
+    {
+      "authIdHal_s": "hélène-beraud",
+      "authIdHal_i": "15699",
+      "labStructName_s": "LAB'URBA",
+      "labStructId_i": "1004423"
+    }
+  ],
+  "Michel Fontugne": [
+    {
+      "authIdHal_s": "michel-fontugne",
+      "authIdHal_i": "1275639",
+      "labStructName_s": "Laboratoire des Sciences du Climat et de l'Environnement [Gif-sur-Yvette]",
+      "labStructId_i": "518"
+    },
+    {
+      "authIdHal_s": "michel-fontugne",
+      "authIdHal_i": "1275639",
+      "labStructName_s": "Géochrononologie Traceurs Archéométrie",
+      "labStructId_i": "578523"
+    }
+  ],
+  "Evelyne Lhoste": [
+    {
+      "authIdHal_s": "evelyne-lhoste",
+      "authIdHal_i": "6983",
+      "labStructName_s": "Laboratoire Interdisciplinaire Sciences, Innovations, Sociétés",
+      "labStructId_i": "1002420"
+    }
+  ],
+  "Lorreine Petters": [
+    {
+      "authIdHal_s": "lorreine-petters",
+      "authIdHal_i": "0",
+      "labStructName_s": "Groupe de Recherche sur les Enjeux de la Communication",
+      "labStructId_i": "1043219"
+    }
+  ],
+  "Amélie Da Costa": [
+    {
+      "authIdHal_s": "amélie-da-costa",
+      "authIdHal_i": "1212237",
+      "labStructName_s": "Archéologies et Sciences de l'Antiquité",
+      "labStructId_i": "1003"
+    },
+    {
+      "authIdHal_s": "amélie-da-costa",
+      "authIdHal_i": "1212237",
+      "labStructName_s": "Anthropologie des techniques, des espaces et des territoires au Pliocène et au Pléistocène",
+      "labStructId_i": "461550"
+    }
+  ],
+  "Gilles Hubert": [
+    {
+      "authIdHal_s": "gilles-hubert",
+      "authIdHal_i": "0",
+      "labStructName_s": "Recherche d’Information et Synthèse d’Information",
+      "labStructId_i": "1001827"
+    }
+  ],
+  "Emanuela Dalmasso": [
+    {
+      "authIdHal_s": "emanuela-dalmasso",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Barbara Blin-Barrois": [
+    {
+      "authIdHal_s": "barbara-blin-barrois",
+      "authIdHal_i": "1426353",
+      "labStructName_s": "Sciences Po Aix - Institut d'études politiques d'Aix-en-Provence",
+      "labStructId_i": "7377"
+    }
+  ],
+  "Salomon Bernier-Kheddache": [
+    {
+      "authIdHal_s": "salomon-bernier-kheddache",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Amal Sofia Dyntsikou": [
+    {
+      "authIdHal_s": "amal-sofia-dyntsikou",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut des hautes études commerciales (Carthage, Tunisie)",
+      "labStructId_i": "56706"
+    }
+  ],
+  "Ghassan Waïl El Karmouni": [
+    {
+      "authIdHal_s": "ghassan-waïl-el-karmouni",
+      "authIdHal_i": "0",
+      "labStructName_s": "Journaliste",
+      "labStructId_i": "194058"
+    }
+  ],
+  "Aurélie Salavert": [
+    {
+      "authIdHal_s": "aurélie-salavert",
+      "authIdHal_i": "170789",
+      "labStructName_s": "BioArchéologie, Interactions Sociétés Environnements",
+      "labStructId_i": "1225933"
+    }
+  ],
+  "Colas Guéret": [
+    {
+      "authIdHal_s": "colas-guéret",
+      "authIdHal_i": "174849",
+      "labStructName_s": "Centre National de la Recherche Scientifique",
+      "labStructId_i": "441569"
+    }
+  ],
+  "Bénédicte Souffi": [
+    {
+      "authIdHal_s": "bénédicte-souffi",
+      "authIdHal_i": "18360",
+      "labStructName_s": "Institut national de recherches archéologiques préventives - Centre de recherches archéologiques de La Courneuve",
+      "labStructId_i": "525323"
+    }
+  ],
+  "Caroline Hamon": [
+    {
+      "authIdHal_s": "caroline-hamon",
+      "authIdHal_i": "738603",
+      "labStructName_s": "Trajectoires - UMR 8215",
+      "labStructId_i": "217516"
+    }
+  ],
+  "Jacques Pelegrin": [
+    {
+      "authIdHal_s": "jacques-pelegrin",
+      "authIdHal_i": "180835",
+      "labStructName_s": "Préhistoire et Technologie",
+      "labStructId_i": "1014"
+    }
+  ],
+  "Antoine Lourdeau": [
+    {
+      "authIdHal_s": "antoine-lourdeau",
+      "authIdHal_i": "179309",
+      "labStructName_s": "Histoire naturelle de l'Homme préhistorique",
+      "labStructId_i": "121947"
+    }
+  ],
+  "Yasmine Boughzala": [
+    {
+      "authIdHal_s": "yasmine-boughzala",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut Supérieur de Gestion de Tunis [Tunis]",
+      "labStructId_i": "132991"
+    }
+  ],
+  "Laure Scoutelis": [
+    {
+      "authIdHal_s": "laure-scoutelis",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut d'Administration des Entreprises - Paris-Est",
+      "labStructId_i": "176728"
+    }
+  ],
+  "Valerie Guillard": [
+    {
+      "authIdHal_s": "valerie-guillard",
+      "authIdHal_i": "0",
+      "labStructName_s": "DRM ERMES",
+      "labStructId_i": "394096"
+    }
+  ],
+  "Louise Adèle Lecomte": [
+    {
+      "authIdHal_s": "louise-adèle-lecomte",
+      "authIdHal_i": "1640983",
+      "labStructName_s": "Iaelyon School of Management",
+      "labStructId_i": "1089520"
+    }
+  ],
+  "Sandra Renou": [
+    {
+      "authIdHal_s": "sandra-renou",
+      "authIdHal_i": "737444",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Christine Hatté": [
+    {
+      "authIdHal_s": "christine-hatté",
+      "authIdHal_i": "7401",
+      "labStructName_s": "Laboratoire des Sciences du Climat et de l'Environnement [Gif-sur-Yvette]",
+      "labStructId_i": "518"
+    },
+    {
+      "authIdHal_s": "christine-hatté",
+      "authIdHal_i": "7401",
+      "labStructName_s": "Géochrononologie Traceurs Archéométrie",
+      "labStructId_i": "578523"
+    }
+  ],
+  "Sylvain Griselin": [
+    {
+      "authIdHal_s": "sylvain-griselin",
+      "authIdHal_i": "1106434",
+      "labStructName_s": "Ethnologie préhistorique",
+      "labStructId_i": "392795"
+    }
+  ],
+  "Francesco Orlandi": [
+    {
+      "authIdHal_s": "francesco-orlandi",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
+    }
+  ],
+  "David Amram": [
+    {
+      "authIdHal_s": "david-amram",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Elise Jourd'Huy": [
+    {
+      "authIdHal_s": "elise-jourd'huy",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Physique des 2 Infinis de Lyon",
+      "labStructId_i": "572233"
+    }
+  ],
+  "Paul Vaucelle": [
+    {
+      "authIdHal_s": "paul-vaucelle",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut Pluridisciplinaire Hubert Curien",
+      "labStructId_i": "93777"
+    }
+  ],
+  "Adriano Di Florio": [
+    {
+      "authIdHal_s": "adriano-di-florio",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre de Calcul de l'IN2P3",
+      "labStructId_i": "496"
+    }
+  ],
+  "Lourdes Urda Gómez": [
+    {
+      "authIdHal_s": "lourdes-urda-gómez",
+      "authIdHal_i": "0",
+      "labStructName_s": "Laboratoire Leprince-Ringuet",
+      "labStructId_i": "127"
+    }
+  ],
+  "Julia Baudry": [
+    {
+      "authIdHal_s": "julia-baudry",
+      "authIdHal_i": "736502",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    },
+    {
+      "authIdHal_s": "julia-baudry",
+      "authIdHal_i": "736502",
+      "labStructName_s": "Centre de Recherche Épidémiologie et Statistique Sorbonne Paris Cité",
+      "labStructId_i": "446175"
+    },
+    {
+      "authIdHal_s": "julia-baudry",
+      "authIdHal_i": "736502",
+      "labStructName_s": "Centre for Research in Epidemiology and Statistics | Centre de Recherche Épidémiologie et Statistiques",
+      "labStructId_i": "1002409"
+    },
+    {
+      "authIdHal_s": "julia-baudry",
+      "authIdHal_i": "736502",
+      "labStructName_s": "Equipe 3: EREN- Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "516244"
+    },
+    {
+      "authIdHal_s": "julia-baudry",
+      "authIdHal_i": "0",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Benjamin Allès": [
+    {
+      "authIdHal_s": "benjamin-allès",
+      "authIdHal_i": "746164",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    },
+    {
+      "authIdHal_s": "benjamin-allès",
+      "authIdHal_i": "746164",
+      "labStructName_s": "Centre de Recherche Épidémiologie et Statistique Sorbonne Paris Cité",
+      "labStructId_i": "446175"
+    },
+    {
+      "authIdHal_s": "benjamin-allès",
+      "authIdHal_i": "746164",
+      "labStructName_s": "Equipe 3: EREN- Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "516244"
+    },
+    {
+      "authIdHal_s": "benjamin-allès",
+      "authIdHal_i": "746164",
+      "labStructName_s": "Centre for Research in Epidemiology and Statistics | Centre de Recherche Épidémiologie et Statistiques",
+      "labStructId_i": "1002409"
+    }
+  ],
+  "François Mariotti": [
+    {
+      "authIdHal_s": "françois-mariotti",
+      "authIdHal_i": "14842",
+      "labStructName_s": "Physiologie de la Nutrition et du Comportement Alimentaire",
+      "labStructId_i": "1002309"
+    }
+  ],
+  "Hélène Fouillet": [
+    {
+      "authIdHal_s": "hélène-fouillet",
+      "authIdHal_i": "19212",
+      "labStructName_s": "Physiologie de la Nutrition et du Comportement Alimentaire",
+      "labStructId_i": "1002309"
+    }
+  ],
+  "Denis Lairon": [
+    {
+      "authIdHal_s": "denis-lairon",
+      "authIdHal_i": "759059",
+      "labStructName_s": "Centre recherche en CardioVasculaire et Nutrition = Center for CardioVascular and Nutrition research",
+      "labStructId_i": "1002339"
+    },
+    {
+      "authIdHal_s": "denis-lairon",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre recherche en CardioVasculaire et Nutrition = Center for CardioVascular and Nutrition research",
+      "labStructId_i": "1002339"
+    },
+    {
+      "authIdHal_s": "denis-lairon",
+      "authIdHal_i": "0",
+      "labStructName_s": "Nutrition, obésité et risque thrombotique",
+      "labStructId_i": "180118"
+    }
+  ],
+  "Philippe Pointereau": [
+    {
+      "authIdHal_s": "philippe-pointereau",
+      "authIdHal_i": "1034461",
+      "labStructName_s": "Association Solagro",
+      "labStructId_i": "1003714"
+    },
+    {
+      "authIdHal_s": "philippe-pointereau",
+      "authIdHal_i": "0",
+      "labStructName_s": "Association Solagro",
+      "labStructId_i": "1003714"
+    }
+  ],
+  "Malo Mofakhami": [
+    {
+      "authIdHal_s": "malo-mofakhami",
+      "authIdHal_i": "20938",
+      "labStructName_s": "Centre d'études de l'emploi et du travail",
+      "labStructId_i": "480325"
+    },
+    {
+      "authIdHal_s": "malo-mofakhami",
+      "authIdHal_i": "20938",
+      "labStructName_s": "Centre d'Economie de l'Université Paris Nord",
+      "labStructId_i": "1001031"
+    },
+    {
+      "authIdHal_s": "malo-mofakhami",
+      "authIdHal_i": "20938",
+      "labStructName_s": "Institut de Recherche Interdisciplinaire sur les enjeux Sociaux - sciences sociales, politique, santé",
+      "labStructId_i": "1001018"
+    }
+  ],
+  "Caroline Méjean": [
+    {
+      "authIdHal_s": "caroline-méjean",
+      "authIdHal_i": "735759",
+      "labStructName_s": "Marchés, Organisations, Institutions et Stratégies d'Acteurs",
+      "labStructId_i": "28445"
+    },
+    {
+      "authIdHal_s": "caroline-méjean",
+      "authIdHal_i": "735759",
+      "labStructName_s": "Centre de Recherche Épidémiologie et Statistique Sorbonne Paris Cité",
+      "labStructId_i": "446175"
+    },
+    {
+      "authIdHal_s": "caroline-méjean",
+      "authIdHal_i": "735759",
+      "labStructName_s": "Equipe 3: EREN- Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "516244"
+    }
+  ],
+  "Mohamed Khenissi": [
+    {
+      "authIdHal_s": "mohamed-khenissi",
+      "authIdHal_i": "1162159",
+      "labStructName_s": "Laboratoire de Recherche Magellan",
+      "labStructId_i": "171535"
+    },
+    {
+      "authIdHal_s": "mohamed-khenissi",
+      "authIdHal_i": "1162159",
+      "labStructName_s": "Centre d'études et de recherches appliquées à la gestion",
+      "labStructId_i": "1041636"
+    },
+    {
+      "authIdHal_s": "mohamed-khenissi",
+      "authIdHal_i": "1162159",
+      "labStructName_s": "Iaelyon School of Management",
+      "labStructId_i": "1089520"
+    }
+  ],
+  "Brigitte Langevin": [
+    {
+      "authIdHal_s": "brigitte-langevin",
+      "authIdHal_i": "874728",
+      "labStructName_s": "Association Solagro",
+      "labStructId_i": "1003714"
+    }
+  ],
+  "Elie Perraud": [
+    {
+      "authIdHal_s": "elie-perraud",
+      "authIdHal_i": "747696",
+      "labStructName_s": "Physiologie de la Nutrition et du Comportement Alimentaire",
+      "labStructId_i": "1002309"
+    }
+  ],
+  "Joséphine Brunin": [
+    {
+      "authIdHal_s": "joséphine-brunin",
+      "authIdHal_i": "806350",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    },
+    {
+      "authIdHal_s": "joséphine-brunin",
+      "authIdHal_i": "0",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    },
+    {
+      "authIdHal_s": "joséphine-brunin",
+      "authIdHal_i": "806350",
+      "labStructName_s": "Agence de l'Environnement et de la Maîtrise de l'Énergie",
+      "labStructId_i": "243969"
+    }
+  ],
+  "Arnaud Stimec": [
+    {
+      "authIdHal_s": "arnaud-stimec",
+      "authIdHal_i": "885208",
+      "labStructName_s": "Arènes: politique, santé publique, environnement, médias",
+      "labStructId_i": "2577"
+    }
+  ],
+  "Lise Frappier": [
+    {
+      "authIdHal_s": "lise-frappier",
+      "authIdHal_i": "10074",
+      "labStructName_s": "Structures et Marché Agricoles, Ressources et Territoires",
+      "labStructId_i": "135749"
+    }
+  ],
+  "Philippine Fassier": [
+    {
+      "authIdHal_s": "philippine-fassier",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre de Recherche Épidémiologie et Statistique Sorbonne Paris Cité",
+      "labStructId_i": "446175"
+    }
+  ],
+  "Edwige Landais": [
+    {
+      "authIdHal_s": "edwige-landais",
+      "authIdHal_i": "1178289",
+      "labStructName_s": "Institut de Recherche pour le Développement",
+      "labStructId_i": "67872"
+    },
+    {
+      "authIdHal_s": "edwige-landais",
+      "authIdHal_i": "1178289",
+      "labStructName_s": "Nutrition et Alimentation des Populations aux Suds",
+      "labStructId_i": "152387"
+    }
+  ],
+  "Justine Berlivet": [
+    {
+      "authIdHal_s": "justine-berlivet",
+      "authIdHal_i": "1365972",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Younes Esseddik": [
+    {
+      "authIdHal_s": "younes-esseddik",
+      "authIdHal_i": "1146569",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Zoé Colombet": [
+    {
+      "authIdHal_s": "zoé-colombet",
+      "authIdHal_i": "184110",
+      "labStructName_s": "Marchés, Organisations, Institutions et Stratégies d'Acteurs",
+      "labStructId_i": "28445"
+    },
+    {
+      "authIdHal_s": "zoé-colombet",
+      "authIdHal_i": "184110",
+      "labStructName_s": "Institut national d’études supérieures agronomiques de Montpellier",
+      "labStructId_i": "474617"
+    }
+  ],
+  "Marlène Perignon": [
+    {
+      "authIdHal_s": "marlène-perignon",
+      "authIdHal_i": "735798",
+      "labStructName_s": "Marchés, Organisations, Institutions et Stratégies d'Acteurs",
+      "labStructId_i": "28445"
+    }
+  ],
+  "Christian Couturier": [
+    {
+      "authIdHal_s": "christian-couturier",
+      "authIdHal_i": "0",
+      "labStructName_s": "Association Solagro",
+      "labStructId_i": "1003714"
+    }
+  ],
+  "Eloi Chazelas": [
+    {
+      "authIdHal_s": "eloi-chazelas",
+      "authIdHal_i": "1066117",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Yves Martin-Prével": [
+    {
+      "authIdHal_s": "yves-martin-prével",
+      "authIdHal_i": "169671",
+      "labStructName_s": "Nutrition et Alimentation des Populations aux Suds",
+      "labStructId_i": "152387"
+    }
+  ],
+  "Cédric Dalmasso": [
+    {
+      "authIdHal_s": "cédric-dalmasso",
+      "authIdHal_i": "7030",
+      "labStructName_s": "Centre de Gestion Scientifique i3",
+      "labStructId_i": "39111"
+    }
+  ],
+  "Mathieu Gibert": [
+    {
+      "authIdHal_s": "mathieu-gibert",
+      "authIdHal_i": "5051",
+      "labStructName_s": "Hélium : du fondamental aux applications",
+      "labStructId_i": "1043195"
+    },
+    {
+      "authIdHal_s": "mathieu-gibert",
+      "authIdHal_i": "5051",
+      "labStructName_s": "Laboratoire de Physique de l'ENS Lyon",
+      "labStructId_i": "13"
+    },
+    {
+      "authIdHal_s": "mathieu-gibert",
+      "authIdHal_i": "5051",
+      "labStructName_s": "Hélium : du fondamental aux applications",
+      "labStructId_i": "390679"
+    }
+  ],
+  "Alexandre de Sa": [
+    {
+      "authIdHal_s": "alexandre-de-sa",
+      "authIdHal_i": "0",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Laurent Debrauwer": [
+    {
+      "authIdHal_s": "laurent-debrauwer",
+      "authIdHal_i": "1106714",
+      "labStructName_s": "Metatoul AXIOM",
+      "labStructId_i": "439073"
+    }
+  ],
+  "Frédéric Garcias": [
+    {
+      "authIdHal_s": "frédéric-garcias",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre de Gestion Scientifique i3",
+      "labStructId_i": "39111"
+    },
+    {
+      "authIdHal_s": "frédéric-garcias",
+      "authIdHal_i": "0",
+      "labStructName_s": "IAE Lille University School of Management - Lille",
+      "labStructId_i": "151921"
+    }
+  ],
+  "Rodolphe Vidal": [
+    {
+      "authIdHal_s": "rodolphe-vidal",
+      "authIdHal_i": "794957",
+      "labStructName_s": "Institut Technique de l'Agriculture Biologique",
+      "labStructId_i": "423496"
+    }
+  ],
+  "Christine Erhel": [
+    {
+      "authIdHal_s": "christine-erhel",
+      "authIdHal_i": "737830",
+      "labStructName_s": "Laboratoire interdisciplinaire de recherche en sciences de l'action",
+      "labStructId_i": "186209"
+    },
+    {
+      "authIdHal_s": "christine-erhel",
+      "authIdHal_i": "737830",
+      "labStructName_s": "Centre d'études de l'emploi et du travail",
+      "labStructId_i": "480325"
+    }
+  ],
+  "Marie Josephe Amiot-Carlin": [
+    {
+      "authIdHal_s": "marie-josephe-amiot-carlin",
+      "authIdHal_i": "735494",
+      "labStructName_s": "Marchés, Organisations, Institutions et Stratégies d'Acteurs",
+      "labStructId_i": "28445"
+    }
+  ],
+  "Mélanie Deschasaux": [
+    {
+      "authIdHal_s": "mélanie-deschasaux",
+      "authIdHal_i": "183648",
+      "labStructName_s": "Centre de Recherche Épidémiologie et Statistique Sorbonne Paris Cité",
+      "labStructId_i": "446175"
+    }
+  ],
+  "Mathilde Guergoat-Larivière": [
+    {
+      "authIdHal_s": "mathilde-guergoat-larivière",
+      "authIdHal_i": "940746",
+      "labStructName_s": "Centre d'études de l'emploi et du travail",
+      "labStructId_i": "480325"
+    }
+  ],
+  "Pauline Rebouillat": [
+    {
+      "authIdHal_s": "pauline-rebouillat",
+      "authIdHal_i": "744764",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Sandrine Peneau": [
+    {
+      "authIdHal_s": "sandrine-peneau",
+      "authIdHal_i": "754586",
+      "labStructName_s": "Centre de Recherche Épidémiologie et Statistique Sorbonne Paris Cité",
+      "labStructId_i": "446175"
+    }
+  ],
+  "Nathalie Druesne-Pecollo": [
+    {
+      "authIdHal_s": "nathalie-druesne-pecollo",
+      "authIdHal_i": "0",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Margaux Robert": [
+    {
+      "authIdHal_s": "margaux-robert",
+      "authIdHal_i": "1146568",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Jean-François Huneau": [
+    {
+      "authIdHal_s": "jean-françois-huneau",
+      "authIdHal_i": "14800",
+      "labStructName_s": "Physiologie de la Nutrition et du Comportement Alimentaire",
+      "labStructId_i": "1002309"
+    }
+  ],
+  "Anouk Reuzé": [
+    {
+      "authIdHal_s": "anouk-reuzé",
+      "authIdHal_i": "1102484",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Rebecca Lutchia": [
+    {
+      "authIdHal_s": "rebecca-lutchia",
+      "authIdHal_i": "0",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Florine Berthy": [
+    {
+      "authIdHal_s": "florine-berthy",
+      "authIdHal_i": "0",
+      "labStructName_s": "Nutritional Epidemiology Research Team | Equipe de Recherche en Epidémiologie Nutritionnelle",
+      "labStructId_i": "1001914"
+    }
+  ],
+  "Mintu Kumar": [
+    {
+      "authIdHal_s": "mintu-kumar",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
+      "labStructId_i": "53946"
     }
   ]
 }

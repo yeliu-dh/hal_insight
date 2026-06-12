@@ -434,12 +434,13 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.patches import Circle
 
+
+# PAGE66666666666666666666666
+
 def generate_topics_keywords_scatterplot(
         topic_model, df, col_text="clean_text", 
         axe_id="1", N_WORDS = 5, date_field=None):
-    
-    # PAGE66666666666666666666666
-    
+        
     cmap = plt.get_cmap("tab20")  #Set2, tab20
     
     # 文本保持一致？
@@ -635,7 +636,7 @@ def generate_topics_keywords_scatterplot(
                 fontsize=fontsize,
                 ha="center",
                 va="center",
-                alpha=0.9,
+                alpha=1,
                 # color='gray' if topic_id == -1 else 'black' 
             )
             
@@ -644,8 +645,7 @@ def generate_topics_keywords_scatterplot(
     axe_title=""
     if len(axe_id)>0:
         axe_title= "sous axe "+", ".join(axe_id) if len(axe_id)>=1 else axe_id[0]
-    
-    
+       
     
     # ---date rang---
     date_title="entre "
@@ -708,6 +708,368 @@ def generate_topics_keywords_scatterplot(
 
     # plt.show()    
     return fig
+
+
+
+
+
+
+
+# ======================PTS INTERACTIF==============================
+
+def generate_topics_keywords_scatterplot_interactive(
+        topic_model, df, col_text="clean_text", 
+        axe_id="1", N_WORDS = 5, date_field=None):
+        
+    cmap = plt.get_cmap("tab20")  #Set2, tab20
+    
+    # 文本保持一致？
+    if not 'axe_list' in df:
+        df=preprocess_df_for_topic_modeling(df)
+    texts = df[col_text].tolist()
+
+    # 提取文本的emb和topic
+    embeddings = topic_model.embedding_model.embed(texts)
+    topics = topic_model.topics_#topics list
+
+    ##umap降维
+    umap_2d = UMAP(
+        n_neighbors=15,
+        n_components=2,
+        min_dist=0.1,
+        metric="cosine",
+        random_state=42
+    )
+
+    ## ================== 文章坐标点
+    coords = umap_2d.fit_transform(embeddings)
+    # df_vis = pd.DataFrame({
+    #     "x": coords[:, 0],
+    #     "y": coords[:, 1],
+    #     "topic": topics  
+    # })
+
+    df_vis = pd.DataFrame({
+    "x": coords[:, 0],
+    "y": coords[:, 1],
+    "topic": topics,
+    "title": df["title_s"].values,
+    "authors":df['authFullName_s']
+    })
+    
+    #加上predicted_axe的信息
+    df_vis["true_axe_list"] = df["true_axe_list"].values
+    if "predicted_axe_list" in df.columns:
+        df_vis["predicted_axe_list"] = df["predicted_axe_list"].values
+
+    ## ==================topics中心点
+    topic_centers = (
+        df_vis[df_vis.topic != -1]
+        # df_vis
+        .groupby("topic")[["x", "y"]]
+        .mean()
+    )
+    #topic的关键词
+    def topic_label(topic_id, n=5):
+        return "\n".join([w for w, _ in topic_model.get_topic(topic_id)[:n]])
+    topic_centers["label"] = topic_centers.index.map(topic_label)
+    # print(topic_centers)
+
+    # 关键词的权重
+    def get_topic_words_with_weights(topic_id, n=8):
+        return topic_model.get_topic(topic_id)[:n]
+
+
+    # vis
+    # fig, ax = plt.subplots(figsize=(10, 8))
+    import plotly.graph_objects as go
+    fig = go.Figure()
+
+    ## ====================坐标点颜色
+    # 1️⃣ outliers (-1)：GRAY
+    mask_outlier = df_vis.topic == -1
+
+    fig.add_trace(
+    go.Scatter(
+            x=df_vis.loc[mask_outlier, "x"],
+            y=df_vis.loc[mask_outlier, "y"],
+            mode="markers",
+            marker=dict(
+                color="lightgrey",
+                size=5
+            ),
+            name="Outliers",
+            hovertext=df_vis.loc[mask_outlier, "title"],
+            hoverinfo="text"
+        )
+    )
+
+    # ax.scatter(
+    #     df_vis.loc[mask_outlier, "x"],
+    #     df_vis.loc[mask_outlier, "y"],
+    #     c="lightgrey",
+    #     alpha=0.4,
+    #     s=8,
+    #     # label="Outliers (-1)"
+    # )
+
+
+    # 2️⃣ 正常 topics点
+    mask_topic = df_vis.topic != -1
+    for topic_id in sorted(df_vis.topic.unique()):
+        if topic_id == -1:
+            continue
+
+        mask = df_vis.topic == topic_id
+
+        fig.add_trace(
+            go.Scatter(
+                x=df_vis.loc[mask, "x"],
+                y=df_vis.loc[mask, "y"],
+
+                mode="markers+text",
+
+                text=df_vis.loc[mask, "predicted_axe_list"]
+                    .apply(lambda x: ",".join(map(str,x)) if x else ""),
+
+                textposition="middle center",
+
+                marker=dict(
+                    size=7
+                ),
+
+                name=f"Topic {topic_id}",#***
+
+                hovertext=df_vis.loc[mask, "title"],
+
+                hovertemplate=
+                "<b>%{hovertext}</b><extra></extra>"
+            )
+        )
+
+    # if "predicted_axe_list" in df_vis.columns:
+    #     for i, row in df_vis.iterrows():
+    #         if row["topic"] == -1:
+    #             continue
+            
+    #         preds = row["predicted_axe_list"]
+    #         if not preds:
+    #             continue
+    #         label = ",".join(map(str, preds)) #str(preds[0]) # 或仅显示第一个 
+    #         ax.text(
+    #             row["x"],
+    #             row["y"],
+    #             label,
+    #             fontsize=6,
+    #             alpha=0.6,
+    #             color='black',
+    #             ha='center',
+    #             va='center',
+    #             # bbox=dict(facecolor='white', alpha=0.6, edgecolor='none')
+    #         )
+            
+        
+
+    # ===== 参数=====
+    # CIRCLE_RADIUS = 1      # ⭐ 固定半径（UMAP 空间）
+    MIN_RADIUS = 0.5
+    MAX_RADIUS = 2.0
+
+    BASE_FONT = 10
+    MAX_FONT = 25
+    FONT_SCALE = 50          # 控制权重 → 字体大小
+
+    # =======Layout keywords========
+    for topic_id, row in topic_centers.iterrows():
+        # 跳过 outliers（一般不画）
+        if topic_id == -1:
+            continue
+
+        cx, cy = row.x, row.y
+        # 取 topic count
+        topic_info = topic_model.get_topic_info()
+        topic_count = topic_info.loc[
+            topic_info.Topic == topic_id, "Count"
+        ].values[0]
+        
+        # ===== 计算圆半径（随 count 变化） =====
+        # 线性缩放到 MIN_RADIUS ~ MAX_RADIUS
+        # 可以根据 count 的全局最大最小值来缩放
+        all_counts = topic_info[topic_info.Topic != -1]["Count"].values
+        min_count, max_count = all_counts.min(), all_counts.max()
+
+        # 防止 max_count == min_count
+        if max_count == min_count:
+            radius = (MIN_RADIUS + MAX_RADIUS) / 2
+        else:
+            radius = MIN_RADIUS + (topic_count - min_count) / (max_count - min_count) * (MAX_RADIUS - MIN_RADIUS)
+
+        
+        # ===== 画圆 =====
+        fig.add_shape(
+            type="circle",
+            xref="x",
+            yref="y",
+
+            x0=cx-radius,
+            x1=cx+radius,
+
+            y0=cy-radius,
+            y1=cy+radius,
+
+            line=dict(
+                dash="dash"
+            )
+        )
+                
+
+        # circle = Circle(
+        #     (cx, cy),
+        #     radius=radius,
+        #     edgecolor='black',
+        #     facecolor="none",
+        #     linestyle="--",
+        #     linewidth=1,
+        #     alpha=0.6,
+        # )
+        # plt.gca().add_patch(circle)
+
+        # ===== 画关键词 =====
+        words = sorted(
+            get_topic_words_with_weights(topic_id, n=N_WORDS),
+            key=lambda x: x[1],
+            reverse=True
+        )
+        
+        # topic ocunt 权重 ：假设fontscale = weight * topic_count 的某个比例
+        all_counts = topic_info[topic_info.Topic != -1]["Count"].values
+        min_count, max_count = all_counts.min(), all_counts.max()
+
+        def compute_fontsize(topic_id, weight):
+            # 先处理 topic count 归一化 0-1
+            if topic_id == -1:
+                count_factor = 0.5  # outliers
+            else:
+                topic_count = topic_info.loc[topic_info.Topic == topic_id, "Count"].values[0]
+                if max_count == min_count:
+                    count_factor = 1.0
+                else:
+                    count_factor = (topic_count - min_count) / (max_count - min_count)  # 0-1
+            
+            # 幂次放大
+            count_factor = count_factor ** 2   #让count的权重更大。指数 >1，放大大值，压缩小值
+            # 结合词权重，映射到字体大小
+            fontsize = BASE_FONT + weight * FONT_SCALE * count_factor
+            # 限制最大最小值
+            fontsize = np.clip(fontsize, BASE_FONT, MAX_FONT)
+            return fontsize
+    
+        for i, (word, weight) in enumerate(words):
+            angle = 2 * np.pi * i / N_WORDS
+            # 文字放在圆的  50% 半径处
+            r_text = radius * 0.6
+            # fontsize = 8 + (weight ** 0.5) * 35
+            # fontsize=BASE_FONT + weight * FONT_SCALE
+            # fontsize = np.clip(fontsize, 5, 15)
+                   
+            fontsize=compute_fontsize(topic_id, weight)
+            x = cx + r_text * np.cos(angle)
+            y = cy + r_text * np.sin(angle)
+
+            fig.add_annotation(
+                x=x,
+                y=y,
+
+                text=word,
+
+                showarrow=False,
+
+                font=dict(
+                    size=fontsize
+                )
+            )
+            
+            # plt.text(
+            #     x,
+            #     y,
+            #     word,
+            #     fontsize=fontsize,
+            #     ha="center",
+            #     va="center",
+            #     alpha=0.9,
+            #     # color='gray' if topic_id == -1 else 'black' 
+            # )
+            
+    #============================================================================
+    # ---axe---
+    axe_title=""
+    if len(axe_id)>0:
+        axe_title= "sous axe "+", ".join(axe_id) if len(axe_id)>=1 else axe_id[0]
+       
+    
+    # ---date rang---
+    date_title="entre "
+    df[date_field] = pd.to_datetime(df[date_field] , errors="coerce")
+    date_min = df[date_field].min()
+    date_max = df[date_field].max()
+    date_title+=f"{date_min.strftime('%Y/%m')} et {date_max.strftime('%Y/%m')}"
+    
+
+    plt.title(f"Sujets et Mots clés {axe_title} {date_title}")
+    
+    # SHOW topics legend
+    topics_sorted = sorted(df_vis.topic.unique())
+    handles = []
+
+    for idx, topic_id in enumerate(topics_sorted):
+        mask = df_vis.topic == topic_id
+        if topic_id == -1:
+            color = "lightgrey"
+            # label = "Topic (-1)"
+            # continue   
+            
+        else:
+            color = cmap(idx % 20)  # 循环颜色
+            plt.scatter(
+                df_vis.loc[mask, "x"],
+                df_vis.loc[mask, "y"],
+                c=[color],
+                alpha=0.5,
+                s=10
+            )
+
+        # 获取前 N 个关键词
+        top_words = [w for w, _ in get_topic_words_with_weights(topic_id, n=N_WORDS)]
+        # 获取 topic count
+        topic_count = topic_model.get_topic_info().loc[
+            topic_model.get_topic_info().Topic == topic_id, "Count"
+        ].values[0]
+
+        label = f"Sujet {topic_id} (n={topic_count}) : {', '.join(top_words)}"
+        handles.append(mpatches.Patch(color=color, label=label))
+
+
+    # # ===== 把 legend 放在图下方 =====
+    # fig.subplots_adjust(bottom=0.25)  # 给 legend 留空间
+
+    # ax.legend(
+    #     handles=handles,
+    #     # title="Sujets",
+    #     loc="upper left",
+    #     bbox_to_anchor=(0, -0.05),  # y小于0说明在图的下方
+    #     fontsize=8,
+    #     ncol=1,      # 每个 topic 一行（竖向）
+    #     frameon=False
+    # )
+    # # loc 决定“legend 自己的哪个角”
+    # # bbox_to_anchor 决定“这个角要贴在图的哪个位置”
+    # ax.set_axis_off()
+
+    # # plt.show()  
+           
+
+    return fig
+
 
 
 

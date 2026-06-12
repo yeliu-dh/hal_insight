@@ -11,7 +11,7 @@ from utils.download import save_file_csv_xlsx_by_filename
 from utils.HAL_search_api import get_start_end_field, filter_par_tdate # 筛选日期条件输入模块和筛选def #  filter_by_publicationdate
 
 from utils.topic_modeling import preprocess_df_for_topic_modeling, filter_by_axe, get_topics_per_axe
-from utils.topic_modeling import generate_topics_keywords_scatterplot
+from utils.topic_modeling import generate_topics_keywords_scatterplot, generate_topics_keywords_scatterplot_interactive
 from utils.upload import missing_data_warning
 
 st.set_page_config(page_title="HAL insight", page_icon="🛸",layout="wide")
@@ -260,11 +260,20 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 df_axe=st.session_state[df_axe_key]
                 topic_model=st.session_state[topic_model_key]
                 
-                fig=generate_topics_keywords_scatterplot(topic_model, df=df_axe, col_text="clean_text", 
-                                                         axe_id=axe_id, N_WORDS = N_WORDS,
-                                                         date_field=date_field_col)
-                st.pyplot(fig)
+                # # fig figé 
+                # fig=generate_topics_keywords_scatterplot(topic_model, df=df_axe, col_text="clean_text", 
+                #                                     axe_id=axe_id, N_WORDS = N_WORDS,
+                #                                          date_field=date_field_col)
                 
+                # st.pyplot(fig)
+
+                # fig interactive
+                fig=generate_topics_keywords_scatterplot_interactive(topic_model, df=df_axe, col_text="clean_text", 
+                                                    axe_id=axe_id, N_WORDS = N_WORDS,
+                                                         date_field=date_field_col)
+                st.plotly_chart(fig, use_container_width=True)
+
+
                 st.markdown("<br>", unsafe_allow_html=True)
                 st.markdown(
                     f"sujet -1 : articles non classés/généraux  \n"
