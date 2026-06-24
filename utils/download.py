@@ -63,7 +63,7 @@ def get_default_filename(df,start_year=None, start_month=None, end_year=None, en
 
   
     
-def save_file_csv_xlsx(df,start_year, start_month, end_year, end_month, key_filename):
+def save_file_csv_xlsx(df,start_year, start_month, end_year, end_month, key_filename, suffix=""):
     """
     保存数据模块！
     
@@ -75,7 +75,8 @@ def save_file_csv_xlsx(df,start_year, start_month, end_year, end_month, key_file
     # st.markdown(f"**📥 Téléchargement**")
 
     default_filename=get_default_filename(df,start_year, start_month, end_year, end_month)
-    
+    if suffix:
+        default_filename+=suffix
     if df is not None and not df.empty:
         try : 
             # ----------------SAVE TO LOCAL----------------- 

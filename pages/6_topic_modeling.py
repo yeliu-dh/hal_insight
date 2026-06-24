@@ -211,7 +211,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
             # col_axe='final_axe' if 'final_axe' in df_predicted.columns else 'axe'
             df_axe_key=f"df_{col_axe}_{'_'.join(axe_id)}"
             date_key=f"{start_year}_{start_month}-{end_year}_{end_month}"
-            topic_model_key=f"topic_model_{date_key}-{len(df_predicted)}arts-axe{'_'.join(axe_id)}-{min_topic_size}"
+            topic_model_key=f"topic_model_{date_key}-{len(df_predicted)}arts-axe{'_'.join(axe_id)}-{min_topic_size}-{range_top_kw}"
             # st.write(f"[KEYS] {topic_model_key}")
             
             if not topic_model_key in st.session_state:
@@ -270,15 +270,18 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 # fig interactive
                 fig=generate_topics_keywords_scatterplot_interactive(topic_model, df=df_axe, col_text="clean_text", 
                                                     axe_id=axe_id, N_WORDS = N_WORDS,
-                                                         date_field=date_field_col)
+                                                    date_field=date_field_col)
                 st.plotly_chart(fig, use_container_width=True)
 
 
                 st.markdown("<br>", unsafe_allow_html=True)
                 st.markdown(
-                    f"sujet -1 : articles non classés/généraux  \n"
-                    f"les points coloré: les articles classé dans un sujet  \n"
-                    f"les chiffres : les articles dont l'axe est prédit  \n"
+                    f"les points coloré: les articles classé dans un sous-sujet  \n"
+                    f"les mots clé noirs : mots clés d'un sous-sujet  \n"
+                    f"les chiffres : les axes prédits des articles sans axe  \n\n"
+
+                    f"les points gris : sujet -1, articles non classés/généraux  \n"
+                    f"les mots clé gris : mots clés des points non classés  \n"    
                     )
                 
                 

@@ -17,7 +17,7 @@ from PIL import Image
 
 #my utils:
 from utils.upload import data_uploader
-from utils.download import save_file_csv_xlsx_by_filename
+from utils.download import save_file_csv_xlsx_by_filename, save_file_csv_xlsx
 
 
 ## axe
@@ -29,7 +29,6 @@ from utils.axe_classification import gather_predicted_axes, merge_axes
 
 
 # topics
-
 
 # @st.cache_resource  # ✅ 缓存模型
 # def load_embedding_model(model_name):
@@ -242,13 +241,16 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
     #------------------save to local-------------------
     if "df_all_pred" in st.session_state:
         df_all_pred=st.session_state['df_all_pred']
-        try :    
+        try :     
+            # if "uploaded_df_filename" in st.session_state:
+            #     filename=st.session_state['uploaded_df_filename'].split('.')[0]+"_final_axe"
             
-            filename=st.session_state['uploaded_df_filename'].split('.')[0]+"_final_axe"
-            save_file_csv_xlsx_by_filename(df_all_pred, filename)
+            save_file_csv_xlsx(df=df_all_pred,start_year=None, start_month=None, 
+                       end_year=None, end_month=None, key_filename='df_predit', suffix="_predit")# key!=filename
         except Exception as e:
             st.warning (f"ERROR in save_file_csv_xlsx :\n {e}")   
         st.divider()    
+   
     
     #------------------check/show-------------------
     st.markdown(f"#### Vérification manuelle")
@@ -267,7 +269,16 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         df_check=df_all[cols_kept]
     st.dataframe(df_check)
     st.divider()
+
+
+    # -------------------update uploaded_df?-------------------
+    # update_df = st.checkbox("Mettre à jour le dataset pour l'analyse suivante? ", value=False, key="nan")
+    # if update_df==True:
+    #     st.session_state["uploaded_df"] = df_all_pred
+    #     st.success("Continuez l'analyse avec le dataset mis à jour!")
+    # st.divider()
     
+
     #------------------vis-------------------
     if "df_all_pred" in st.session_state:                
         st.subheader("✳️ Visualisation")

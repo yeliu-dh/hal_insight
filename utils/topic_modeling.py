@@ -475,11 +475,16 @@ def generate_topics_keywords_scatterplot(
 
     ## ==================topics中心点
     topic_centers = (
-        df_vis[df_vis.topic != -1]
-        # df_vis
+        # df_vis[df_vis.topic != -1]
+        df_vis
         .groupby("topic")[["x", "y"]]
         .mean()
     )
+    
+    # st.writ("TOPIC CENTERS")
+    st.dataframe(topic_centers)
+    
+
     #topic的关键词
     def topic_label(topic_id, n=5):
         return "\n".join([w for w, _ in topic_model.get_topic(topic_id)[:n]])
@@ -544,16 +549,20 @@ def generate_topics_keywords_scatterplot(
     # CIRCLE_RADIUS = 1      # ⭐ 固定半径（UMAP 空间）
     MIN_RADIUS = 0.5
     MAX_RADIUS = 2.0
+    OUTLIER_RADIUS=1
 
     BASE_FONT = 10
     MAX_FONT = 25
     FONT_SCALE = 50          # 控制权重 → 字体大小
 
+    
+    # print("draw circle and keywords")
     # =======Layout keywords========
     for topic_id, row in topic_centers.iterrows():
-        # 跳过 outliers（一般不画）
-        if topic_id == -1:
-            continue
+       
+        ## 跳过 outliers（一般不画）
+        # if topic_id == -1:
+        #     continue
 
         cx, cy = row.x, row.y
         # 取 topic count
@@ -573,19 +582,24 @@ def generate_topics_keywords_scatterplot(
             radius = (MIN_RADIUS + MAX_RADIUS) / 2
         else:
             radius = MIN_RADIUS + (topic_count - min_count) / (max_count - min_count) * (MAX_RADIUS - MIN_RADIUS)
+        if topic_id==-1:
+            radius=OUTLIER_RADIUS
+        print(f'topic id:{topic_id}, radius:{radius}')
 
-        
         # ===== 画圆 =====
-        circle = Circle(
-            (cx, cy),
-            radius=radius,
-            edgecolor='black',
-            facecolor="none",
-            linestyle="--",
-            linewidth=1,
-            alpha=0.6,
-        )
-        plt.gca().add_patch(circle)
+        if topic_id!=-1:
+            circle = Circle(
+                (cx, cy),
+                radius=radius,
+                edgecolor='gray',
+                facecolor="none",
+                linestyle="--",
+                linewidth=1,
+                alpha=1,
+            )
+            plt.gca().add_patch(circle)
+        # else : 
+            # radius=OUTLIER_RADIUS
 
         # ===== 画关键词 =====
         words = sorted(
@@ -764,8 +778,8 @@ def generate_topics_keywords_scatterplot_interactive(
 
     ## ==================topics中心点
     topic_centers = (
-        df_vis[df_vis.topic != -1]
-        # df_vis
+        # df_vis[df_vis.topic != -1]
+        df_vis
         .groupby("topic")[["x", "y"]]
         .mean()
     )
@@ -796,10 +810,15 @@ def generate_topics_keywords_scatterplot_interactive(
             mode="markers",
             marker=dict(
                 color="lightgrey",
-                size=5
+                size=6
             ),
             name="Outliers",
-            hovertext=df_vis.loc[mask_outlier, "title"],
+            # hovertext=df_vis.loc[mask_outlier, "title"],
+            hovertext = (
+                df_vis.loc[mask_outlier, "title"]
+                + "<br>"
+                + df_vis.loc[mask_outlier, "authors"].fillna("")
+            ),
             hoverinfo="text"
         )
     )
@@ -829,7 +848,7 @@ def generate_topics_keywords_scatterplot_interactive(
 
                 mode="markers+text",
 
-                text=df_vis.loc[mask, "predicted_axe_list"]
+                text=df_vis.loc[mask, "predicted_axe_list"] #?
                     .apply(lambda x: ",".join(map(str,x)) if x else ""),
 
                 textposition="middle center",
@@ -840,10 +859,15 @@ def generate_topics_keywords_scatterplot_interactive(
 
                 name=f"Topic {topic_id}",#***
 
-                hovertext=df_vis.loc[mask, "title"],
-
-                hovertemplate=
-                "<b>%{hovertext}</b><extra></extra>"
+                # hovertext=df_vis.loc[mask, "title"], #" "+df_vis.loc[mask, "authors"],
+                hovertext = (
+                    df_vis.loc[mask_outlier, "title"]
+                    + "<br>"
+                    + df_vis.loc[mask_outlier, "authors"].fillna("")
+                ),
+            hoverinfo="text"
+                # hovertemplate=
+                # "<b>%{hovertext}</b><extra></extra>"
             )
         )
 
@@ -874,16 +898,21 @@ def generate_topics_keywords_scatterplot_interactive(
     # CIRCLE_RADIUS = 1      # ⭐ 固定半径（UMAP 空间）
     MIN_RADIUS = 0.5
     MAX_RADIUS = 2.0
+    OUTLIER_RADIUS=1
 
-    BASE_FONT = 10
-    MAX_FONT = 25
+    BASE_FONT = 15
+    MAX_FONT = 30
     FONT_SCALE = 50          # 控制权重 → 字体大小
 
     # =======Layout keywords========
+    # st.dataframe(topic_centers)
+
+    #若只有-1则显示显示关键词？
+
     for topic_id, row in topic_centers.iterrows():
         # 跳过 outliers（一般不画）
-        if topic_id == -1:
-            continue
+        # if topic_id == -1:
+        #     continue
 
         cx, cy = row.x, row.y
         # 取 topic count
@@ -895,7 +924,8 @@ def generate_topics_keywords_scatterplot_interactive(
         # ===== 计算圆半径（随 count 变化） =====
         # 线性缩放到 MIN_RADIUS ~ MAX_RADIUS
         # 可以根据 count 的全局最大最小值来缩放
-        all_counts = topic_info[topic_info.Topic != -1]["Count"].values
+        # all_counts = topic_info[topic_info.Topic != -1]["Count"].values
+        all_counts = topic_info["Count"].values
         min_count, max_count = all_counts.min(), all_counts.max()
 
         # 防止 max_count == min_count
@@ -904,25 +934,30 @@ def generate_topics_keywords_scatterplot_interactive(
         else:
             radius = MIN_RADIUS + (topic_count - min_count) / (max_count - min_count) * (MAX_RADIUS - MIN_RADIUS)
 
-        
+        if topic_id==-1:
+            radius=OUTLIER_RADIUS
+
         # ===== 画圆 =====
-        fig.add_shape(
-            type="circle",
-            xref="x",
-            yref="y",
+        # topic_id -1不画圈
 
-            x0=cx-radius,
-            x1=cx+radius,
+        if topic_id!=-1:
+            fig.add_shape(
+                type="circle",
+                xref="x",
+                yref="y",
 
-            y0=cy-radius,
-            y1=cy+radius,
+                x0=cx-radius,
+                x1=cx+radius,
 
-            line=dict(
-                dash="dash"
+                y0=cy-radius,
+                y1=cy+radius,
+
+                line=dict(
+                    dash="dash",
+                    color="gray"
+                )
             )
-        )
                 
-
         # circle = Circle(
         #     (cx, cy),
         #     radius=radius,
@@ -934,7 +969,10 @@ def generate_topics_keywords_scatterplot_interactive(
         # )
         # plt.gca().add_patch(circle)
 
-        # ===== 画关键词 =====
+
+
+        # ===== 画关键词 =====(需要用到radius)
+        # ---fontsize---
         words = sorted(
             get_topic_words_with_weights(topic_id, n=N_WORDS),
             key=lambda x: x[1],
@@ -942,7 +980,8 @@ def generate_topics_keywords_scatterplot_interactive(
         )
         
         # topic ocunt 权重 ：假设fontscale = weight * topic_count 的某个比例
-        all_counts = topic_info[topic_info.Topic != -1]["Count"].values
+        # all_counts = topic_info[topic_info.Topic != -1]["Count"].values
+        all_counts = topic_info["Count"].values
         min_count, max_count = all_counts.min(), all_counts.max()
 
         def compute_fontsize(topic_id, weight):
@@ -966,8 +1005,12 @@ def generate_topics_keywords_scatterplot_interactive(
     
         for i, (word, weight) in enumerate(words):
             angle = 2 * np.pi * i / N_WORDS
-            # 文字放在圆的  50% 半径处
-            r_text = radius * 0.6
+           
+            # 文字放在圆的  50% 半径处 
+            if topic_id==-1:
+                r_text=radius*1.5
+            else :
+                r_text = radius * 0.6
             # fontsize = 8 + (weight ** 0.5) * 35
             # fontsize=BASE_FONT + weight * FONT_SCALE
             # fontsize = np.clip(fontsize, 5, 15)
@@ -976,19 +1019,24 @@ def generate_topics_keywords_scatterplot_interactive(
             x = cx + r_text * np.cos(angle)
             y = cy + r_text * np.sin(angle)
 
+            # st.write(f"fontsize of key word:{fontsize}")
+
+            color_keywords="black" if topic_id!=-1 else 'gray'
             fig.add_annotation(
                 x=x,
                 y=y,
 
                 text=word,
-
                 showarrow=False,
-
                 font=dict(
-                    size=fontsize
+                    size=fontsize,
+                    color=color_keywords,
+                    # opacity=1
+
                 )
-            )
-            
+            )  
+
+
             # plt.text(
             #     x,
             #     y,
@@ -1047,6 +1095,9 @@ def generate_topics_keywords_scatterplot_interactive(
 
         label = f"Sujet {topic_id} (n={topic_count}) : {', '.join(top_words)}"
         handles.append(mpatches.Patch(color=color, label=label))
+
+
+
 
 
     # # ===== 把 legend 放在图下方 =====
