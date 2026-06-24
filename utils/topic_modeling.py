@@ -799,12 +799,20 @@ def generate_topics_keywords_scatterplot_interactive(
     import plotly.graph_objects as go
     fig = go.Figure()
 
-    ## ====================坐标点颜色
-    # 1️⃣ outliers (-1)：GRAY
+
+# 显示点和悬浮文本
+# ========================================================================
+    df_vis["hover_text"] = (
+        "<b>" + df_vis["title"].fillna("") + "</b>"
+        + "<br>"
+        + df_vis["authors"].fillna("")
+    )
+
     mask_outlier = df_vis.topic == -1
 
+    # outlier:
     fig.add_trace(
-    go.Scatter(
+        go.Scatter(
             x=df_vis.loc[mask_outlier, "x"],
             y=df_vis.loc[mask_outlier, "y"],
             mode="markers",
@@ -813,63 +821,108 @@ def generate_topics_keywords_scatterplot_interactive(
                 size=6
             ),
             name="Outliers",
-            # hovertext=df_vis.loc[mask_outlier, "title"],
-            hovertext = (
-                df_vis.loc[mask_outlier, "title"]
-                + "<br>"
-                + df_vis.loc[mask_outlier, "authors"].fillna("")
-            ),
-            hoverinfo="text"
+            hovertext=df_vis.loc[mask_outlier, "hover_text"],
+            hovertemplate="%{hovertext}<extra></extra>"
         )
     )
 
-    # ax.scatter(
-    #     df_vis.loc[mask_outlier, "x"],
-    #     df_vis.loc[mask_outlier, "y"],
-    #     c="lightgrey",
-    #     alpha=0.4,
-    #     s=8,
-    #     # label="Outliers (-1)"
+    # points topic:
+    for topic_id in sorted(df_vis.topic.unique()):
+        if topic_id!=-1:
+            mask = df_vis.topic == topic_id
+            fig.add_trace(
+                go.Scatter(
+                    x=df_vis.loc[mask, "x"],
+                    y=df_vis.loc[mask, "y"],
+
+                    mode="markers+text",
+
+                    text=df_vis.loc[mask, "predicted_axe_list"]
+                        .apply(lambda x: ",".join(map(str,x)) if x else ""),
+
+                    textposition="middle center",
+
+                    marker=dict(size=7),
+
+                    name=f"Topic {topic_id}",
+
+                    hovertext=df_vis.loc[mask, "hover_text"],
+
+                    hovertemplate="%{hovertext}<extra></extra>"
+                )
+            )
+# ========================================================================
+
+
+    # ## ====================坐标点颜色
+    # # 1️⃣ outliers (-1)：GRAY
+    # mask_outlier = df_vis.topic == -1
+
+    # fig.add_trace(
+    # go.Scatter(
+    #         x=df_vis.loc[mask_outlier, "x"],
+    #         y=df_vis.loc[mask_outlier, "y"],
+    #         mode="markers",
+    #         marker=dict(
+    #             color="lightgrey",
+    #             size=6
+    #         ),
+    #         name="Outliers",
+    #         # hovertext=df_vis.loc[mask_outlier, "title"],
+    #         hovertext = (
+    #             df_vis.loc[mask_outlier, "title"]
+    #             + "<br>"
+    #             + df_vis.loc[mask_outlier, "authors"].fillna("")
+    #         ),
+    #         hoverinfo="text"
+    #     )
     # )
 
+    # # ax.scatter(
+    # #     df_vis.loc[mask_outlier, "x"],
+    # #     df_vis.loc[mask_outlier, "y"],
+    # #     c="lightgrey",
+    # #     alpha=0.4,
+    # #     s=8,
+    # #     # label="Outliers (-1)"
+    # # )
 
-    # 2️⃣ 正常 topics点
-    mask_topic = df_vis.topic != -1
-    for topic_id in sorted(df_vis.topic.unique()):
-        if topic_id == -1:
-            continue
 
-        mask = df_vis.topic == topic_id
+    # # 2️⃣ 正常 topics点
+    # mask_topic = df_vis.topic != -1
+    # for topic_id in sorted(df_vis.topic.unique()):
+    #     if topic_id == -1:
+    #         continue
 
-        fig.add_trace(
-            go.Scatter(
-                x=df_vis.loc[mask, "x"],
-                y=df_vis.loc[mask, "y"],
+    #     mask = df_vis.topic == topic_id
 
-                mode="markers+text",
+    #     fig.add_trace(
+    #         go.Scatter(
+    #             x=df_vis.loc[mask, "x"],
+    #             y=df_vis.loc[mask, "y"],
 
-                text=df_vis.loc[mask, "predicted_axe_list"] #?
-                    .apply(lambda x: ",".join(map(str,x)) if x else ""),
+    #             mode="markers+text",
 
-                textposition="middle center",
+    #             text=df_vis.loc[mask, "predicted_axe_list"] #?
+    #                 .apply(lambda x: ",".join(map(str,x)) if x else ""),
 
-                marker=dict(
-                    size=7
-                ),
+    #             textposition="middle center",
 
-                name=f"Topic {topic_id}",#***
+    #             marker=dict(
+    #                 size=7
+    #             ),
 
-                # hovertext=df_vis.loc[mask, "title"], #" "+df_vis.loc[mask, "authors"],
-                hovertext = (
-                    df_vis.loc[mask_outlier, "title"]
-                    + "<br>"
-                    + df_vis.loc[mask_outlier, "authors"].fillna("")
-                ),
-            hoverinfo="text"
-                # hovertemplate=
-                # "<b>%{hovertext}</b><extra></extra>"
-            )
-        )
+    #             name=f"Topic {topic_id}",#***
+    #             hovertext = (
+    #             df_vis.loc[mask_outlier, "title"]
+    #             + "<br>"
+    #             + df_vis.loc[mask_outlier, "authors"].fillna("")
+    #             ),
+    #             hoverinfo="text"
+    #     )
+
+
+
 
     # if "predicted_axe_list" in df_vis.columns:
     #     for i, row in df_vis.iterrows():

@@ -276,12 +276,28 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
 
                 st.markdown("<br>", unsafe_allow_html=True)
                 st.markdown(
-                    f"les points coloré: les articles classé dans un sous-sujet  \n"
-                    f"les mots clé noirs : mots clés d'un sous-sujet  \n"
-                    f"les chiffres : les axes prédits des articles sans axe  \n\n"
+                    """
+                **Note**
 
-                    f"les points gris : sujet -1, articles non classés/généraux  \n"
-                    f"les mots clé gris : mots clés des points non classés  \n"    
-                    )
+                - Points colorés : articles regroupés dans un sous-sujet.
+                - Mots-clés noirs : mots-clés représentatifs d'un sous-sujet.
+                - Chiffres : axes prédits associés aux articles sans axe.
+                - Points gris : articles non classés/généraux (sujet -1).
+                - Mots-clés gris : mots-clés associés aux articles non classés.
+
+                💡 Survolez un point pour afficher le titre et les auteurs de l'article.
+                """
+                )
+                
+                # st.markdown(
+                #     f'*NOTE:*  \n'
+                #     f"les points coloré: les articles classé dans un sous-sujet  \n"
+                #     f"les mots clé noirs : mots clés d'un sous-sujet  \n"
+                #     f"les chiffres : les axes prédits des articles sans axe  \n\n"
+
+                #     f"les points gris : sujet -1, articles non classés/généraux  \n"
+                #     f"les mots clé gris : mots clés des points non classés  \n"    
+                    
+                #     f"rapprocher au point pour consulter le titre et les auteurs d'un article")
                 
                 
