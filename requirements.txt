@@ -45,6 +45,5 @@ kneed==0.8.5
 lightgbm==4.6.0
 fuzzywuzzy==0.18.0
 bertopic==0.17.3
-odfpy==1.4.1
-
+# odfpy==1.4.1
 # pyplot==6.3.0
