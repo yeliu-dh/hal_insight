@@ -147,7 +147,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
                 col.metric(label, value, suffix)
 
         col1, col2, col3, col4 = st.columns(4)
-        display_metric(col1, "Nombre total d'articles", total_articles, f" jusqu’à {latest_ym}")
+        display_metric(col1, "Nombre total d'articles", total_articles)# f" jusqu’à {latest_ym}"
         display_metric(col2, "Nombre total d'auteurs", total_authors)  # , f"Moyenne par auteur: {avg_per_author:.2f}"
         display_metric(col3, "Nombre total de revues", total_journals)
         display_metric(col4, "Nombre total de domaines", total_domains)
@@ -264,7 +264,7 @@ if "uploaded_df" in st.session_state and st.session_state.uploaded_df is not Non
         
         # -----------------待搜索关键词 ---------------
         keywords = st_tags(
-            label="Mots clés",
+            label="Mots clés en question",
             text="Tapez un mot et appuyez sur Entrée",
             value=["management","gestion","marketing"],
             maxtags=50
