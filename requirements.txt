@@ -47,4 +47,4 @@ fuzzywuzzy==0.18.0
 bertopic==0.17.3
 odfpy==1.4.1
 
-pyplot==6.3.0
+# pyplot==6.3.0
