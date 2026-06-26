@@ -570,12 +570,6 @@
       "authIdHal_s": "olivier-joffre",
       "authIdHal_i": "5490",
       "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
-    },
-    {
-      "authIdHal_s": "olivier-joffre",
-      "authIdHal_i": "5490",
-      "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "1004418"
     }
   ],
@@ -2865,18 +2859,6 @@
       "authIdHal_i": "1432834",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "1004418"
-    },
-    {
-      "authIdHal_s": "nesrine-bentemessek-kahia",
-      "authIdHal_i": "1432834",
-      "labStructName_s": "Institut de Recherche en Gestion",
-      "labStructId_i": "57129"
-    },
-    {
-      "authIdHal_s": "nesrine-bentemessek-kahia",
-      "authIdHal_i": "1432834",
-      "labStructName_s": "Université Paris-Est Créteil Val-de-Marne - Paris 12",
-      "labStructId_i": "420786"
     }
   ],
   "Ji-Yong Lee": [
@@ -2993,12 +2975,6 @@
       "authIdHal_i": "737377",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "1004418"
-    },
-    {
-      "authIdHal_s": "chikako-oka",
-      "authIdHal_i": "737377",
-      "labStructName_s": "Université Paris-Est Créteil Val-de-Marne - Paris 12",
-      "labStructId_i": "420786"
     }
   ],
   "Marc Kouzez": [
@@ -5695,12 +5671,6 @@
       "authIdHal_i": "1241219",
       "labStructName_s": "Institut de Recherche en Gestion",
       "labStructId_i": "1004418"
-    },
-    {
-      "authIdHal_s": "manel-laroum",
-      "authIdHal_i": "1241219",
-      "labStructName_s": "Université Gustave Eiffel",
-      "labStructId_i": "580722"
     }
   ],
   "Samuel Guillemot": [
@@ -8231,12 +8201,6 @@
     {
       "authIdHal_s": "mohamed-khenissi",
       "authIdHal_i": "1162159",
-      "labStructName_s": "Centre d'études et de recherches appliquées à la gestion",
-      "labStructId_i": "1041636"
-    },
-    {
-      "authIdHal_s": "mohamed-khenissi",
-      "authIdHal_i": "1162159",
       "labStructName_s": "Iaelyon School of Management",
       "labStructId_i": "1089520"
     }
@@ -8551,6 +8515,146 @@
       "authIdHal_i": "0",
       "labStructName_s": "Institut de Recherches sur les lois Fondamentales de l'Univers",
       "labStructId_i": "53946"
+    }
+  ],
+  "Géraldine Michel": [
+    {
+      "authIdHal_s": "géraldine-michel",
+      "authIdHal_i": "172885",
+      "labStructName_s": "IAE Paris - Sorbonne Business School",
+      "labStructId_i": "300334"
+    }
+  ],
+  "Duffort Bernard": [
+    {
+      "authIdHal_s": "duffort-bernard",
+      "authIdHal_i": "0",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "duffort-bernard",
+      "authIdHal_i": "1690965",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Valérie Zeitoun": [
+    {
+      "authIdHal_s": "valérie-zeitoun",
+      "authIdHal_i": "0",
+      "labStructName_s": "IAE Paris - Sorbonne Business School",
+      "labStructId_i": "300334"
+    },
+    {
+      "authIdHal_s": "valérie-zeitoun",
+      "authIdHal_i": "0",
+      "labStructName_s": "LAB IAE Paris - Sorbonne",
+      "labStructId_i": "1154480"
+    }
+  ],
+  "Alexandre Nassar": [
+    {
+      "authIdHal_s": "alexandre-nassar",
+      "authIdHal_i": "0",
+      "labStructName_s": "IAE Paris - Sorbonne Business School",
+      "labStructId_i": "300334"
+    },
+    {
+      "authIdHal_s": "alexandre-nassar",
+      "authIdHal_i": "0",
+      "labStructName_s": "LAB IAE Paris - Sorbonne",
+      "labStructId_i": "1154480"
+    },
+    {
+      "authIdHal_s": "alexandre-nassar",
+      "authIdHal_i": "0",
+      "labStructName_s": "Université Gustave Eiffel",
+      "labStructId_i": "580722"
+    },
+    {
+      "authIdHal_s": "alexandre-nassar",
+      "authIdHal_i": "1664444",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    }
+  ],
+  "Oussama Moustabchir": [
+    {
+      "authIdHal_s": "oussama-moustabchir",
+      "authIdHal_i": "1182390",
+      "labStructName_s": "Centre d'études et de recherches appliquées à la gestion",
+      "labStructId_i": "1043181"
+    },
+    {
+      "authIdHal_s": "oussama-moustabchir",
+      "authIdHal_i": "0",
+      "labStructName_s": "Université Grenoble Alpes",
+      "labStructId_i": "1042703"
+    },
+    {
+      "authIdHal_s": "oussama-moustabchir",
+      "authIdHal_i": "0",
+      "labStructName_s": "Centre d'études et de recherches appliquées à la gestion",
+      "labStructId_i": "1043181"
+    },
+    {
+      "authIdHal_s": "oussama-moustabchir",
+      "authIdHal_i": "1182390",
+      "labStructName_s": "Université Grenoble Alpes",
+      "labStructId_i": "1042703"
+    }
+  ],
+  "Samuel Haddad-Bacry": [
+    {
+      "authIdHal_s": "samuel-haddad-bacry",
+      "authIdHal_i": "1228695",
+      "labStructName_s": "LAB IAE Paris - Sorbonne",
+      "labStructId_i": "1154480"
+    },
+    {
+      "authIdHal_s": "samuel-haddad-bacry",
+      "authIdHal_i": "0",
+      "labStructName_s": "University of York [York, UK]",
+      "labStructId_i": "124942"
+    }
+  ],
+  "Jean-Yves Juban": [
+    {
+      "authIdHal_s": "jean-yves-juban",
+      "authIdHal_i": "1369289",
+      "labStructName_s": "Centre d'études et de recherches appliquées à la gestion",
+      "labStructId_i": "1043181"
+    }
+  ],
+  "Bastien Francois": [
+    {
+      "authIdHal_s": "bastien-francois",
+      "authIdHal_i": "1687572",
+      "labStructName_s": "Institut de Recherche en Gestion",
+      "labStructId_i": "1004418"
+    },
+    {
+      "authIdHal_s": "bastien-francois",
+      "authIdHal_i": "736030",
+      "labStructName_s": "Laboratoire des Sciences du Climat et de l'Environnement [Gif-sur-Yvette]",
+      "labStructId_i": "518"
+    }
+  ],
+  "Juban Jean-Yves": [
+    {
+      "authIdHal_s": "juban-jean-yves",
+      "authIdHal_i": "1369289",
+      "labStructName_s": "Centre d'études et de recherches appliquées à la gestion",
+      "labStructId_i": "1043181"
+    }
+  ],
+  "Elke Schuessler": [
+    {
+      "authIdHal_s": "elke-schuessler",
+      "authIdHal_i": "1656214",
+      "labStructName_s": "Leuphana University of Lüneburg",
+      "labStructId_i": "332949"
     }
   ]
 }
